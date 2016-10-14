@@ -28,6 +28,7 @@ export class TimesheetManagerComponent {
         console.log('Retrieving for ' + this.selectedCarer.carerCode + ' & ' + this.weekCommencing);
         this.http.get('/api/timesheet/timesheet?carerCode=' + this.selectedCarer.carerCode + '&weekCommencing=' + this.weekCommencing).subscribe(res => {
             this.timeSheet = res.json();
+            console.log(this.timeSheet);
         });
     }
 }

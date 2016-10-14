@@ -1,4 +1,5 @@
 export class CarerBooking {
+	public BookingCode: number;
 	public ContractCode: number;
 	public ThisStart: Date;
 	public ThisFinish: Date;

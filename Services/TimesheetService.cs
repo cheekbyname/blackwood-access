@@ -24,11 +24,7 @@ namespace Blackwood.Access.Services
 
         public Timesheet GetTimesheet(int carerCode, DateTime weekCommencing)
         {
-			Console.Write($"GetTimesheet for {carerCode} w/c {weekCommencing}\n");
-
 			Carer carer = _context.Carers.FirstOrDefault(c => c.CarerCode == carerCode);
-
-			Console.Write($"Retrieved entity for {carer.Forename} {carer.Surname}\n");
 
 			Timesheet ts = new Timesheet()
 			{
@@ -37,19 +33,24 @@ namespace Blackwood.Access.Services
 				Carer = carer
 			};
 
-			DbParameter pCarerCode = new SqlParameter("@CarerCode", carerCode);
-			DbParameter pWeekCommencing = new SqlParameter("@WeekCommencing", weekCommencing);
-
 			// CarerContracts
 			ts.Contracts = _context.Set<CarerContract>().FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
-				parameters: new [] { pCarerCode, pWeekCommencing }).ToList();
-
-			// ts.Contracts = _context.CarerContracts.FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
-			// 	parameters: new [] { pCarerCode, pWeekCommencing}).ToList();
+				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
 			// ScheduledAvailability
+			ts.ScheduledAvailability = _context.Set<Availability>().FromSql("GetCarerScheduledAvailability @CarerCode, @WeekCommencing",
+				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+
 			// ActualAvailability
+			ts.ActualAvailability = _context.Set<Availability>().FromSql("GetCarerActualAvailability @CarerCode, @WeekCommencing",
+				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+
+			// Remove Scheduled Availability on Actual Availability Days
+			// DELETE FROM @Scheduled WHERE CONVERT(DATE, ThisStart) IN (SELECT CONVERT(DATE, ThisStart) FROM @ActAvail)
+
 			// CarerBookings
+			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
+				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
             return ts;
         }
