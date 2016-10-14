@@ -23,9 +23,9 @@ namespace Blackwood.Access.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public Timesheet Timesheet(Carer carer, DateTime weekCommencing)
+		public Timesheet Timesheet(int carerCode, DateTime weekCommencing)
 		{
-			return _service.GetTimesheet(carer, weekCommencing);
+			return _service.GetTimesheet(carerCode, weekCommencing);
 		}
 	}
 }

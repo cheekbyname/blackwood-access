@@ -1,8 +1,10 @@
 namespace Blackwood.Access.Models {
-	using System;
+    using System;
+    using System.ComponentModel.DataAnnotations;
 
-	public class CarerContract {
+    public class CarerContract {
 		public string PayrollNumber {get;set;}
+		[Key]
 		public int ContractCode {get;set;}
 		public DateTime CycleStart {get;set;}
 		public int CycleLength {get;set;}
