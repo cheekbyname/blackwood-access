@@ -2,7 +2,6 @@ namespace Blackwood.Access.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Common;
     using System.Data.SqlClient;
     using System.Linq;
     using Blackwood.Access.Models;
@@ -17,6 +16,10 @@ namespace Blackwood.Access.Services
 			_context = context;
 		}
 
+		public IEnumerable<Team> GetTeams()
+		{
+			return _context.Teams.OrderBy(c=>c.TeamDesc).ToList();
+		}
         public IEnumerable<Carer> GetCarers()
         {
 			return _context.Carers.OrderBy(c=>c.Forename).ThenBy(c=>c.Surname).ToList();

@@ -4,13 +4,26 @@
     </div>
     <div class="panel-body">
         <div class="form-group form-inline">
-            <label for="carerSelect">Select Carer</label>
-            <select class="form-control" id="carerSelect" [(ngModel)]="selectedCarer" name="selectedCarer" required>
-                <option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
-            </select>
             <label for="weekCommencing">Week Commencing</label>
-            <input class="form-control datepicker" id="weekCommencing" type="date" [(ngModel)]="weekCommencing"/>
-            <a class="btn btn-default btn-primary" (click)="showTimesheet()">Show Timesheet</a>
+            <div class="input-group">
+                <input class="form-control datepicker" id="weekCommencing" type="date" [(ngModel)]="weekCommencing"/>
+                <!--<span class="input-group-addon datebutton" (click)="showCalendar()"><span class="glyphicon glyphicon-calendar"></span></span>-->
+            </div>
+            <label for="teamSelect">Select Team</label>
+            <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
+                <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
+            </select>
+        </div>
+        <div *ngIf="selectedTeam && weekCommencing">
+            <hr/>
+            <div class="form-group form-inline">
+                <label for="carerSelect">Select Carer</label>
+                <select class="form-control" id="carerSelect" [(ngModel)]="selectedCarer" name="selectedCarer" required>
+                    <option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
+                </select>
+                <!--<a class="btn btn-default btn-primary" *ngIf="selectedCarer" (click)="showTimesheet()">Show Timesheet</a>-->
+            </div>
         </div>
     </div>
 </div>
+<timesheetviewer *ngIf="weekCommencing && selectedCarer" [weekCommencing]="weekCommencing" [carer]="selectedCarer"></timesheetviewer>

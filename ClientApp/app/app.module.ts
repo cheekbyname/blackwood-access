@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { TimesheetManagerComponent } from './components/timesheetmanager/timesheetmanager.component';
+import { TimesheetViewerComponent } from './components/timesheetviewer/timesheetviewer.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -17,6 +18,7 @@ import { TimesheetManagerComponent } from './components/timesheetmanager/timeshe
         CounterComponent,
         FetchDataComponent,
         TimesheetManagerComponent,
+        TimesheetViewerComponent,
         HomeComponent
     ],
     imports: [

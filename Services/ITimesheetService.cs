@@ -6,7 +6,8 @@ namespace Blackwood.Access.Services
 
     public interface ITimesheetService
     {
-      IEnumerable<Carer> GetCarers();
-      Timesheet GetTimesheet(int carerCode, DateTime weekCommencing);
+        IEnumerable<Team> GetTeams();
+        IEnumerable<Carer> GetCarers();
+        Timesheet GetTimesheet(int carerCode, DateTime weekCommencing);
   	}
 }

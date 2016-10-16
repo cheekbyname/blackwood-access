@@ -7,7 +7,7 @@ namespace Blackwood.Access
     public class AccessContext : DbContext {
 
 		public AccessContext(DbContextOptions<AccessContext> options) : base(options) { }
-		
+		public DbSet<Team> Teams {get;set;}
 		public DbSet<Carer> Carers {get;set;}
 		public DbSet<CarerContract> CarerContracts {get;set;}
 		public DbSet<Availability> Availabilities {get;set;}

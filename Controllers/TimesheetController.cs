@@ -16,13 +16,19 @@ namespace Blackwood.Access.Controllers
 			_service = service;
 		}
 
-		[HttpGet("[action]")]
+		[HttpGetAttribute("[action]")]
+		public IEnumerable<Team> Teams()
+		{
+			return _service.GetTeams();
+		}
+
+		[HttpGetAttribute("[action]")]
 		public IEnumerable<Carer> Carers()
 		{
 			return _service.GetCarers();
 		}
 
-		[HttpGet("[action]")]
+		[HttpGetAttribute("[action]")]
 		public Timesheet Timesheet(int carerCode, DateTime weekCommencing)
 		{
 			return _service.GetTimesheet(carerCode, weekCommencing);

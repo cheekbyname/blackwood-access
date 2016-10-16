@@ -1,9 +1,9 @@
-h3, label, select {
+h4, label, select {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
 
-label, select, input {
+label, select, input, .input-group {
     font-size: 11pt;
     margin-right: 10px;
 }
@@ -23,6 +23,16 @@ label, select, input {
     background-color: hotpink;
     color: black;
     border-color: black;
+}
+
+.datebutton {
+    color: green;
+}
+
+.datebutton:hover {
+    cursor: pointer;
+    background-color: #bfd730;
+    color: black;
 }
 
 .panel {

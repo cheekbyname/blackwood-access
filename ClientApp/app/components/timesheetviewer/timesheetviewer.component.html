@@ -1,0 +1,25 @@
+<div class="panel panel-default" *ngIf="timesheet">
+	<div class="panel-heading">
+		<h4>Timesheet for {{carer.forename}} {{carer.surname}}</h4>
+	</div>
+	<div class="panel-body">
+		<table class="table" *ngIf="timesheet.contracts">
+			<thead>
+				<tr class="row">
+					<th class="col-md-1">Payroll No</th>
+					<th class="col-md-4">Team</th>
+					<th class="col-md-1">Cycle Week</th>
+					<th class="col-md-6">Other Stuff</th>
+				</tr>
+			</thead>
+			<tr class="row" *ngFor="let contract of timesheet.contracts">
+				<td>{{contract.payrollNumber}}</td>
+				<td>{{contract.teamDesc}}</td>
+				<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
+			</tr>
+		</table>
+		<div >
+			<span *ngIf="!timesheet.contracts" class="danger">No Contracts found for this Carer</span>
+		</div>
+	</div>
+</div>
