@@ -3,23 +3,30 @@
 		<h4>Timesheet for {{carer.forename}} {{carer.surname}}</h4>
 	</div>
 	<div class="panel-body">
-		<table class="table" *ngIf="timesheet.contracts">
+		<table class="table" *ngIf="timesheet.contracts !== null">
 			<thead>
 				<tr class="row">
 					<th class="col-md-1">Payroll No</th>
 					<th class="col-md-4">Team</th>
 					<th class="col-md-1">Cycle Week</th>
-					<th class="col-md-6">Other Stuff</th>
+					<th class="col-md-1">Contracted Hours</th>
+					<th class="col-md-1">Maximum Hours</th>
+					<th class="col-md-1">Available Hours</th>
+					<th class="col-md-1">Overtime Hours</th>
+					<th class="col-md-2">Other Stuff</th>
 				</tr>
 			</thead>
 			<tr class="row" *ngFor="let contract of timesheet.contracts">
 				<td>{{contract.payrollNumber}}</td>
 				<td>{{contract.teamDesc}}</td>
 				<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
+				<td>{{timeDisplay(contract.contractMins)}}</td>
+				<td>{{timeDisplay(contract.limitMins)}}</td>
+				<td>{{availHoursForContract(contract.contractCode)}}</td>
 			</tr>
 		</table>
 		<div >
-			<span *ngIf="!timesheet.contracts" class="danger">No Contracts found for this Carer</span>
+			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>
 		</div>
 	</div>
 </div>

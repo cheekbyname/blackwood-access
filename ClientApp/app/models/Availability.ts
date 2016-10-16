@@ -1,9 +1,9 @@
 export class Availability {
-	public AvailCode: number;
-	public ContractCode: number;
-	public ThisStart: Date;
-	public ThisFinish: Date;
-	public ThisMins: number;
-	public AvailType: number;
-	public AvailDesc: string;
+	public availCode: number;
+	public contractCode: number;
+	public thisStart: Date;
+	public thisFinish: Date;
+	public thisMins: number;
+	public availType: number;
+	public availDesc: string;
 }

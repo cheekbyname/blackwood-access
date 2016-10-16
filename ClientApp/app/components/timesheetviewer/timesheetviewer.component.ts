@@ -19,17 +19,33 @@ export class TimesheetViewerComponent {
 	http: Http;
 	timesheet: Timesheet;
 
-	@Input() set weekCommencing(weekCommencing: Date) {
+	@Input()
+	set weekCommencing(weekCommencing: Date) {
 		this._weekCommencing = weekCommencing;
+		if (this._carer) this.getTimesheet();
 	}
 	get weekCommencing() { return this._weekCommencing }
 
-	@Input() set carer(carer: Carer) {
+	@Input()
+	set carer(carer: Carer) {
 		this._carer = carer;
+		if (this._weekCommencing) this.getTimesheet();
+	}
+	get carer() { return this._carer }
+
+	getTimesheet(): void {
 		this.http.get('/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing).subscribe(res => {
             this.timesheet = res.json();
             console.log(this.timesheet);
         });
 	}
-	get carer() { return this._carer }
+
+	public timeDisplay(mins: number): string {
+		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
+	}
+
+	public availHoursForContract(contractCode: number): string {
+		return this.timeDisplay(this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
+			.map(ava => {return ava.thisMins}).reduce((acc, cur) => { return acc + cur }));
+	}
 }
