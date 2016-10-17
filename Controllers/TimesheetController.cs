@@ -29,6 +29,12 @@ namespace Blackwood.Access.Controllers
 		}
 
 		[HttpGetAttribute("[action]")]
+		public IEnumerable<Carer> CarersByTeam(int TeamCode)
+		{
+			return _service.GetCarersByTeam(TeamCode);
+		}
+
+		[HttpGetAttribute("[action]")]
 		public Timesheet Timesheet(int carerCode, DateTime weekCommencing)
 		{
 			return _service.GetTimesheet(carerCode, weekCommencing);

@@ -14,8 +14,7 @@
                 <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
             </select>
         </div>
-        <div *ngIf="selectedTeam && weekCommencing">
-            <hr/>
+        <div *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0">
             <div class="form-group form-inline">
                 <label for="carerSelect">Select Carer</label>
                 <select class="form-control" id="carerSelect" [(ngModel)]="selectedCarer" name="selectedCarer" required>
@@ -23,6 +22,9 @@
                 </select>
                 <!--<a class="btn btn-default btn-primary" *ngIf="selectedCarer" (click)="showTimesheet()">Show Timesheet</a>-->
             </div>
+        </div>
+        <div *ngIf="(weekCommencing && selectedTeam) && (!carers || carers.length === 0)">
+            <p class="bg-danger"><strong>No Carers found for the selected Team</strong></p>
         </div>
     </div>
 </div>

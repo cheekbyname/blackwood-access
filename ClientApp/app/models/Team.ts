@@ -1,4 +1,4 @@
 export class Team {
-	public TeamCode: number;
-	public TeamDesc: string;
+	public teamCode: number;
+	public teamDesc: string;
 }

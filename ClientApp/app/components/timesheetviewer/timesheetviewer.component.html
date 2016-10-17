@@ -12,17 +12,36 @@
 					<th class="col-md-1">Contracted Hours</th>
 					<th class="col-md-1">Maximum Hours</th>
 					<th class="col-md-1">Available Hours</th>
+					<th class="col-md-1">Booking Hours</th>
 					<th class="col-md-1">Overtime Hours</th>
-					<th class="col-md-2">Other Stuff</th>
+					<th class="col-md-1">Other Stuff</th>
 				</tr>
 			</thead>
 			<tr class="row" *ngFor="let contract of timesheet.contracts">
 				<td>{{contract.payrollNumber}}</td>
 				<td>{{contract.teamDesc}}</td>
-				<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
-				<td>{{timeDisplay(contract.contractMins)}}</td>
-				<td>{{timeDisplay(contract.limitMins)}}</td>
+				<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- This is out by one on the first digit under certain circumstances -->
+				<td>{{displayTime(contract.contractMins)}}</td>
+				<td>{{displayTime(contract.limitMins)}}</td>
 				<td>{{availHoursForContract(contract.contractCode)}}</td>
+				<td>{{bookedHoursForContract(contract.contractCode)}}</td>
+				<td>{{overtimeHoursForContract(contract.contractCode)}}</td>
+			</tr>
+		</table>
+		<table class="table" *ngIf="combinedAvailability()">
+			<thead class="row">
+				<th class="col-md-4">Team</th>
+				<th class="col-md-3">Availability Type</th>
+				<th class="col-md-2">Start Time</th>
+				<th class="col-md-2">Finish Time</th>
+				<th class="col-md-1">Duration</th>
+			</thead>
+			<tr class="row" *ngFor="let avail of combinedAvailability()">
+				<td>To be included</td>
+				<td>{{avail.availDesc}}</td>
+				<td>{{formatDate(avail.thisStart)}}</td>
+				<td>{{formatDate(avail.thisFinish)}}</td>
+				<td>{{displayTime(avail.thisMins)}}
 			</tr>
 		</table>
 		<div >

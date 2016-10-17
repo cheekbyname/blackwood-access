@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Http } from '@angular/http';
 import { Carer } from '../../models/Carer';
 import { Timesheet } from '../../models/Timesheet';
@@ -16,13 +16,26 @@ export class TimesheetManagerComponent {
     public teams: Team[];
     public carers: Carer[];
     
-    public selectedTeam: Team;
+    _selectedTeam: Team;
+
     public selectedCarer: Carer;
     public weekCommencing: Date;
     
+    @Input()
+    get selectedTeam() { return this._selectedTeam }
+    set selectedTeam(team: Team ) {
+        this._selectedTeam = team;
+        console.log(this._selectedTeam);
+        this.http.get('/api/timesheet/carersbyteam?teamCode=' + this._selectedTeam.teamCode).subscribe(res => {
+            this.carers = res.json();
+            this.selectedCarer = null;
+        })
+    }
+
     constructor(http: Http) {
         this.http = http;
         
+        // Now redundant - candidate for removal
         http.get('/api/timesheet/carers').subscribe(res => {
             this.carers = res.json();
         });

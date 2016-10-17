@@ -8,6 +8,7 @@ namespace Blackwood.Access.Services
     {
         IEnumerable<Team> GetTeams();
         IEnumerable<Carer> GetCarers();
+        IEnumerable<Carer> GetCarersByTeam(int TeamCode);
         Timesheet GetTimesheet(int carerCode, DateTime weekCommencing);
   	}
 }

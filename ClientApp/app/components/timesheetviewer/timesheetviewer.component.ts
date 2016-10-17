@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Http } from '@angular/http';
 import { Timesheet } from '../../models/Timesheet';
 import { Carer } from '../../models/Carer';
+import { Availability } from '../../models/availability';
 
 @Component({
 	selector: 'timesheetviewer',
@@ -40,12 +41,31 @@ export class TimesheetViewerComponent {
         });
 	}
 
-	public timeDisplay(mins: number): string {
+	public combinedAvailability(): Availability[] {
+		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability).sort(av => { return av.thisStart.valueOf() });
+	}
+
+	public displayTime(mins: number): string {
 		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
 	}
 
+	public formatDate(date: Date): string {
+		var dt = new Date(date);
+		return dt.toLocaleDateString() + " " + dt.toLocaleTimeString().substr(0, 5); 
+	}
+
 	public availHoursForContract(contractCode: number): string {
-		return this.timeDisplay(this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
-			.map(ava => {return ava.thisMins}).reduce((acc, cur) => { return acc + cur }));
+		return this.displayTime(this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
+			.map(av => {return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0));
+	}
+
+	public bookedHoursForContract(contractCode: number): string {
+		return this.displayTime(this.timesheet.bookings
+			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0));
+	}
+
+	public overtimeHoursForContract(contractCode: number): string {
+		return this.displayTime(this.timesheet.actualAvailability.filter(av => { av.availCode !== 0})
+			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur}, 0));
 	}
 }
