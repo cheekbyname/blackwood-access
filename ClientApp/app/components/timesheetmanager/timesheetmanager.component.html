@@ -1,8 +1,9 @@
 <div class="panel panel-default">
     <div class="panel-heading">
+        <a class="btn btn-default btn-primary pull-right" (click)="toggleManager()">{{showManager ? "Hide" : "Show"}}</a>
         <h4>Timesheet Management</h4>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" *ngIf="showManager">
         <div class="form-group form-inline">
             <label for="weekCommencing">Week Commencing</label>
             <div class="input-group">
@@ -14,6 +15,7 @@
                 <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
             </select>
         </div>
+        <!-- TODO Move Carer Selection further dowm, probably underneath the team-summary -->
         <div *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0">
             <div class="form-group form-inline">
                 <label for="carerSelect">Select Carer</label>
@@ -28,4 +30,6 @@
         </div>
     </div>
 </div>
-<timesheetviewer *ngIf="weekCommencing && selectedCarer" [weekCommencing]="weekCommencing" [carer]="selectedCarer"></timesheetviewer>
+<team-summary *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0" [team]="selectedTeam" [carers]="carers"></team-summary>
+<timesheet-viewer *ngIf="weekCommencing && selectedCarer" [weekCommencing]="weekCommencing" [carer]="selectedCarer"></timesheet-viewer>
+

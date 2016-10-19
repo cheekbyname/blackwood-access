@@ -5,7 +5,7 @@ import { Carer } from '../../models/Carer';
 import { Availability } from '../../models/availability';
 
 @Component({
-	selector: 'timesheetviewer',
+	selector: 'timesheet-viewer',
 	template: require('./timesheetviewer.component.html'),
 	styles: [require('./timesheetviewer.component.css')]
 })
@@ -42,7 +42,7 @@ export class TimesheetViewerComponent {
 	}
 
 	public combinedAvailability(): Availability[] {
-		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability).sort(av => { return av.thisStart.valueOf() });
+		return (this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)).sort(av => { return av.thisStart.valueOf() });
 	}
 
 	public displayTime(mins: number): string {

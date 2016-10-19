@@ -13,6 +13,10 @@ export class TimesheetManagerComponent {
 
     private http: Http;
 
+    // May not need these
+    private trainingCodes: number [] = [105, 106, 107];
+    private absenceCodes: number [] = [108, 109];
+
     public teams: Team[];
     public carers: Carer[];
     
@@ -20,7 +24,8 @@ export class TimesheetManagerComponent {
 
     public selectedCarer: Carer;
     public weekCommencing: Date;
-    
+    public showManager: Boolean = true;
+
     @Input()
     get selectedTeam() { return this._selectedTeam }
     set selectedTeam(team: Team ) {
@@ -43,5 +48,9 @@ export class TimesheetManagerComponent {
         http.get('api/timesheet/teams').subscribe(res => {
             this.teams = res.json();
         });
+    }
+
+    toggleManager(): void {
+        this.showManager = !this.showManager;
     }
 }

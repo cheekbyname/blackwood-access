@@ -9,6 +9,7 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { TimesheetManagerComponent } from './components/timesheetmanager/timesheetmanager.component';
 import { TimesheetViewerComponent } from './components/timesheetviewer/timesheetviewer.component';
+import { TeamTimeSummaryComponent } from './components/teamtimesummary/teamtimesummary.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -19,6 +20,7 @@ import { TimesheetViewerComponent } from './components/timesheetviewer/timesheet
         FetchDataComponent,
         TimesheetManagerComponent,
         TimesheetViewerComponent,
+        TeamTimeSummaryComponent,
         HomeComponent
     ],
     imports: [
@@ -26,7 +28,7 @@ import { TimesheetViewerComponent } from './components/timesheetviewer/timesheet
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'timesheetmanager', component: TimesheetManagerComponent },
+            { path: 'timesheet-manager', component: TimesheetManagerComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }

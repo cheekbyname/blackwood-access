@@ -1,0 +1,31 @@
+<div class="panel">
+	<div class="panel-heading">
+		<a class="btn btn-default btn-primary pull-right" (click)="toggleSummary()">{{showSummary ? "Hide" : "Show"}}</a>
+		<h4>Team Tracking for {{team.teamDesc}}</h4>
+	</div>
+	<div class="panel-body" *ngIf="showSummary">
+		<table class="table">
+			<thead>
+				<tr class="row">
+					<th class="col-md-3">Staff Name</th>
+					<th class="col-md-1">Hours Accruing</th>
+					<th class="col-md-2">Supervision / Training</th>
+					<th class="col-md-2">Sickness / Annual Leave</th>
+					<th class="col-md-2">Contracted Hours</th>
+					<th class="col-md-2">Actual Hours</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="row" *ngFor="let carer of carers">
+					<td>{{carer.forename}} {{carer.surname}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>		
+
