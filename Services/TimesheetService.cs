@@ -64,5 +64,12 @@ namespace Blackwood.Access.Services
 
             return ts;
         }
+
+		public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
+		{
+			return _context.Set<Summary>().FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
+				parameters: new [] { new SqlParameter("@teamCode", teamCode), new SqlParameter("@periodStart", periodStart),
+				new SqlParameter("@periodEnd", periodEnd)});
+		}
     }
 }

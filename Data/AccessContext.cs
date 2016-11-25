@@ -12,5 +12,6 @@ namespace Blackwood.Access
 		public DbSet<CarerContract> CarerContracts {get;set;}
 		public DbSet<Availability> Availabilities {get;set;}
 		public DbSet<CarerBooking> CarerBookings {get;set;}
+		public DbSet<Summary> Summaries { get; set; }
 	}
 }

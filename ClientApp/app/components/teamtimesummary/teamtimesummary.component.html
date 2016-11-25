@@ -16,13 +16,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="row" *ngFor="let carer of carers">
-					<td>{{carer.forename}} {{carer.surname}}</td>
+				<tr class="row" *ngFor="let sum of summaries">
+					<td>{{sum.forename}} {{sum.surname}}</td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{{displayTime(sum.superTrainMins)}}</td>
+					<td>{{displayTime(sum.leaveSickMins)}}</td>
+					<td>{{displayTime(sum.monthlyContractMins)}}</td>
+					<td>{{displayTime(sum.contactTimeMins)}}</td>
 				</tr>
 			</tbody>
 		</table>

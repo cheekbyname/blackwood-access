@@ -30,6 +30,9 @@
         </div>
     </div>
 </div>
-<team-summary *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0" [team]="selectedTeam" [carers]="carers"></team-summary>
-<timesheet-viewer *ngIf="weekCommencing && selectedCarer" [weekCommencing]="weekCommencing" [carer]="selectedCarer"></timesheet-viewer>
-
+<team-summary *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0"
+    [team]="selectedTeam" [weekCommencing]="weekCommencing">
+</team-summary>
+<timesheet-viewer *ngIf="weekCommencing && selectedCarer"
+    [weekCommencing]="weekCommencing" [carer]="selectedCarer">
+</timesheet-viewer>

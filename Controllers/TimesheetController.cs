@@ -39,5 +39,10 @@ namespace Blackwood.Access.Controllers
 		{
 			return _service.GetTimesheet(carerCode, weekCommencing);
 		}
+
+		[HttpGetAttribute("[action]")]
+		public IEnumerable<Summary> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd){
+			return _service.GetSummaries(teamCode, periodStart, periodEnd);
+		}
 	}
 }
