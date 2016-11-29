@@ -13,4 +13,5 @@ export class Summary {
 	public leaveSickMins: number;
 	public contactTimeMins: number;
 	public totalMins: number;
+	public availMins: number;
 }

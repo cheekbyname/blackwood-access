@@ -19,5 +19,6 @@ namespace Blackwood.Access.Models
 		public int LeaveSickMins { get; set; }
 		public int ContactTimeMins { get; set; }
 		public int TotalMins { get; set; }
+		public int AvailMins { get; set; }
 	}
 }

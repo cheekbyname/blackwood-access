@@ -9,20 +9,26 @@
 				<tr class="row">
 					<th class="col-md-3">Staff Name</th>
 					<th class="col-md-1">Hours Accruing</th>
-					<th class="col-md-2">Supervision / Training</th>
-					<th class="col-md-2">Sickness / Annual Leave</th>
-					<th class="col-md-2">Contracted Hours</th>
-					<th class="col-md-2">Actual Hours</th>
+					<th class="col-md-1">Supervision / Training</th>
+					<th class="col-md-1">Sickness / Annual Leave</th>
+					<th class="col-md-1">Contracted Hours</th>
+					<th class="col-md-1">Availability</th>
+					<th class="col-md-1">Implied Overtime</th>
+					<th class="col-md-1">Contact Hours</th>
+					<th class="col-md-1">Utilisation</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr class="row" *ngFor="let sum of summaries">
 					<td>{{sum.forename}} {{sum.surname}}</td>
-					<td></td>
+					<td>{{displayTime(sum.monthlyContractMins-sum.availMins < 0 ? 0 : sum.monthlyContractMins-sum.availMins)}}</td>
 					<td>{{displayTime(sum.superTrainMins)}}</td>
 					<td>{{displayTime(sum.leaveSickMins)}}</td>
 					<td>{{displayTime(sum.monthlyContractMins)}}</td>
+					<td>{{displayTime(sum.availMins)}}</td>
+					<td>{{displayTime(sum.availMins-sum.monthlyContractMins < 0 ? 0 : sum.availMins-sum.monthlyContractMins)}}
 					<td>{{displayTime(sum.contactTimeMins)}}</td>
+					<td>{{displayPercent(sum.contactTimeMins, sum.availMins)}}
 				</tr>
 			</tbody>
 		</table>

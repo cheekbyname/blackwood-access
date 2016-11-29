@@ -55,17 +55,17 @@ export class TimesheetViewerComponent {
 	}
 
 	public availHoursForContract(contractCode: number): string {
-		return this.displayTime(this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
+		return this.displayTime(this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability).filter(av => av.contractCode === contractCode)
 			.map(av => {return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0));
 	}
 
 	public bookedHoursForContract(contractCode: number): string {
-		return this.displayTime(this.timesheet.bookings
+		return this.displayTime(this.timesheet.bookings.filter(bk => bk.contractCode === contractCode)
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0));
 	}
 
 	public overtimeHoursForContract(contractCode: number): string {
-		return this.displayTime(this.timesheet.actualAvailability.filter(av => { av.availCode !== 0})
+		return this.displayTime(this.timesheet.actualAvailability.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
 			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur}, 0));
 	}
 }

@@ -28,7 +28,7 @@
 				<td>{{overtimeHoursForContract(contract.contractCode)}}</td>
 			</tr>
 		</table>
-		<table class="table" *ngIf="combinedAvailability()">
+		<!--<table class="table" *ngIf="combinedAvailability()">
 			<thead class="row">
 				<th class="col-md-4">Team</th>
 				<th class="col-md-3">Availability Type</th>
@@ -43,7 +43,7 @@
 				<td>{{formatDate(avail.thisFinish)}}</td>
 				<td>{{displayTime(avail.thisMins)}}
 			</tr>
-		</table>
+		</table>-->
 		<div >
 			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>
 		</div>

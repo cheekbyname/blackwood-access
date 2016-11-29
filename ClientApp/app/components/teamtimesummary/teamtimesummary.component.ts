@@ -47,6 +47,13 @@ export class TeamTimeSummaryComponent {
 
 	public displayTime(mins: number): string {
 		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
+		//return Math.floor(mins/60) + ":" + (mins % 60);
+	}
+
+	public displayPercent(num: number, den: number): string {
+		if (num === 0) return "0.00%";
+		if (den === 0) return "N/A";
+		return (num / den * 100).toFixed(2) + "%";
 	}
 
 	public sqlDate(date: Date): string {
