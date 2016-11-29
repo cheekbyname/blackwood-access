@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
-import { Timesheet } from '../../models/Timesheet';
-import { Carer } from '../../models/Carer';
+import { BookingCardComponent } from '../cards/booking.card/booking.card';
+import { Timesheet } from '../../models/timesheet';
+import { CarerBooking } from '../../models/booking';
+import { Carer } from '../../models/carer';
 import { Availability } from '../../models/availability';
 
 @Component({
@@ -9,16 +11,24 @@ import { Availability } from '../../models/availability';
 	template: require('./timesheetviewer.component.html'),
 	styles: [require('./timesheetviewer.component.css')]
 })
-export class TimesheetViewerComponent {
+export class TimesheetViewerComponent implements OnInit {
 
 	constructor(http: Http) {
 		this.http = http;
+	}
+
+
+	ngOnInit(): void {
+		for (var i=0; i<7; i++){
+			this.bookings[i] = [];
+		}
 	}
 
 	_carer: Carer;
 	_weekCommencing: Date;
 	http: Http;
 	timesheet: Timesheet;
+	bookings = [];
 
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
@@ -36,9 +46,24 @@ export class TimesheetViewerComponent {
 
 	getTimesheet(): void {
 		this.http.get('/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing).subscribe(res => {
+			// TODO Ensure bookings array is cleared down as elements are being pushed
             this.timesheet = res.json();
+			var bookings = res.json().bookings;
+			bookings.forEach(bk => this.stuffBook(bk));
+			this.transBook();
             console.log(this.timesheet);
+			console.log(this.bookings);
         });
+	}
+
+	stuffBook(bk: CarerBooking): void {
+		// Because we want whole days and valueOf returns milliseconds
+		var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
+		this.bookings[offset].push(bk);
+	}
+
+	transBook(): void {
+		this.bookings = this.bookings[0].map((x, i) => this.bookings.map(x=>x[i]));
 	}
 
 	public combinedAvailability(): Availability[] {
@@ -67,5 +92,13 @@ export class TimesheetViewerComponent {
 	public overtimeHoursForContract(contractCode: number): string {
 		return this.displayTime(this.timesheet.actualAvailability.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
 			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur}, 0));
+	}
+
+	public bookingSlot(offset: number): CarerBooking[] {
+		var bookSlot = CarerBooking[7];
+		for (var i=0; i<7; i++) {
+
+		}
+		return bookSlot;
 	}
 }

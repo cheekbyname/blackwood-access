@@ -5,6 +5,7 @@
     </div>
     <div class="panel-body" *ngIf="showManager">
         <div class="form-group form-inline">
+            <!--<p-calendar [(ngModel)]="weekCommencing" [inline]="true"></p-calendar>-->
             <label for="weekCommencing">Week Commencing</label>
             <div class="input-group">
                 <input class="form-control datepicker" id="weekCommencing" type="date" [(ngModel)]="weekCommencing"/>
@@ -31,7 +32,7 @@
     </div>
 </div>
 <team-summary *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0"
-    [team]="selectedTeam" [weekCommencing]="weekCommencing">
+    [team]="selectedTeam" [weekCommencing]="weekCommencing" (onSelectedCarer)="onSelectedCarer($event)">
 </team-summary>
 <timesheet-viewer *ngIf="weekCommencing && selectedCarer"
     [weekCommencing]="weekCommencing" [carer]="selectedCarer">

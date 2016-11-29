@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Http } from '@angular/http';
-import { Team } from '../../models/Team';
-import { Summary } from '../../models/Summary';
+import { Team } from '../../models/team';
+import { Summary } from '../../models/summary';
 
 @Component({
 	selector: 'team-summary',
@@ -33,6 +33,8 @@ export class TeamTimeSummaryComponent {
 		if (this._team) this.getSummaries();
 	}
 
+	@Output() onSelectCarer = new EventEmitter<number>();
+
 	getSummaries(): void {
 		// Get first and last of month from weekCommencing
 		var periodStart = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth(), 1);
@@ -62,5 +64,9 @@ export class TeamTimeSummaryComponent {
 
 	toggleSummary(): void {
 		this.showSummary = !this.showSummary;
+	}
+
+	selectCarer(sum: Summary): void {
+		this.onSelectCarer.emit(sum.carerCode);
 	}
 }

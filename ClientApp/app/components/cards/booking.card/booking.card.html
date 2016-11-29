@@ -1,0 +1,9 @@
+<div class="card">
+    <div class="card-header">
+        {{booking.forename}} {{booking.surname}}
+    </div>
+    <div class="card-block">
+        {{displayTime(booking.thisStart)}} - {{displayTime(booking.thisFinish)}}<br/>
+        {{booking.bookingDesc}}
+    </div>
+</div>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { FormsModule } from '@angular/forms';
+// import { CalendarModule } from 'primeng/primeng';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -10,6 +11,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { TimesheetManagerComponent } from './components/timesheetmanager/timesheetmanager.component';
 import { TimesheetViewerComponent } from './components/timesheetviewer/timesheetviewer.component';
 import { TeamTimeSummaryComponent } from './components/teamtimesummary/teamtimesummary.component';
+import { BookingCardComponent } from './components/cards/booking.card/booking.card';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -21,6 +23,7 @@ import { TeamTimeSummaryComponent } from './components/teamtimesummary/teamtimes
         TimesheetManagerComponent,
         TimesheetViewerComponent,
         TeamTimeSummaryComponent,
+        BookingCardComponent,
         HomeComponent
     ],
     imports: [
@@ -34,6 +37,7 @@ import { TeamTimeSummaryComponent } from './components/teamtimesummary/teamtimes
             { path: '**', redirectTo: 'home' }
         ]),
         FormsModule
+        // CalendarModule
     ]
 })
 export class AppModule {

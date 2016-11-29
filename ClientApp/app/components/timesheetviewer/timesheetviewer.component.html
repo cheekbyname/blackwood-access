@@ -1,33 +1,66 @@
 <div class="panel panel-default" *ngIf="timesheet">
 	<div class="panel-heading">
-		<h4>Timesheet for {{carer.forename}} {{carer.surname}}</h4>
+		<h4>Rota/Timesheet for {{carer.forename}} {{carer.surname}}</h4>
 	</div>
 	<div class="panel-body">
-		<table class="table" *ngIf="timesheet.contracts !== null">
-			<thead>
-				<tr class="row">
-					<th class="col-md-1">Payroll No</th>
-					<th class="col-md-4">Team</th>
-					<th class="col-md-1">Cycle Week</th>
-					<th class="col-md-1">Contracted Hours</th>
-					<th class="col-md-1">Maximum Hours</th>
-					<th class="col-md-1">Available Hours</th>
-					<th class="col-md-1">Booking Hours</th>
-					<th class="col-md-1">Overtime Hours</th>
-					<th class="col-md-1">Other Stuff</th>
-				</tr>
-			</thead>
-			<tr class="row" *ngFor="let contract of timesheet.contracts">
-				<td>{{contract.payrollNumber}}</td>
-				<td>{{contract.teamDesc}}</td>
-				<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- This is out by one on the first digit under certain circumstances -->
-				<td>{{displayTime(contract.contractMins)}}</td>
-				<td>{{displayTime(contract.limitMins)}}</td>
-				<td>{{availHoursForContract(contract.contractCode)}}</td>
-				<td>{{bookedHoursForContract(contract.contractCode)}}</td>
-				<td>{{overtimeHoursForContract(contract.contractCode)}}</td>
-			</tr>
-		</table>
+		<!-- Team/Contract Summary -->
+		<div class = "table-responsive">
+			<table class="table table-striped" *ngIf="timesheet.contracts !== null">
+				<thead class="thead-default">
+					<tr class="row">
+						<th class="col-md-1">Payroll No</th>
+						<th class="col-md-4">Team</th>
+						<th class="col-md-1">Cycle Week</th>
+						<th class="col-md-1">Contracted Hours</th>
+						<th class="col-md-1">Maximum Hours</th>
+						<th class="col-md-1">Available Hours</th>
+						<th class="col-md-1">Booking Hours</th>
+						<th class="col-md-1">Overtime Hours</th>
+						<th class="col-md-1">Other Stuff</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="row" *ngFor="let contract of timesheet.contracts">
+						<td>{{contract.payrollNumber}}</td>
+						<td>{{contract.teamDesc}}</td>
+						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- This is out by one on the first digit under certain circumstances -->
+						<td>{{displayTime(contract.contractMins)}}</td>
+						<td>{{displayTime(contract.limitMins)}}</td>
+						<td>{{availHoursForContract(contract.contractCode)}}</td>
+						<td>{{bookedHoursForContract(contract.contractCode)}}</td>
+						<td>{{overtimeHoursForContract(contract.contractCode)}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-rota">
+				<thead>
+					<tr class="row">
+						<th>Monday</th>
+						<th>Tuesday</th>
+						<th>Wednesday</th>
+						<th>Thursday</th>
+						<th>Friday</th>
+						<th>Saturday</th>
+						<th>Sunday</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="row" *ngFor="let bk of bookings">
+						<td><booking-card *ngIf="bk[0]" [booking]="bk[0]"></booking-card></td>
+						<td><booking-card *ngIf="bk[1]" [booking]="bk[1]"></booking-card></td>
+						<td><booking-card *ngIf="bk[2]" [booking]="bk[2]"></booking-card></td>
+						<td><booking-card *ngIf="bk[3]" [booking]="bk[3]"></booking-card></td>
+						<td><booking-card *ngIf="bk[4]" [booking]="bk[4]"></booking-card></td>
+						<td><booking-card *ngIf="bk[5]" [booking]="bk[5]"></booking-card></td>
+						<td><booking-card *ngIf="bk[6]" [booking]="bk[6]"></booking-card></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
 		<!--<table class="table" *ngIf="combinedAvailability()">
 			<thead class="row">
 				<th class="col-md-4">Team</th>
@@ -44,6 +77,7 @@
 				<td>{{displayTime(avail.thisMins)}}
 			</tr>
 		</table>-->
+
 		<div >
 			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>
 		</div>

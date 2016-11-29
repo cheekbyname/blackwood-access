@@ -14,3 +14,12 @@ h4, label, select, td, th {
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);
 }
+
+table.table-rota {
+    table-layout: fixed;
+}
+
+table.table-rota th {
+    width: 14.3%;
+    /*width: 14.285714%;*/
+}

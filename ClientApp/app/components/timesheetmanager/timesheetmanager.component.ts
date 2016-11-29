@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+// import { CalendarModule } from 'primeng/primeng';
 import { Http } from '@angular/http';
 import { Carer } from '../../models/Carer';
 import { Timesheet } from '../../models/Timesheet';
@@ -52,5 +53,9 @@ export class TimesheetManagerComponent {
 
     toggleManager(): void {
         this.showManager = !this.showManager;
+    }
+
+    onSelectedCarer(carerCode: number): void {
+        this.selectedCarer = this.carers.find(c => c.carerCode === carerCode);
     }
 }

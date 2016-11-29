@@ -4,34 +4,36 @@
 		<h4>Team Tracking for {{team.teamDesc}}</h4>
 	</div>
 	<div class="panel-body" *ngIf="showSummary">
-		<table class="table">
-			<thead>
-				<tr class="row">
-					<th class="col-md-3">Staff Name</th>
-					<th class="col-md-1">Hours Accruing</th>
-					<th class="col-md-1">Supervision / Training</th>
-					<th class="col-md-1">Sickness / Annual Leave</th>
-					<th class="col-md-1">Contracted Hours</th>
-					<th class="col-md-1">Availability</th>
-					<th class="col-md-1">Implied Overtime</th>
-					<th class="col-md-1">Contact Hours</th>
-					<th class="col-md-1">Utilisation</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="row" *ngFor="let sum of summaries">
-					<td>{{sum.forename}} {{sum.surname}}</td>
-					<td>{{displayTime(sum.monthlyContractMins-sum.availMins < 0 ? 0 : sum.monthlyContractMins-sum.availMins)}}</td>
-					<td>{{displayTime(sum.superTrainMins)}}</td>
-					<td>{{displayTime(sum.leaveSickMins)}}</td>
-					<td>{{displayTime(sum.monthlyContractMins)}}</td>
-					<td>{{displayTime(sum.availMins)}}</td>
-					<td>{{displayTime(sum.availMins-sum.monthlyContractMins < 0 ? 0 : sum.availMins-sum.monthlyContractMins)}}
-					<td>{{displayTime(sum.contactTimeMins)}}</td>
-					<td>{{displayPercent(sum.contactTimeMins, sum.availMins)}}
-				</tr>
-			</tbody>
-		</table>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr class="row">
+						<th class="col-md-3">Staff Name</th>
+						<th class="col-md-1">Hours Accruing</th>
+						<th class="col-md-1">Supervision / Training</th>
+						<th class="col-md-1">Sickness / Annual Leave</th>
+						<th class="col-md-1">Contracted Hours</th>
+						<th class="col-md-1">Availability</th>
+						<th class="col-md-1">Implied Overtime</th>
+						<th class="col-md-1">Contact Hours</th>
+						<th class="col-md-1">Utilisation</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="row" *ngFor="let sum of summaries" (click)="selectCarer(sum)">
+						<td>{{sum.forename}} {{sum.surname}}</td>
+						<td>{{displayTime(sum.monthlyContractMins-sum.availMins < 0 ? 0 : sum.monthlyContractMins-sum.availMins)}}</td>
+						<td>{{displayTime(sum.superTrainMins)}}</td>
+						<td>{{displayTime(sum.leaveSickMins)}}</td>
+						<td>{{displayTime(sum.monthlyContractMins)}}</td>
+						<td>{{displayTime(sum.availMins)}}</td>
+						<td>{{displayTime(sum.contactTimeMins-sum.monthlyContractMins < 0 ? 0 : sum.contactTimeMins-sum.monthlyContractMins)}}
+						<td>{{displayTime(sum.contactTimeMins)}}</td>
+						<td>{{displayPercent(sum.contactTimeMins, sum.monthlyContractMins)}}
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>		
 
