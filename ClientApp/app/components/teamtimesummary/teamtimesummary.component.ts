@@ -16,6 +16,7 @@ export class TeamTimeSummaryComponent {
 	_team: Team;
 	summaries: Summary[];
 	_weekCommencing: Date;
+	months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	public showSummary: Boolean = true;
 
@@ -50,6 +51,10 @@ export class TeamTimeSummaryComponent {
 	public displayTime(mins: number): string {
 		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
 		//return Math.floor(mins/60) + ":" + (mins % 60);
+	}
+
+	public displayMonth(): string {
+		return this.months[this.weekCommencing.getMonth()] + " " + this.weekCommencing.getFullYear();
 	}
 
 	public displayPercent(num: number, den: number): string {

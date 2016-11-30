@@ -86,6 +86,10 @@ export class TimesheetViewerComponent implements OnInit {
 		return dt.toLocaleDateString() + " " + dt.toLocaleTimeString().substr(0, 5); 
 	}
 
+	public displayDate(date: Date): string {
+		return new Date(date).toLocaleDateString();
+	}
+
 	public availHoursForContract(contractCode: number): number {
 		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
 			.filter(av => av.contractCode === contractCode)
