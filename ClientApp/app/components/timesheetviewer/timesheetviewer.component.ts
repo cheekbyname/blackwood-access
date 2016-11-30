@@ -19,9 +19,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 
 	ngOnInit(): void {
-		for (var i=0; i<7; i++){
-			this.bookings[i] = [];
-		}
+		this.clearBook();
 	}
 
 	_carer: Carer;
@@ -46,13 +44,14 @@ export class TimesheetViewerComponent implements OnInit {
 
 	getTimesheet(): void {
 		this.http.get('/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing).subscribe(res => {
-			// TODO Ensure bookings array is cleared down as elements are being pushed
+			this.clearBook();
             this.timesheet = res.json();
 			var bookings = res.json().bookings;
 			bookings.forEach(bk => this.stuffBook(bk));
 			this.transBook();
             console.log(this.timesheet);
 			console.log(this.bookings);
+			document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
         });
 	}
 
@@ -62,10 +61,17 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings[offset].push(bk);
 	}
 
+	// Transform n*7 array to 7*n
 	transBook(): void {
-		this.bookings = this.bookings[0].map((x, i) => this.bookings.map(x=>x[i]));
+		this.bookings = this.bookings.map((x, i) => this.bookings.map(x => x[i]));
+		this.bookings = this.bookings.filter((x: [any]) => x.some(e => e !== undefined)); 
 	}
 
+	clearBook(): void {
+		for (var i=0; i<7; i++){
+			this.bookings[i] = [];
+		}
+	}
 	public combinedAvailability(): Availability[] {
 		return (this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)).sort(av => { return av.thisStart.valueOf() });
 	}

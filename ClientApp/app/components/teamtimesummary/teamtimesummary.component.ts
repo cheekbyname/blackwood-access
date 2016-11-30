@@ -33,7 +33,7 @@ export class TeamTimeSummaryComponent {
 		if (this._team) this.getSummaries();
 	}
 
-	@Output() onSelectCarer = new EventEmitter<number>();
+	@Output() onSelectedCarer = new EventEmitter<number>();
 
 	getSummaries(): void {
 		// Get first and last of month from weekCommencing
@@ -67,6 +67,6 @@ export class TeamTimeSummaryComponent {
 	}
 
 	selectCarer(sum: Summary): void {
-		this.onSelectCarer.emit(sum.carerCode);
+		this.onSelectedCarer.emit(sum.carerCode);
 	}
 }

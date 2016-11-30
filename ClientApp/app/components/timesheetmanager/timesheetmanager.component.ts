@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 // import { CalendarModule } from 'primeng/primeng';
 import { Http } from '@angular/http';
 import { Carer } from '../../models/Carer';
@@ -10,7 +10,7 @@ import { Team } from '../../models/Team';
     template: require('./timesheetmanager.component.html'),
     styles: [require('./timesheetmanager.component.css')]
 })
-export class TimesheetManagerComponent {
+export class TimesheetManagerComponent implements OnInit {
 
     private http: Http;
 
@@ -26,6 +26,11 @@ export class TimesheetManagerComponent {
     public selectedCarer: Carer;
     public weekCommencing: Date;
     public showManager: Boolean = true;
+
+    ngOnInit() {
+        var thisMonday = new Date(Date.now());
+        this.weekCommencing = thisMonday;
+    }
 
     @Input()
     get selectedTeam() { return this._selectedTeam }

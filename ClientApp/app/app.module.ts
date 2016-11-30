@@ -29,7 +29,7 @@ import { BookingCardComponent } from './components/cards/booking.card/booking.ca
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: '', redirectTo: 'timesheet-manager', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'timesheet-manager', component: TimesheetManagerComponent },
             { path: 'counter', component: CounterComponent },
