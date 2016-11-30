@@ -8,11 +8,11 @@ p {
 }
 strong {
     font-family: 'Century Gothic';
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 label, select, input, .input-group {
-    font-size: 11pt;
+    font-size: 10pt;
     margin-right: 10px;
 }
 
