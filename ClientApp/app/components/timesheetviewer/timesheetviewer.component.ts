@@ -17,10 +17,11 @@ export class TimesheetViewerComponent implements OnInit {
 		this.http = http;
 	}
 
-
 	ngOnInit(): void {
 		this.clearBook();
 	}
+
+    private absenceCodes: number [] = [108, 109];
 
 	_carer: Carer;
 	_weekCommencing: Date;
@@ -85,19 +86,28 @@ export class TimesheetViewerComponent implements OnInit {
 		return dt.toLocaleDateString() + " " + dt.toLocaleTimeString().substr(0, 5); 
 	}
 
-	public availHoursForContract(contractCode: number): string {
-		return this.displayTime(this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability).filter(av => av.contractCode === contractCode)
-			.map(av => {return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0));
+	public availHoursForContract(contractCode: number): number {
+		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
+			.filter(av => av.contractCode === contractCode)
+			.map(av => {return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public bookedHoursForContract(contractCode: number): string {
-		return this.displayTime(this.timesheet.bookings.filter(bk => bk.contractCode === contractCode)
-			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0));
+	public bookedHoursForContract(contractCode: number): number {
+		return this.timesheet.bookings
+			.filter(bk => bk.contractCode === contractCode)
+			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public overtimeHoursForContract(contractCode: number): string {
-		return this.displayTime(this.timesheet.actualAvailability.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
-			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur}, 0));
+	public overtimeHoursForContract(contractCode: number): number {
+		return this.timesheet.actualAvailability
+			.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
+			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur}, 0);
+	}
+
+	public leaveSickHoursForContract(contractCode: number): number {
+		return this.timesheet.bookings
+			.filter(bk => bk.contractCode === contractCode && this.absenceCodes.some(ac => ac === bk.bookingType))
+			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur}, 0);
 	}
 
 	public bookingSlot(offset: number): CarerBooking[] {

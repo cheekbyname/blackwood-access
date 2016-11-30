@@ -16,7 +16,6 @@ export class TimesheetManagerComponent implements OnInit {
 
     // May not need these
     private trainingCodes: number [] = [105, 106, 107];
-    private absenceCodes: number [] = [108, 109];
 
     public teams: Team[];
     public carers: Carer[];
@@ -24,12 +23,14 @@ export class TimesheetManagerComponent implements OnInit {
     _selectedTeam: Team;
 
     public selectedCarer: Carer;
-    public weekCommencing: Date;
+    public weekCommencing: any;         // Would love to use Date but js date handling is such bullshit
     public showManager: Boolean = true;
 
     ngOnInit() {
-        var thisMonday = new Date(Date.now());
-        this.weekCommencing = thisMonday;
+        var mon = new Date(Date.now());
+        var dow = mon.getDay() || 7;
+        if (dow !== 1) mon.setHours(-24 * (dow - 1));
+        this.weekCommencing = mon.getFullYear() + "-" + (mon.getMonth() + 1) + "-" + mon.getDate();
     }
 
     @Input()
