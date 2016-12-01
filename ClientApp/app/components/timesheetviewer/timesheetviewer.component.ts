@@ -121,4 +121,20 @@ export class TimesheetViewerComponent implements OnInit {
 		}
 		return bookSlot;
 	}
+
+	public dateOrd(offset: number): string {
+		var dt = new Date(this.weekCommencing);
+		dt.setDate(dt.getDate() + offset);
+		var dy = dt.getDate().toString();
+		switch (dy.substr(dy.length - 1)) {
+			case "1":
+				return dy + "st";
+			case "2":
+				return dy + "nd";
+			case "3":
+				return dy + "rd";
+			default:
+				return dy + "th";
+		}
+	}
 }

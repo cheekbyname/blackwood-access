@@ -8,7 +8,7 @@ import { Team } from '../../models/Team';
 @Component({
     selector: 'timesheet-manager',
     template: require('./timesheetmanager.component.html'),
-    styles: [require('./timesheetmanager.component.css')]
+    styles: [ require('./timesheetmanager.component.css')]
 })
 export class TimesheetManagerComponent implements OnInit {
 

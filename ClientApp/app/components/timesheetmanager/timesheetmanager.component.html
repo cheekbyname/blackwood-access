@@ -16,6 +16,7 @@
                 <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
             </select>
         </div>
+        <p-calendar [inline]="true"></p-calendar>
         <!-- TODO Move Carer Selection further dowm, probably underneath the team-summary -->
         <div *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0">
             <div class="form-group form-inline">

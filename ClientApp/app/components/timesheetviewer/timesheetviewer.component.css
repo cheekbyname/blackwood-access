@@ -24,3 +24,8 @@ table.table-rota th {
     background-color: rgba(191, 215, 48, 0.5);
     /*width: 14.285714%;*/
 }
+
+table.table-rota td:hover {
+    background-color: rgba(255, 105, 180, 0.5);
+    cursor: pointer;
+}

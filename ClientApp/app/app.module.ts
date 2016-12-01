@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { FormsModule } from '@angular/forms';
-// import { CalendarModule } from 'primeng/primeng';
+import { CalendarModule } from 'primeng/primeng';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -36,8 +36,8 @@ import { BookingCardComponent } from './components/cards/booking.card/booking.ca
             { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }
         ]),
-        FormsModule
-        // CalendarModule
+        FormsModule,
+        CalendarModule
     ]
 })
 export class AppModule {
