@@ -12,6 +12,7 @@ import { TimesheetManagerComponent } from './components/timesheetmanager/timeshe
 import { TimesheetViewerComponent } from './components/timesheetviewer/timesheetviewer.component';
 import { TeamTimeSummaryComponent } from './components/teamtimesummary/teamtimesummary.component';
 import { BookingCardComponent } from './components/cards/booking.card/booking.card';
+import { TimesheetService } from './services/timesheet.service';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -38,7 +39,8 @@ import { BookingCardComponent } from './components/cards/booking.card/booking.ca
         ]),
         FormsModule,
         CalendarModule
-    ]
+    ],
+    providers: [ TimesheetService ]
 })
 export class AppModule {
 }

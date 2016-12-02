@@ -6,8 +6,10 @@ li .glyphicon {
 li.link-active a,
 li.link-active a:hover,
 li.link-active a:focus {
-    background-color: #4189C7;
-    color: white;
+    /*background-color: #4189C7;*/
+    /*color: white;*/
+    background-color: #bfd730;
+    color: black;
 }
 
 /* Keep the nav menu independent of scrolling and on top of other items */
@@ -56,4 +58,8 @@ li.link-active a:focus {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+}
+
+div.calendar-div {
+    margin-top: 1em;
 }

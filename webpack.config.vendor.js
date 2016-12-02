@@ -34,7 +34,7 @@ module.exports = {
             'zone.js',
             'font-awesome/css/font-awesome.css',
             'primeng/resources/primeng.min.css',
-            'primeng/resources/themes/glass-x/theme.css'
+            'primeng/resources/themes/omega/theme.css'
         ]
     },
     output: {

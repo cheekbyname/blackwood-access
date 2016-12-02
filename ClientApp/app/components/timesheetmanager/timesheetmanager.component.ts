@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-// import { CalendarModule } from 'primeng/primeng';
 import { Http } from '@angular/http';
+import { Subscription } from 'rxjs/subscription';
+
 import { Carer } from '../../models/Carer';
 import { Timesheet } from '../../models/Timesheet';
 import { Team } from '../../models/Team';
+import { TimesheetService } from '../../services/timesheet.service';
 
 @Component({
     selector: 'timesheet-manager',
@@ -11,8 +13,6 @@ import { Team } from '../../models/Team';
     styles: [ require('./timesheetmanager.component.css')]
 })
 export class TimesheetManagerComponent implements OnInit {
-
-    private http: Http;
 
     // May not need these
     private trainingCodes: number [] = [105, 106, 107];
@@ -22,15 +22,26 @@ export class TimesheetManagerComponent implements OnInit {
     
     _selectedTeam: Team;
 
+    teamSub: Subscription;
+    selectedDateSub: Subscription;
+
     public selectedCarer: Carer;
     public weekCommencing: any;         // Would love to use Date but js date handling is such bullshit
     public showManager: Boolean = true;
 
     ngOnInit() {
-        var mon = new Date(Date.now());
-        var dow = mon.getDay() || 7;
-        if (dow !== 1) mon.setHours(-24 * (dow - 1));
-        this.weekCommencing = mon.getFullYear() + "-" + (mon.getMonth() + 1) + "-" + mon.getDate();
+        this.weekCommencing = this.getWeekCommencingFromDate(new Date(Date.now()));
+
+        // Subscribe to TimesheetService observables
+        this.teamSub = this.timeSrv.teams$.subscribe(teams => {
+            this.teams = teams;
+        });
+        this.selectedDateSub = this.timeSrv.weekCommencing$.subscribe(dt => {
+            this.weekCommencing = this.getWeekCommencingFromDate(dt);
+        });
+
+        // Init Team list in TimesheetService 
+        this.timeSrv.getTeams();
     }
 
     @Input()
@@ -44,17 +55,12 @@ export class TimesheetManagerComponent implements OnInit {
         })
     }
 
-    constructor(http: Http) {
-        this.http = http;
-        
-        // Now redundant - candidate for removal
-        http.get('/api/timesheet/carers').subscribe(res => {
-            this.carers = res.json();
-        });
+    constructor(private http: Http, public timeSrv: TimesheetService) {
+        // this.http = http;
+        // http.get('api/timesheet/teams').subscribe(res => {
+        //     this.teams = res.json();
+        // });
 
-        http.get('api/timesheet/teams').subscribe(res => {
-            this.teams = res.json();
-        });
     }
 
     toggleManager(): void {
@@ -63,5 +69,11 @@ export class TimesheetManagerComponent implements OnInit {
 
     onSelectedCarer(carerCode: number): void {
         this.selectedCarer = this.carers.find(c => c.carerCode === carerCode);
+    }
+
+    getWeekCommencingFromDate(dt: Date): string {
+        var dow = dt.getDay() || 7;
+        if (dow !== 1) dt.setHours(-24 * (dow - 1));
+        return dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
     }
 }
