@@ -24,7 +24,10 @@ export class TeamTimeSummaryComponent {
 	get team() { return this._team }
 	set team(team: Team) {
 		this._team = team;
-		if (this._weekCommencing) this.getSummaries();
+		if (this._weekCommencing) {
+			this.getSummaries();
+			this.toggleSummary();
+		}
 	}
 
 	@Input()
@@ -73,5 +76,6 @@ export class TeamTimeSummaryComponent {
 
 	selectCarer(sum: Summary): void {
 		this.onSelectedCarer.emit(sum.carerCode);
+		this.toggleSummary();
 	}
 }

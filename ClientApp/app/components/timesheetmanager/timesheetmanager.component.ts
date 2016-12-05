@@ -52,14 +52,10 @@ export class TimesheetManagerComponent implements OnInit {
         this.http.get('/api/timesheet/carersbyteam?teamCode=' + this._selectedTeam.teamCode).subscribe(res => {
             this.carers = res.json();
             this.selectedCarer = null;
-        })
+        });
     }
 
     constructor(private http: Http, public timeSrv: TimesheetService) {
-        // this.http = http;
-        // http.get('api/timesheet/teams').subscribe(res => {
-        //     this.teams = res.json();
-        // });
 
     }
 
@@ -74,6 +70,9 @@ export class TimesheetManagerComponent implements OnInit {
     getWeekCommencingFromDate(dt: Date): string {
         var dow = dt.getDay() || 7;
         if (dow !== 1) dt.setHours(-24 * (dow - 1));
-        return dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+        var mon = "0" + (dt.getMonth() + 1);
+        var day = "0" + dt.getDate();
+        // TODO Adjust this so it fits yyyy/mm/dd pattern precisely
+        return dt.getFullYear() + "-" + mon.substr(mon.length - 2) + "-" + day.substr(day.length - 2);
     }
 }
