@@ -41,9 +41,14 @@ namespace Blackwood.Access.Services
 				Carer = carer
 			};
 
+			// Days covered
+			DateTime[] dates = DatesCovered(weekCommencing, 7); 
+
 			// CarerContracts
 			ts.Contracts = _context.Set<CarerContract>().FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+
+			bool isContracted = ts.Contracts.Any(c => c.ContractMins > 0);
 
 			// ScheduledAvailability
 			ts.ScheduledAvailability = _context.Set<Availability>().FromSql("GetCarerScheduledAvailability @CarerCode, @WeekCommencing",
@@ -55,13 +60,18 @@ namespace Blackwood.Access.Services
 
 			// TODO Remove Scheduled Availability on Actual Availability Days
 			// DELETE FROM @Scheduled WHERE CONVERT(DATE, ThisStart) IN (SELECT CONVERT(DATE, ThisStart) FROM @ActAvail)
+			ts.ActualAvailability.Select(aa => aa.ThisStart.Date).Distinct().ToList().ForEach(dt => {
+				ts.ScheduledAvailability.Where(sa => sa.ThisStart.Date == dt).ToList().ForEach(sa => {
+					ts.ScheduledAvailability.Remove(sa);
+				});
+			});
 
 			// CarerBookings
 			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
-			List<DateTime> tsDates = ts.Bookings.Select(bk => bk.ThisStart.Date).Distinct().OrderBy(dt => dt).ToList();
-			tsDates.ForEach(dt => {
+			//List<DateTime> tsDates = ts.Bookings.Select(bk => bk.ThisStart.Date).Distinct().OrderBy(dt => dt).ToList();
+			dates.ToList().ForEach(dt => {
 				DateTime? shiftStart = null;
 				DateTime? lastEnd = null;
 				TimeSpan? thisGap = null;
@@ -83,7 +93,16 @@ namespace Blackwood.Access.Services
             return ts;
         }
 
-		public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
+        private DateTime[] DatesCovered(DateTime dateCommencing, int periodLength)
+        {
+			DateTime[] dates = new DateTime[periodLength];
+			for(int d = 0; d < periodLength; d++) {
+				dates[d] = dateCommencing.AddDays(d);
+			}
+			return dates;
+        }
+
+        public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
 			return _context.Set<Summary>().FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
 				parameters: new [] { new SqlParameter("@teamCode", teamCode), new SqlParameter("@periodStart", periodStart),

@@ -1,6 +1,6 @@
 <div class="panel panel-default" *ngIf="timesheet">
 	<div class="panel-heading">
-		<h4>{{carer.forename}} {{carer.surname}} w/c {{displayDate(weekCommencing)}}</h4>
+		<h4>{{carer.forename}} {{carer.surname}} {{isContracted ? "[Contracted]" : "[Relief]"}} w/c {{displayDate(weekCommencing)}}</h4>
 	</div>
 	<div class="panel-body">
 		<!-- Team/Contract Summary -->

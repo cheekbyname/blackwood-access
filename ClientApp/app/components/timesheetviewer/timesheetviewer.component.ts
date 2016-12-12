@@ -28,6 +28,7 @@ export class TimesheetViewerComponent implements OnInit {
 	http: Http;
 	timesheet: Timesheet;
 	bookings = [];
+	isContracted: boolean;
 
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
@@ -46,10 +47,12 @@ export class TimesheetViewerComponent implements OnInit {
 	getTimesheet(): void {
 		this.http.get('/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing).subscribe(res => {
 			this.clearBook();
-            this.timesheet = res.json();
-			var bookings = res.json().bookings;
-			bookings.forEach(bk => this.stuffBook(bk));
+			var ts: Timesheet = res.json();
+            this.timesheet = ts;
+//			var bookings = ts.bookings;
+			ts.bookings.forEach(bk => this.stuffBook(bk));
 			this.transBook();
+			this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });
             console.log(this.timesheet);
 			console.log(this.bookings);
 			document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
