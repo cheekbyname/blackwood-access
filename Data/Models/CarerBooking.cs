@@ -13,5 +13,6 @@ namespace Blackwood.Access.Models {
 		public string BookingDesc {get;set;}
 		public string Forename {get;set;}
 		public string Surname {get;set;}
+		public int Shift { get; set; }
 	}
 }

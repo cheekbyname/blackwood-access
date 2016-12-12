@@ -60,6 +60,24 @@ namespace Blackwood.Access.Services
 			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
+			List<DateTime> tsDates = ts.Bookings.Select(bk => bk.ThisStart.Date).Distinct().OrderBy(dt => dt).ToList();
+			tsDates.ForEach(dt => {
+				DateTime? shiftStart = null;
+				DateTime? lastEnd = null;
+				TimeSpan? thisGap = null;
+				int shiftCount = 1;
+				ts.Bookings.Where(bk => bk.ThisStart.Date == dt).OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
+					thisGap = bk.ThisStart - lastEnd ?? TimeSpan.FromMinutes(0);
+					shiftStart = shiftStart ?? bk.ThisStart;
+					if (thisGap >= TimeSpan.FromHours(2)) {
+						shiftCount++;
+						shiftStart = null;
+					}
+					bk.Shift = shiftCount;
+					lastEnd = bk.ThisFinish;
+				});
+			});
+
 			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture
 
             return ts;
