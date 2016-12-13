@@ -50,13 +50,13 @@
 				</thead>
 				<tbody>
 					<tr class="row" *ngFor="let bk of bookings">
-						<td><booking-card *ngIf="bk[0]" [booking]="bk[0]"></booking-card></td>
-						<td><booking-card *ngIf="bk[1]" [booking]="bk[1]"></booking-card></td>
-						<td><booking-card *ngIf="bk[2]" [booking]="bk[2]"></booking-card></td>
-						<td><booking-card *ngIf="bk[3]" [booking]="bk[3]"></booking-card></td>
-						<td><booking-card *ngIf="bk[4]" [booking]="bk[4]"></booking-card></td>
-						<td><booking-card *ngIf="bk[5]" [booking]="bk[5]"></booking-card></td>
-						<td><booking-card *ngIf="bk[6]" [booking]="bk[6]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[0])"><booking-card *ngIf="bk[0]" [booking]="bk[0]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[1])"><booking-card *ngIf="bk[1]" [booking]="bk[1]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[2])"><booking-card *ngIf="bk[2]" [booking]="bk[2]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[3])"><booking-card *ngIf="bk[3]" [booking]="bk[3]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[4])"><booking-card *ngIf="bk[4]" [booking]="bk[4]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[5])"><booking-card *ngIf="bk[5]" [booking]="bk[5]"></booking-card></td>
+						<td [style.background-color]="bookColor(bk[6])"><booking-card *ngIf="bk[6]" [booking]="bk[6]"></booking-card></td>
 					</tr>
 				</tbody>
 			</table>

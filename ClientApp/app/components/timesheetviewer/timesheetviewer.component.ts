@@ -18,7 +18,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.clearBook();
+		this.bookings = this.emptyBook();
 	}
 
     private absenceCodes: number [] = [108, 109];
@@ -50,7 +50,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	handleRes(res): void {
-		this.clearBook();
+		this.bookings = this.emptyBook();
 		var ts: Timesheet = res.json();
 		this.timesheet = ts;
 		ts.bookings.forEach(bk => this.stuffBook(bk));
@@ -59,6 +59,10 @@ export class TimesheetViewerComponent implements OnInit {
 		console.log(this.timesheet);
 		document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
 	}
+
+	emptyBook() {
+		return [[],[],[],[],[],[],[]]
+	};
 
 	stuffBook(bk: CarerBooking): void {
 		// Because we want whole days and valueOf returns milliseconds
@@ -70,16 +74,13 @@ export class TimesheetViewerComponent implements OnInit {
 	transBook(): void {
 		var bks = this.bookings;
 		var len = Math.max(...bks.map(ar => { return ar.length }));				// Get max width of matrix
-		bks = bks.concat(Array(len-bks.length).fill([]));						// Pad to square
+		if (len-bks.length > 0) {
+			bks = bks.concat(Array(len-bks.length).fill([]));					// Pad to square
+		}
 		bks = bks.map((r, c) => bks.map(r => r[c]));							// Transpose array
 		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 
 	}
 
-	clearBook(): void {
-		for (var i=0; i<7; i++){
-			this.bookings[i] = [];
-		}
-	}
 	public combinedAvailability(): Availability[] {
 		return (this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)).sort(av => { return av.thisStart.valueOf() });
 	}
@@ -143,5 +144,11 @@ export class TimesheetViewerComponent implements OnInit {
 			default:
 				return dy + "th";
 		}
+	}
+
+	public bookColor(bk: CarerBooking): string {
+		var shiftColors = ['lavender', 'lightblue', 'hotpink'];
+		if (bk === undefined) return '';
+		return shiftColors[bk.shift-1];
 	}
 }

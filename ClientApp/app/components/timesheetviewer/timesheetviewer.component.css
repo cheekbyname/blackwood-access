@@ -26,6 +26,6 @@ table.table-rota th {
 }
 
 table.table-rota td:hover {
-    background-color: rgba(255, 105, 180, 0.5);
+    background-color: rgba(255, 105, 180, 0.5)!important;
     cursor: pointer;
 }

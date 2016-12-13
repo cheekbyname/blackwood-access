@@ -73,10 +73,15 @@ namespace Blackwood.Access.Services
 			dates.ToList().ForEach(dt => {
 				// Definitions:
 				// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
-				// The shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
-				// A Shift which contains a gap of two hours or more should be split into two shifts
+				// The Shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
+				// The Shift finishes at the end of the end of the last booking in that Shift, if the first Shift
+				// The Shift finishes at the end of the Availability block if the second Shift 
+				// A Shift which contains a gap of two hours or more should be split into two Shifts
+				// !But only if at least part of that gap falls between 2PM and 4PM!
 				// The first Shift ends at the end of the last Booking before the split
-				// The second Shift begins at the beginning of the first booking after the split 
+				// The second Shift begins at the beginning of the first booking after the split
+				// The actual hours paid are counted from the beginning of the Shift to the finish of it
+				// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
 
 				DateTime? shiftStart = null;
 				DateTime? lastEnd = null;
