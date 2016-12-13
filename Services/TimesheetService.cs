@@ -41,9 +41,6 @@ namespace Blackwood.Access.Services
 				Carer = carer
 			};
 
-			// Days covered
-			DateTime[] dates = DatesCovered(weekCommencing, 7); 
-
 			// CarerContracts
 			ts.Contracts = _context.Set<CarerContract>().FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
@@ -70,8 +67,17 @@ namespace Blackwood.Access.Services
 			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
-			//List<DateTime> tsDates = ts.Bookings.Select(bk => bk.ThisStart.Date).Distinct().OrderBy(dt => dt).ToList();
+			// Days covered
+			DateTime[] dates = DatesCovered(weekCommencing, 7); 
+
 			dates.ToList().ForEach(dt => {
+				// Definitions:
+				// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
+				// The shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
+				// A Shift which contains a gap of two hours or more should be split into two shifts
+				// The first Shift ends at the end of the last Booking before the split
+				// The second Shift begins at the beginning of the first booking after the split 
+
 				DateTime? shiftStart = null;
 				DateTime? lastEnd = null;
 				TimeSpan? thisGap = null;

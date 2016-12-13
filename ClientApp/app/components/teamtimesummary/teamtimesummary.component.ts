@@ -47,7 +47,6 @@ export class TeamTimeSummaryComponent {
 		this.http.get('api/timesheet/summaries/?teamCode=' + this._team.teamCode + '&periodStart=' + this.sqlDate(periodStart)
 			+ '&periodEnd=' + this.sqlDate(periodEnd)).subscribe( res => {
 				this.summaries = res.json();
-				console.log(res.json());
 			});
 	}
 
