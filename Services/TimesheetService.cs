@@ -71,8 +71,10 @@ namespace Blackwood.Access.Services
 
 			// Setup for Shift calculation
 			ts.Shifts = new List<Shift>();
+            Shift shift;
 			DateTime[] dates = DatesCovered(weekCommencing, 7); 
 
+			// Establish Shifts for each day in period
 			dates.ToList().ForEach(dt => {
 				// Definitions:
 				// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
@@ -87,10 +89,10 @@ namespace Blackwood.Access.Services
 				// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
 
 				TimeSpan thisGap;
+				int day = Array.FindIndex(dates, dx => dx == dt);
 
 				// First Shift of this day
-				Shift shift = new Shift() { CarerCode = ts.CarerCode, Sequence = 1, Day = Array.FindIndex(dates, dx => dx == dt) };
-				ts.Shifts.Add(shift);
+				shift = new Shift() { CarerCode = ts.CarerCode, Sequence = 1, Day = day };
 
 				ts.Bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
 					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
@@ -105,7 +107,7 @@ namespace Blackwood.Access.Services
 					{
 						ts.Shifts.Add(shift);
 						shift = new Shift() { CarerCode = ts.CarerCode, Sequence = ts.Shifts.Select(sh => sh.Sequence).Max() + 1,
-							Day = Array.FindIndex(dates, dx => dx == dt) };
+							Day = day };
 					}
 					else
 					{
