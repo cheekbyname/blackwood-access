@@ -9,6 +9,7 @@ namespace Blackwood.Access.Services
 
     public class TimesheetService : ITimesheetService
     {
+		private static int[] _absenceCodes = { 108, 109 };
 		private AccessContext _context;
 
 		public TimesheetService(AccessContext context)
@@ -30,6 +31,7 @@ namespace Blackwood.Access.Services
 			return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode", new SqlParameter("@TeamCode", TeamCode)).ToList()
 				.OrderBy(c => c.Forename).ThenBy(c => c.Surname);
 		}
+
         public Timesheet GetTimesheet(int carerCode, DateTime weekCommencing)
         {
 			Carer carer = _context.Carers.FirstOrDefault(c => c.CarerCode == carerCode);
@@ -67,7 +69,8 @@ namespace Blackwood.Access.Services
 			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
-			// Days covered
+			// Setup for Shift calculation
+			ts.Shifts = new List<Shift>();
 			DateTime[] dates = DatesCovered(weekCommencing, 7); 
 
 			dates.ToList().ForEach(dt => {
@@ -83,21 +86,40 @@ namespace Blackwood.Access.Services
 				// The actual hours paid are counted from the beginning of the Shift to the finish of it
 				// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
 
-				DateTime? shiftStart = null;
-				DateTime? lastEnd = null;
-				TimeSpan? thisGap = null;
-				int shiftCount = 1;
-				ts.Bookings.Where(bk => bk.ThisStart.Date == dt).OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
-					thisGap = bk.ThisStart - lastEnd ?? TimeSpan.FromMinutes(0);
-					shiftStart = shiftStart ?? bk.ThisStart;
-					if (thisGap >= TimeSpan.FromHours(2)) {
-						shiftCount++;
-						shiftStart = null;
+				TimeSpan thisGap;
+
+				// First Shift of this day
+				Shift shift = new Shift() { CarerCode = ts.CarerCode, Sequence = 1, Day = Array.FindIndex(dates, dx => dx == dt) };
+				ts.Shifts.Add(shift);
+
+				ts.Bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
+					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
+
+					// Calculate gap from last booking and adjust Shift Start/Finish times
+					thisGap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
+					shift.Start = shift.Start ?? bk.ThisStart;
+
+					// Begin new Shift if valid shift break detected
+					if (thisGap >= TimeSpan.FromHours(2) &&
+						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) || (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
+					{
+						ts.Shifts.Add(shift);
+						shift = new Shift() { CarerCode = ts.CarerCode, Sequence = ts.Shifts.Select(sh => sh.Sequence).Max() + 1,
+							Day = Array.FindIndex(dates, dx => dx == dt) };
 					}
-					bk.Shift = shiftCount;
-					lastEnd = bk.ThisFinish;
+					else
+					{
+						shift.Finish = bk.ThisFinish;
+						shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes);		// TODO Factor in breaks
+					}
+
+					// Tag Booking with Shift Sequence
+					bk.Shift = shift.Sequence;
 				});
 			});
+
+			// Strip out blank Shifts
+			ts.Shifts = ts.Shifts.Where(sh => sh.Start != null && sh.Finish != null).ToList();
 
 			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture
 

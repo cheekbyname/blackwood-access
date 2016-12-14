@@ -12,9 +12,9 @@
 						<th class="col-md-4">Team</th>
 						<th class="col-md-1">Cycle Week</th>
 						<th class="col-md-1">Contracted Hours</th>
-						<th class="col-md-1">Maximum Hours</th>
 						<th class="col-md-1">Available Hours</th>
 						<th class="col-md-1">Booking Hours</th>
+						<th class="col-md-1">Actual Hours</th>
 						<th class="col-md-1">Overtime Hours</th>
 						<th class="col-md-1">Sickness &amp; Annual Leave</th>
 					</tr>
@@ -25,9 +25,9 @@
 						<td>{{contract.teamDesc}}</td>
 						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- This is out by one on the first digit under certain circumstances -->
 						<td>{{displayTime(contract.contractMins)}}</td>
-						<td>{{displayTime(contract.limitMins)}}</td>
 						<td>{{displayTime(availHoursForContract(contract.contractCode))}}</td>
 						<td>{{displayTime(bookedHoursForContract(contract.contractCode)-leaveSickHoursForContract(contract.contractCode))}}</td>
+						<td>{{displayTime(actualHoursForContract(contract.contractCode))}}</td>
 						<td>{{displayTime(overtimeHoursForContract(contract.contractCode))}}</td>
 						<td>{{displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
 					</tr>
@@ -39,13 +39,13 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th>Monday {{dateOrd(0)}}</th>
-						<th>Tuesday {{dateOrd(1)}}</th>
-						<th>Wednesday {{dateOrd(2)}}</th>
-						<th>Thursday {{dateOrd(3)}}</th>
-						<th>Friday {{dateOrd(4)}}</th>
-						<th>Saturday {{dateOrd(5)}}</th>
-						<th>Sunday {{dateOrd(6)}}</th>
+						<th>Monday {{dateOrd(0)}}<br/>{{displayTime(actualHoursForDay(0))}}</th>
+						<th>Tuesday {{dateOrd(1)}}<br/>{{displayTime(actualHoursForDay(1))}}</th>
+						<th>Wednesday {{dateOrd(2)}}<br/>{{displayTime(actualHoursForDay(2))}}</th>
+						<th>Thursday {{dateOrd(3)}}<br/>{{displayTime(actualHoursForDay(3))}}</th>
+						<th>Friday {{dateOrd(4)}}<br/>{{displayTime(actualHoursForDay(4))}}</th>
+						<th>Saturday {{dateOrd(5)}}<br/>{{displayTime(actualHoursForDay(5))}}</th>
+						<th>Sunday {{dateOrd(6)}}<br/>{{displayTime(actualHoursForDay(6))}}</th>
 					</tr>
 				</thead>
 				<tbody>

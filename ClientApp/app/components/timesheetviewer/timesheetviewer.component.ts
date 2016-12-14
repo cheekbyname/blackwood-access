@@ -45,8 +45,8 @@ export class TimesheetViewerComponent implements OnInit {
 	get carer() { return this._carer }
 
 	getTimesheet(): void {
-		this.http.get('/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing)
-			.subscribe(res => this.handleRes(res));
+		var tsUrl = '/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing;
+		this.http.get(tsUrl).subscribe(res => this.handleRes(res));
 	}
 
 	handleRes(res): void {
@@ -70,15 +70,13 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings[offset].push(bk);
 	}
 
-	// Transform n*7 array to 7*n
+	// Transpose Bookings array
 	transBook(): void {
 		var bks = this.bookings;
-		var len = Math.max(...bks.map(ar => { return ar.length }));				// Get max width of matrix
-		if (len-bks.length > 0) {
-			bks = bks.concat(Array(len-bks.length).fill([]));					// Pad to square
-		}
-		bks = bks.map((r, c) => bks.map(r => r[c]));							// Transpose array
-		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 
+		var len = Math.max(...bks.map(ar => { return ar.length }));					// Get max width of matrix
+		if (len-bks.length > 0) bks = bks.concat(Array(len-bks.length).fill([]));	// Pad to square
+		bks = bks.map((r, c) => bks.map(r => r[c]));								// Transpose array
+		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 	// Strip blank rows
 	}
 
 	public combinedAvailability(): Availability[] {
@@ -110,25 +108,37 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
+	public actualHoursForDay(offset: number): number {
+		return this.timesheet.shifts
+			.filter(sh => sh.day === offset)
+			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0);
+	}
+
+	public actualHoursForContract(contractCode: number): number {
+		// TODO Filter by Contract once we figure out what to do regarding possible multi-contract shifts
+		return this.timesheet.shifts
+			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0 )
+	}
+
 	public overtimeHoursForContract(contractCode: number): number {
 		return this.timesheet.actualAvailability
 			.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
-			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur}, 0);
+			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public leaveSickHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
 			.filter(bk => bk.contractCode === contractCode && this.absenceCodes.some(ac => ac === bk.bookingType))
-			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur}, 0);
+			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public bookingSlot(offset: number): CarerBooking[] {
-		var bookSlot = CarerBooking[7];
-		for (var i=0; i<7; i++) {
+	// public bookingSlot(offset: number): CarerBooking[] {
+	// 	var bookSlot = CarerBooking[7];
+	// 	for (var i=0; i<7; i++) {
 
-		}
-		return bookSlot;
-	}
+	// 	}
+	// 	return bookSlot;
+	// }
 
 	public dateOrd(offset: number): string {
 		var dt = new Date(this.weekCommencing);
@@ -149,6 +159,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'hotpink'];
 		if (bk === undefined) return '';
+		if (this.absenceCodes.some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		return shiftColors[bk.shift-1];
 	}
 }
