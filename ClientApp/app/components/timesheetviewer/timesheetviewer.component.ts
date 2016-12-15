@@ -120,10 +120,14 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0 )
 	}
 
-	public overtimeHoursForContract(contractCode: number): number {
-		return this.timesheet.actualAvailability
-			.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
-			.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0);
+	public additionalHoursForContract(contractCode: number): number {
+		var overMins = this.actualHoursForContract(contractCode)
+			- this.timesheet.contracts.find(cn => cn.contractCode === contractCode).contractMins;
+		return overMins < 0 ? 0 : overMins;
+
+		// return this.timesheet.actualAvailability
+		// 	.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
+		// 	.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public leaveSickHoursForContract(contractCode: number): number {

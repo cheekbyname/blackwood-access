@@ -71,7 +71,7 @@ namespace Blackwood.Access.Services
 
 			// Setup for Shift calculation
 			ts.Shifts = new List<Shift>();
-            Shift shift;
+			Shift shift;
 			DateTime[] dates = DatesCovered(weekCommencing, 7); 
 
 			// Establish Shifts for each day in period
@@ -88,7 +88,7 @@ namespace Blackwood.Access.Services
 				// The actual hours paid are counted from the beginning of the Shift to the finish of it
 				// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
 
-				TimeSpan thisGap;
+				TimeSpan gap;
 				int day = Array.FindIndex(dates, dx => dx == dt);
 
 				// First Shift of this day
@@ -98,11 +98,11 @@ namespace Blackwood.Access.Services
 					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
 
 					// Calculate gap from last booking and adjust Shift Start/Finish times
-					thisGap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
+					gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
 					shift.Start = shift.Start ?? bk.ThisStart;
 
 					// Begin new Shift if valid shift break detected
-					if (thisGap >= TimeSpan.FromHours(2) &&
+					if (gap >= TimeSpan.FromHours(2) &&
 						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) || (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
 					{
 						ts.Shifts.Add(shift);
@@ -118,6 +118,7 @@ namespace Blackwood.Access.Services
 					// Tag Booking with Shift Sequence
 					bk.Shift = shift.Sequence;
 				});
+				ts.Shifts.Add(shift);
 			});
 
 			// Strip out blank Shifts

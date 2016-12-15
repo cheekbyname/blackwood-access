@@ -15,7 +15,7 @@
 						<th class="col-md-1">Available Hours</th>
 						<th class="col-md-1">Booking Hours</th>
 						<th class="col-md-1">Actual Hours</th>
-						<th class="col-md-1">Overtime Hours</th>
+						<th class="col-md-1">Additional Hours</th>
 						<th class="col-md-1">Sickness &amp; Annual Leave</th>
 					</tr>
 				</thead>
@@ -28,7 +28,7 @@
 						<td>{{displayTime(availHoursForContract(contract.contractCode))}}</td>
 						<td>{{displayTime(bookedHoursForContract(contract.contractCode)-leaveSickHoursForContract(contract.contractCode))}}</td>
 						<td>{{displayTime(actualHoursForContract(contract.contractCode))}}</td>
-						<td>{{displayTime(overtimeHoursForContract(contract.contractCode))}}</td>
+						<td>{{displayTime(additionalHoursForContract(contract.contractCode))}}</td>
 						<td>{{displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
 					</tr>
 				</tbody>
