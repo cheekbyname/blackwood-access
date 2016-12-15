@@ -6,6 +6,8 @@ import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
 import { Availability } from '../../models/availability';
 
+type BookingGrid = Array<Array<CarerBooking>>;
+
 @Component({
 	selector: 'timesheet-viewer',
 	template: require('./timesheetviewer.component.html'),
@@ -27,7 +29,7 @@ export class TimesheetViewerComponent implements OnInit {
 	_weekCommencing: Date;
 	http: Http;
 	timesheet: Timesheet;
-	bookings = [];
+	bookings: BookingGrid;
 	isContracted: boolean;
 
 	@Input()
@@ -46,10 +48,10 @@ export class TimesheetViewerComponent implements OnInit {
 
 	getTimesheet(): void {
 		var tsUrl = '/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing;
-		this.http.get(tsUrl).subscribe(res => this.handleRes(res));
+		this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
 	}
 
-	handleRes(res): void {
+	processTimesheet(res): void {
 		this.bookings = this.emptyBook();
 		var ts: Timesheet = res.json();
 		this.timesheet = ts;
@@ -61,7 +63,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	emptyBook() {
-		return [[],[],[],[],[],[],[]]
+		return [[],[],[],[],[],[],[]];
 	};
 
 	stuffBook(bk: CarerBooking): void {
@@ -75,8 +77,31 @@ export class TimesheetViewerComponent implements OnInit {
 		var bks = this.bookings;
 		var len = Math.max(...bks.map(ar => { return ar.length }));					// Get max width of matrix
 		if (len-bks.length > 0) bks = bks.concat(Array(len-bks.length).fill([]));	// Pad to square
-		bks = bks.map((r, c) => bks.map(r => r[c]));								// Transpose array
+		bks = bks.map((x, y) => bks.map(x => x[y]));								// Transpose array
+		//bks = this.chronOrder(bks);													// Shift down to make some chronological sense
 		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 	// Strip blank rows
+	}
+
+	// Display BookingGrid in rough chronological order by sliding Bookings down if they start after another on the same row finishes
+	chronOrder(bookings: BookingGrid): BookingGrid {
+		var row = 0;
+		while (row < bookings.length - 1) {
+			var min = bookings[row].map(booking => { if (booking === undefined) {
+					return 9 } else { return booking.shift }
+				}).reduce((cur, min) => { return min < cur ? min : cur; }, 9);
+			bookings[row].forEach((booking) => {
+				if (booking !== undefined && booking.shift > min) {
+					var col = bookings[row].indexOf(booking);
+					if (bookings[bookings.length - 1][col] !== undefined) { bookings.push(Array(7)) };
+					for (var i = bookings.length - 1; i > row ; i--) {
+						bookings[i][col] = bookings[i-1][col];
+					}
+					bookings[row][col] = undefined;
+				}
+			});
+			row++;
+		}
+		return bookings;
 	}
 
 	public combinedAvailability(): Availability[] {
@@ -161,9 +186,10 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public bookColor(bk: CarerBooking): string {
-		var shiftColors = ['lavender', 'lightblue', 'hotpink'];
+		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
 		if (this.absenceCodes.some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
-		return shiftColors[bk.shift-1];
+		//return shiftColors[bk.shift-1];
+		return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
 	}
 }
