@@ -21,6 +21,7 @@ table.table-rota {
 
 table.table-rota th {
     width: 14.3%;
+    min-width: 9em;
     background-color: rgba(191, 215, 48, 0.5);
     /*width: 14.285714%;*/
 }
