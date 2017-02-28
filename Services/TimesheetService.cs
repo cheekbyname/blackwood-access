@@ -102,6 +102,7 @@ namespace Blackwood.Access.Services
 					gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
 					shift.Start = shift.Start ?? bk.ThisStart;
 
+					//  TODO Check for Unpaid Break Booking Type
 					// Begin new Shift if valid shift break detected
 					if (gap >= TimeSpan.FromHours(2) &&
 						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) || (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
