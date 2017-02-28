@@ -19,11 +19,11 @@ namespace Blackwood.Access.Services
 
 		public IEnumerable<Team> GetTeams()
 		{
-			return _context.Teams.OrderBy(c=>c.TeamDesc).ToList();
+			return _context.Teams.OrderBy(c => c.TeamDesc).ToList();
 		}
         public IEnumerable<Carer> GetCarers()
         {
-			return _context.Carers.OrderBy(c=>c.Forename).ThenBy(c=>c.Surname).ToList();
+			return _context.Carers.OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
         }
 
 		public IEnumerable<Carer> GetCarersByTeam(int TeamCode)
