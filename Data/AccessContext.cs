@@ -7,11 +7,17 @@ namespace Blackwood.Access
     public class AccessContext : DbContext {
 
 		public AccessContext(DbContextOptions<AccessContext> options) : base(options) { }
-		public DbSet<Team> Teams {get;set;}
-		public DbSet<Carer> Carers {get;set;}
-		public DbSet<CarerContract> CarerContracts {get;set;}
-		public DbSet<Availability> Availabilities {get;set;}
-		public DbSet<CarerBooking> CarerBookings {get;set;}
+		public DbSet<Team> Teams { get; set; }
+		public DbSet<Carer> Carers { get; set; }
+		public DbSet<CarerContract> CarerContracts { get; set; }
+		public DbSet<Availability> Availabilities { get; set; }
+		public DbSet<CarerBooking> CarerBookings { get; set; }
 		public DbSet<Summary> Summaries { get; set; }
+        public DbSet<CareInitialAssessment> CareInitialAssessments { get; set; }
+        public DbSet<ActiveUser> ActiveUsers { get; set; }
+        public DbSet<CheckItem> CheckItems { get; set; }
+        public DbSet<CommsItem> CommsItems { get; set; }
+        public DbSet<TileGroup> TileGroups { get; set; }
+        public DbSet<TileItem> TileItems { get; set; }
 	}
 }

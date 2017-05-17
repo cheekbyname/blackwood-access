@@ -34,6 +34,7 @@ namespace Blackwood.Access
 
             // Add Application services
             services.AddTransient<ITimesheetService, TimesheetService>();
+            services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
