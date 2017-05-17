@@ -1,12 +1,21 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Blackwood.Access.Models
 {
+	using System;
+	using System.ComponentModel.DataAnnotations;
+
 	public class Team
 	{
-		[Key]
-		public int TeamCode {get;set;}
+		// public int ID { get; set;}
 
-		public string TeamDesc {get;set;}
+		[Key]
+		public Int16 TeamCode { get; set; }
+
+		// public Guid CareSysLocationGuid { get; set; }
+
+		public string TeamDesc { get; set; }
+
+		// public bool EnableSync { get; set; }
+
+		// public string PrimaryContact { get; set; }
 	}
 }
