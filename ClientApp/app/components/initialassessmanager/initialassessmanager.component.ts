@@ -27,4 +27,9 @@ export class InitialAssessManagerComponent implements OnInit {
         // Init data
         this.assPro.getAssessments();
     }
+
+    dateFormat(parm) {
+        var dt = new Date(parm);
+        return dt.getDate() + '-' + dt.getMonth() + '-' + dt.getFullYear();
+    }
 }

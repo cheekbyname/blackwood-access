@@ -13,10 +13,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="row" *ngFor="let assess of assessments">
+                    <tr class="row table-row" *ngFor="let assess of assessments">
                         <td>{{assess.name}}</td>
                         <td>{{assess.visitBy}}</td>
-                        <td>{{assess.visitDate}}</td>
+                        <td>{{dateFormat(assess.visitDate)}}</td>
                     </tr>
                 </tbody>
             </table>
