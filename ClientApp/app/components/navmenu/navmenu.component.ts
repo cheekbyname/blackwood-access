@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { TimesheetService } from '../../services/timesheet.service';
+import { TimesheetProvider } from '../../providers/timesheet.provider';
 
 @Component({
     selector: 'nav-menu',
@@ -7,10 +7,12 @@ import { TimesheetService } from '../../services/timesheet.service';
     styles: [require('./navmenu.component.css')]
 })
 export class NavMenuComponent implements OnInit {
+
     en: any;
     selectedDate: Date;
+    showCalendar: boolean = true;
 
-    constructor(public timeSrv: TimesheetService) {
+    constructor(public timeSrv: TimesheetProvider) {
 
     }
 

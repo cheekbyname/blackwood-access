@@ -28,12 +28,17 @@
                     </a>
                 </li>-->
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/timesheet-manager']">
+                    <a [routerLink]="['/timesheet-manager']" (click)="showCalendar=true">
                         <span class="glyphicon glyphicon-calendar"></span>Timesheet Manager
                     </a>
                 </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/initial-assess-manager']" (click)="showCalendar=false">
+                        <span class="glyphicon glyphicon-list-alt"></span>Initial Assessments
+                    </a>
+                </li>
             </ul>
-            <div class="calendar-div" align="center">
+            <div *ngIf="showCalendar" class="calendar-div" align="center">
                 <p-calendar class="datepicker" [inline]="true" [locale]="en" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"
                     [showOtherMonths]="true" [selectOtherMonths]="true">
                 </p-calendar>

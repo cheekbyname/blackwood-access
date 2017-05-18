@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/subscription';
 import { Carer } from '../../models/Carer';
 import { Timesheet } from '../../models/Timesheet';
 import { Team } from '../../models/Team';
-import { TimesheetService } from '../../services/timesheet.service';
+import { TimesheetProvider } from '../../providers/timesheet.provider';
 
 @Component({
     selector: 'timesheet-manager',
@@ -33,15 +33,15 @@ export class TimesheetManagerComponent implements OnInit {
         this.weekCommencing = this.getWeekCommencingFromDate(new Date(Date.now()));
 
         // Subscribe to TimesheetService observables
-        this.teamSub = this.timeSrv.teams$.subscribe(teams => {
+        this.teamSub = this.timePro.teams$.subscribe(teams => {
             this.teams = teams;
         });
-        this.selectedDateSub = this.timeSrv.weekCommencing$.subscribe(dt => {
+        this.selectedDateSub = this.timePro.weekCommencing$.subscribe(dt => {
             this.weekCommencing = this.getWeekCommencingFromDate(dt);
         });
 
         // Init Team list in TimesheetService 
-        this.timeSrv.getTeams();
+        this.timePro.getTeams();
     }
 
     @Input()
@@ -55,7 +55,7 @@ export class TimesheetManagerComponent implements OnInit {
         });
     }
 
-    constructor(private http: Http, public timeSrv: TimesheetService) {
+    constructor(private http: Http, public timePro: TimesheetProvider) {
 
     }
 

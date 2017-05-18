@@ -1,0 +1,57 @@
+h4, label, select, input, td {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+p {
+    padding: 10px;
+}
+
+strong {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}
+
+label, select, input, .input-group {
+    font-size: 11pt;
+    margin-right: 10px;
+}
+
+.panel {
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+.btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+}
+
+.datebutton {
+    color: green;
+}
+
+.datebutton:hover, .row:hover {
+    cursor: pointer;
+    background-color: #bfd730;
+    color: black;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+}

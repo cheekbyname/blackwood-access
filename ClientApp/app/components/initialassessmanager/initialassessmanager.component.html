@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Care Initial Assessments</h4>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr class="row">
+                        <td class="col-md-5">Client's Name</td>
+                        <td class="col-md-5">Visit Conducted By</td>
+                        <td class="col-md-2">Date of Visit</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row" *ngFor="let assess of assessments">
+                        <td>{{assess.name}}</td>
+                        <td>{{assess.visitBy}}</td>
+                        <td>{{assess.visitDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

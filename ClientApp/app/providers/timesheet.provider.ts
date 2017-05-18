@@ -5,7 +5,7 @@ import { Carer } from '../models/carer';
 import { Team } from '../models/team';
 
 @Injectable()
-export class TimesheetService
+export class TimesheetProvider
 {
     constructor(public http: Http) {
     }
