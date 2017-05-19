@@ -19,8 +19,14 @@ strong {
 label, select, input, .input-group {
     font-size: 11pt;
     margin-right: 10px;
+    vertical-align: middle;
 }
 
+label {
+    text-align: right;
+    font-style: italic;
+    margin-top: 4px;
+}
 .panel {
     margin-top: 20px;
     margin-left: 0px;
@@ -58,4 +64,9 @@ label, select, input, .input-group {
     border-bottom: 1px solid silver;
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);
+}
+
+.form-group {
+    clear: left;
+    margin-bottom: 40px;
 }
