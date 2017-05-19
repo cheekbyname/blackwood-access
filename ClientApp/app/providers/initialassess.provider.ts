@@ -1,6 +1,7 @@
-import { Component, Injectable} from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Subject } from 'rxjs/subject';
+import { Subject, Observable } from 'rxjs';
+import 'rxjs/Rx';
 
 import { CareInitialAssessment } from '../models/careinitialassessment';
 
@@ -21,5 +22,9 @@ export class InitialAssessProvider {
             assessments = res.json();
             this.assessSource.next(assessments);
         });
+    }
+
+    getAssessment(id: number) {
+        return this.http.get('api/careinitialassessment/careinitialassessment?id=' + id);
     }
 }

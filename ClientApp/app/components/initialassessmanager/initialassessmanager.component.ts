@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs/subscription';
 
@@ -15,7 +16,7 @@ export class InitialAssessManagerComponent implements OnInit {
     public assessments: CareInitialAssessment[];
     assessSub: Subscription;
 
-    constructor(private http: Http, private assPro: InitialAssessProvider) {
+    constructor(private http: Http, private assPro: InitialAssessProvider, private router: Router) {
 
     }
 
@@ -30,6 +31,10 @@ export class InitialAssessManagerComponent implements OnInit {
 
     dateFormat(parm) {
         var dt = new Date(parm);
-        return dt.getDate() + '-' + dt.getMonth() + '-' + dt.getFullYear();
+        return dt.getDate() + '-' + (dt.getMonth() + 1) + '-' + dt.getFullYear();
+    }
+
+    selectAssess(assess: CareInitialAssessment) {
+        this.router.navigate(['/initial-assess', assess.id]);
     }
 }

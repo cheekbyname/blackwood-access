@@ -7,14 +7,16 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr class="row">
-                        <td class="col-md-5">Client's Name</td>
-                        <td class="col-md-5">Visit Conducted By</td>
+                        <td class="col-md-3">Client's Name</td>
+                        <td class="col-md-4">Client's Address</td>
+                        <td class="col-md-3">Visit Conducted By</td>
                         <td class="col-md-2">Date of Visit</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="row table-row" *ngFor="let assess of assessments">
+                    <tr class="row table-row" *ngFor="let assess of assessments" (click)="selectAssess(assess)">
                         <td>{{assess.name}}</td>
+                        <td>{{assess.address1}}</td>
                         <td>{{assess.visitBy}}</td>
                         <td>{{dateFormat(assess.visitDate)}}</td>
                     </tr>

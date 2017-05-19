@@ -5,6 +5,7 @@ export class CareInitialAssessment {
 	// Internal
 	guid: string;
 	activeUser: ActiveUser;
+	id: number;
 
 	// Assessment Tab
 	name: string;

@@ -44,7 +44,7 @@ label, select, input, .input-group {
 
 .datebutton:hover, .table-row:hover {
     cursor: pointer;
-    background-color: #bfd730;
+    background-color: rgba(255, 105, 180, 0.5);
     color: black;
 }
 

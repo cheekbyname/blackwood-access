@@ -20,5 +20,10 @@
         {
             return _service.GetAllAssessments();
         }
+
+        [HttpGet("[action]")]
+        public CareInitialAssessment CareInitialAssessment(int id) {
+            return _service.GetAssessment(id);
+        }
     }
 }

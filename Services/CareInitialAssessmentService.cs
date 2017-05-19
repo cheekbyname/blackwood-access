@@ -22,11 +22,13 @@
                 .Include(c => c.ActiveUser).Include(c => c.CheckItems).Include(c => c.Comms)
                 .Include(c => c.TileGroups).Include(c => c.TileGroups).ThenInclude(g => g.Items)
                 .ToList();
+            // TODO Use PopAndSort (below)
             // Pop lookups and sort Comms
             assess.SelectMany(a => a.Comms).ToList().ForEach(c => { c.Title = CommsItem.Lookup[c.ItemId]; });
             assess.ForEach(a => { a.Comms = a.Comms.OrderBy(c => c.ItemId).ToList(); });
             // Pop lookups and sort CheckItems
-            assess.SelectMany(a => a.CheckItems).ToList().ForEach(c => {
+            assess.SelectMany(a => a.CheckItems).ToList().ForEach(c =>
+            {
                 c.ItemName = CheckItem.Lookup[c.ItemId].ItemName;
                 c.FurtherValue = CheckItem.Lookup[c.ItemId].FurtherValue;
                 c.FurtherTitle = CheckItem.Lookup[c.ItemId].FurtherTitle;
@@ -44,6 +46,43 @@
                 c.Items = c.Items.OrderBy(i => i.ItemId).ToList();
             });
             assess.ForEach(a => { a.TileGroups = a.TileGroups.OrderBy(c => c.GroupId).ToList(); });
+
+            return assess;
+        }
+
+        public CareInitialAssessment GetAssessment(int Id)
+        {
+            CareInitialAssessment assess = _context.CareInitialAssessments
+                .Include(c => c.ActiveUser).Include(c => c.CheckItems).Include(c => c.Comms)
+                .Include(c => c.TileGroups).Include(c => c.TileGroups).ThenInclude(g => g.Items)
+                .FirstOrDefault(cia => cia.Id == Id);
+            
+            return PopAndSort(assess);
+        }
+
+        private CareInitialAssessment PopAndSort(CareInitialAssessment assess) {
+            assess.Comms.ToList().ForEach(c => { c.Title = CommsItem.Lookup[c.ItemId]; });
+            assess.Comms = assess.Comms.OrderBy(c => c.ItemId).ToList();
+
+            assess.CheckItems.ToList().ForEach(c =>
+            {
+                c.ItemName = CheckItem.Lookup[c.ItemId].ItemName;
+                c.FurtherValue = CheckItem.Lookup[c.ItemId].FurtherValue;
+                c.FurtherTitle = CheckItem.Lookup[c.ItemId].FurtherTitle;
+            });
+            assess.CheckItems = assess.CheckItems.OrderBy(c => c.ItemId).ToList();
+
+            assess.TileGroups.ToList().ForEach(c =>
+            {
+                c.Title = TileGroup.Lookup[c.GroupId].Title;
+                c.Desc = TileGroup.Lookup[c.GroupId].Desc;
+                c.Items.ToList().ForEach(i =>
+                {
+                    i.Task = TileItem.Lookup[Tuple.Create(i.GroupId, i.ItemId)];
+                });
+                c.Items = c.Items.OrderBy(i => i.ItemId).ToList();
+            });
+            assess.TileGroups = assess.TileGroups.OrderBy(c => c.GroupId).ToList();
 
             return assess;
         }

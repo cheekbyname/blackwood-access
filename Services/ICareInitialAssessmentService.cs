@@ -6,5 +6,6 @@
     public interface ICareInitialAssessmentService
     {
         IEnumerable<CareInitialAssessment> GetAllAssessments();
+        CareInitialAssessment GetAssessment(int Id);
     }
 }
