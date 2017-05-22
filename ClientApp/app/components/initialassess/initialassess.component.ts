@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
+import { SliderModule } from 'primeng/primeng';
 
 import { CareInitialAssessment } from '../../models/careinitialassessment'
 import { InitialAssessProvider } from '../../providers/initialassess.provider';

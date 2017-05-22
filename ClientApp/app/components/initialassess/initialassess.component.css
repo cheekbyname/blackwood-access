@@ -1,4 +1,4 @@
-h4, label, select, input, td {
+h4, label, select, input, td, textarea, p {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -11,7 +11,7 @@ p {
     padding: 10px;
 }
 
-strong {
+strong, textarea, p {
     font-family: 'Century Gothic';
     font-size: 11pt;
 }
@@ -25,7 +25,7 @@ label, select, input, .input-group {
 label {
     text-align: right;
     font-style: italic;
-    margin-top: 4px;
+    margin-left: 4px;
 }
 .panel {
     margin-top: 20px;
@@ -66,7 +66,6 @@ label {
     background-color: rgba(191, 215, 48, 0.5);
 }
 
-.form-group {
-    clear: left;
-    margin-bottom: 40px;
+.check-label, .nudge-down {
+    margin-top: 6px;
 }

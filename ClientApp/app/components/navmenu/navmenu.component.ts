@@ -10,7 +10,7 @@ export class NavMenuComponent implements OnInit {
 
     en: any;
     selectedDate: Date;
-    showCalendar: boolean = true;
+    showCalendar: boolean = false;
 
     constructor(public timeSrv: TimesheetProvider) {
 

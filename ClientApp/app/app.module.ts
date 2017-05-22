@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { FormsModule } from '@angular/forms';
 
-import { CalendarModule } from 'primeng/primeng';
+import { CalendarModule, SliderModule } from 'primeng/primeng';
 
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -49,7 +49,8 @@ import { TimesheetProvider } from './providers/timesheet.provider';
             { path: '**', redirectTo: 'home' }
         ]),
         FormsModule,
-        CalendarModule
+        CalendarModule,
+        SliderModule
     ],
     providers: [ TimesheetProvider, InitialAssessProvider ]
 })
