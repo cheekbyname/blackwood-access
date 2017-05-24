@@ -1,251 +1,389 @@
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <h4>Care Initial Assessment</h4>
+    <div class="panel-heading clearfix">
+        <h4 class="pull-left">Care Initial Assessment</h4>
+        <div class="btn-group pull-right">
+            <button class="btn btn-default" [ngClass]="{'selected': section=='assessment'}" (click)="selectSection('assessment')">Assessment</button>
+            <button class="btn btn-default" [ngClass]="{'selected': section=='checklist'}" (click)="selectSection('checklist')">Checklist</button>
+            <button class="btn btn-default" [ngClass]="{'selected': section=='handling'}" (click)="selectSection('handling')">Handling</button>
+            <button class="btn btn-default" [ngClass]="{'selected': section=='tile'}" (click)="selectSection('tile')">T.I.L.E</button>
+        </div>
     </div>
-    <div class="panel-body">
+    <!-- TODO panel-body height is a bit of a fudge -->
+    <div class="panel-body" style="height:87vh;overflow-y:scroll;">
         <form class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="visitDate" class="col-form-label">Date of Visit</label>
-                    <input class="form-control" [value]="assess.visitDate | date:'dd/MM/yyyy'" id="visitDate" type="date" readonly/>
+            <div *ngIf="section=='assessment'" class="panel-section" id="assessment">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="visitDate" class="col-form-label">Date of Visit</label>
+                        <input class="form-control" [value]="assess.visitDate | date:'dd/MM/yyyy'" id="visitDate" readonly/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="visitBy" class="col-form-label">Visit By</label>
+                        <input class="form-control" [value]="assess.visitBy" id="visitBy" readonly/>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="visitBy" class="col-form-label">Visit By</label>
-                    <input class="form-control" [value]="assess.visitBy" id="visitBy" readonly/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="name" class="col-form-label">Name of Client</label>
+                        <input class="form-control" [value]="assess.name" id="name" readonly/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="prefName" class="col-form-label">Preferred Name</label>
+                        <input class="form-control" [value]="assess.prefName" id="prefName" readonly/>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="name" class="col-form-label">Name of Client</label>
-                    <input class="form-control" [value]="assess.name" id="name" readonly/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="address1">Address</label>
+                        <textarea class="form-control" [value]="assess.address1" id="address1" rows="5" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="telephoneNumber">Telephone Number</label>
+                        <input class="form-control" [value]="assess.telephoneNumber" id="telephoneNumber" readonly/>
+                        <label for="dateOfBirth" class="nudge-down">Date of Birth</label>
+                        <input class="form-control" [value]="assess.dateOfBirth | date:'dd/MM/yyyy'" id="dateOfBirth" readonly/>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="prefName" class="col-form-label">Preferred Name</label>
-                    <input class="form-control" [value]="assess.prefName" id="prefName" readonly/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="address1">Address</label>
-                    <textarea class="form-control" [value]="assess.address1" id="address1" rows="5" readonly></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="telephoneNumber">Telephone Number</label>
-                    <input class="form-control" [value]="assess.telephoneNumber" id="telephoneNumber" readonly/>
-                    <label for="dateOfBirth" class="nudge-down">Date of Birth</label>
-                    <input class="form-control" [value]="assess.dateOfBirth | date:'dd/MM/yyyy'" id="dateOfBirth" readonly/>
-                </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="visitType">Type of Visit</label>
-                    <select class="form-control" [value]="assess.visitType" id="visitType" disabled>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="visitType">Type of Visit</label>
+                        <select class="form-control" [value]="assess.visitType" id="visitType" disabled>
                         <option value="0">Personal Care</option>
                         <option value="1">Non-Personal Care</option>
                         <option value="2">Housing Support</option>
                         <option value="3">Mixed Care &amp; Housing Support</option>
                     </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="whatRequired">What assistance is required</label>
-                    <textarea class="form-control" [value]="assess.whatRequired" id="whatRequired" rows="3" readonly></textarea>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="whatRequired">What assistance is required</label>
+                        <textarea class="form-control" [value]="assess.whatRequired" id="whatRequired" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="whenRequired">When assistance is required</label>
+                        <textarea class="form-control" [value]="assess.whenRequired" id="whenRequired" rows="3" readonly></textarea>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="whenRequired">When assistance is required</label>
-                    <textarea class="form-control" [value]="assess.whenRequired" id="whenRequired" rows="3" readonly></textarea>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="staffRequirements">Staffing &amp; Training Requirements</label>
+                        <textarea class="form-control" [value]="assess.staffRequirements" id="staffRequirements" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="generalHealth">General Health &amp; Physical Wellbeing</label>
+                        <textarea class="form-control" [value]="assess.generalHealth" id="generalHealth" rows="3" readonly></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="staffRequirements">Staffing &amp; Training Requirements</label>
-                    <textarea class="form-control" [value]="assess.staffRequirements" id="staffRequirements" rows="3" readonly></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="generalHealth">General Health &amp; Physical Wellbeing</label>
-                    <textarea class="form-control" [value]="assess.generalHealth" id="generalHealth" rows="3" readonly></textarea>
-                </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="medication">Medication</label>
-                    <textarea class="form-control" [value]="assess.medication" id="medication" rows="3" readonly></textarea>
-                    <label for="medicationCapacity" class="nudge-down">Capacity</label>
-                    <select class="form-control" [value]="assess.medicationCapacity" id="medicationCapacity" disabled>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="medication">Medication</label>
+                        <textarea class="form-control" [value]="assess.medication" id="medication" rows="3" readonly></textarea>
+                        <label for="medicationCapacity" class="nudge-down">Capacity</label>
+                        <select class="form-control" [value]="assess.medicationCapacity" id="medicationCapacity" disabled>
                         <option value="0">Has Capacity</option>
                         <option value="1">Does not have Capacity</option>
                         <option value="2">Referred for GP Assessment</option>
                     </select>
+                    </div>
+                    <div class="col-md-6" style="padding:0%;">
+                        <div class="col-md-4">
+                            <input type="checkbox" [checked]="assess.medicMorningVisit" id="medicMorningVisit" disabled/>
+                            <label for="medicMorningVisit" class="check-label">Morning</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" [checked]="assess.medicLunchVisit" id="medicLunchVisit" disabled/>
+                            <label for="medicLunchVisit" class="check-label">Lunchtime</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" [checked]="assess.medicTeatimeVisit" id="medicTeamtimeVisit" disabled/>
+                            <label for="medicTeamtimeVisit" class="check-label">Teatime</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" [checked]="assess.medicBedtimeVisit" id="medicBedtimeVisit" disabled/>
+                            <label for="medicBedtimeVisit" class="check-label">Bedtime</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" [checked]="assess.medicOtherVisit" id="medicOtherVisit" disabled/>
+                            <label for="medicOtherVisit" class="check-label">Other Time</label>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="medicOtherVisitDetails" style="margin-top:8px;">Other Visit Time</label>
+                            <textarea class="form-control" [value]="assess.medicOtherVisitDetails" id="medicOtherVisitDetails" rows="3" readonly></textarea>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6" style="padding:0%;">
-                    <div class="col-md-4">
-                        <input type="checkbox" [checked]="assess.medicMorningVisit" id="medicMorningVisit" disabled/>
-                        <label for="medicMorningVisit" class="check-label">Morning</label>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="checkbox" [checked]="assess.medicLunchVisit" id="medicLunchVisit" disabled/>
-                        <label for="medicLunchVisit" class="check-label">Lunchtime</label>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="checkbox" [checked]="assess.medicTeatimeVisit" id="medicTeamtimeVisit" disabled/>
-                        <label for="medicTeamtimeVisit" class="check-label">Teatime</label>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="checkbox" [checked]="assess.medicBedtimeVisit" id="medicBedtimeVisit" disabled/>
-                        <label for="medicBedtimeVisit" class="check-label">Bedtime</label>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="checkbox" [checked]="assess.medicOtherVisit" id="medicOtherVisit" disabled/>
-                        <label for="medicOtherVisit" class="check-label">Other Time</label>
-                    </div>
-                    <div class="col-md-12">
-                        <label for="medicOtherVisitDetails" style="margin-top:8px;">Other Visit Time</label>
-                        <textarea class="form-control" [value]="assess.medicOtherVisitDetails" id="medicOtherVisitDetails" rows="3" readonly></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="medicOralGrading">Oral Grading</label>
-                    <select class="form-control" [value]="assess.medicOralGrading" id="medicOralGrading" disabled>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="medicOralGrading">Oral Grading</label>
+                        <select class="form-control" [value]="assess.medicOralGrading" id="medicOralGrading" disabled>
                         <option value="0">Independent</option>
                         <option value="1">Prompt &amp; Assist</option>
                         <option value="2">Administer with capacity</option>
                         <option value="3">Administer without capacity</option>
                     </select>
-                    <label for="whoOrdersMedication" class="nudge-down">Medication ordered by</label>
-                    <select class="form-control" [value]="assess.whoOrdersMedication" id="whoOrdersMedication" disabled>
+                        <label for="whoOrdersMedication" class="nudge-down">Medication ordered by</label>
+                        <select class="form-control" [value]="assess.whoOrdersMedication" id="whoOrdersMedication" disabled>
                         <option value="0">Blackwood</option>
                         <option value="1">Family</option>
                     </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="medicNonOralGrading">Non Oral Grading</label>
-                    <select class="form-control" [value]="assess.medicNonOralGrading" id="medicNonOralGrading" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="medicNonOralGrading">Non Oral Grading</label>
+                        <select class="form-control" [value]="assess.medicNonOralGrading" id="medicNonOralGrading" disabled>
                         <option value="0">Independent</option>
                         <option value="1">Prompt &amp; Assist</option>
                         <option value="2">Administer with capacity</option>
                         <option value="3">Administer without capacity</option>
                     </select>
+                    </div>
                 </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="familycarer">Carer or Family Involvement</label>
-                    <textarea class="form-control" [value]="assess.familyCarer" id="familyCarer" rows="3" readonly></textarea>
-                    <label for="eyeSight" class="nudge-down">Sight</label>
-                    <select class="form-control" [value]="assess.eyeSight" id="eyeSight" disabled>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="familycarer">Carer or Family Involvement</label>
+                        <textarea class="form-control" [value]="assess.familyCarer" id="familyCarer" rows="3" readonly></textarea>
+                        <label for="eyeSight" class="nudge-down">Sight</label>
+                        <select class="form-control" [value]="assess.eyeSight" id="eyeSight" disabled>
                         <option value="0">Full Sight - No Glasses</option>
                         <option value="1">Full Sight - Glasses</option>
                         <option value="2">Partially Sighted</option>
                         <option value="3">Blind</option>
                     </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="communicationAbility">Communication Ability</label>
-                    <textarea class="form-control" [value]="assess.communicationAbility" id="communicationAbility" rows="3" readonly></textarea>
-                    <label for="hearing" class="nudge-down">Wears a Hearing Aid?</label>
-                    <input class="form-control" type="text" [value]="assess.hearing" id="hearing" readonly/>
-                </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <p style="margin-left:20px;">Communications Preferences</p>
-                <div *ngFor="let comm of assess.comms" style="float:left;margin-left:24px;">
-                    <input type="checkbox" disabled [checked]="comm.preferred">
-                    <label class="check-label">{{comm.title}}</label>
-                </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="continence">Continence</label>
-                    <select class="form-control" [value]="assess.continence" id="continence" disabled>
-                        <option value="0">Full Continent</option>
-                        <option value="1">Periodic Incontinence</option>
-                        <option value="2">Full Incontinence</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label for="continenceDetails">Continence Details</label>
-                    <textarea class="form-control" [value]="assess.continenceDetails" id="continenceDetails" rows="3" readonly></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <div>
-                        <label for="dexterity">Manual Dexterity</label><span class="label label-pill label-success">{{assess.dexterity}}</span>
                     </div>
-                    <p-slider name="dexterity" [ngModel]="assess.dexterity" [min]="1" [max]="5" [step]="1" disabled></p-slider>
-                    <div class="nudge-down" style="width:100%;clear:left;">
-                        <label>(Poor) 1</label>
-                        <!-- TODO Figure out align right -->
-                        <label>5 (Great)</label>
+                    <div class="col-md-6">
+                        <label for="communicationAbility">Communication Ability</label>
+                        <textarea class="form-control" [value]="assess.communicationAbility" id="communicationAbility" rows="3" readonly></textarea>
+                        <label for="hearing" class="nudge-down">Wears a Hearing Aid?</label>
+                        <input class="form-control" type="text" [value]="assess.hearing" id="hearing" readonly/>
                     </div>
                 </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="adaptations">Disability Equipment Needs</label>
-                    <textarea class="form-control" [value]="assess.adaptations" id="adaptations" rows="3" readonly></textarea>
+                <hr/>
+                <div class="form-group">
+                    <p style="margin-left:20px;">Communications Preferences</p>
+                    <div *ngFor="let comm of assess.comms" style="float:left;margin-left:24px;">
+                        <input type="checkbox" disabled [checked]="comm.preferred">
+                        <label class="check-label">{{comm.title}}</label>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="mentalHealth">Mental Health</label>
-                    <textarea class="form-control" [value]="assess.mentalHealth" id="mentalHealth" rows="3" readonly></textarea>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="continence">Continence</label>
+                        <select class="form-control" [value]="assess.continence" id="continence" disabled>
+                            <option value="0">Full Continent</option>
+                            <option value="1">Periodic Incontinence</option>
+                            <option value="2">Full Incontinence</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="continenceDetails">Continence Details</label>
+                        <textarea class="form-control" [value]="assess.continenceDetails" id="continenceDetails" rows="3" readonly></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="dietaryRequirements">Dietary Requirements</label>
-                    <textarea class="form-control" [value]="assess.dietaryRequirements" id="dietaryRequirements" rows="3" readonly></textarea>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <div>
+                            <label for="dexterity">Manual Dexterity</label><span class="label label-pill label-success">{{assess.dexterity}}</span>
+                        </div>
+                        <p-slider name="dexterity" [ngModel]="assess.dexterity" [min]="1" [max]="5" [step]="1" disabled></p-slider>
+                        <div class="nudge-down" style="width:100%;clear:left;">
+                            <label>(Poor) 1</label>
+                            <!-- TODO Figure out align right -->
+                            <label>5 (Great)</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="foodDrinkPreferences">Food &amp; Drink Preferences</label>
-                    <textarea class="form-control" [value]="assess.foodDrinkPreferences" id="foodDrinkPreferences" rows="3" readonly></textarea>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="adaptations">Disability Equipment Needs</label>
+                        <textarea class="form-control" [value]="assess.adaptations" id="adaptations" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="mentalHealth">Mental Health</label>
+                        <textarea class="form-control" [value]="assess.mentalHealth" id="mentalHealth" rows="3" readonly></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="socialInterests">Social Interests</label>
-                    <textarea class="form-control" [value]="assess.socialInterests" id="socialInterests" rows="3" readonly></textarea>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="dietaryRequirements">Dietary Requirements</label>
+                        <textarea class="form-control" [value]="assess.dietaryRequirements" id="dietaryRequirements" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="foodDrinkPreferences">Food &amp; Drink Preferences</label>
+                        <textarea class="form-control" [value]="assess.foodDrinkPreferences" id="foodDrinkPreferences" rows="3" readonly></textarea>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="religionCulture">Religion &amp; Culture</label>
-                    <textarea class="form-control" [value]="assess.religionCulture" id="religionCultire" rows="3" readonly></textarea>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="socialInterests">Social Interests</label>
+                        <textarea class="form-control" [value]="assess.socialInterests" id="socialInterests" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="religionCulture">Religion &amp; Culture</label>
+                        <textarea class="form-control" [value]="assess.religionCulture" id="religionCultire" rows="3" readonly></textarea>
+                    </div>
                 </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <div class="col-md-6">
-                    <label for="happyVary">Happy to vary dates/times?</label>
-                    <select class="form-control" [value]="assess.happyVary" id="happyVary" disabled>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="happyVary">Happy to vary dates/times?</label>
+                        <select class="form-control" [value]="assess.happyVary" id="happyVary" disabled>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
-                    <label for="timeChange" class="nudge-down">Details of time changes</label>
-                    <textarea class="form-control" [value]="assess.timeChange" rows="3" id="timeChange" readonly></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="genderPref">Client has gender preference?</label>
-                    <select class="form-control" [value]="assess.genderPref" id="genderPref" disabled>
+                        <label for="timeChange" class="nudge-down">Details of time changes</label>
+                        <textarea class="form-control" [value]="assess.timeChange" rows="3" id="timeChange" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="genderPref">Client has gender preference?</label>
+                        <select class="form-control" [value]="assess.genderPref" id="genderPref" disabled>
                         <option value="0">No preference</option>
                         <option value="1">Female preferred</option>
                         <option value="2">Male preferred</option>
                         <option value="3">Depends on Task</option>
                     </select>
-                    <label for="genderDetails" class="nudge-down">Gender preference details</label>
-                    <textarea class="form-control" [value]="assess.genderDetails" id="genderDetails" rows="3" readonly></textarea>
-                    <label for="altGender" class="nudge-down">Will accept alternative?</label>
-                    <select class="form-control" [value]="assess.altGender" id="altGender" disabled>
+                        <label for="genderDetails" class="nudge-down">Gender preference details</label>
+                        <textarea class="form-control" [value]="assess.genderDetails" id="genderDetails" rows="3" readonly></textarea>
+                        <label for="altGender" class="nudge-down">Will accept alternative?</label>
+                        <select class="form-control" [value]="assess.altGender" id="altGender" disabled>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
+                    </div>
                 </div>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="accessArrangements">Access Arrangements</label>
+                        <textarea class="form-control" [value]="assess.accessArrangements" id="accessArrangements" rows="3" readonly></textarea>
+                        <label for="doorEntry" class="nudge-down">Door Entry</label>
+                        <select class="form-control" [value]="assess.doorEntry" id="doorEntry" disabled>
+                        <option value="0">Buzzer</option>
+                        <option value="1">Key Code</option>
+                        <option value="2">None</option>
+                    </select>
+                        <label for="keyCode" class="nudge-down">Key Code</label>
+                        <input type="text" class="form-control" [value]="assess.keyCode" id="keyCode" readonly/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="disability">Disability &amp; Conditions</label>
+                        <textarea class="form-control" [value]="assess.disability" id="disability" rows="3" readonly></textarea>
+                        <label for="allergies" class="nudge-down">Suffers from any Allergies?</label>
+                        <textarea class="form-control" [value]="assess.allergies" id="allergies" rows="3" readonly></textarea>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="gpDetails">General Practitioner</label>
+                        <textarea class="form-control" [value]="assess.gpDetails" id="gpDetails" rows="3" readonly></textarea>
+                        <label for="nextOfKin" class="nudge-down">Next-of-Kin &amp; Emergencies</label>
+                        <textarea class="form-control" [value]="assess.nextOfKin" id="nextOfKin" rows="3" readonly></textarea>
+                        <label for="goals" class="nudge-down">Goals</label>
+                        <textarea class="form-control" [value]="assess.goals" id="goals" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="otherProvider">Other Healthcare Provider</label>
+                        <textarea class="form-control" [value]="assess.otherProvider" id="otherProvider" rows="3" readonly></textarea>
+                        <label for="specificRisks" class="nudge-down">Specific Risks</label>
+                        <textarea class="form-control" [value]="assess.specificRisks" id="specificRisks" rows="3" readonly></textarea>
+                        <label for="additionalInfo" class="nudge-down">Any other additional info</label>
+                        <textarea class="form-control" [value]="assess.additionalInfo" id="additionalInfo" rows="3" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="section=='checklist'" class="panel-section" id="checklist">
+                <table class="table table-striped table-fixedheader">
+                    <thead class="thead-inverse">
+                        <th class="col-md-8">Home Visit Checklist Item</th>
+                        <th class="col-md-1 checklist-cell">Yes</th>
+                        <th class="col-md-1 checklist-cell">No</th>
+                        <th class="col-md-1 checklist-cell" title="Not Applicable">N/A</th>
+                        <th class="col-md-1 checklist-cell" title="Further Information Required">F/I</th>
+                    </thead>
+                    <tbody>
+                        <template let-check ngFor [ngForOf]="assess.checkItems">
+                            <tr class="table-row">
+                                <td class="col-md-8"><span>{{check.itemName}}</span></td>
+                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="yes" disabled /></td>
+                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="no"  disabled/></td>
+                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="n/a" disabled/></td>
+                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="f/i" disabled/></td>
+                            </tr>
+                            <tr class="table-row" *ngIf="check.value && check.value==check.furtherValue">
+                                <td colspan="5">
+                                    <span>{{check.furtherTitle}}</span><br/>
+                                    <textarea class="form-control nudge-down" [value]="check.further" rows="3" readonly></textarea>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="otherHazards">Other hazards observed</label>
+                        <textarea class="form-control" [value]="assess.otherHazards" id="otherHazards" rows="3" readonly></textarea>
+                        <label class="nudge-down" for="fullAssessReqd">Detailed Risk Assessment required?</label>
+                        <select class="form-control" [value]="assess.fullAssessReqd" id="fullAssessReqd" disabled>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="furtherAction">Comments &amp; further action to be taken</label>
+                        <textarea class="form-control" [value]="assess.furtherAction" id="furtherAction" rows="3" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="section=='handling'" class="panel-section" id="handling">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="aboutPerson">About the person</label>
+                        <textarea class="form-control" [value]="assess.aboutPerson" id="aboutPerson" rows="3" readonly></textarea>
+                        <label for="riskFalls" class="nudge-down">Risk of Falls</label>
+                        <select class="form-control" [value]="assess.riskFalls" id="riskFalls" disabled>
+                            <option value="1">High</option>
+                            <option value="2">Low</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bodyBuildWeight">Body Build - Weight</label>
+                        <select class="form-control" [value]="assess.bodyBuildWeight" id="bodyBuildWeight" disabled>
+                            <option value="1">Obese</option>
+                            <option value="2">Above Average</option>
+                            <option value="3">Average</option>
+                            <option value="4">Below Average</option>
+                        </select>
+                        <label for="bodyBuildHeight" class="nudge-down">Body Build - Height</label>
+                        <select class="form-control" [value]="assess.bodyBuildHeight" id="bodyBuildHeight" disabled>
+                            <option value="1">Tall</option>
+                            <option value="2">Medium</option>
+                            <option value="3">Short</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="problems">Problems with comprehension, behaviours, co-operation, etc.</label>
+                        <textarea class="form-control" [value]="assess.problems" id="problems" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="constraints">Handling Constraints e.g. disability, weakness, etc.</label>
+                        <textarea class="form-control" [value]="assess.constraints" id="constraints" rows="3" readonly></textarea>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    
+                </div>
+            </div>
+            <div *ngIf="section=='tile'" class="panel-section" id="tile">
+                <h4>T.I.L.E</h4>
             </div>
         </form>
     </div>

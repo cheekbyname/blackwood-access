@@ -11,10 +11,10 @@ import { InitialAssessProvider } from '../../providers/initialassess.provider';
     selector: 'initial-assess',
     template: require('./initialassess.component.html'),
     styles: [require('./initialassess.component.css')]
-}) 
-export class InitialAssessComponent implements OnInit
-{
+})
+export class InitialAssessComponent implements OnInit {
     public assess: CareInitialAssessment = new CareInitialAssessment();
+    public section: string = "assessment";
 
     constructor(private route: ActivatedRoute, private router: Router, private assPro: InitialAssessProvider) {
 
@@ -27,5 +27,11 @@ export class InitialAssessComponent implements OnInit
                 console.log(res.json());
                 this.assess = res.json();
             });
+    }
+
+    selectSection(section) {
+        this.section = section;
+        window.location.hash = '';
+        window.location.hash = section;
     }
 }
