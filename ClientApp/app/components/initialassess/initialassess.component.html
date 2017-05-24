@@ -682,7 +682,27 @@
             </div>
 
             <div *ngIf="section=='tile'" class="panel-section" id="tile">
-                <h4>T.I.L.E</h4>
+                <template let-group ngFor [ngForOf]="assess.tileGroups">
+                    <h4>{{group.title}}</h4>
+                    <p style="background-color:silver;">{{group.desc}}</p>
+                    <table class="table table-striped">
+                        <tbody>
+                            <template let-item ngFor [ngForOf]="group.items">
+                                <tr class="table-row">
+                                    <td class="col-md-8">{{item.task}}</td>
+                                    <td class="col-md-2">
+                                        <label [attr.for]="'tile-item-yes-' + item.itemId">Yes</label>
+                                        <input type="radio" [name]="'tile-item-yes-' + item.itemId" [ngModel]="item.hazard" [value]="true" disabled/>
+                                    </td>
+                                    <td class="col-md-2">
+                                        <label [attr.for]="'tile-item-no-' + item.itemId">No</label>
+                                        <input type="radio" [name]="'tile-item-no-' + item.itemId" [ngModel]="item.hazard" [value]="false" disabled/>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
             </div>
 
         </form>
