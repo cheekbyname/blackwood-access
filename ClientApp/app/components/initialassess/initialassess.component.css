@@ -11,7 +11,7 @@ p {
     padding: 10px;
 }
 
-strong, textarea, p, th {
+strong, textarea, p, th, span {
     font-family: 'Century Gothic';
     font-size: 11pt;
 }
@@ -27,6 +27,7 @@ label {
     font-style: italic;
     margin-left: 4px;
 }
+
 .panel {
     margin-top: 20px;
     margin-left: 0px;
@@ -85,4 +86,31 @@ button.selected {
 
 .checklist-cell {
     text-align: center;
+}
+
+span.label {
+    background-color: #bfd730;
+    color: black;
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}
+
+.slider-inner {
+    margin: 8px 8px 8px 4px;
+}
+
+.slider-boxed {
+    padding: 8px 8px 0px 8px;
+    border: 1px solid silver;
+    border-radius: 4px;
+    background-color: rgba(191, 215, 48, 0.5)
+}
+
+.slider-legend {
+    display: inline-block;
+    width:100%;
+}
+
+.slider-nudge {
+    margin-top: 10px;
 }

@@ -185,14 +185,17 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-6">
-                        <div>
-                            <label for="dexterity">Manual Dexterity</label><span class="label label-pill label-success">{{assess.dexterity}}</span>
-                        </div>
-                        <p-slider name="dexterity" [ngModel]="assess.dexterity" [min]="1" [max]="5" [step]="1" disabled></p-slider>
-                        <div class="nudge-down" style="width:100%;clear:left;">
-                            <label>(Poor) 1</label>
-                            <!-- TODO Figure out align right -->
-                            <label>5 (Great)</label>
+                        <div class="slider-boxed">
+                            <div>
+                                <label for="dexterity">Manual Dexterity</label><span class="label label-pill">{{assess.dexterity}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="dexterity" [ngModel]="assess.dexterity" [min]="1" [max]="5" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">(Poor) 1</span>
+                                <span class="pull-right">5 (Great)</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -309,8 +312,9 @@
                         <template let-check ngFor [ngForOf]="assess.checkItems">
                             <tr class="table-row">
                                 <td class="col-md-8"><span>{{check.itemName}}</span></td>
-                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="yes" disabled /></td>
-                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="no"  disabled/></td>
+                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="yes" disabled
+                                    /></td>
+                                <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="no" disabled/></td>
                                 <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="n/a" disabled/></td>
                                 <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="f/i" disabled/></td>
                             </tr>
@@ -341,6 +345,7 @@
                 </div>
             </div>
             <div *ngIf="section=='handling'" class="panel-section" id="handling">
+
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="aboutPerson">About the person</label>
@@ -367,6 +372,7 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="problems">Problems with comprehension, behaviours, co-operation, etc.</label>
@@ -378,13 +384,307 @@
                     </div>
                 </div>
                 <hr/>
+
+                <h4>Transfers <small>Including to/from bed, wheelchair, commode, toilet, etc.</small></h4>
                 <div class="form-group">
-                    
+                    <div class="col-md-6">
+                        <label for="transferSpec">Specify</label>
+                        <select class="form-control" [value]="assess.transferSpec" id="transferSpec" disabled>
+                            <option value="1">Hoist or Standaid</option>
+                            <option value="2">Assistance</option>
+                            <option value="3">Supervision</option>
+                            <option value="4">Independent</option>
+                        </select>
+                        <label class="nudge-down" for="transferAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.transferAdditional" name="transferAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="transferWalkingAid">Walking Aid - Specify</label>
+                        <input class="form-control" [value]="assess.transferWalkingAid" id="transferWalkingAid" readonly/>
+                        <div class="slider-boxed slider-nudge">
+                            <div>
+                                <label for="transferPeople">People</label><span class="label label-pill">{{assess.transferPeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="transferPeople" [ngModel]="assess.transferPeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Toileting</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="toiletSpec">Specify</label>
+                        <select class="form-control" [value]="assess.toiletSpec" id="toiletSpec" disabled>
+                            <option value="1">Hoist or Standaid</option>
+                            <option value="2">Assistance</option>
+                            <option value="3">Supervision</option>
+                            <option value="4">Independent</option>
+                        </select>
+                        <label class="nudge-down" for="toiletAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.toiletAdditional" name="toiletAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="toiletWalkingAid">Walking Aid - Specify</label>
+                        <input class="form-control" [value]="assess.toiletWalkingAid" id="toiletWalkingAid" readonly/>
+                        <div class="slider-boxed slider-nudge">
+                            <div>
+                                <label for="toiletPeople">People</label><span class="label label-pill">{{assess.toiletPeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="toiletPeople" [ngModel]="assess.toiletPeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Move On/Off Bedpan</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="bedpanSpec">Specify</label>
+                        <select class="form-control" [value]="assess.bedpanSpec" id="bedpanSpec" disabled>
+                            <option value="1">Hoist</option>
+                            <option value="2">Manoeuver</option>
+                            <option value="3">Assistance</option>
+                            <option value="4">Supervision</option>
+                            <option value="5">N/A</option>
+                        </select>
+                        <label class="nudge-down" for="bedpanAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.bedpanAdditional" name="bedpanAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bedpanManeuver">Specify Maneuver</label>
+                        <select class="form-control" [value]="assess.bedpanManeuver" id="bedpanManeuver" disabled>
+                            <option value="1">Roll Customer</option>
+                            <option value="2">Monkey Pole</option>
+                            <option value="3">Customer Bridges</option>
+                        </select>
+                        <div class="slider-boxed slider-nudge">
+                            <div>
+                                <label for="bedpanPeople">People</label><span class="label label-pill">{{assess.bedpanPeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="bedpanPeople" [ngModel]="assess.bedpanPeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Move Up/Down Bed</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="bedMoveSpec">Specify</label>
+                        <select class="form-control" [value]="assess.bedMoveSpec" id="bedMoveSpec" disabled>
+                            <option value="1">Hoist</option>
+                            <option value="2">Handling Aids</option>
+                            <option value="3">Assistance</option>
+                            <option value="4">Supervision</option>
+                            <option value="5">Independent</option>
+                        </select>
+                        <label class="nudge-down" for="bedMoveAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.bedMoveAdditional" name="bedMoveAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bedMoveHandlingAid">Specify Handling Aids</label>
+                        <select class="form-control" [value]="assess.bedMoveHandlingAid" id="bedMoveHandlingAid" disabled>
+                            <option value="1">Sliding Street</option>
+                            <option value="2">Monkey Pole</option>
+                            <option value="3">Rope Ladder</option>
+                        </select>
+                        <div class="slider-boxed slider-nudge">
+                            <div>
+                                <label for="bedMovePeople">People</label><span class="label label-pill">{{assess.bedMovePeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="bedMovePeople" [ngModel]="assess.bedMovePeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Transfer To/From Bed</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="bedTransferSpec">Specify</label>
+                        <select class="form-control" [value]="assess.bedTransferSpec" id="bedTransferSpec" disabled>
+                            <option value="1">Hoist</option>
+                            <option value="2">Handling Aids</option>
+                            <option value="3">Assistance</option>
+                            <option value="4">Supervision</option>
+                            <option value="5">Independent</option>
+                        </select>
+                        <label class="nudge-down" for="bedTransferAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.bedTransferAdditional" name="bedTransferAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bedTransferHandlingAid">Specify Handling Aids</label>
+                        <select class="form-control" [value]="assess.bedTransferHandlingAid" id="bedTransferHandlingAid" disabled>
+                            <option value="1">Patslide</option>
+                            <option value="2">Roll Board</option>
+                            <option value="3">Fabric Sliding Aid</option>
+                        </select>
+                        <div class="slider-boxed slider-nudge">
+                            <div>
+                                <label for="bedTransferPeople">People</label><span class="label label-pill">{{assess.bedTransferPeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="bedTransferPeople" [ngModel]="assess.bedTransferPeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Sit Up Over Side of Bed</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="bedsideSpec">Specify</label>
+                        <select class="form-control" [value]="assess.bedsideSpec" id="bedsideSpec" disabled>
+                            <option value="1">Bed Rest</option>
+                            <option value="2">Assistant</option>
+                            <option value="3">Supervision</option>
+                            <option value="4">Independent</option>
+                        </select>
+                        <label class="nudge-down" for="bedsideAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.bedsideAdditional" name="bedsideAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="slider-boxed" style="margin-top:24px;">
+                            <div>
+                                <label for="bedsidePeople">People</label><span class="label label-pill">{{assess.bedsidePeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="bedsidePeople" [ngModel]="assess.bedsidePeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Into Bath or Shower</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="bathShowerWhich">Which Bath or Shower</label>
+                        <select class="form-control" [value]="assess.bathShowerWhich" id="bathShowerWhich" disabled>
+                            <option value="1">Shower</option>
+                            <option value="2">Variable Height Bath</option>
+                            <option value="3">Bed Bath</option>
+                        </select>
+                        <label for="bathShowerSpec" class="nudge-down">Which Bath or Shower</label>
+                        <select class="form-control" [value]="assess.bathShowerSpec" id="bathShowerSpec" disabled>
+                            <option value="1">Assistance</option>
+                            <option value="2">Supervision</option>
+                            <option value="3">Independent</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bathShowerHandlingAid">Which Bath or Shower</label>
+                        <select class="form-control" [value]="assess.bathShowerHandlingAid" id="bathShowerHandlingAid" disabled>
+                            <option value="1">Hoist</option>
+                            <option value="2">Ambulift</option>
+                            <option value="3">Shower Chair</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="bathShowerAdditional">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.bathShowerAdditional" name="bathShowerAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="slider-boxed" style="margin-top:24px;">
+                            <div>
+                                <label for="bathShowerPeople">People</label><span class="label label-pill">{{assess.bathShowerPeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="bathShowerPeople" [ngModel]="assess.bathShowerPeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <h4>Walking</h4>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="walkingSpec">Specify</label>
+                        <select class="form-control" [value]="assess.walkingSpec" name="waklingSpec" disabled>
+                            <option value="1">No Walking</option>
+                            <option value="2">Walking Aid</option>
+                            <option value="3">Assistance</option>
+                            <option value="4">Supervision</option>
+                            <option value="5">Independent</option>
+                        </select>
+                        <label for="walkingAdditional" class="nudge-down">Additional Information</label>
+                        <textarea class="form-control" [value]="assess.walkingAdditional" name="walkingAdditional" rows="3" readonly></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <div *ngIf="assess.walkingSpec=='2'">
+                            <label for="walkingWalkingAid">Specify Walking Aid</label>
+                            <textarea class="form-control" [value]="assess.walkingWalkingAid" name="walkingWalkingAid" rows="3" readonly></textarea>
+                        </div>
+                        <div *ngIf="assess.walkingSpec=='3'" class="slider-boxed" style="margin-top:24px;">
+                            <div>
+                                <label for="walkingPeople">People</label><span class="label label-pill">{{assess.walkingPeople}}</span>
+                            </div>
+                            <div class="slider-inner">
+                                <p-slider name="walkingPeople" [ngModel]="assess.walkingPeople" [min]="0" [max]="3" [step]="1" [disabled]="true"></p-slider>
+                            </div>
+                            <div class="nudge-down slider-legend">
+                                <span class="pull-left">0</span>
+                                <span class="pull-right">3</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="otherInstructions">Other Instructions</label>
+                        <textarea class="form-control" [value]="assess.otherInstructions" name="otherInstructions" rows="3" readonly></textarea>
+                    </div>
                 </div>
             </div>
+
             <div *ngIf="section=='tile'" class="panel-section" id="tile">
                 <h4>T.I.L.E</h4>
             </div>
+
         </form>
     </div>
 </div>
