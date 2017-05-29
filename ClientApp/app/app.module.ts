@@ -17,24 +17,16 @@ import { TimesheetManagerComponent } from './components/timesheetmanager/timeshe
 import { TimesheetViewerComponent } from './components/timesheetviewer/timesheetviewer.component';
 import { TeamTimeSummaryComponent } from './components/teamtimesummary/teamtimesummary.component';
 import { BookingCardComponent } from './components/cards/booking.card/booking.card';
+import { ModalComponent } from './components/modal.component/modal.component';
 
 import { InitialAssessProvider } from './providers/initialassess.provider';
 import { TimesheetProvider } from './providers/timesheet.provider';
 
 @NgModule({
     bootstrap: [ AppComponent ],
-    declarations: [
-        AppComponent,
-        NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
-        InitialAssessManagerComponent,
-        InitialAssessComponent,
-        TimesheetManagerComponent,
-        TimesheetViewerComponent,
-        TeamTimeSummaryComponent,
-        BookingCardComponent,
-        HomeComponent
+    declarations: [ AppComponent, NavMenuComponent, CounterComponent, FetchDataComponent, InitialAssessManagerComponent,
+        InitialAssessComponent, TimesheetManagerComponent, TimesheetViewerComponent, TeamTimeSummaryComponent, BookingCardComponent,
+        HomeComponent, ModalComponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
@@ -49,8 +41,7 @@ import { TimesheetProvider } from './providers/timesheet.provider';
             { path: '**', redirectTo: 'home' }
         ]),
         FormsModule,
-        CalendarModule,
-        SliderModule
+        CalendarModule, SliderModule
     ],
     providers: [ TimesheetProvider, InitialAssessProvider ]
 })

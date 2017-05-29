@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
+
 import { BookingCardComponent } from '../cards/booking.card/booking.card';
+import { ModalComponent } from '../../components/modal.component/modal.component';
 import { Timesheet } from '../../models/timesheet';
 import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
@@ -47,6 +49,7 @@ export class TimesheetViewerComponent implements OnInit {
 	get carer() { return this._carer }
 
 	getTimesheet(): void {
+		// TODO This should really be on the provider
 		var tsUrl = '/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing;
 		this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
 	}

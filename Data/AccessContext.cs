@@ -19,5 +19,6 @@ namespace Blackwood.Access
         public DbSet<CommsItem> CommsItems { get; set; }
         public DbSet<TileGroup> TileGroups { get; set; }
         public DbSet<TileItem> TileItems { get; set; }
+		public DbSet<TimesheetAdjustment> TimesheetAdjustments { get; set; }
 	}
 }

@@ -39,13 +39,13 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th>Monday {{dateOrd(0)}}<br/>{{displayTime(actualHoursForDay(0))}}</th>
-						<th>Tuesday {{dateOrd(1)}}<br/>{{displayTime(actualHoursForDay(1))}}</th>
-						<th>Wednesday {{dateOrd(2)}}<br/>{{displayTime(actualHoursForDay(2))}}</th>
-						<th>Thursday {{dateOrd(3)}}<br/>{{displayTime(actualHoursForDay(3))}}</th>
-						<th>Friday {{dateOrd(4)}}<br/>{{displayTime(actualHoursForDay(4))}}</th>
-						<th>Saturday {{dateOrd(5)}}<br/>{{displayTime(actualHoursForDay(5))}}</th>
-						<th>Sunday {{dateOrd(6)}}<br/>{{displayTime(actualHoursForDay(6))}}</th>
+						<th [title]="'Click here to adjust hours for Monday ' + dateOrd(0)" (click)="modal1.show()">Monday {{dateOrd(0)}}<br/>{{displayTime(actualHoursForDay(0))}}</th>
+						<th [title]="'Click here to adjust hours for Tuesday ' + dateOrd(1)">Tuesday {{dateOrd(1)}}<br/>{{displayTime(actualHoursForDay(1))}}</th>
+						<th [title]="'Click here to adjust hours for Wednesday ' + dateOrd(2)">Wednesday {{dateOrd(2)}}<br/>{{displayTime(actualHoursForDay(2))}}</th>
+						<th [title]="'Click here to adjust hours for Thursday ' + dateOrd(3)">Thursday {{dateOrd(3)}}<br/>{{displayTime(actualHoursForDay(3))}}</th>
+						<th [title]="'Click here to adjust hours for Friday ' + dateOrd(4)">Friday {{dateOrd(4)}}<br/>{{displayTime(actualHoursForDay(4))}}</th>
+						<th [title]="'Click here to adjust hours for Saturday ' + dateOrd(5)">Saturday {{dateOrd(5)}}<br/>{{displayTime(actualHoursForDay(5))}}</th>
+						<th [title]="'Click here to adjust hours for Sunday ' + dateOrd(6)">Sunday {{dateOrd(6)}}<br/>{{displayTime(actualHoursForDay(6))}}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -60,6 +60,19 @@
 					</tr>
 				</tbody>
 			</table>
+
+			<app-modal #modal1>
+				<div class="app-modal-header">
+					Monday {{dateOrd(0)}}
+				</div>
+				<div class="app-modal-body">
+					Some controls and stuff in here
+				</div>
+				<div class="app-modal-footer">
+					<button type="button" class="btn btn-default" (click)="modal1.hide()">Close</button>
+				</div>
+			</app-modal>
+
 		</div>
 
 		<!--<table class="table" *ngIf="combinedAvailability()">

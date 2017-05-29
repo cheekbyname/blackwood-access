@@ -9,7 +9,7 @@ namespace Blackwood.Access.Services
 
     public class TimesheetService : ITimesheetService
     {
-		private static int[] _absenceCodes = { 108, 109 };
+		private static int[] _absenceCodes = { 108, 109 };	// TODO Consider unpaid leave situation
 		private AccessContext _context;
 
 		public TimesheetService(AccessContext context)
