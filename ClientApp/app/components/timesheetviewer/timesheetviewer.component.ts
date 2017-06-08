@@ -25,7 +25,7 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = this.emptyBook();
 	}
 
-    private absenceCodes: number [] = [108, 109];
+    private absenceCodes: number [] = [108, 109, 123];
 
 	_carer: Carer;
 	_weekCommencing: Date;
@@ -58,10 +58,10 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = this.emptyBook();
 		var ts: Timesheet = res.json();
 		this.timesheet = ts;
+		console.log(this.timesheet);
 		ts.bookings.forEach(bk => this.stuffBook(bk));
 		this.transBook();
 		this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });
-		console.log(this.timesheet);
 		document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
 	}
 
@@ -72,6 +72,7 @@ export class TimesheetViewerComponent implements OnInit {
 	stuffBook(bk: CarerBooking): void {
 		// Because we want whole days and valueOf returns milliseconds
 		var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
+		offset = offset < 0 ? 0 : offset;
 		this.bookings[offset].push(bk);
 	}
 
@@ -144,8 +145,8 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public actualHoursForContract(contractCode: number): number {
 		// TODO Filter by Contract once we figure out what to do regarding possible multi-contract shifts
-		return this.timesheet.shifts
-			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0 )
+		return this.timesheet.bookings.filter(bk => bk.contractCode === contractCode)
+			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0 );
 	}
 
 	public additionalHoursForContract(contractCode: number): number {

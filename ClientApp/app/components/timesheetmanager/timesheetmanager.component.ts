@@ -51,6 +51,7 @@ export class TimesheetManagerComponent implements OnInit {
         console.log(this._selectedTeam);
         this.http.get('/api/timesheet/carersbyteam?teamCode=' + this._selectedTeam.teamCode).subscribe(res => {
             this.carers = res.json();
+            console.log(this.carers);
             this.selectedCarer = null;
         });
     }
