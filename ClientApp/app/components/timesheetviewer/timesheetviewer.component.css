@@ -35,3 +35,27 @@ table.table-rota td:hover {
     background-color: rgba(255, 105, 180, 0.5)!important;
     cursor: pointer;
 }
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+.btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+}
+
+p-dialog input, p-dialog button {
+    font-family: 'Century Gothic';
+}
+
+p-spinner * {
+    font-family: 'Century Gothic';
+}
+
+span.glyphicon-remove {
+    color: red;
+}

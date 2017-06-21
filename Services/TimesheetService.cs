@@ -69,6 +69,11 @@ namespace Blackwood.Access.Services
 			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
+			// Adjustments
+			ts.Adjustments = new List<Adjustment>();
+			// ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",
+			// 	parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
+
 			// Establish Shifts for each day in period
 			// Definitions:
 			// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings

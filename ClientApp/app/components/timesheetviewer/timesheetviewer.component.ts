@@ -2,11 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { BookingCardComponent } from '../cards/booking.card/booking.card';
-import { ModalComponent } from '../../components/modal.component/modal.component';
 import { Timesheet } from '../../models/timesheet';
 import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
 import { Availability } from '../../models/availability';
+import { Shift } from '../../models/shift';
+import { Adjustment } from '../../models/adjustment';
+
+import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
 type BookingGrid = Array<Array<CarerBooking>>;
 
@@ -33,6 +36,12 @@ export class TimesheetViewerComponent implements OnInit {
 	timesheet: Timesheet;
 	bookings: BookingGrid;
 	isContracted: boolean;
+
+	adjustVisible: boolean = false;
+	adjustDate: number;
+	adjustDay: string;
+	adjustShifts: Shift[];
+	adjustments: Adjustment[] = new Array<Adjustment>();
 
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
@@ -113,8 +122,18 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public displayTime(mins: number): string {
+		if (mins < 0) {
+			return Math.ceil(mins/60) + "h " + (mins % 60) + "m";
+		}
 		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
 	}
+
+    public timeFromDate(dt: string): string {
+        var ndt = new Date(dt);
+        var hr = "0" + ndt.getHours();
+        var mn = "0" + ndt.getMinutes();
+        return hr.substr(hr.length - 2) + ":" + mn.substr(mn.length - 2);
+    }
 
 	public formatDate(date: Date): string {
 		var dt = new Date(date);
@@ -140,7 +159,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public actualHoursForDay(offset: number): number {
 		return this.timesheet.shifts
 			.filter(sh => sh.day === offset)
-			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0);
+			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
 	}
 
 	public actualHoursForContract(contractCode: number): number {
@@ -195,5 +214,38 @@ export class TimesheetViewerComponent implements OnInit {
 		if (this.absenceCodes.some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		//return shiftColors[bk.shift-1];
 		return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
+	}
+
+	public minsForAdjustments(): number {
+		return this.adjustments
+			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
+	}
+
+	public minsAdjustOffset(offset: number) {
+		return this.timesheet.adjustments.filter(adj => adj.dayOffset == offset)
+			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
+	}
+
+	public adjustHours(offset: number, day: string) {
+		this.adjustDate = offset;
+		this.adjustDay = day;
+		this.adjustShifts = this.timesheet.shifts.filter(sh => sh.day === offset);
+		this.adjustVisible = true;
+		this.adjustments = new Array<Adjustment>().concat(this.timesheet.adjustments.filter(adj => adj.dayOffset == offset));
+		// Temporarily remove the adjustments from the timesheet
+		this.timesheet.adjustments = this.timesheet.adjustments.filter(adj => adj.dayOffset !== this.adjustDate);
+	}
+
+	public removeAdjust(adjust: Adjustment) {
+		this.adjustments = this.adjustments.filter(adj => adj != adjust);
+	}
+
+	public closeAdjust() {
+		this.timesheet.adjustments = this.timesheet.adjustments.concat(this.adjustments);
+		this.adjustVisible = false;
+	}
+
+	public addAdjust() {
+		this.adjustments.push(new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.adjustDate));
 	}
 }

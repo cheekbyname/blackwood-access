@@ -12,6 +12,6 @@ namespace Blackwood.Access.Models {
 		public ICollection<Availability> ActualAvailability { get; set; }
 		public ICollection<CarerBooking> Bookings { get; set; }
 		public ICollection<Shift> Shifts { get; set; }
-		public ICollection<TimesheetAdjustment> Adjustments { get; set;}
+		public ICollection<Adjustment> Adjustments { get; set;}
 	}
 }

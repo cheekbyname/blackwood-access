@@ -39,13 +39,13 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th [title]="'Click here to adjust hours for Monday ' + dateOrd(0)" (click)="modal1.show()">Monday {{dateOrd(0)}}<br/>{{displayTime(actualHoursForDay(0))}}</th>
-						<th [title]="'Click here to adjust hours for Tuesday ' + dateOrd(1)">Tuesday {{dateOrd(1)}}<br/>{{displayTime(actualHoursForDay(1))}}</th>
-						<th [title]="'Click here to adjust hours for Wednesday ' + dateOrd(2)">Wednesday {{dateOrd(2)}}<br/>{{displayTime(actualHoursForDay(2))}}</th>
-						<th [title]="'Click here to adjust hours for Thursday ' + dateOrd(3)">Thursday {{dateOrd(3)}}<br/>{{displayTime(actualHoursForDay(3))}}</th>
-						<th [title]="'Click here to adjust hours for Friday ' + dateOrd(4)">Friday {{dateOrd(4)}}<br/>{{displayTime(actualHoursForDay(4))}}</th>
-						<th [title]="'Click here to adjust hours for Saturday ' + dateOrd(5)">Saturday {{dateOrd(5)}}<br/>{{displayTime(actualHoursForDay(5))}}</th>
-						<th [title]="'Click here to adjust hours for Sunday ' + dateOrd(6)">Sunday {{dateOrd(6)}}<br/>{{displayTime(actualHoursForDay(6))}}</th>
+						<th [title]="'Click here to adjust hours for Monday ' + dateOrd(0)" (click)="adjustHours(0, 'Monday')">Monday {{dateOrd(0)}}<br/>{{displayTime(actualHoursForDay(0))}}</th>
+						<th [title]="'Click here to adjust hours for Tuesday ' + dateOrd(1)" (click)="adjustHours(1, 'Tuesday')">Tuesday {{dateOrd(1)}}<br/>{{displayTime(actualHoursForDay(1))}}</th>
+						<th [title]="'Click here to adjust hours for Wednesday ' + dateOrd(2)" (click)="adjustHours(2, 'Wednesday')">Wednesday {{dateOrd(2)}}<br/>{{displayTime(actualHoursForDay(2))}}</th>
+						<th [title]="'Click here to adjust hours for Thursday ' + dateOrd(3)" (click)="adjustHours(3, 'Thursday')">Thursday {{dateOrd(3)}}<br/>{{displayTime(actualHoursForDay(3))}}</th>
+						<th [title]="'Click here to adjust hours for Friday ' + dateOrd(4)" (click)="adjustHours(4, 'Friday')">Friday {{dateOrd(4)}}<br/>{{displayTime(actualHoursForDay(4))}}</th>
+						<th [title]="'Click here to adjust hours for Saturday ' + dateOrd(5)" (click)="adjustHours(5, 'Saturday')">Saturday {{dateOrd(5)}}<br/>{{displayTime(actualHoursForDay(5))}}</th>
+						<th [title]="'Click here to adjust hours for Sunday ' + dateOrd(6)" (click)="adjustHours(6, 'Sunday')">Sunday {{dateOrd(6)}}<br/>{{displayTime(actualHoursForDay(6))}}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -61,19 +61,68 @@
 				</tbody>
 			</table>
 
-			<app-modal #modal1>
-				<div class="app-modal-header">
-					Monday {{dateOrd(0)}}
-				</div>
-				<div class="app-modal-body">
-					Some controls and stuff in here
-				</div>
-				<div class="app-modal-footer">
-					<button type="button" class="btn btn-default" (click)="modal1.hide()">Close</button>
-				</div>
-			</app-modal>
-
 		</div>
+
+		<!-- TODO Consider making this it's own component -->
+		<p-dialog [(visible)]="adjustVisible" modal="modal" [width]="600" [minWidth]="450" [minHeight]="450" [responsive]="true"
+			[closable]="false" [closeOnEscape]="false">
+			<header><span>Hours for {{adjustDay}} {{dateOrd(adjustDate)}}</span></header>
+			<div id="adjust-modal-content">
+				<table class="table table-striped">
+					<thead class="row">
+						<th class="col-md-2">Start</th>
+						<th class="col-md-8">Finish</th>
+						<th class="col-md-2">Hours</th>
+					</thead>
+					<tbody>
+						<tr *ngFor="let shift of adjustShifts" class="row">
+							<td>{{timeFromDate(shift.start)}}</td>
+							<td>{{timeFromDate(shift.finish)}}</td>
+							<td>{{displayTime(shift.shiftMins)}}</td>
+						</tr>
+						<tr class="row">
+							<td colspan="2"><strong>Shift Totals</strong></td>
+							<td><strong>{{displayTime(actualHoursForDay(adjustDate))}}</strong></td>
+						</tr>
+					</tbody>
+				</table>
+				<table *ngIf="adjustments.length > 0" class="table table-striped">
+					<thead class="row">
+						<th class="col-md-8">Reason for Adjustment</th>
+						<th class="col-md-2">Hours</th>
+						<th class="col-md-2">Mins</th>
+					</thead>
+					<tbody>
+						<tr *ngFor="let adjust of adjustments" class="row">
+							<td>
+								<div class="input-group">
+									<span class="input-group-addon" (click)="removeAdjust(adjust)">
+										<span class="glyphicon glyphicon-remove"></span>
+									</span>
+									<input class="form-control" type="text" [(ngModel)]="adjust.reason"/>
+								</div>
+							</td>
+							<td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2"></p-spinner></td>
+							<td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2"></p-spinner></td>
+						</tr>
+						<tr *ngIf="minsForAdjustments()" class="row">
+							<td colspan="2"><strong>Adjustment Totals</strong></td>
+							<td><strong>{{displayTime(minsForAdjustments())}}</strong></td>
+						</tr>
+						<tr *ngIf="minsForAdjustments()" class="row">
+							<td colspan="2"><strong>Daily Totals</strong></td>
+							<td><strong>{{displayTime(actualHoursForDay(adjustDate) + minsForAdjustments())}}</strong></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<footer>
+				<div class="ui-dialog-buttonpane">
+					<button class="btn btn-default btn-primary pull-left" (click)="addAdjust()">Add Adjustment</button>
+					<button class="btn btn-primary pull-right" (click)="closeAdjust()">Close</button>
+				</div>
+			</footer>
+		</p-dialog>
 
 		<!--<table class="table" *ngIf="combinedAvailability()">
 			<thead class="row">
