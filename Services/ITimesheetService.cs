@@ -11,5 +11,7 @@ namespace Blackwood.Access.Services
         IEnumerable<Carer> GetCarersByTeam(int teamCode);
         Timesheet GetTimesheet(int carerCode, DateTime weekCommencing);
         IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd);
+        IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing);
+        Adjustment AddTimesheetAdjustment(Adjustment adjust);
   	}
 }

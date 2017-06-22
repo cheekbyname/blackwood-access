@@ -5,6 +5,17 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    public class CareInitialAssessmentSummary
+    {
+        [Key]
+        public int Id { get; set; }
+        public Guid Guid { get; set; }
+        public string Name { get; set; }
+        public string Address1 { get; set; }
+        public string VisitBy { get; set; }
+        public DateTime VisitDate { get; set; }
+    }
+
     public class CareInitialAssessment
     {
         [Key]

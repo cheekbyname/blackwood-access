@@ -44,5 +44,11 @@ namespace Blackwood.Access.Controllers
 		public IEnumerable<Summary> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd){
 			return _service.GetSummaries(teamCode, periodStart, periodEnd);
 		}
+
+		[HttpPut("[action]")]
+		public Adjustment AddTimesheetAdjustment([FromBody] Adjustment adj)
+		{
+			return _service.AddTimesheetAdjustment(adj);
+		}
 	}
 }

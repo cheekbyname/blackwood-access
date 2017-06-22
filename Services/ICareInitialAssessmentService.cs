@@ -7,5 +7,6 @@
     {
         IEnumerable<CareInitialAssessment> GetAllAssessments();
         CareInitialAssessment GetAssessment(int Id);
+        IEnumerable<CareInitialAssessmentSummary> GetAllAssessSummaries();
     }
 }

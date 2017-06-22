@@ -70,9 +70,8 @@ namespace Blackwood.Access.Services
 				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
 
 			// Adjustments
-			ts.Adjustments = new List<Adjustment>();
-			// ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",
-			// 	parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
+			ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",
+				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
 
 			// Establish Shifts for each day in period
 			// Definitions:
@@ -153,6 +152,37 @@ namespace Blackwood.Access.Services
 			return _context.Set<Summary>().FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
 				parameters: new [] { new SqlParameter("@teamCode", teamCode), new SqlParameter("@periodStart", periodStart),
 				new SqlParameter("@periodEnd", periodEnd)});
+		}
+
+		// Do we actually even need this?
+		public IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing)
+		{
+			return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",
+				parameters: new [] {
+					new SqlParameter("@CarerCode", carerCode),
+					new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
+		}
+
+		public Adjustment AddTimesheetAdjustment(Adjustment adj)
+		{
+			_context.Database.ExecuteSqlCommand("AddTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
+				new [] {
+					new SqlParameter("@Id", adj.Id),
+					new SqlParameter("@Guid", adj.Guid),
+					new SqlParameter("@CarerCode", adj.CarerCode),
+					new SqlParameter("@WeekCommencing", adj.WeekCommencing),
+					new SqlParameter("@RequestedBy", adj.RequestedBy),
+					new SqlParameter("@Requested", adj.Requested),
+					new SqlParameter("@AuthorisedBy", adj.AuthorisedBy),
+					new SqlParameter("@Authorised", adj.Authorised),
+					new SqlParameter("@ContractCode", adj.ContractCode),
+					new SqlParameter("@DayOffset", adj.DayOffset),
+					new SqlParameter("@Reason", adj.Reason),
+					new SqlParameter("@Hours", adj.Hours),
+					new SqlParameter("@Mins", adj.Mins)
+				});
+			
+			return _context.Adjustments.FirstOrDefault(a => a.Guid == adj.Guid);
 		}
     }
 }

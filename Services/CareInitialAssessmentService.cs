@@ -15,6 +15,13 @@
             _context = context;
         }
 
+        public IEnumerable<CareInitialAssessmentSummary> GetAllAssessSummaries()
+        {
+            return _context.CareInitialAssessments.Select(ca => new CareInitialAssessmentSummary() {
+                Id = ca.Id, Guid = ca.Guid, Name = ca.Name, Address1 = ca.Address1, VisitBy = ca.VisitBy, VisitDate = ca.VisitDate
+            }).OrderByDescending(cs => cs.VisitDate);
+        }
+
         public IEnumerable<CareInitialAssessment> GetAllAssessments()
         {
             // TODO We want this filtered by Users

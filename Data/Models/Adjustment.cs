@@ -7,6 +7,7 @@ namespace Blackwood.Access.Models
     {
         [Key]
         public int Id { get; set; }
+        public Guid Guid { get; set; }
         public int CarerCode { get; set; }
         public DateTime WeekCommencing { get; set; }
         public string RequestedBy { get; set; }
@@ -17,7 +18,7 @@ namespace Blackwood.Access.Models
         public int DayOffset { get; set; }
         public string Reason { get; set; }
         public int Hours { get; set; }
-        public int Minutes { get; set; }
+        public int Mins { get; set; }
     }
 }
 
