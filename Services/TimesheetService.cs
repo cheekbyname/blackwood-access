@@ -2,6 +2,7 @@ namespace Blackwood.Access.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
     using Blackwood.Access.Models;
@@ -165,24 +166,29 @@ namespace Blackwood.Access.Services
 
 		public Adjustment AddTimesheetAdjustment(Adjustment adj)
 		{
-			_context.Database.ExecuteSqlCommand("AddTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
+			_context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
 				new [] {
-					new SqlParameter("@Id", adj.Id),
-					new SqlParameter("@Guid", adj.Guid),
-					new SqlParameter("@CarerCode", adj.CarerCode),
-					new SqlParameter("@WeekCommencing", adj.WeekCommencing),
-					new SqlParameter("@RequestedBy", adj.RequestedBy),
-					new SqlParameter("@Requested", adj.Requested),
-					new SqlParameter("@AuthorisedBy", adj.AuthorisedBy),
-					new SqlParameter("@Authorised", adj.Authorised),
-					new SqlParameter("@ContractCode", adj.ContractCode),
-					new SqlParameter("@DayOffset", adj.DayOffset),
-					new SqlParameter("@Reason", adj.Reason),
-					new SqlParameter("@Hours", adj.Hours),
-					new SqlParameter("@Mins", adj.Mins)
+					new SqlParameter { ParameterName = "@Id", Value = adj.Id },
+					new SqlParameter { ParameterName = "@Guid", Value = adj.Guid },
+					new SqlParameter { ParameterName = "@CarerCode", Value = adj.CarerCode },
+					new SqlParameter { ParameterName = "@WeekCommencing", Value = adj.WeekCommencing },
+					new SqlParameter { ParameterName = "@RequestedBy", Value = adj.RequestedBy ?? (object)DBNull.Value },
+					new SqlParameter { ParameterName = "@Requested", SqlDbType = SqlDbType.DateTime2, Value=adj.Requested },
+					new SqlParameter { ParameterName = "@AuthorisedBy",  Value = adj.AuthorisedBy ?? (object)DBNull.Value },
+					new SqlParameter { ParameterName = "@Authorised", SqlDbType = SqlDbType.DateTime2, Value=adj.Authorised },
+					new SqlParameter { ParameterName = "@ContractCode", Value = adj.ContractCode },
+					new SqlParameter { ParameterName = "@DayOffset", Value = adj.DayOffset },
+					new SqlParameter { ParameterName = "@Reason", Value = adj.Reason ?? (object)DBNull.Value },
+					new SqlParameter { ParameterName = "@Hours", Value = adj.Hours },
+					new SqlParameter { ParameterName = "@Mins", Value = adj.Mins }
 				});
 			
 			return _context.Adjustments.FirstOrDefault(a => a.Guid == adj.Guid);
+		}
+
+		public void RemoveTimesheetAdjustment(Adjustment adj)
+		{
+			throw new NotImplementedException();
 		}
     }
 }

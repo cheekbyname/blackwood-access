@@ -63,6 +63,21 @@ export class TimesheetViewerComponent implements OnInit {
 		this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
 	}
 
+	putAdjustment(oldAdj: Adjustment) {
+		var tsUrl = '/api/timesheet/AddTimesheetAdjustment';
+		this.http.put(tsUrl, oldAdj).subscribe((res) => {
+			// The (potentially updated) Adjustment returned by the API
+			console.log(res.json());
+			var newAdj = res.json() as Adjustment;
+			// Splice into Timesheet adjustments
+			var idx = this.timesheet.adjustments.indexOf(oldAdj);
+			this.timesheet.adjustments.splice(idx, 1, newAdj);
+			// Splice into Dialog adjustments
+			var idx = this.adjustments.indexOf(oldAdj);
+			this.adjustments.splice(idx, 1, newAdj);
+		});
+	}
+
 	processTimesheet(res): void {
 		this.bookings = this.emptyBook();
 		var ts: Timesheet = res.json();
@@ -241,6 +256,9 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public closeAdjust() {
+		this.adjustments.forEach((adj) => {
+			this.putAdjustment(adj);
+		});
 		this.timesheet.adjustments = this.timesheet.adjustments.concat(this.adjustments);
 		this.adjustVisible = false;
 	}
