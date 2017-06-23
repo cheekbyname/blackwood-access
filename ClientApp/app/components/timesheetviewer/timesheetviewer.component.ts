@@ -32,7 +32,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
     private absenceCodes: number [] = [108, 109];
-	private unpaidCodes: number [] = [123];
+	private unpaidCodes: number [] = [123, 110];
 	public days: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 	public months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
