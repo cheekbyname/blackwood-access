@@ -40,7 +40,7 @@
 				<thead>
 					<tr class="row">
 						<th *ngFor="let day of days; let i = index" (click)="openAdjustments(i)"
-							[title]="'Click here to adjust hours for ' + days[i] + ' ' + dateOrd(0)">
+							[title]="'Click here to adjust hours for ' + days[i] + ' ' + dateOrd(i)">
 							<span>{{days[i]}} {{dateOrd(i)}}</span><br/><span>{{displayTime(actualHoursForDay(i))}}</span>
 						</th>
 					</tr>
@@ -64,18 +64,20 @@
 				<table class="table table-striped">
 					<thead class="row">
 						<th class="col-md-2">Start</th>
-						<th class="col-md-8">Finish</th>
+						<th class="col-md-6">Finish</th>
+						<th class="col-md-2">Unpaid</th>
 						<th class="col-md-2">Hours</th>
 					</thead>
 					<tbody>
 						<tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
 							<td>{{timeFromDate(shift.start)}}</td>
 							<td>{{timeFromDate(shift.finish)}}</td>
+							<td>{{displayTime(shift.unpaidMins)}}</td>
 							<td>{{displayTime(shift.shiftMins)}}</td>
 						</tr>
 						<tr class="row">
-							<td colspan="2"><strong>Shift Totals</strong></td>
-							<td><strong>{{displayTime(actualHoursForDay(dayOffset))}}</strong></td>
+							<td colspan="3"><strong>Shift Totals</strong></td>
+							<td><strong>{{displayTime(actualShiftTimeForDay(dayOffset))}}</strong></td>
 						</tr>
 					</tbody>
 				</table>
@@ -110,7 +112,7 @@
 						</tr>
 						<tr *ngIf="minsForAdjustments()" class="row">
 							<td colspan="2"><strong>Daily Totals</strong></td>
-							<td><strong>{{displayTime(actualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
+							<td><strong>{{displayTime(actualShiftTimeForDay(dayOffset) + minsForAdjustments())}}</strong></td>
 						</tr>
 					</tbody>
 				</table>

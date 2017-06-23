@@ -8,6 +8,7 @@ export class Shift {
     public start: Date;
     public finish: Date;
     public shiftMins: number;
+    public unpaidMins: number;
 }
 
 @Pipe({

@@ -31,7 +31,8 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = this.emptyBook();
 	}
 
-    private absenceCodes: number [] = [108, 109, 123];
+    private absenceCodes: number [] = [108, 109];
+	private unpaidCodes: number [] = [123];
 	public days: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 	public months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -165,9 +166,15 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
 	}
 
+	public actualShiftTimeForDay(offset: number): number {
+		return this.timesheet.shifts
+			.filter(sh => sh.day == offset)
+			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc +cur }, 0);
+	}
+
 	public actualHoursForContract(contractCode: number): number {
-		// TODO Filter by Contract once we figure out what to do regarding possible multi-contract shifts
 		return this.timesheet.bookings.filter(bk => bk.contractCode === contractCode)
+			.filter(bk => !this.absenceCodes.concat(this.unpaidCodes).some(cd => cd == bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0 );
 	}
 
@@ -206,7 +213,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
-		if (this.absenceCodes.some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
+		if (this.absenceCodes.concat(this.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
 	}
 
