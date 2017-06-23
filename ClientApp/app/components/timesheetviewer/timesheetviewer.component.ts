@@ -1,15 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
+import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
+
 import { BookingCardComponent } from '../cards/booking.card/booking.card';
 import { Timesheet } from '../../models/timesheet';
 import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
 import { Availability } from '../../models/availability';
 import { Shift } from '../../models/shift';
-import { Adjustment } from '../../models/adjustment';
+import { Adjustment, AdjustmentOffsetFilter } from '../../models/adjustment';
+import { Team } from '../../models/team';
 
-import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
+import { TimesheetProvider } from '../../providers/timesheet.provider';
 
 type BookingGrid = Array<Array<CarerBooking>>;
 
@@ -20,8 +23,8 @@ type BookingGrid = Array<Array<CarerBooking>>;
 })
 export class TimesheetViewerComponent implements OnInit {
 
-	constructor(http: Http) {
-		this.http = http;
+	constructor(private http: Http, private timePro: TimesheetProvider ) {
+
 	}
 
 	ngOnInit(): void {
@@ -29,19 +32,18 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
     private absenceCodes: number [] = [108, 109, 123];
+	public days: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+	public months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	_carer: Carer;
 	_weekCommencing: Date;
-	http: Http;
 	timesheet: Timesheet;
 	bookings: BookingGrid;
 	isContracted: boolean;
+	// teams: Team[];
 
 	adjustVisible: boolean = false;
-	adjustDate: number;
-	adjustDay: string;
-	adjustShifts: Shift[];
-	adjustments: Adjustment[] = new Array<Adjustment>();
+	dayOffset: number;
 
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
@@ -63,25 +65,11 @@ export class TimesheetViewerComponent implements OnInit {
 		this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
 	}
 
-	putAdjustment(oldAdj: Adjustment) {
-		var tsUrl = '/api/timesheet/AddTimesheetAdjustment';
-		this.http.put(tsUrl, oldAdj).subscribe((res) => {
-			// The (potentially updated) Adjustment returned by the API
-			console.log(res.json());
-			var newAdj = res.json() as Adjustment;
-			// Splice into Timesheet adjustments
-			var idx = this.timesheet.adjustments.indexOf(oldAdj);
-			this.timesheet.adjustments.splice(idx, 1, newAdj);
-			// Splice into Dialog adjustments
-			var idx = this.adjustments.indexOf(oldAdj);
-			this.adjustments.splice(idx, 1, newAdj);
-		});
-	}
-
 	processTimesheet(res): void {
 		this.bookings = this.emptyBook();
-		var ts: Timesheet = res.json();
+		var ts: Timesheet = res.json() as Timesheet;
 		this.timesheet = ts;
+		// this.teams = ts.contracts.map((con) => { return { teamCode: con.teamCode, teamDesc: con.teamDesc } as Team });
 		console.log(this.timesheet);
 		ts.bookings.forEach(bk => this.stuffBook(bk));
 		this.transBook();
@@ -199,14 +187,6 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	// public bookingSlot(offset: number): CarerBooking[] {
-	// 	var bookSlot = CarerBooking[7];
-	// 	for (var i=0; i<7; i++) {
-
-	// 	}
-	// 	return bookSlot;
-	// }
-
 	public dateOrd(offset: number): string {
 		var dt = new Date(this.weekCommencing);
 		dt.setDate(dt.getDate() + offset);
@@ -227,12 +207,11 @@ export class TimesheetViewerComponent implements OnInit {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
 		if (this.absenceCodes.some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
-		//return shiftColors[bk.shift-1];
 		return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
 	}
 
 	public minsForAdjustments(): number {
-		return this.adjustments
+		return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset)
 			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -241,29 +220,42 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public adjustHours(offset: number, day: string) {
-		this.adjustDate = offset;
-		this.adjustDay = day;
-		this.adjustShifts = this.timesheet.shifts.filter(sh => sh.day === offset);
+	public openAdjustments(offset: number) {
+		this.dayOffset = offset;
 		this.adjustVisible = true;
-		this.adjustments = new Array<Adjustment>().concat(this.timesheet.adjustments.filter(adj => adj.dayOffset == offset));
-		// Temporarily remove the adjustments from the timesheet
-		this.timesheet.adjustments = this.timesheet.adjustments.filter(adj => adj.dayOffset !== this.adjustDate);
 	}
 
 	public removeAdjust(adjust: Adjustment) {
-		this.adjustments = this.adjustments.filter(adj => adj != adjust);
+		// TODO Move this onto Provider
+		var tsUrl = '/api/timesheet/RemoveTimesheetAdjustment?id=' + adjust.id;
+		this.http.delete(tsUrl).subscribe(res => {
+			this.timesheet.adjustments.splice(this.timesheet.adjustments.indexOf(adjust), 1);
+		});
 	}
 
 	public closeAdjust() {
-		this.adjustments.forEach((adj) => {
+		this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset).forEach((adj) => {
 			this.putAdjustment(adj);
 		});
-		this.timesheet.adjustments = this.timesheet.adjustments.concat(this.adjustments);
 		this.adjustVisible = false;
 	}
 
+	putAdjustment(oldAdj: Adjustment) {
+		// TODO Move this onto Provider
+		var tsUrl = '/api/timesheet/AddTimesheetAdjustment';
+		this.http.put(tsUrl, oldAdj).subscribe((res) => {
+			// The (potentially updated) Adjustment returned by the API
+			console.log(res.json());
+			var newAdj = res.json() as Adjustment;
+			// Splice into Timesheet adjustments
+			var idx = this.timesheet.adjustments.indexOf(oldAdj);
+			this.timesheet.adjustments.splice(idx, 1, newAdj);
+		});
+	}
+
 	public addAdjust() {
-		this.adjustments.push(new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.adjustDate));
+		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
+		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
+		this.timesheet.adjustments.push(newAdj);
 	}
 }

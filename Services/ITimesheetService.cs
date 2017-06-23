@@ -13,6 +13,6 @@ namespace Blackwood.Access.Services
         IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd);
         IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing);
         Adjustment AddTimesheetAdjustment(Adjustment adjust);
-        void RemoveTimesheetAdjustment(Adjustment adjust);
+        void RemoveTimesheetAdjustment(int id);
   	}
 }

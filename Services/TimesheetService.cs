@@ -168,6 +168,7 @@ namespace Blackwood.Access.Services
 		{
 			_context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
 				new [] {
+					// TODO Consider null coalescing date values also
 					new SqlParameter { ParameterName = "@Id", Value = adj.Id },
 					new SqlParameter { ParameterName = "@Guid", Value = adj.Guid },
 					new SqlParameter { ParameterName = "@CarerCode", Value = adj.CarerCode },
@@ -186,9 +187,11 @@ namespace Blackwood.Access.Services
 			return _context.Adjustments.FirstOrDefault(a => a.Guid == adj.Guid);
 		}
 
-		public void RemoveTimesheetAdjustment(Adjustment adj)
+		public void RemoveTimesheetAdjustment(int id)
 		{
-			throw new NotImplementedException();
+			_context.Database.ExecuteSqlCommand("RemoveTimeSheetAdjustment @AdjustId", new [] {
+				new SqlParameter("@AdjustId", id)
+			});
 		}
     }
 }

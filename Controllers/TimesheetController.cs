@@ -52,9 +52,9 @@ namespace Blackwood.Access.Controllers
 		}
 
 		[HttpDelete("[action]")]
-		public void RemoveTimesheetAdjustment([FromBody] Adjustment adj)
+		public void RemoveTimesheetAdjustment(int id)
 		{
-			throw new NotImplementedException();
+			_service.RemoveTimesheetAdjustment(id);
 		}
 	}
 }

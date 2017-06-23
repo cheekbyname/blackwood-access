@@ -1,3 +1,5 @@
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
+
 import { Guid } from './Utilities';
 
 export class Adjustment {
@@ -23,5 +25,16 @@ export class Adjustment {
         this.hours = 0;
         this.mins = 0;
         this.guid = Guid.newGuid();
+    }
+}
+
+@Pipe({
+    name: 'adjustmentOffsetFilter',
+    pure: false
+})
+@Injectable()
+export class AdjustmentOffsetFilter implements PipeTransform {
+    transform(adjustments: Adjustment[], offset: number): Adjustment[] {
+        return adjustments.filter(adjust => adjust.dayOffset == offset);
     }
 }

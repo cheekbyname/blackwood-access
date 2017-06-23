@@ -21,11 +21,14 @@ import { BookingCardComponent } from './components/cards/booking.card/booking.ca
 import { InitialAssessProvider } from './providers/initialassess.provider';
 import { TimesheetProvider } from './providers/timesheet.provider';
 
+import { AdjustmentOffsetFilter } from './models/adjustment';
+import { ShiftOffsetFilter } from './models/shift';
+
 @NgModule({
     bootstrap: [ AppComponent ],
     declarations: [ AppComponent, NavMenuComponent, CounterComponent, FetchDataComponent, InitialAssessManagerComponent,
         InitialAssessComponent, TimesheetManagerComponent, TimesheetViewerComponent, TeamTimeSummaryComponent, BookingCardComponent,
-        HomeComponent
+        HomeComponent, AdjustmentOffsetFilter, ShiftOffsetFilter
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.

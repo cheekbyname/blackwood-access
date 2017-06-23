@@ -39,24 +39,17 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th [title]="'Click here to adjust hours for Monday ' + dateOrd(0)" (click)="adjustHours(0, 'Monday')">Monday {{dateOrd(0)}}<br/>{{displayTime(actualHoursForDay(0))}}</th>
-						<th [title]="'Click here to adjust hours for Tuesday ' + dateOrd(1)" (click)="adjustHours(1, 'Tuesday')">Tuesday {{dateOrd(1)}}<br/>{{displayTime(actualHoursForDay(1))}}</th>
-						<th [title]="'Click here to adjust hours for Wednesday ' + dateOrd(2)" (click)="adjustHours(2, 'Wednesday')">Wednesday {{dateOrd(2)}}<br/>{{displayTime(actualHoursForDay(2))}}</th>
-						<th [title]="'Click here to adjust hours for Thursday ' + dateOrd(3)" (click)="adjustHours(3, 'Thursday')">Thursday {{dateOrd(3)}}<br/>{{displayTime(actualHoursForDay(3))}}</th>
-						<th [title]="'Click here to adjust hours for Friday ' + dateOrd(4)" (click)="adjustHours(4, 'Friday')">Friday {{dateOrd(4)}}<br/>{{displayTime(actualHoursForDay(4))}}</th>
-						<th [title]="'Click here to adjust hours for Saturday ' + dateOrd(5)" (click)="adjustHours(5, 'Saturday')">Saturday {{dateOrd(5)}}<br/>{{displayTime(actualHoursForDay(5))}}</th>
-						<th [title]="'Click here to adjust hours for Sunday ' + dateOrd(6)" (click)="adjustHours(6, 'Sunday')">Sunday {{dateOrd(6)}}<br/>{{displayTime(actualHoursForDay(6))}}</th>
+						<th *ngFor="let day of days; let i = index" (click)="openAdjustments(i)"
+							[title]="'Click here to adjust hours for ' + days[i] + ' ' + dateOrd(0)">
+							<span>{{days[i]}} {{dateOrd(i)}}</span><br/><span>{{displayTime(actualHoursForDay(i))}}</span>
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class="row" *ngFor="let bk of bookings">
-						<td [style.background-color]="bookColor(bk[0])"><booking-card *ngIf="bk[0]" [booking]="bk[0]"></booking-card></td>
-						<td [style.background-color]="bookColor(bk[1])"><booking-card *ngIf="bk[1]" [booking]="bk[1]"></booking-card></td>
-						<td [style.background-color]="bookColor(bk[2])"><booking-card *ngIf="bk[2]" [booking]="bk[2]"></booking-card></td>
-						<td [style.background-color]="bookColor(bk[3])"><booking-card *ngIf="bk[3]" [booking]="bk[3]"></booking-card></td>
-						<td [style.background-color]="bookColor(bk[4])"><booking-card *ngIf="bk[4]" [booking]="bk[4]"></booking-card></td>
-						<td [style.background-color]="bookColor(bk[5])"><booking-card *ngIf="bk[5]" [booking]="bk[5]"></booking-card></td>
-						<td [style.background-color]="bookColor(bk[6])"><booking-card *ngIf="bk[6]" [booking]="bk[6]"></booking-card></td>
+						<td *ngFor="let day of days; let i = index" [style.background-color]="bookColor(bk[i])">
+							<booking-card *ngIf="bk[i]" [booking]="bk[i]"></booking-card>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -64,9 +57,9 @@
 		</div>
 
 		<!-- TODO Consider making this it's own component -->
-		<p-dialog [(visible)]="adjustVisible" modal="modal" [width]="600" [minWidth]="450" [minHeight]="450" [responsive]="true"
+		<p-dialog [(visible)]="adjustVisible" modal="modal" [width]="920" [minWidth]="640" [minHeight]="480" [responsive]="true"
 			[closable]="false" [closeOnEscape]="false">
-			<header><span>Hours for {{adjustDay}} {{dateOrd(adjustDate)}}</span></header>
+			<header><span>Hours for {{days[dayOffset]}} {{dateOrd(dayOffset)}}</span></header>
 			<div id="adjust-modal-content">
 				<table class="table table-striped">
 					<thead class="row">
@@ -75,32 +68,38 @@
 						<th class="col-md-2">Hours</th>
 					</thead>
 					<tbody>
-						<tr *ngFor="let shift of adjustShifts" class="row">
+						<tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
 							<td>{{timeFromDate(shift.start)}}</td>
 							<td>{{timeFromDate(shift.finish)}}</td>
 							<td>{{displayTime(shift.shiftMins)}}</td>
 						</tr>
 						<tr class="row">
 							<td colspan="2"><strong>Shift Totals</strong></td>
-							<td><strong>{{displayTime(actualHoursForDay(adjustDate))}}</strong></td>
+							<td><strong>{{displayTime(actualHoursForDay(dayOffset))}}</strong></td>
 						</tr>
 					</tbody>
 				</table>
-				<table *ngIf="adjustments.length > 0" class="table table-striped">
+				<table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0" class="table table-striped">
 					<thead class="row">
-						<th class="col-md-8">Reason for Adjustment</th>
-						<th class="col-md-2">Hours</th>
-						<th class="col-md-2">Mins</th>
+						<th class="col-md-5">Reason for Adjustment</th>
+						<th class="col-md-5">Team</th>
+						<th class="col-md-1">Hours</th>
+						<th class="col-md-1">Mins</th>
 					</thead>
 					<tbody>
-						<tr *ngFor="let adjust of adjustments" class="row">
+						<tr *ngFor="let adjust of timesheet.adjustments | adjustmentOffsetFilter:dayOffset" class="row">
 							<td>
 								<div class="input-group">
-									<span class="input-group-addon" (click)="removeAdjust(adjust)">
+									<span class="input-group-addon delete-button" (click)="removeAdjust(adjust)" title="Remove this adjustment">
 										<span class="glyphicon glyphicon-remove"></span>
 									</span>
 									<input class="form-control" type="text" [(ngModel)]="adjust.reason"/>
 								</div>
+							</td>
+							<td>
+								<select class="form-control" [(ngModel)]="adjust.contractCode">
+									<option *ngFor="let con of timesheet.contracts" [ngValue]="con.contractCode">{{con.teamDesc}}</option>
+								</select>
 							</td>
 							<td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2"></p-spinner></td>
 							<td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2"></p-spinner></td>
@@ -111,7 +110,7 @@
 						</tr>
 						<tr *ngIf="minsForAdjustments()" class="row">
 							<td colspan="2"><strong>Daily Totals</strong></td>
-							<td><strong>{{displayTime(actualHoursForDay(adjustDate) + minsForAdjustments())}}</strong></td>
+							<td><strong>{{displayTime(actualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
 						</tr>
 					</tbody>
 				</table>

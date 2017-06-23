@@ -59,3 +59,8 @@ p-spinner * {
 span.glyphicon-remove {
     color: red;
 }
+
+.delete-button:hover {
+    cursor: pointer;
+    background-color: #bfd730;
+}
