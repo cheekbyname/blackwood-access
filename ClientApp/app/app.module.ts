@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 
 import { CalendarModule, SliderModule, DialogModule, SpinnerModule } from 'primeng/primeng';
 
+import { AppRouterModule } from './app-routing.module';
+
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -32,16 +34,17 @@ import { ShiftOffsetFilter } from './models/shift';
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
-        RouterModule.forRoot([
-            { path: '', redirectTo: 'timesheet-manager', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
-            { path: 'timesheet-manager', component: TimesheetManagerComponent },
-            { path: 'initial-assess-manager', component: InitialAssessManagerComponent },
-            { path: 'initial-assess/:id', component: InitialAssessComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
-            { path: '**', redirectTo: 'home' }
-        ]),
+        // RouterModule.forRoot([
+        //     { path: '', redirectTo: 'timesheet-manager', pathMatch: 'full' },
+        //     { path: 'home', component: HomeComponent },
+        //     { path: 'timesheet-manager', component: TimesheetManagerComponent },
+        //     { path: 'initial-assess-manager', component: InitialAssessManagerComponent },
+        //     { path: 'initial-assess/:id', component: InitialAssessComponent },
+        //     { path: 'counter', component: CounterComponent },
+        //     { path: 'fetch-data', component: FetchDataComponent },
+        //     { path: '**', redirectTo: 'home' }
+        // ]),
+        AppRouterModule,
         FormsModule,
         CalendarModule, SliderModule, DialogModule, SpinnerModule
     ],

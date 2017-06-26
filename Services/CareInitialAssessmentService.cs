@@ -28,7 +28,7 @@
             List<CareInitialAssessment> assess = _context.CareInitialAssessments
                 .Include(c => c.ActiveUser).Include(c => c.CheckItems).Include(c => c.Comms)
                 .Include(c => c.TileGroups).Include(c => c.TileGroups).ThenInclude(g => g.Items)
-                .ToList();
+                .OrderByDescending(c => c.VisitDate).ToList();
             // TODO Use PopAndSort (below)
             // Pop lookups and sort Comms
             assess.SelectMany(a => a.Comms).ToList().ForEach(c => { c.Title = CommsItem.Lookup[c.ItemId]; });
