@@ -10,7 +10,7 @@ namespace Blackwood.Access.Services
 
     public class TimesheetService : ITimesheetService
     {
-		private static int[] _absenceCodes = { 108, 109 };	// TODO Consider unpaid leave situation
+		private static int[] _absenceCodes = { 108, 109 };
 		private static int[] _unpaidCodes = { 123, 110 };
 		private AccessContext _context;
 
@@ -96,6 +96,7 @@ namespace Blackwood.Access.Services
 			dates.ToList().ForEach(dt => {
 
 				TimeSpan gap;
+				int contract;
 				int day = Array.FindIndex(dates, dx => dx == dt);
 
 				// First Shift of this day
@@ -106,6 +107,7 @@ namespace Blackwood.Access.Services
 
 					// Calculate gap from last booking and adjust Shift Start/Finish times
 					gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
+					contract = shift.ContractCode ?? bk.ContractCode;
 					shift.Start = shift.Start ?? bk.ThisStart;
 
 					//  Check for Unpaid Break Booking Type
@@ -113,15 +115,18 @@ namespace Blackwood.Access.Services
 					{
 						shift.UnpaidMins += (bk.ThisMins);
 					}
-					// Begin new Shift if valid shift break detected
-					if (gap >= TimeSpan.FromHours(2) &&
-						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) || (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
+					// Begin new Shift if valid shift break detected or team changes
+					if ((gap >= TimeSpan.FromHours(2) &&
+						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
+							|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
+						|| bk.ContractCode != contract)
 					{
 						ts.Shifts.Add(shift);
 						shift = new Shift() {
 							CarerCode = ts.CarerCode,
 							Sequence = ts.Shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
-							Day = day
+							Day = day,
+							ContractCode = bk.ContractCode
 						};
 					}
 					else

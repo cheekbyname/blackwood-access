@@ -46,6 +46,9 @@ export class TimesheetViewerComponent implements OnInit {
 	adjustVisible: boolean = false;
 	dayOffset: number;
 
+	bookingVisible: boolean = false;
+	selectedBooking: CarerBooking = new CarerBooking();
+
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
 		this._weekCommencing = weekCommencing;
@@ -157,6 +160,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookedHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
 			.filter(bk => bk.contractCode === contractCode)
+			.filter(bk => !(this.absenceCodes.concat(this.unpaidCodes)).some(uc => uc === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -173,6 +177,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public actualHoursForContract(contractCode: number): number {
+		// TODO This kinda has to be based on the shift, for (by now) obvious reasons. Move server-side?
 		return this.timesheet.bookings.filter(bk => bk.contractCode === contractCode)
 			.filter(bk => !this.absenceCodes.concat(this.unpaidCodes).some(cd => cd == bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0 );
@@ -190,7 +195,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public leaveSickHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
-			.filter(bk => bk.contractCode === contractCode && this.absenceCodes.some(ac => ac === bk.bookingType))
+			.filter(bk => bk.contractCode === contractCode && (this.absenceCodes).some(ac => ac === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -227,6 +232,11 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
+	public teamForContract(contractCode: number): string {
+		var contract = this.timesheet.contracts.find(con => con.contractCode === contractCode);
+		return contract ? contract.teamDesc : "";
+	}
+
 	public openAdjustments(offset: number) {
 		this.dayOffset = offset;
 		this.adjustVisible = true;
@@ -242,6 +252,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public closeAdjust() {
 		this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset).forEach((adj) => {
+			// TODO Validation
 			this.putAdjustment(adj);
 		});
 		this.adjustVisible = false;
@@ -264,5 +275,14 @@ export class TimesheetViewerComponent implements OnInit {
 		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
 		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
 		this.timesheet.adjustments.push(newAdj);
+	}
+
+	public openBookingDetail(bk: CarerBooking) {
+		this.selectedBooking = bk;
+		this.bookingVisible = true;
+	}
+
+	public closeBookingDetail() {
+		this.bookingVisible = false;
 	}
 }

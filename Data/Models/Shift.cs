@@ -8,6 +8,7 @@ namespace Blackwood.Access.Models
         [Key]
         public int Id { get; set; }
         public int CarerCode { get; set; }
+        public int? ContractCode { get; set; }
         public int Sequence { get; set; }
         public int Day { get; set; }
         public DateTime? Start { get; set; }

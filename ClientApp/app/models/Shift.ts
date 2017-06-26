@@ -3,6 +3,7 @@ import { Injectable, Pipe, PipeTransform } from '@angular/core';
 export class Shift {
     public id: number;
     public carerCode: number;
+    public contractCode: number;
     public sequence: number;
     public day: number;
     public start: Date;
