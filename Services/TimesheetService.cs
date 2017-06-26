@@ -68,12 +68,22 @@ namespace Blackwood.Access.Services
 			});
 
 			// CarerBookings
-			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @WeekCommencing",
-				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @PeriodStart, @PeriodFinish",
+				parameters: new [] {
+					new SqlParameter("@CarerCode", carerCode),
+					new SqlParameter("@PeriodStart", weekCommencing),
+					new SqlParameter("@PeriodFinish", weekCommencing.AddDays(6))
+					})
+				.ToList();
 
 			// Adjustments
-			ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",
-				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
+			ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
+				parameters: new [] {
+					new SqlParameter("@CarerCode", carerCode),
+					new SqlParameter("@PeriodStart", weekCommencing),
+					new SqlParameter("@PeriodFinish", weekCommencing.AddDays(6))
+					})
+				.ToList();
 
 			// Establish Shifts for each day in period
 			// Definitions:
@@ -150,6 +160,60 @@ namespace Blackwood.Access.Services
             return ts;
         }
 
+		// private List<Shift> ShiftsForDays(int carerCode, DateTime[] dates)
+		// {
+		// 	List<Shift> shifts = new List<Shift>();
+
+		// 	dates.ToList().ForEach(dt => {
+
+		// 		TimeSpan gap;
+		// 		int contract;
+		// 		int day = Array.FindIndex(dates, dx => dx == dt);
+
+		// 		// First Shift of this day
+		// 		Shift shift = new Shift() { CarerCode = carerCode, Sequence = 1, Day = day, UnpaidMins = 0 };
+
+		// 		ts.Bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
+		// 			.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
+
+		// 			// Calculate gap from last booking and adjust Shift Start/Finish times
+		// 			gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
+		// 			contract = shift.ContractCode ?? bk.ContractCode;
+		// 			shift.Start = shift.Start ?? bk.ThisStart;
+
+		// 			//  Check for Unpaid Break Booking Type
+		// 			if (_unpaidCodes.Any(uc => uc == bk.BookingType))
+		// 			{
+		// 				shift.UnpaidMins += (bk.ThisMins);
+		// 			}
+		// 			// Begin new Shift if valid shift break detected or team changes
+		// 			if ((gap >= TimeSpan.FromHours(2) &&
+		// 				((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
+		// 					|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
+		// 				|| bk.ContractCode != contract)
+		// 			{
+		// 				ts.Shifts.Add(shift);
+		// 				shift = new Shift() {
+		// 					CarerCode = ts.CarerCode,
+		// 					Sequence = ts.Shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
+		// 					Day = day,
+		// 					ContractCode = bk.ContractCode
+		// 				};
+		// 			}
+		// 			else
+		// 			{
+		// 				shift.Finish = bk.ThisFinish;
+		// 				// Shift time from beginning to end minus unpaid breaks
+		// 				shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes) - shift.UnpaidMins;
+		// 			}
+
+		// 			// Tag Booking with Shift Sequence
+		// 			bk.Shift = shift.Sequence;
+		// 		});
+		// 		ts.Shifts.Add(shift);
+		// 	});
+		// }
+
         private DateTime[] DatesCovered(DateTime dateCommencing, int periodLength)
         {
 			DateTime[] dates = new DateTime[periodLength];
@@ -159,6 +223,16 @@ namespace Blackwood.Access.Services
 			return dates;
         }
 
+		private DateTime[] DatesCovered(DateTime dateCommencing, DateTime dateConcluding)
+		{
+			int periodLength = (dateConcluding - dateCommencing).Days;
+			DateTime[] dates = new DateTime[periodLength];
+			for(int d = 0; d <periodLength; d++) {
+				dates[d] = dateCommencing.AddDays(d);
+			}
+			return dates;
+		}
+
         public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
 			return _context.Set<Summary>().FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
@@ -166,7 +240,6 @@ namespace Blackwood.Access.Services
 				new SqlParameter("@periodEnd", periodEnd)});
 		}
 
-		// Do we actually even need this?
 		public IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing)
 		{
 			return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",

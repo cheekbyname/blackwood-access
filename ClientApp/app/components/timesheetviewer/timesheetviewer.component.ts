@@ -244,6 +244,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public removeAdjust(adjust: Adjustment) {
 		// TODO Move this onto Provider
+		// TODO Implement confirmation
 		var tsUrl = '/api/timesheet/RemoveTimesheetAdjustment?id=' + adjust.id;
 		this.http.delete(tsUrl).subscribe(res => {
 			this.timesheet.adjustments.splice(this.timesheet.adjustments.indexOf(adjust), 1);
