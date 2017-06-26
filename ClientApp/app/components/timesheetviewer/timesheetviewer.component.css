@@ -48,7 +48,7 @@ table.table-rota td:hover {
     border-color: black;
 }
 
-p-dialog input, p-dialog button, p-dialog span {
+p-dialog input, p-dialog button, p-dialog .row > span {
     font-family: 'Century Gothic';
 }
 

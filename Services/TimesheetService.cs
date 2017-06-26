@@ -110,7 +110,7 @@ namespace Blackwood.Access.Services
 				int day = Array.FindIndex(dates, dx => dx == dt);
 
 				// First Shift of this day
-				shift = new Shift() { CarerCode = ts.CarerCode, Sequence = 1, Day = day, UnpaidMins = 0 };
+				shift = new Shift() { CarerCode = ts.CarerCode, Sequence = 1, Day = day, UnpaidMins = 0, ContractCode = null };
 
 				ts.Bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
 					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
