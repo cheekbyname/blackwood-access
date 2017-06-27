@@ -52,6 +52,7 @@ p-dialog input, p-dialog button, p-dialog .row > span {
     font-family: 'Century Gothic';
 }
 
+/*TODO Make spinners 34px high to match inputs*/
 p-spinner * {
     font-family: 'Century Gothic';
 }

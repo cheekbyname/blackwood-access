@@ -64,7 +64,8 @@
 				<table class="table table-striped">
 					<thead class="row">
 						<th class="col-md-2">Start</th>
-						<th class="col-md-6">Finish</th>
+						<th class="col-md-2">Finish</th>
+						<th class="col-md-4">Team</th>
 						<th class="col-md-2">Unpaid</th>
 						<th class="col-md-2">Hours</th>
 					</thead>
@@ -72,6 +73,7 @@
 						<tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
 							<td>{{timeFromDate(shift.start)}}</td>
 							<td>{{timeFromDate(shift.finish)}}</td>
+							<td>{{teamForContract(shift.contractCode)}}</td>
 							<td>{{displayTime(shift.unpaidMins)}}</td>
 							<td>{{displayTime(shift.shiftMins)}}</td>
 						</tr>

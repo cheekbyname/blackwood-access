@@ -85,39 +85,44 @@ namespace Blackwood.Access.Services
 					})
 				.ToList();
 
-			// Establish Shifts for each day in period
-			// Definitions:
-			// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
-			// The Shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
-			// The Shift finishes at the end of the end of the last booking in that Shift, if the first Shift
-			// The Shift finishes at the end of the Availability block if the second Shift 
-			// A Shift which contains a gap of two hours or more should be split into two Shifts
-			// !But only if at least part of that gap falls between 2PM and 4PM!
-			// The first Shift ends at the end of the last Booking before the split
-			// The second Shift begins at the beginning of the first booking after the split
-			// The actual hours paid are counted from the beginning of the Shift to the finish of it
-			// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
+			// Transform Bookings -> Shifts
+			ts.Shifts = BookingsToShifts(ts.Bookings, ts.CarerCode);
 
-			// Setup for Shift calculation
-			ts.Shifts = new List<Shift>();
-			Shift shift;
-			DateTime[] dates = DatesCovered(weekCommencing, 7); 
+			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture
 
-			dates.ToList().ForEach(dt => {
+            return ts;
+        }
 
+		// Establish Shifts for each day in period
+		// Definitions:
+		// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
+		// The Shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
+		// The Shift finishes at the end of the end of the last booking in that Shift, if the first Shift
+		// The Shift finishes at the end of the Availability block if the second Shift 
+		// A Shift which contains a gap of two hours or more should be split into two Shifts
+		// !But only if at least part of that gap falls between 2PM and 4PM!
+		// The first Shift ends at the end of the last Booking before the split
+		// The second Shift begins at the beginning of the first booking after the split
+		// The actual hours paid are counted from the beginning of the Shift to the finish of it
+		// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
+		private ICollection<Shift> BookingsToShifts(ICollection<CarerBooking> bookings, int carerCode)
+		{
+			List<DateTime> dates = bookings.Select(b => b.ThisStart.Date).Distinct().ToList();
+			List<Shift> shifts = new List<Shift>();
+
+			dates.ForEach(dt => {
 				TimeSpan gap;
-				int contract;
-				int day = Array.FindIndex(dates, dx => dx == dt);
+				int day = dates.IndexOf(dt);
 
 				// First Shift of this day
-				shift = new Shift() { CarerCode = ts.CarerCode, Sequence = 1, Day = day, UnpaidMins = 0, ContractCode = null };
+				Shift shift = new Shift() { CarerCode = carerCode, Sequence = 1, Day = day, UnpaidMins = 0 };
 
-				ts.Bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
+				bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
 					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
 
 					// Calculate gap from last booking and adjust Shift Start/Finish times
 					gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
-					contract = shift.ContractCode ?? bk.ContractCode;
+					shift.ContractCode = shift.ContractCode ?? bk.ContractCode;
 					shift.Start = shift.Start ?? bk.ThisStart;
 
 					//  Check for Unpaid Break Booking Type
@@ -129,12 +134,12 @@ namespace Blackwood.Access.Services
 					if ((gap >= TimeSpan.FromHours(2) &&
 						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
 							|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
-						|| bk.ContractCode != contract)
+						|| bk.ContractCode != shift.ContractCode)
 					{
-						ts.Shifts.Add(shift);
+						shifts.Add(shift);
 						shift = new Shift() {
-							CarerCode = ts.CarerCode,
-							Sequence = ts.Shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
+							CarerCode = carerCode,
+							Sequence = shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
 							Day = day,
 							ContractCode = bk.ContractCode
 						};
@@ -149,88 +154,13 @@ namespace Blackwood.Access.Services
 					// Tag Booking with Shift Sequence
 					bk.Shift = shift.Sequence;
 				});
-				ts.Shifts.Add(shift);
+				shifts.Add(shift);
 			});
 
 			// Strip out blank Shifts
-			ts.Shifts = ts.Shifts.Where(sh => sh.Start != null && sh.Finish != null).ToList();
+			shifts = shifts.Where(sh => sh.Start != null && sh.Finish != null).ToList();
 
-			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture
-
-            return ts;
-        }
-
-		// private List<Shift> ShiftsForDays(int carerCode, DateTime[] dates)
-		// {
-		// 	List<Shift> shifts = new List<Shift>();
-
-		// 	dates.ToList().ForEach(dt => {
-
-		// 		TimeSpan gap;
-		// 		int contract;
-		// 		int day = Array.FindIndex(dates, dx => dx == dt);
-
-		// 		// First Shift of this day
-		// 		Shift shift = new Shift() { CarerCode = carerCode, Sequence = 1, Day = day, UnpaidMins = 0 };
-
-		// 		ts.Bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
-		// 			.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
-
-		// 			// Calculate gap from last booking and adjust Shift Start/Finish times
-		// 			gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
-		// 			contract = shift.ContractCode ?? bk.ContractCode;
-		// 			shift.Start = shift.Start ?? bk.ThisStart;
-
-		// 			//  Check for Unpaid Break Booking Type
-		// 			if (_unpaidCodes.Any(uc => uc == bk.BookingType))
-		// 			{
-		// 				shift.UnpaidMins += (bk.ThisMins);
-		// 			}
-		// 			// Begin new Shift if valid shift break detected or team changes
-		// 			if ((gap >= TimeSpan.FromHours(2) &&
-		// 				((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
-		// 					|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
-		// 				|| bk.ContractCode != contract)
-		// 			{
-		// 				ts.Shifts.Add(shift);
-		// 				shift = new Shift() {
-		// 					CarerCode = ts.CarerCode,
-		// 					Sequence = ts.Shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
-		// 					Day = day,
-		// 					ContractCode = bk.ContractCode
-		// 				};
-		// 			}
-		// 			else
-		// 			{
-		// 				shift.Finish = bk.ThisFinish;
-		// 				// Shift time from beginning to end minus unpaid breaks
-		// 				shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes) - shift.UnpaidMins;
-		// 			}
-
-		// 			// Tag Booking with Shift Sequence
-		// 			bk.Shift = shift.Sequence;
-		// 		});
-		// 		ts.Shifts.Add(shift);
-		// 	});
-		// }
-
-        private DateTime[] DatesCovered(DateTime dateCommencing, int periodLength)
-        {
-			DateTime[] dates = new DateTime[periodLength];
-			for(int d = 0; d < periodLength; d++) {
-				dates[d] = dateCommencing.AddDays(d);
-			}
-			return dates;
-        }
-
-		private DateTime[] DatesCovered(DateTime dateCommencing, DateTime dateConcluding)
-		{
-			int periodLength = (dateConcluding - dateCommencing).Days;
-			DateTime[] dates = new DateTime[periodLength];
-			for(int d = 0; d <periodLength; d++) {
-				dates[d] = dateCommencing.AddDays(d);
-			}
-			return dates;
+			return shifts;
 		}
 
         public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
