@@ -86,7 +86,7 @@ namespace Blackwood.Access.Services
 				.ToList();
 
 			// Transform Bookings -> Shifts
-			ts.Shifts = BookingsToShifts(ts.Bookings, ts.CarerCode);
+			ts.Shifts = BookingsToShifts(weekCommencing, weekCommencing.AddDays(6), ts.Bookings, ts.CarerCode);
 
 			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture
 
@@ -105,9 +105,9 @@ namespace Blackwood.Access.Services
 		// The second Shift begins at the beginning of the first booking after the split
 		// The actual hours paid are counted from the beginning of the Shift to the finish of it
 		// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
-		private ICollection<Shift> BookingsToShifts(ICollection<CarerBooking> bookings, int carerCode)
+		private ICollection<Shift> BookingsToShifts(DateTime startDate, DateTime finishDate, ICollection<CarerBooking> bookings, int carerCode)
 		{
-			List<DateTime> dates = bookings.Select(b => b.ThisStart.Date).Distinct().ToList();
+			List<DateTime> dates = Enumerable.Range(0, (finishDate - startDate).Days + 1).Select(d => startDate.AddDays(d)).ToList();
 			List<Shift> shifts = new List<Shift>();
 
 			dates.ForEach(dt => {
@@ -115,13 +115,15 @@ namespace Blackwood.Access.Services
 				int day = dates.IndexOf(dt);
 
 				// First Shift of this day
-				Shift shift = new Shift() { CarerCode = carerCode, Sequence = 1, Day = day, UnpaidMins = 0 };
+				Shift shift = new Shift() { CarerCode = carerCode, Sequence = 1, Day = day, UnpaidMins = 0,
+					BiggestGap = 0 };
 
 				bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
 					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
 
 					// Calculate gap from last booking and adjust Shift Start/Finish times
 					gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
+					shift.BiggestGap = Math.Max(gap.Minutes, shift.BiggestGap);
 					shift.ContractCode = shift.ContractCode ?? bk.ContractCode;
 					shift.Start = shift.Start ?? bk.ThisStart;
 
@@ -136,12 +138,14 @@ namespace Blackwood.Access.Services
 							|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
 						|| bk.ContractCode != shift.ContractCode)
 					{
+						// Check that Shift had valid break
 						shifts.Add(shift);
 						shift = new Shift() {
 							CarerCode = carerCode,
 							Sequence = shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
 							Day = day,
-							ContractCode = bk.ContractCode
+							ContractCode = bk.ContractCode,
+							BiggestGap = 0
 						};
 					}
 					else

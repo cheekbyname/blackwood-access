@@ -57,29 +57,39 @@
 		</div>
 
 		<!-- TODO Consider making this it's own component -->
-		<p-dialog [(visible)]="adjustVisible" modal="modal" [width]="920" [minWidth]="640" [minHeight]="480" [responsive]="true"
+		<p-dialog [(visible)]="adjustVisible" modal="modal" [width]="960" [minWidth]="640" [minHeight]="480" [responsive]="true"
 			[closable]="false" [closeOnEscape]="false">
-			<header><span>Hours for {{days[dayOffset]}} {{dateOrd(dayOffset)}}</span></header>
+			<header>
+				<div class="header-row">
+					<button class="btn btn-primary pull-left" (click)="prevDay()" [disabled]="dayOffset==0">Previous</button>
+					<span class="text-center header-text">Hours for {{days[dayOffset]}} {{dateOrd(dayOffset)}}</span>
+					<button class="btn btn-primary pull-right" (click)="nextDay()" [disabled]="dayOffset==6">Next</button>
+				</div>
+			</header>
 			<div id="adjust-modal-content">
 				<table class="table table-striped">
 					<thead class="row">
-						<th class="col-md-2">Start</th>
-						<th class="col-md-2">Finish</th>
-						<th class="col-md-4">Team</th>
-						<th class="col-md-2">Unpaid</th>
-						<th class="col-md-2">Hours</th>
+						<th class="col-md-7">Team</th>
+						<th class="col-md-1">Start</th>
+						<th class="col-md-1">Finish</th>
+						<th class="col-md-1">Total</th>
+						<th class="col-md-1">Unpaid</th>
+						<th class="col-md-1">Actual</th>
 					</thead>
 					<tbody>
 						<tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
+							<td>{{teamForContract(shift.contractCode)}}</td>
 							<td>{{timeFromDate(shift.start)}}</td>
 							<td>{{timeFromDate(shift.finish)}}</td>
-							<td>{{teamForContract(shift.contractCode)}}</td>
+							<td>{{displayTime(shift.shiftMins + shift.unpaidMins)}}</td>
 							<td>{{displayTime(shift.unpaidMins)}}</td>
 							<td>{{displayTime(shift.shiftMins)}}</td>
 						</tr>
 						<tr class="row">
 							<td colspan="3"><strong>Shift Totals</strong></td>
-							<td><strong>{{displayTime(actualShiftTimeForDay(dayOffset))}}</strong></td>
+							<td>{{displayTime(totalUnpaidHoursForDay(dayOffset) + totalActualHoursForDay(dayOffset))}}</td>
+							<td>{{displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
+							<td>{{displayTime(totalActualHoursForDay(dayOffset))}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -114,7 +124,7 @@
 						</tr>
 						<tr *ngIf="minsForAdjustments()" class="row">
 							<td colspan="2"><strong>Daily Totals</strong></td>
-							<td><strong>{{displayTime(actualShiftTimeForDay(dayOffset) + minsForAdjustments())}}</strong></td>
+							<td><strong>{{displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
 						</tr>
 					</tbody>
 				</table>

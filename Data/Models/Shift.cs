@@ -15,5 +15,6 @@ namespace Blackwood.Access.Models
         public DateTime? Finish { get; set; }
         public int ShiftMins { get; set; }
         public int UnpaidMins { get; set; }
+        public int BiggestGap { get; set; }
     }
 }

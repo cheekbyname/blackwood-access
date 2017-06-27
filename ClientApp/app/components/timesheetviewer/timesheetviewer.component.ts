@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
@@ -19,7 +19,8 @@ type BookingGrid = Array<Array<CarerBooking>>;
 @Component({
 	selector: 'timesheet-viewer',
 	template: require('./timesheetviewer.component.html'),
-	styles: [require('./timesheetviewer.component.css')]
+	styles: [require('./timesheetviewer.component.css')],
+	encapsulation: ViewEncapsulation.None
 })
 export class TimesheetViewerComponent implements OnInit {
 
@@ -170,27 +171,27 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
 	}
 
-	public actualShiftTimeForDay(offset: number): number {
+	public totalActualHoursForDay(offset: number): number {
 		return this.timesheet.shifts
 			.filter(sh => sh.day == offset)
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc +cur }, 0);
 	}
 
+	public totalUnpaidHoursForDay(offset: number): number {
+		return this.timesheet.shifts
+			.filter(sh => sh.day === offset)
+			.map(sh => { return sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
+	}
+
 	public actualHoursForContract(contractCode: number): number {
-		// TODO This kinda has to be based on the shift, for (by now) obvious reasons. Move server-side?
-		return this.timesheet.bookings.filter(bk => bk.contractCode === contractCode)
-			.filter(bk => !this.absenceCodes.concat(this.unpaidCodes).some(cd => cd == bk.bookingType))
-			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0 );
+		return this.timesheet.shifts.filter(sh => sh.contractCode === contractCode)
+			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0 );
 	}
 
 	public additionalHoursForContract(contractCode: number): number {
 		var overMins = this.actualHoursForContract(contractCode)
 			- this.timesheet.contracts.find(cn => cn.contractCode === contractCode).contractMins;
 		return overMins < 0 ? 0 : overMins;
-
-		// return this.timesheet.actualAvailability
-		// 	.filter(av => { av.availCode !== 0 && av.contractCode === contractCode})
-		// 	.map(av => { return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public leaveSickHoursForContract(contractCode: number): number {
@@ -276,6 +277,14 @@ export class TimesheetViewerComponent implements OnInit {
 		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
 		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
 		this.timesheet.adjustments.push(newAdj);
+	}
+
+	public prevDay() {
+		this.dayOffset--;
+	}
+
+	public nextDay() {
+		this.dayOffset++;
 	}
 
 	public openBookingDetail(bk: CarerBooking) {

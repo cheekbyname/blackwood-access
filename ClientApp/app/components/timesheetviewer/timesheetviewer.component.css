@@ -48,13 +48,12 @@ table.table-rota td:hover {
     border-color: black;
 }
 
-p-dialog input, p-dialog button, p-dialog .row > span {
-    font-family: 'Century Gothic';
+p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select {
+    font-family: 'Century Gothic'!important;
 }
 
-/*TODO Make spinners 34px high to match inputs*/
-p-spinner * {
-    font-family: 'Century Gothic';
+p-spinner {
+    height: 34px!important;
 }
 
 span.glyphicon-remove {
@@ -64,4 +63,17 @@ span.glyphicon-remove {
 .delete-button:hover {
     cursor: pointer;
     background-color: #bfd730;
+}
+
+span.ui-dialog-title, span.header-text {
+    width: 100%;
+}
+
+.header-row {
+    display: flex;
+}
+
+.header-row button, .ui-dialog-buttonpane button {
+    font-size: 10pt;
+    font-family: 'Century Gothic';
 }
