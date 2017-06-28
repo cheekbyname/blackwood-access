@@ -99,7 +99,7 @@ export class TimesheetViewerComponent implements OnInit {
 		var len = Math.max(...bks.map(ar => { return ar.length }));					// Get max width of matrix
 		if (len-bks.length > 0) bks = bks.concat(Array(len-bks.length).fill([]));	// Pad to square
 		bks = bks.map((x, y) => bks.map(x => x[y]));								// Transpose array
-		//bks = this.chronOrder(bks);													// Shift down to make some chronological sense
+		//bks = this.chronOrder(bks);												// Shift down to make some chronological sense
 		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 	// Strip blank rows
 	}
 

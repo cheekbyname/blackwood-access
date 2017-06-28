@@ -12,6 +12,7 @@ export class Summary {
 	public superTrainMins: number;
 	public leaveSickMins: number;
 	public contactTimeMins: number;
+	public actualMins: number;
 	public totalMins: number;
 	public availMins: number;
 }
