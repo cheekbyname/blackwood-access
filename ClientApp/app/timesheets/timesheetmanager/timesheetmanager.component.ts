@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/subscription';
 import { Carer } from '../../models/Carer';
 import { Timesheet } from '../../models/Timesheet';
 import { Team } from '../../models/Team';
-import { TimesheetProvider } from '../../providers/timesheet.provider';
+import { TimesheetProvider } from '../timesheet.provider';
 
 @Component({
     selector: 'timesheet-manager',

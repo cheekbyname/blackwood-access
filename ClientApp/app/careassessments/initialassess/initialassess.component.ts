@@ -5,7 +5,7 @@ import 'rxjs/add/operator/switchMap';
 import { SliderModule } from 'primeng/primeng';
 
 import { CareInitialAssessment } from '../../models/careinitialassessment'
-import { InitialAssessProvider } from '../../providers/initialassess.provider';
+import { InitialAssessProvider } from '../initialassess.provider';
 
 @Component({
     selector: 'initial-assess',

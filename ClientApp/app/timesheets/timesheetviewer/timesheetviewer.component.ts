@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
-import { BookingCardComponent } from '../cards/booking.card/booking.card';
+import { BookingCardComponent } from '../booking.card/booking.card';
 import { Timesheet } from '../../models/timesheet';
 import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
@@ -12,7 +12,7 @@ import { Shift } from '../../models/shift';
 import { Adjustment, AdjustmentOffsetFilter } from '../../models/adjustment';
 import { Team } from '../../models/team';
 
-import { TimesheetProvider } from '../../providers/timesheet.provider';
+import { TimesheetProvider } from '../timesheet.provider';
 
 type BookingGrid = Array<Array<CarerBooking>>;
 

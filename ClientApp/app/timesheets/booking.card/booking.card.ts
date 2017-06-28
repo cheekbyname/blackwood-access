@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { CarerBooking } from '../../../models/booking';
+import { CarerBooking } from '../../models/booking';
 
 @Component({
     selector: 'booking-card',

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { TimesheetProvider } from '../../providers/timesheet.provider';
+import { TimesheetProvider } from '../../timesheets/timesheet.provider';
 
 @Component({
     selector: 'nav-menu',

@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { Subscription } from 'rxjs/subscription';
 
 import { CareInitialAssessment } from '../../models/careinitialassessment';
-import { InitialAssessProvider } from '../../providers/initialassess.provider';
+import { InitialAssessProvider } from '../initialassess.provider';
 
 @Component({
     selector: 'initial-assess-manager',

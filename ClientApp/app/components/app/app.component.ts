@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { InitialAssessProvider } from '../../providers/initialassess.provider';
-import { TimesheetProvider } from '../../providers/timesheet.provider';
+import { InitialAssessProvider } from '../../careassessments/initialassess.provider';
+import { TimesheetProvider } from '../../timesheets/timesheet.provider';
 
 @Component({
     selector: 'app',
