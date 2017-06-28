@@ -7,7 +7,11 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class='navbar-brand' [routerLink]="['/home']">Blackwood Access</a>
+            <ul class="nav navbar-nav">
+                <li [routerLinkActive]="['link-active']">
+                    <a class='navbar-brand' [routerLink]="['/home']">Blackwood Access</a>
+                </li>
+            </ul>
         </div>
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse'>

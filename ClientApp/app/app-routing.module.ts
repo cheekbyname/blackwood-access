@@ -7,7 +7,7 @@ import { InitialAssessManagerComponent } from './careassessments/initialassessma
 import { InitialAssessComponent } from './careassessments/initialassess/initialassess.component';
 
 const APPROUTES: Routes = [
-	{ path: '', redirectTo: 'timesheet-manager', pathMatch: 'full' },
+	{ path: '', redirectTo: 'home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
 	{ path: 'timesheet-manager', component: TimesheetManagerComponent },
 	{ path: 'initial-assess-manager', component: InitialAssessManagerComponent },
