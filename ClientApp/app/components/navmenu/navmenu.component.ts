@@ -1,4 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { TimesheetProvider } from '../../providers/timesheet.provider';
 
 @Component({
@@ -12,8 +13,10 @@ export class NavMenuComponent implements OnInit {
     selectedDate: Date;
     showCalendar: boolean = false;
 
-    constructor(public timeSrv: TimesheetProvider) {
-
+    constructor(public timeSrv: TimesheetProvider, private router: Router) {
+        router.events.subscribe((ev) => {
+            this.showCalendar = ev.toString().includes("timesheet-manager");
+        });
     }
 
     ngOnInit() {

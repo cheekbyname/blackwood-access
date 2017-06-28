@@ -19,7 +19,7 @@ namespace Blackwood.Access.Controllers
 		[HttpGet("[action]")]
 		public IEnumerable<Team> Teams()
 		{
-			return _service.GetTeams();
+            return _service.GetTeams();
 		}
 
 		[HttpGet("[action]")]
@@ -31,7 +31,7 @@ namespace Blackwood.Access.Controllers
 		[HttpGet("[action]")]
 		public IEnumerable<Carer> CarersByTeam(int TeamCode)
 		{
-			return _service.GetCarersByTeam(TeamCode);
+            return _service.GetCarersByTeam(TeamCode);
 		}
 
 		[HttpGet("[action]")]

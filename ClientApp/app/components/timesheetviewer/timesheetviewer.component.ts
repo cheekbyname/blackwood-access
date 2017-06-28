@@ -216,6 +216,11 @@ export class TimesheetViewerComponent implements OnInit {
 		}
 	}
 
+    public monthOf(offset: number): string {
+        var dt = new Date(this.weekCommencing);
+        dt.setDate(dt.getDate() + offset);
+        return this.months[dt.getMonth()];
+    }
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';

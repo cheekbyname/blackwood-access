@@ -40,7 +40,7 @@
 				<thead>
 					<tr class="row">
 						<th *ngFor="let day of days; let i = index" (click)="openAdjustments(i)"
-							[title]="'Click here to adjust hours for ' + days[i] + ' ' + dateOrd(i)">
+							[title]="'Click here to adjust hours for ' + days[i] + ' ' + dateOrd(i) + ' ' + monthOf(i)">
 							<span>{{days[i]}} {{dateOrd(i)}}</span><br/><span>{{displayTime(actualHoursForDay(i))}}</span>
 						</th>
 					</tr>
@@ -62,7 +62,7 @@
 			<header>
 				<div class="header-row">
 					<button class="btn btn-primary pull-left" (click)="prevDay()" [disabled]="dayOffset==0">Previous</button>
-					<span class="text-center header-text">Hours for {{days[dayOffset]}} {{dateOrd(dayOffset)}}</span>
+					<span class="text-center header-text">Hours for {{days[dayOffset]}} {{dateOrd(dayOffset)}} {{monthOf(dayOffset)}}</span>
 					<button class="btn btn-primary pull-right" (click)="nextDay()" [disabled]="dayOffset==6">Next</button>
 				</div>
 			</header>
@@ -172,23 +172,6 @@
 				</div>
 			</footer>
 		</p-dialog>
-
-		<!--<table class="table" *ngIf="combinedAvailability()">
-			<thead class="row">
-				<th class="col-md-4">Team</th>
-				<th class="col-md-3">Availability Type</th>
-				<th class="col-md-2">Start Time</th>
-				<th class="col-md-2">Finish Time</th>
-				<th class="col-md-1">Duration</th>
-			</thead>
-			<tr class="row" *ngFor="let avail of combinedAvailability()">
-				<td>To be included</td>
-				<td>{{avail.availDesc}}</td>
-				<td>{{formatDate(avail.thisStart)}}</td>
-				<td>{{formatDate(avail.thisFinish)}}</td>
-				<td>{{displayTime(avail.thisMins)}}
-			</tr>
-		</table>-->
 
 		<div >
 			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>

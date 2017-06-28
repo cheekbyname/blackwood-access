@@ -1,4 +1,8 @@
 {
+  "title": "Blackwood Access",
+  "copyright": "2017 Blackwood Homes & Care",
+  "description": "Applications for Blackwood Managers and Staff",
+  "language": "en-GB",
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.1",

@@ -32,6 +32,11 @@ namespace Blackwood.Access
             // Add framework services.
             services.AddMvc();
 
+            services.Configure<IISOptions>(options =>
+            {
+                options.ForwardWindowsAuthentication = true;
+            });
+
             // Add Application services
             services.AddTransient<ITimesheetService, TimesheetService>();
             services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
