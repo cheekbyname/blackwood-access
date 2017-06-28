@@ -1,7 +1,7 @@
 <div class="panel">
 	<div class="panel-heading">
 		<a class="btn btn-default btn-primary pull-right" (click)="toggleSummary()">{{showSummary ? "Hide" : "Show"}}</a>
-		<h4>Team Summary : {{team.teamDesc}} : {{displayMonth()}}</h4>
+		<h4>{{team.teamDesc}} : {{displayMonth()}}</h4>
 	</div>
 	<div class="panel-body" *ngIf="showSummary">
 		<div class="table-responsive">

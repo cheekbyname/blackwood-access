@@ -1,18 +1,25 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <a class="btn btn-default btn-primary pull-right" (click)="toggleManager()">{{showManager ? "Hide" : "Show"}}</a>
-        <h4>Timesheet Management</h4>
+        <div class="row">
+        <!--<a class="btn btn-default btn-primary pull-right" (click)="toggleManager()">{{showManager ? "Hide" : "Show"}}</a>-->
+            <h4 class="col-md-6">Timesheet Management</h4>
+            <div class="col-md-6 form-inline text-right">
+                <label for="teamSelect">Select Team</label>
+                <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
+                    <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="panel-body" *ngIf="showManager">
+    <!--<div class="panel-body" *ngIf="showManager">
         <div class="form-group form-inline">
             <div class="form-group">
                 <label for="weekCommencing">Week Commencing</label>
                 <div class="input-group">
                     <input class="form-control datepicker" id="weekCommencing" type="date" [(ngModel)]="weekCommencing" />
-                    <!--<span class="input-group-addon datebutton" (click)="showCalendar()"><span class="glyphicon glyphicon-calendar"></span></span>-->
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-inline">
                 <label for="teamSelect">Select Team</label>
                 <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
                     <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
@@ -24,17 +31,19 @@
                     <option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
                 </select>
             </div>
-        </div>
+        </div>-->
         <!--<p-calendar [inline]="true"></p-calendar>-->
         <!-- TODO Move Carer Selection further dowm, probably underneath the team-summary -->
-        <div *ngIf="(weekCommencing && selectedTeam) && (!carers || carers.length === 0)">
-            <p class="bg-danger"><strong>No Carers found for the selected Team</strong></p>
-        </div>
-    </div>
 </div>
+<div *ngIf="(weekCommencing && selectedTeam) && (!carers || carers.length === 0)">
+    <p class="bg-danger"><strong>No Carers found for the selected Team</strong></p>
+</div>
+
+<!-- TODO Deprecate this when secondary routes implemented -->
 <team-summary *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0"
     [team]="selectedTeam" [weekCommencing]="weekCommencing" (onSelectedCarer)="onSelectedCarer($event)">
 </team-summary>
+<!-- TODO Deprecate this when secondary routes implemented -->
 <timesheet-viewer *ngIf="weekCommencing && selectedCarer"
     [weekCommencing]="weekCommencing" [carer]="selectedCarer">
 </timesheet-viewer>

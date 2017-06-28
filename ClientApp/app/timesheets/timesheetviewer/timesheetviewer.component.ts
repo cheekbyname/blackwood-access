@@ -79,7 +79,7 @@ export class TimesheetViewerComponent implements OnInit {
 		ts.bookings.forEach(bk => this.stuffBook(bk));
 		this.transBook();
 		this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });
-		document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
+		//document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
 	}
 
 	emptyBook() {

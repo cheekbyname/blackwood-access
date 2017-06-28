@@ -14,9 +14,6 @@ import { TimesheetProvider } from '../timesheet.provider';
 })
 export class TimesheetManagerComponent implements OnInit {
 
-    // May not need these
-    private trainingCodes: number [] = [105, 106, 107];
-
     public teams: Team[];
     public carers: Carer[];
     

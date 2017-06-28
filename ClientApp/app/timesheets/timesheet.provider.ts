@@ -27,10 +27,18 @@ export class TimesheetProvider
     }
 
     getTeams() {
-        var teams: Team[]
+        var teams: Team[];
         this.http.get('api/timesheet/teams').subscribe(res => {
-            teams = res.json();
+            var teams = res.json();
             this.teamSource.next(teams);
+        });
+    }
+
+    getCarers() {
+        this.http.get('/api/timesheet/carersbyteam?teamCode=' + this.selectedTeam$).subscribe(res => {
+            var carers = res.json();
+            this.selectedCarerSource.next(null);
+            this.carerSource.next(carers);
         });
     }
 }
