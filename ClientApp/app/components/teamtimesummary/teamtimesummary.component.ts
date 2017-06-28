@@ -26,7 +26,7 @@ export class TeamTimeSummaryComponent {
 		this._team = team;
 		if (this._weekCommencing) {
 			this.getSummaries();
-			this.toggleSummary();
+            this.showSummary = true;
 		}
 	}
 

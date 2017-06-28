@@ -9,7 +9,7 @@ h4, label, select, td, th {
     background-color: rgba(255,255,255,0.5);
 }
 
-.panel-heading {
+.panel-default>.panel-heading {
     border-bottom: 1px solid silver;
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);

@@ -5,28 +5,28 @@
     </div>
     <div class="panel-body" *ngIf="showManager">
         <div class="form-group form-inline">
-            <!--<p-calendar [(ngModel)]="weekCommencing" [inline]="true"></p-calendar>-->
-            <label for="weekCommencing">Week Commencing</label>
-            <div class="input-group">
-                <input class="form-control datepicker" id="weekCommencing" type="date" [(ngModel)]="weekCommencing"/>
-                <!--<span class="input-group-addon datebutton" (click)="showCalendar()"><span class="glyphicon glyphicon-calendar"></span></span>-->
+            <div class="form-group">
+                <label for="weekCommencing">Week Commencing</label>
+                <div class="input-group">
+                    <input class="form-control datepicker" id="weekCommencing" type="date" [(ngModel)]="weekCommencing" />
+                    <!--<span class="input-group-addon datebutton" (click)="showCalendar()"><span class="glyphicon glyphicon-calendar"></span></span>-->
+                </div>
             </div>
-            <label for="teamSelect">Select Team</label>
-            <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
-                <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
-            </select>
+            <div class="form-group">
+                <label for="teamSelect">Select Team</label>
+                <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
+                    <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label *ngIf="showCarer()" for="carerSelect">Select Carer</label>
+                <select *ngIf="showCarer()" class="form-control" id="carerSelect" [(ngModel)]="selectedCarer" name="selectedCarer" required>
+                    <option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
+                </select>
+            </div>
         </div>
         <!--<p-calendar [inline]="true"></p-calendar>-->
         <!-- TODO Move Carer Selection further dowm, probably underneath the team-summary -->
-        <div *ngIf="weekCommencing && selectedTeam && carers && carers.length > 0">
-            <div class="form-group form-inline">
-                <label for="carerSelect">Select Carer</label>
-                <select class="form-control" id="carerSelect" [(ngModel)]="selectedCarer" name="selectedCarer" required>
-                    <option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
-                </select>
-                <!--<a class="btn btn-default btn-primary" *ngIf="selectedCarer" (click)="showTimesheet()">Show Timesheet</a>-->
-            </div>
-        </div>
         <div *ngIf="(weekCommencing && selectedTeam) && (!carers || carers.length === 0)">
             <p class="bg-danger"><strong>No Carers found for the selected Team</strong></p>
         </div>

@@ -76,4 +76,8 @@ export class TimesheetManagerComponent implements OnInit {
         // TODO Adjust this so it fits yyyy/mm/dd pattern precisely
         return dt.getFullYear() + "-" + mon.substr(mon.length - 2) + "-" + day.substr(day.length - 2);
     }
+
+    showCarer(): boolean {
+        return this.weekCommencing && this.selectedTeam && this.carers && this.carers.length > 0
+    }
 }

@@ -21,7 +21,8 @@ namespace Blackwood.Access.Services
 
 		public IEnumerable<Team> GetTeams()
 		{
-			return _context.Teams.OrderBy(c => c.TeamDesc).ToList();
+            return _context.Set<Team>().FromSql("GetTeams").OrderBy(t => t.TeamDesc).ToList();
+			//return _context.Teams.OrderBy(c => c.TeamDesc).ToList();
 		}
         public IEnumerable<Carer> GetCarers()
         {
