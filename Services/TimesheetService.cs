@@ -69,13 +69,7 @@ namespace Blackwood.Access.Services
 			});
 
 			// CarerBookings
-			ts.Bookings = _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @PeriodStart, @PeriodFinish",
-				parameters: new [] {
-					new SqlParameter("@CarerCode", carerCode),
-					new SqlParameter("@PeriodStart", weekCommencing),
-					new SqlParameter("@PeriodFinish", weekCommencing.AddDays(6))
-					})
-				.ToList();
+			ts.Bookings = GetBookings(carerCode, weekCommencing, weekCommencing.AddDays(6));
 
 			// Adjustments
 			ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
@@ -170,9 +164,20 @@ namespace Blackwood.Access.Services
 
         public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
-			return _context.Set<Summary>().FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
-				parameters: new [] { new SqlParameter("@teamCode", teamCode), new SqlParameter("@periodStart", periodStart),
-				new SqlParameter("@periodEnd", periodEnd)});
+			List<Summary> summaries = _context.Set<Summary>()
+				.FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
+					parameters: new [] {
+						new SqlParameter("@teamCode", teamCode),
+						new SqlParameter("@periodStart", periodStart),
+						new SqlParameter("@periodEnd", periodEnd)})
+				.ToList();
+			// TODO See if we can async this
+			summaries.ForEach(sum => {
+				var shifts = BookingsToShifts(periodStart, periodEnd,
+					GetBookings(sum.CarerCode, periodStart, periodEnd), sum.CarerCode);
+				sum.ActualMins = shifts.Sum(sh => sh.ShiftMins);
+			});
+			return summaries;
 		}
 
 		public IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing)
@@ -212,5 +217,15 @@ namespace Blackwood.Access.Services
 				new SqlParameter("@AdjustId", id)
 			});
 		}
+
+		private ICollection<CarerBooking> GetBookings(int carerCode, DateTime periodStart, DateTime periodFinish)
+		{
+			return _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @PeriodStart, @PeriodFinish",
+				parameters: new [] {
+					new SqlParameter("@CarerCode", carerCode),
+					new SqlParameter("@PeriodStart", periodStart),
+					new SqlParameter("@PeriodFinish", periodFinish)
+					})
+				.ToList();		}
     }
 }

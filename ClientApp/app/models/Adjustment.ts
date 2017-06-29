@@ -11,6 +11,8 @@ export class Adjustment {
     public requested: Date;
     public authorisedBy: string;
     public authorised: Date;
+    public rejectedBy: string;
+    public rejected: Date;
     public contractCode: number;
     public dayOffset: number;
     public reason: string;
@@ -25,6 +27,10 @@ export class Adjustment {
         this.hours = 0;
         this.mins = 0;
         this.guid = Guid.newGuid();
+    }
+
+    public status() {
+
     }
 }
 

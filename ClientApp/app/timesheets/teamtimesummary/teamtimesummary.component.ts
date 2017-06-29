@@ -9,13 +9,13 @@ import { Summary } from '../../models/summary';
 	styles: [require('./teamtimesummary.component.css')]
 })
 export class TeamTimeSummaryComponent {
-	constructor(private http: Http) {
-
-	}
+	constructor(private http: Http) { }
 
 	_team: Team;
 	summaries: Summary[];
 	_weekCommencing: Date;
+	periodStart: Date;
+	periodFinish: Date;
 	months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	public showSummary: Boolean = true;
@@ -40,14 +40,17 @@ export class TeamTimeSummaryComponent {
 	@Output() onSelectedCarer = new EventEmitter<number>();
 
 	getSummaries(): void {
+		this.summaries = undefined;
 		// Get first and last of month from weekCommencing
-		var periodStart = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth(), 1);
-		var periodEnd = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth()+1, 0);
+		this.periodStart = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth(), 1);
+		this.periodFinish = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth()+1, 0);
 
-		this.http.get('api/timesheet/summaries/?teamCode=' + this._team.teamCode + '&periodStart=' + this.sqlDate(periodStart)
-			+ '&periodEnd=' + this.sqlDate(periodEnd)).subscribe( res => {
+		this.http.get('api/timesheet/summaries/?teamCode=' + this._team.teamCode
+			+ '&periodStart=' + this.sqlDate(this.periodStart)
+			+ '&periodEnd=' + this.sqlDate(this.periodFinish)).subscribe( res => {
 				this.summaries = res.json();
-			});
+			console.log(this.summaries);
+		});
 	}
 
 	public displayTime(mins: number): string {

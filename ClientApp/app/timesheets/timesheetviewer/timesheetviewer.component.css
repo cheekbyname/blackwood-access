@@ -60,6 +60,10 @@ span.glyphicon-remove {
     color: red;
 }
 
+span.glyphicon-ok {
+    color: green;
+}
+
 .delete-button:hover {
     cursor: pointer;
     background-color: #bfd730;
