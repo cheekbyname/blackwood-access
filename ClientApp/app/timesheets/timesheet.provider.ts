@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Carer } from '../models/carer';
 import { Team } from '../models/team';
+import { CarerContract } from '../models/contract';
 import { Locale, LOC_EN } from '../models/locale';
 
 @Injectable()
@@ -26,6 +27,8 @@ export class TimesheetProvider
     carers$ = this._carers.asObservable();
 
     public locale: Locale = LOC_EN;
+    public absenceCodes: number [] = [108, 109];
+	public unpaidCodes: number [] = [123, 110];
 
     constructor(public http: Http) {
         this.selectedTeam$.subscribe((tm) => {
@@ -88,4 +91,49 @@ export class TimesheetProvider
     //     return dt.getFullYear() + "-" + mon.substr(mon.length - 2) + "-" + day.substr(day.length - 2);
     // }
 
+    // Convenience methods
+    public timeFromDate(dt: string): string {
+        var ndt = new Date(dt);
+        var hr = "0" + ndt.getHours();
+        var mn = "0" + ndt.getMinutes();
+        return hr.substr(hr.length - 2) + ":" + mn.substr(mn.length - 2);
+    }
+
+	public displayTime(mins: number): string {
+		if (mins < 0) {
+			return Math.ceil(mins/60) + "h " + (mins % 60) + "m";
+		}
+		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
+	}
+
+	public displayDate(date: Date): string {
+		return new Date(date).toLocaleDateString();
+	}
+
+	public teamForContract(contractCode: number, cons: CarerContract[]): string {
+		var contract = cons.find(con => con.contractCode === contractCode);
+		return contract ? contract.teamDesc : "";
+	}
+
+	public dateOrd(wc: Date, offset: number): string {
+		var dt = new Date(wc);
+		dt.setDate(dt.getDate() + offset);
+		var dy = dt.getDate().toString();
+		switch (dy.substr(dy.length - 1)) {
+			case "1":
+				return dy + "st";
+			case "2":
+				return dy + "nd";
+			case "3":
+				return dy + "rd";
+			default:
+				return dy + "th";
+		}
+	}
+
+    public monthOf(wc: Date, offset: number): string {
+        var dt = new Date(wc);
+        dt.setDate(dt.getDate() + offset);
+        return this.locale.monthNames[dt.getMonth()];
+    }
 }

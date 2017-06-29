@@ -1,0 +1,86 @@
+<p-dialog [(visible)]="adjustVisible" modal="modal" [width]="960" [minWidth]="640" [minHeight]="480" [responsive]="true"
+    [closable]="false" [closeOnEscape]="false">
+    <header>
+        <div class="header-row">
+            <button class="btn btn-primary pull-left" (click)="prevDay()" [disabled]="dayOffset==0">Previous</button>
+            <span class="text-center header-text">Hours for {{loc.dayNames[dayOffset]}} {{timePro.dateOrd(weekCommencing, dayOffset)}} {{timePro.monthOf(weekCommencing, dayOffset)}}</span>
+            <button class="btn btn-primary pull-right" (click)="nextDay()" [disabled]="dayOffset==6">Next</button>
+        </div>
+    </header>
+    <div id="adjust-modal-content">
+        <table class="table table-striped">
+            <thead class="row">
+                <th class="col-md-7">Team</th>
+                <th class="col-md-1">Start</th>
+                <th class="col-md-1">Finish</th>
+                <th class="col-md-1">Total</th>
+                <th class="col-md-1">Unpaid</th>
+                <th class="col-md-1">Actual</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
+                    <td>{{timePro.teamForContract(shift.contractCode, timesheet.contracts)}}</td>
+                    <td>{{timePro.timeFromDate(shift.start)}}</td>
+                    <td>{{timePro.timeFromDate(shift.finish)}}</td>
+                    <td>{{timePro.displayTime(shift.shiftMins + shift.unpaidMins)}}</td>
+                    <td>{{timePro.displayTime(shift.unpaidMins)}}</td>
+                    <td>{{timePro.displayTime(shift.shiftMins)}}</td>
+                </tr>
+                <tr class="row">
+                    <td colspan="3"><strong>Shift Totals</strong></td>
+                    <td>{{timePro.displayTime(totalUnpaidHoursForDay(dayOffset) + totalActualHoursForDay(dayOffset))}}</td>
+                    <td>{{timePro.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
+                    <td>{{timePro.displayTime(totalActualHoursForDay(dayOffset))}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0" class="table table-striped">
+            <thead class="row">
+                <th class="col-md-4">Reason for Adjustment</th>
+                <th class="col-md-4">Team</th>
+                <th class="col-md-2">Approval</th>
+                <th class="col-md-1">Hours</th>
+                <th class="col-md-1">Mins</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let adjust of timesheet.adjustments | adjustmentOffsetFilter:dayOffset" class="row">
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon delete-button" (click)="removeAdjust(adjust)" title="Remove this adjustment">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </span>
+                            <input class="form-control" type="text" [(ngModel)]="adjust.reason"/>
+                        </div>
+                    </td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="adjust.contractCode">
+                            <option *ngFor="let con of timesheet.contracts" [ngValue]="con.contractCode">{{con.teamDesc}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn action-button" (click)="approve(adjust)"><span class="glyphicon glyphicon-ok"></span></button>
+                            <button type="button" class="btn action-button" (click)="decline(adjust)"><span class="glyphicon glyphicon-remove"></span></button>
+                        </div>
+                    </td>
+                    <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2"></p-spinner></td>
+                    <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2"></p-spinner></td>
+                </tr>
+                <tr *ngIf="minsForAdjustments()" class="row">
+                    <td colspan="2"><strong>Adjustment Totals</strong></td>
+                    <td><strong>{{timePro.displayTime(minsForAdjustments())}}</strong></td>
+                </tr>
+                <tr *ngIf="minsForAdjustments()" class="row">
+                    <td colspan="2"><strong>Daily Totals</strong></td>
+                    <td><strong>{{timePro.displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        <div class="ui-dialog-buttonpane">
+            <button class="btn btn-default btn-primary pull-left" (click)="addAdjust()">Add Adjustment</button>
+            <button class="btn btn-primary pull-right" (click)="closeAdjust()">Close</button>
+        </div>
+    </footer>
+</p-dialog>

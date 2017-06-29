@@ -5,7 +5,7 @@ namespace Blackwood.Access.Services
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
-    using Blackwood.Access.Models;
+    using Models;
     using Microsoft.EntityFrameworkCore;
 
     public class TimesheetService : ITimesheetService
@@ -190,7 +190,7 @@ namespace Blackwood.Access.Services
 
 		public Adjustment AddTimesheetAdjustment(Adjustment adj)
 		{
-			_context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
+			_context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @RejectedBy, @Rejected, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
 				new [] {
 					// TODO Consider null coalescing date values also
 					new SqlParameter { ParameterName = "@Id", Value = adj.Id },
@@ -198,9 +198,11 @@ namespace Blackwood.Access.Services
 					new SqlParameter { ParameterName = "@CarerCode", Value = adj.CarerCode },
 					new SqlParameter { ParameterName = "@WeekCommencing", Value = adj.WeekCommencing },
 					new SqlParameter { ParameterName = "@RequestedBy", Value = adj.RequestedBy ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@Requested", SqlDbType = SqlDbType.DateTime2, Value=adj.Requested },
+					new SqlParameter { ParameterName = "@Requested", SqlDbType = SqlDbType.DateTime2, Value = adj.Requested ?? (object)DBNull.Value },
 					new SqlParameter { ParameterName = "@AuthorisedBy",  Value = adj.AuthorisedBy ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@Authorised", SqlDbType = SqlDbType.DateTime2, Value=adj.Authorised },
+					new SqlParameter { ParameterName = "@Authorised", SqlDbType = SqlDbType.DateTime2, Value=adj.Authorised ?? (object)DBNull.Value },
+					new SqlParameter { ParameterName = "@RejectedBy", Value = adj.RejectedBy ?? (object)DBNull.Value },
+					new SqlParameter { ParameterName = "@Rejected", SqlDbType = SqlDbType.DateTime2, Value = adj.Rejected ?? (object)DBNull.Value },
 					new SqlParameter { ParameterName = "@ContractCode", Value = adj.ContractCode },
 					new SqlParameter { ParameterName = "@DayOffset", Value = adj.DayOffset },
 					new SqlParameter { ParameterName = "@Reason", Value = adj.Reason ?? (object)DBNull.Value },

@@ -4,7 +4,10 @@ import { Http } from '@angular/http';
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
 import { BookingCardComponent } from '../booking.card/booking.card';
-import { BookingInfoComponent } from '../booking.info/booking.info.component';
+import { BookingDetailComponent } from '../booking.detail/booking.detail.component';
+import { TimesheetAdjustment } from '../timesheet.adjustment/timesheet.adjustment.component';
+
+import { Locale, LOC_EN} from '../../models/locale';
 import { Timesheet } from '../../models/timesheet';
 import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
@@ -33,17 +36,13 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = this.emptyBook();
 	}
 
-    private absenceCodes: number [] = [108, 109];
-	private unpaidCodes: number [] = [123, 110];
-	public days: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-	public months: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	public loc: Locale = LOC_EN;
 
 	_carer: Carer;
 	_weekCommencing: Date;
 	timesheet: Timesheet;
 	bookings: BookingGrid;
 	isContracted: boolean;
-	// teams: Team[];
 
 	adjustVisible: boolean = false;
 	dayOffset: number;
@@ -75,12 +74,10 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = this.emptyBook();
 		var ts: Timesheet = res.json() as Timesheet;
 		this.timesheet = ts;
-		// this.teams = ts.contracts.map((con) => { return { teamCode: con.teamCode, teamDesc: con.teamDesc } as Team });
 		console.log(this.timesheet);
 		ts.bookings.forEach(bk => this.stuffBook(bk));
 		this.transBook();
 		this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });
-		//document.getElementsByTagName("timesheet-viewer")[0].scrollIntoView();
 	}
 
 	emptyBook() {
@@ -105,6 +102,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	// Display BookingGrid in rough chronological order by sliding Bookings down if they start after another on the same row finishes
+	// Not currently used
 	chronOrder(bookings: BookingGrid): BookingGrid {
 		var row = 0;
 		while (row < bookings.length - 1) {
@@ -126,31 +124,9 @@ export class TimesheetViewerComponent implements OnInit {
 		return bookings;
 	}
 
+	// Not currently used
 	public combinedAvailability(): Availability[] {
 		return (this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)).sort(av => { return av.thisStart.valueOf() });
-	}
-
-	public displayTime(mins: number): string {
-		if (mins < 0) {
-			return Math.ceil(mins/60) + "h " + (mins % 60) + "m";
-		}
-		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
-	}
-
-    public timeFromDate(dt: string): string {
-        var ndt = new Date(dt);
-        var hr = "0" + ndt.getHours();
-        var mn = "0" + ndt.getMinutes();
-        return hr.substr(hr.length - 2) + ":" + mn.substr(mn.length - 2);
-    }
-
-	public formatDate(date: Date): string {
-		var dt = new Date(date);
-		return dt.toLocaleDateString() + " " + dt.toLocaleTimeString().substr(0, 5); 
-	}
-
-	public displayDate(date: Date): string {
-		return new Date(date).toLocaleDateString();
 	}
 
 	public availHoursForContract(contractCode: number): number {
@@ -162,7 +138,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookedHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
 			.filter(bk => bk.contractCode === contractCode)
-			.filter(bk => !(this.absenceCodes.concat(this.unpaidCodes)).some(uc => uc === bk.bookingType))
+			.filter(bk => !(this.timePro.absenceCodes.concat(this.timePro.unpaidCodes)).some(uc => uc === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -178,12 +154,6 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc +cur }, 0);
 	}
 
-	public totalUnpaidHoursForDay(offset: number): number {
-		return this.timesheet.shifts
-			.filter(sh => sh.day === offset)
-			.map(sh => { return sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
-	}
-
 	public actualHoursForContract(contractCode: number): number {
 		return this.timesheet.shifts.filter(sh => sh.contractCode === contractCode)
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0 );
@@ -197,41 +167,15 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public leaveSickHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
-			.filter(bk => bk.contractCode === contractCode && (this.absenceCodes).some(ac => ac === bk.bookingType))
+			.filter(bk => bk.contractCode === contractCode && (this.timePro.absenceCodes).some(ac => ac === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public dateOrd(offset: number): string {
-		var dt = new Date(this.weekCommencing);
-		dt.setDate(dt.getDate() + offset);
-		var dy = dt.getDate().toString();
-		switch (dy.substr(dy.length - 1)) {
-			case "1":
-				return dy + "st";
-			case "2":
-				return dy + "nd";
-			case "3":
-				return dy + "rd";
-			default:
-				return dy + "th";
-		}
-	}
-
-    public monthOf(offset: number): string {
-        var dt = new Date(this.weekCommencing);
-        dt.setDate(dt.getDate() + offset);
-        return this.months[dt.getMonth()];
-    }
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
-		if (this.absenceCodes.concat(this.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
+		if (this.timePro.absenceCodes.concat(this.timePro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
-	}
-
-	public minsForAdjustments(): number {
-		return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset)
-			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public minsAdjustOffset(offset: number) {
@@ -239,74 +183,13 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public teamForContract(contractCode: number): string {
-		var contract = this.timesheet.contracts.find(con => con.contractCode === contractCode);
-		return contract ? contract.teamDesc : "";
-	}
-
 	public openAdjustments(offset: number) {
 		this.dayOffset = offset;
 		this.adjustVisible = true;
 	}
 
-	public removeAdjust(adjust: Adjustment) {
-		// TODO Move this onto Provider
-		// TODO Implement confirmation
-		var tsUrl = '/api/timesheet/RemoveTimesheetAdjustment?id=' + adjust.id;
-		this.http.delete(tsUrl).subscribe(res => {
-			this.timesheet.adjustments.splice(this.timesheet.adjustments.indexOf(adjust), 1);
-		});
-	}
-
-	public closeAdjust() {
-		this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset).forEach((adj) => {
-			// TODO Validation
-			this.putAdjustment(adj);
-		});
-		this.adjustVisible = false;
-	}
-
-	putAdjustment(oldAdj: Adjustment) {
-		// TODO Move this onto Provider
-		var tsUrl = '/api/timesheet/AddTimesheetAdjustment';
-		this.http.put(tsUrl, oldAdj).subscribe((res) => {
-			// The (potentially updated) Adjustment returned by the API
-			console.log(res.json());
-			var newAdj = res.json() as Adjustment;
-			// Splice into Timesheet adjustments
-			var idx = this.timesheet.adjustments.indexOf(oldAdj);
-			this.timesheet.adjustments.splice(idx, 1, newAdj);
-		});
-	}
-
-	public addAdjust() {
-		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
-		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
-		this.timesheet.adjustments.push(newAdj);
-	}
-
-	public prevDay() {
-		this.dayOffset--;
-	}
-
-	public nextDay() {
-		this.dayOffset++;
-	}
-
 	public openBookingDetail(bk: CarerBooking) {
 		this.selectedBooking = bk;
 		this.bookingVisible = true;
-	}
-
-	public closeBookingDetail() {
-		this.bookingVisible = false;
-	}
-
-	public approve(adjust: Adjustment) {
-
-	}
-
-	public reject(adjust: Adjustment) {
-		
 	}
 }

@@ -17,7 +17,8 @@ import { TimesheetManagerComponent } from './timesheets/timesheetmanager/timeshe
 import { TimesheetViewerComponent } from './timesheets/timesheetviewer/timesheetviewer.component';
 import { TeamTimeSummaryComponent } from './timesheets/teamtimesummary/teamtimesummary.component';
 import { BookingCardComponent } from './timesheets/booking.card/booking.card';
-import { BookingInfoComponent } from './timesheets/booking.info/booking.info.component';
+import { BookingDetailComponent } from './timesheets/booking.detail/booking.detail.component';
+import { TimesheetAdjustment } from './timesheets/timesheet.adjustment/timesheet.adjustment.component';
 
 import { InitialAssessProvider } from './careassessments/initialassess.provider';
 import { TimesheetProvider } from './timesheets/timesheet.provider';
@@ -29,7 +30,7 @@ import { ShiftOffsetFilter } from './models/shift';
     bootstrap: [ AppComponent ],
     declarations: [ AppComponent, NavMenuComponent, InitialAssessManagerComponent, InitialAssessComponent, TimesheetManagerComponent,
         TimesheetViewerComponent, TeamTimeSummaryComponent, BookingCardComponent, HomeComponent, AdjustmentOffsetFilter,
-        ShiftOffsetFilter, BookingInfoComponent
+        ShiftOffsetFilter, BookingDetailComponent, TimesheetAdjustment
     ],
     imports: [
         UniversalModule,

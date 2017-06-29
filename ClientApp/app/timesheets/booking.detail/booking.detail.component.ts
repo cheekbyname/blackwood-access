@@ -3,11 +3,18 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CarerBooking } from '../../models/booking';
 import { CarerContract } from '../../models/contract';
 
+import { TimesheetProvider } from '../timesheet.provider';
+
 @Component({
-    selector: 'booking-info',
-    template: require('./booking.info.component.html')
+    selector: 'booking-detail',
+    template: require('./booking.detail.component.html')
 })
-export class BookingInfoComponent {
+export class BookingDetailComponent {
+
+    constructor(public timePro: TimesheetProvider) {
+
+    }
+
     _bookingVisible: boolean;
     _booking: CarerBooking;
     _contracts: CarerContract[];
@@ -31,24 +38,4 @@ export class BookingInfoComponent {
         this.bookingVisible = false;
         this.bookingVisibleChange.emit(this.bookingVisible);
     }
-
-    // TODO Move these methods to provider for convenience
-    public timeFromDate(dt: string): string {
-        var ndt = new Date(dt);
-        var hr = "0" + ndt.getHours();
-        var mn = "0" + ndt.getMinutes();
-        return hr.substr(hr.length - 2) + ":" + mn.substr(mn.length - 2);
-    }
-
-	public displayTime(mins: number): string {
-		if (mins < 0) {
-			return Math.ceil(mins/60) + "h " + (mins % 60) + "m";
-		}
-		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
-	}
-
-	public teamForContract(contractCode: number): string {
-		var contract = this.contracts.find(con => con.contractCode === contractCode);
-		return contract ? contract.teamDesc : "";
-	}
 }

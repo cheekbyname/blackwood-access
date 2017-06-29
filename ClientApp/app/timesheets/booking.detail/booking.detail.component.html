@@ -12,19 +12,19 @@
         </div>
         <div class="row">
             <label class="col-md-4">Team</label>
-            <span class="col-md-8">{{teamForContract(booking.contractCode)}}</span>
+            <span class="col-md-8">{{timePro.teamForContract(booking.contractCode, contracts)}}</span>
         </div>
         <div class="row">
             <label class="col-md-4">Start Time</label>
-            <span class="col-md-8">{{timeFromDate(booking.thisStart)}}</span>
+            <span class="col-md-8">{{timePro.timeFromDate(booking.thisStart)}}</span>
         </div>
         <div class="row">
             <label class="col-md-4">Finish Time</label>
-            <span class="col-md-8">{{timeFromDate(booking.thisFinish)}}</span>
+            <span class="col-md-8">{{timePro.timeFromDate(booking.thisFinish)}}</span>
         </div>
         <div class="row">
             <label class="col-md-4">Duration</label>
-            <span class="col-md-8">{{displayTime(booking.thisMins)}}</span>
+            <span class="col-md-8">{{timePro.displayTime(booking.thisMins)}}</span>
         </div>
     </div>
     <footer>
