@@ -1,0 +1,35 @@
+<p-dialog [(visible)]="bookingVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
+    [closable]="false" [closeOnEscape]="false">
+    <!--<header><span>Booking Detail</span></header>-->
+    <div id="booking-modal-content" class="container" style="width:100%;">
+        <div class="row">
+            <label class="col-md-4">Client</label>
+            <span class="col-md-8">{{booking.forename}} {{booking.surname}}</span>
+        </div>
+        <div class="row">
+            <label class="col-md-4">Type</label>
+            <span class="col-md-8">{{booking.bookingDesc}}</span>
+        </div>
+        <div class="row">
+            <label class="col-md-4">Team</label>
+            <span class="col-md-8">{{teamForContract(booking.contractCode)}}</span>
+        </div>
+        <div class="row">
+            <label class="col-md-4">Start Time</label>
+            <span class="col-md-8">{{timeFromDate(booking.thisStart)}}</span>
+        </div>
+        <div class="row">
+            <label class="col-md-4">Finish Time</label>
+            <span class="col-md-8">{{timeFromDate(booking.thisFinish)}}</span>
+        </div>
+        <div class="row">
+            <label class="col-md-4">Duration</label>
+            <span class="col-md-8">{{displayTime(booking.thisMins)}}</span>
+        </div>
+    </div>
+    <footer>
+        <div class="ui-dialog-buttonpane">
+            <button class="btn btn-primary pull-right" (click)="close()">Close</button>
+        </div>
+    </footer>
+</p-dialog>

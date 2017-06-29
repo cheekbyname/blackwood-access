@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
 import { BookingCardComponent } from '../booking.card/booking.card';
+import { BookingInfoComponent } from '../booking.info/booking.info.component';
 import { Timesheet } from '../../models/timesheet';
 import { CarerBooking } from '../../models/booking';
 import { Carer } from '../../models/carer';
@@ -299,5 +300,13 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public closeBookingDetail() {
 		this.bookingVisible = false;
+	}
+
+	public approve(adjust: Adjustment) {
+
+	}
+
+	public reject(adjust: Adjustment) {
+		
 	}
 }

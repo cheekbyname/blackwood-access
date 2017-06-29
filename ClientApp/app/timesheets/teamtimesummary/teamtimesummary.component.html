@@ -1,14 +1,20 @@
 <div class="panel">
 	<div class="panel-heading">
 		<div class="row">
-			<a class="col-md-1 btn btn-default btn-primary pull-right" (click)="toggleSummary()">{{showSummary ? "Hide" : "Show"}}</a>
 			<!--<h4>{{team.teamDesc}} : {{displayMonth()}}</h4>-->
-			<h4 class="col-md-3">Team Summary</h4>
-			<div class="col-md-6 form-inline">
+			<h4 class="col-md-6">Team Summary</h4>
+			<div class="col-md-6 form-inline date-controls">
 				<label class="control-label" for="periodStart">From</label>
-				<p-calendar [(ngModel)]="periodStart" id="periodStart" dateFormat="dd/mm/yy"></p-calendar>
+				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy"
+					(onSelect)="periodStartSelected($event)"></p-calendar>
 				<label class="control-label" for="periodFinish">To</label>
-				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" dateFormat="dd/mm/yy"></p-calendar>
+				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy"
+					(onSelect)="periodFinishSelected($event)"></p-calendar>
+				<a class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
+					<span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
+					<span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
+					<!--{{showSummary ? "Hide" : "Show"}}-->
+				</a>
 			</div>
 		</div>
 	</div>

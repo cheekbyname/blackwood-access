@@ -28,7 +28,7 @@
                 </li>
             </ul>
             <div *ngIf="showCalendar" class="calendar-div" align="center">
-                <p-calendar class="datepicker" [inline]="true" [locale]="en" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"
+                <p-calendar class="datepicker" [inline]="true" [locale]="loc" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"
                     [showOtherMonths]="true" [selectOtherMonths]="true">
                 </p-calendar>
             </div>

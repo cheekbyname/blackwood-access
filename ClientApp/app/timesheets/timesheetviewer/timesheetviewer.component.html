@@ -118,8 +118,8 @@
 							</td>
 							<td>
 								<div class="btn-group">
-									<button type="button" class="btn"><span class="glyphicon glyphicon-ok"></span></button>
-									<button type="button" class="btn"><span class="glyphicon glyphicon-remove"></span></button>
+									<button type="button" class="btn action-button" (click)="approve(adjust)"><span class="glyphicon glyphicon-ok"></span></button>
+									<button type="button" class="btn action-button" (click)="decline(adjust)"><span class="glyphicon glyphicon-remove"></span></button>
 								</div>
 							</td>
 							<td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2"></p-spinner></td>
@@ -144,43 +144,9 @@
 			</footer>
 		</p-dialog>
 
-		<p-dialog [(visible)]="bookingVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
-			[closable]="false" [closeOnEscape]="false">
-			<!--<header><span>Booking Detail</span></header>-->
-			<div id="booking-modal-content" class="container" style="width:100%;">
-				<div class="row">
-					<label class="col-md-4">Client</label>
-					<span class="col-md-8">{{selectedBooking.forename}} {{selectedBooking.surname}}</span>
-				</div>
-				<div class="row">
-					<label class="col-md-4">Type</label>
-					<span class="col-md-8">{{selectedBooking.bookingDesc}}</span>
-				</div>
-				<div class="row">
-					<label class="col-md-4">Team</label>
-					<span class="col-md-8">{{teamForContract(selectedBooking.contractCode)}}</span>
-				</div>
-				<div class="row">
-					<label class="col-md-4">Start Time</label>
-					<span class="col-md-8">{{timeFromDate(selectedBooking.thisStart)}}</span>
-				</div>
-				<div class="row">
-					<label class="col-md-4">Finish Time</label>
-					<span class="col-md-8">{{timeFromDate(selectedBooking.thisFinish)}}</span>
-				</div>
-				<div class="row">
-					<label class="col-md-4">Duration</label>
-					<span class="col-md-8">{{displayTime(selectedBooking.thisMins)}}</span>
-				</div>
-			</div>
-			<footer>
-				<div class="ui-dialog-buttonpane">
-					<button class="btn btn-primary pull-right" (click)="closeBookingDetail()">Close</button>
-				</div>
-			</footer>
-		</p-dialog>
+		<booking-info [booking]="selectedBooking" [(bookingVisible)]="bookingVisible" [contracts]="timesheet.contracts"></booking-info>
 
-		<div >
+		<div>
 			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>
 		</div>
 	</div>

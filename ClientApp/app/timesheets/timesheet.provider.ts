@@ -1,8 +1,10 @@
 import { Component, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
+
 import { Carer } from '../models/carer';
 import { Team } from '../models/team';
+import { Locale, LOC_EN } from '../models/locale';
 
 @Injectable()
 export class TimesheetProvider
@@ -22,6 +24,8 @@ export class TimesheetProvider
     selectedCarer$ = this._selectedCarer.asObservable();
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
+
+    public locale: Locale = LOC_EN;
 
     constructor(public http: Http) {
         this.selectedTeam$.subscribe((tm) => {

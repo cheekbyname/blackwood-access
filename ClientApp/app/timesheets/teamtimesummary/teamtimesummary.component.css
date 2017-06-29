@@ -34,3 +34,20 @@ table tr {
 table tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
 }
+
+p-calendar > span.ui-calendar > input {
+    height: 34px;
+    width: 120px;
+    font-family: 'Century Gothic';
+}
+
+.summ-toggle {
+    width: 48px;
+    /*float: right;*/
+    font-size: 14pt;
+}
+
+.date-controls {
+    display: inline-block;
+    text-align: right;
+}

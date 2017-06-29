@@ -66,7 +66,8 @@ span.glyphicon-ok {
 
 .delete-button:hover {
     cursor: pointer;
-    background-color: #bfd730;
+    background-color: hotpink;
+    color: black;
 }
 
 span.ui-dialog-title, span.header-text {
@@ -80,4 +81,14 @@ span.ui-dialog-title, span.header-text {
 .header-row button, .ui-dialog-buttonpane button {
     font-size: 10pt;
     font-family: 'Century Gothic';
+}
+
+.action-button {
+    border: 1px solid silver;
+    background: white;
+}
+
+.action-button:hover {
+    cursor: pointer;
+    background-color: hotpink;
 }
