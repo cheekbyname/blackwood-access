@@ -25,4 +25,4 @@ const TIMESHEETROUTES: Routes = [
     imports: [ RouterModule.forChild(TIMESHEETROUTES) ],
     exports: [ RouterModule ]
 })
-export class TimesheetsRoutingModule { }
+export class TimesheetRoutingModule { }

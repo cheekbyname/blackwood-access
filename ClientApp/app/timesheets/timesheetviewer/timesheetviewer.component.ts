@@ -5,7 +5,7 @@ import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
 import { BookingCardComponent } from '../booking.card/booking.card';
 import { BookingDetailComponent } from '../booking.detail/booking.detail.component';
-import { TimesheetAdjustment } from '../timesheet.adjustment/timesheet.adjustment.component';
+import { TimesheetAdjustmentComponent } from '../timesheet.adjustment/timesheet.adjustment.component';
 
 import { Locale, LOC_EN} from '../../models/locale';
 import { Timesheet } from '../../models/timesheet';

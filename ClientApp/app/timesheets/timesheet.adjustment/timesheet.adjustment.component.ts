@@ -12,7 +12,7 @@ import { TimesheetProvider } from '../timesheet.provider';
     template: require('./timesheet.adjustment.component.html'),
     encapsulation: ViewEncapsulation.None
 })
-export class TimesheetAdjustment {
+export class TimesheetAdjustmentComponent {
 
     constructor(public timePro: TimesheetProvider, private http: Http) {
 

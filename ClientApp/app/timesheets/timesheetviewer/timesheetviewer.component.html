@@ -41,7 +41,10 @@
 					<tr class="row">
 						<th *ngFor="let day of loc.dayNames; let i = index" (click)="openAdjustments(i)"
 							[title]="'Click here to adjust hours for ' + day + ' ' + timePro.dateOrd(weekCommencing, i) + ' ' + timePro.monthOf(weekCommencing, i)">
-							<span>{{day}} {{timePro.dateOrd(weekCommencing, i)}}</span><br/><span>{{timePro.displayTime(actualHoursForDay(i))}}</span>
+							<span>{{day}} {{timePro.dateOrd(weekCommencing, i)}}</span><br/>
+							<span>{{timePro.displayTime(actualHoursForDay(i))}}</span>
+							<span *ngIf="minsAdjustOffset(i) > 0" title="There are adjustments for this day"
+								class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
 						</th>
 					</tr>
 				</thead>

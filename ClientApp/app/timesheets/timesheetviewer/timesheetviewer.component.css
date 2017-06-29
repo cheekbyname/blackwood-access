@@ -56,7 +56,8 @@ p-spinner {
     height: 34px!important;
 }
 
-span.glyphicon-remove {
+span.adjust-flag {
+    font-size: 12pt;
     color: red;
 }
 

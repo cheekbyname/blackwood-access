@@ -19,4 +19,4 @@ const APPROUTES: Routes = [
 	imports: [ RouterModule.forRoot(APPROUTES) ],
 	exports: [ RouterModule ]
 })
-export class AppRouterModule { }
+export class AppRouterModule {}
