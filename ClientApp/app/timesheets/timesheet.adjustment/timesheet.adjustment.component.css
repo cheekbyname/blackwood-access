@@ -1,0 +1,95 @@
+h4, label, select, td, th {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.panel-default>.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+table.table-rota {
+    table-layout: fixed;
+}
+
+table.table-rota th {
+    width: 14.3%;
+    min-width: 9em;
+    background-color: rgba(191, 215, 48, 0.5);
+    /*width: 14.285714%;*/
+}
+
+table.table-rota th:hover {
+    background-color: rgb(191, 215, 48);
+    cursor: pointer;
+}
+
+table.table-rota td:hover {
+    background-color: rgba(255, 105, 180, 0.5)!important;
+    cursor: pointer;
+}
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+.btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+}
+
+p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select {
+    font-family: 'Century Gothic'!important;
+}
+
+p-spinner {
+    height: 34px!important;
+}
+
+span.adjust-flag {
+    font-size: 12pt;
+    color: red;
+}
+
+span.glyphicon-ok {
+    color: green;
+}
+
+.delete-button:hover {
+    cursor: pointer;
+    background-color: hotpink;
+    color: black;
+}
+
+span.ui-dialog-title, span.header-text {
+    width: 100%;
+}
+
+.header-row {
+    display: flex;
+}
+
+.header-row button, .ui-dialog-buttonpane button {
+    font-size: 10pt;
+    font-family: 'Century Gothic';
+}
+
+.action-button {
+    border: 1px solid silver;
+    background: white;
+}
+
+.action-button:hover {
+    cursor: pointer;
+    background-color: hotpink;
+}

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs/subscription';
 
@@ -33,6 +34,11 @@ export class TimesheetManagerComponent implements OnInit {
         this.teamSub = this.timePro.teams$.subscribe(teams => {
             this.teams = teams;
         });
+        this.route.params.subscribe((p) => {
+            if (p['teamCode'] != undefined && this.teams != null) {
+                this.selectedTeam = this.teams.find((t) => t.teamCode == p['teamCode']);
+            }
+        });
         this.selectedDateSub = this.timePro.weekCommencing$.subscribe(dt => {
             this.weekCommencing = this.getWeekCommencingFromDate(dt);
         });
@@ -45,15 +51,22 @@ export class TimesheetManagerComponent implements OnInit {
     get selectedTeam() { return this._selectedTeam }
     set selectedTeam(team: Team ) {
         this._selectedTeam = team;
+        this.timePro.selectTeam(team);
         console.log(this._selectedTeam);
-        this.http.get('/api/timesheet/carersbyteam?teamCode=' + this._selectedTeam.teamCode).subscribe(res => {
-            this.carers = res.json();
-            console.log(this.carers);
-            this.selectedCarer = null;
+        // this.http.get('/api/timesheet/carersbyteam?teamCode=' + this._selectedTeam.teamCode).subscribe(res => {
+        //     this.carers = res.json();
+        //     console.log(this.carers);
+        //     this.selectedCarer = null;
+        // });
+        // Navigate to aux route for summary
+        this.router.navigate([{ outlets: { 'detail': null }}]).then((q) => {
+            this.router.navigate(['timesheet-manager', this.selectedTeam.teamCode]).then((p) => {
+                this.router.navigate([{outlets: { 'summary': ['summary', this.selectedTeam.teamCode] }}]);
+            });
         });
     }
 
-    constructor(private http: Http, public timePro: TimesheetProvider) {
+    constructor(private http: Http, public timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) {
 
     }
 

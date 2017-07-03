@@ -1,10 +1,11 @@
+<!--<form #thisForm='ngForm'>-->
 <p-dialog [(visible)]="adjustVisible" modal="modal" [width]="960" [minWidth]="640" [minHeight]="480" [responsive]="true"
     [closable]="false" [closeOnEscape]="false">
     <header>
         <div class="header-row">
-            <button class="btn btn-primary pull-left" (click)="prevDay()" [disabled]="dayOffset==0">Previous</button>
+            <button class="btn btn-primary pull-left" (click)="prevDay(thisForm)" [disabled]="dayOffset==0">Previous</button>
             <span class="text-center header-text">Hours for {{loc.dayNames[dayOffset]}} {{timePro.dateOrd(weekCommencing, dayOffset)}} {{timePro.monthOf(weekCommencing, dayOffset)}}</span>
-            <button class="btn btn-primary pull-right" (click)="nextDay()" [disabled]="dayOffset==6">Next</button>
+            <button class="btn btn-primary pull-right" (click)="nextDay(thisForm)" [disabled]="dayOffset==6">Next</button>
         </div>
     </header>
     <div id="adjust-modal-content">
@@ -49,11 +50,11 @@
                             <span class="input-group-addon delete-button" (click)="removeAdjust(adjust)" title="Remove this adjustment">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
-                            <input class="form-control" type="text" [(ngModel)]="adjust.reason"/>
+                            <input class="form-control" type="text" [(ngModel)]="adjust.reason" name="adjustReason"/>
                         </div>
                     </td>
                     <td>
-                        <select class="form-control" [(ngModel)]="adjust.contractCode">
+                        <select class="form-control" [(ngModel)]="adjust.contractCode" name="adjustContract">
                             <option *ngFor="let con of timesheet.contracts" [ngValue]="con.contractCode">{{con.teamDesc}}</option>
                         </select>
                     </td>
@@ -63,8 +64,8 @@
                             <button type="button" class="btn action-button" (click)="decline(adjust)"><span class="glyphicon glyphicon-remove"></span></button>
                         </div>
                     </td>
-                    <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2"></p-spinner></td>
-                    <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2"></p-spinner></td>
+                    <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2" name="adjustHours"></p-spinner></td>
+                    <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2" name="adjustMins"></p-spinner></td>
                 </tr>
                 <tr *ngIf="minsForAdjustments()" class="row">
                     <td colspan="2"><strong>Adjustment Totals</strong></td>
@@ -80,7 +81,8 @@
     <footer>
         <div class="ui-dialog-buttonpane">
             <button class="btn btn-default btn-primary pull-left" (click)="addAdjust()">Add Adjustment</button>
-            <button class="btn btn-primary pull-right" (click)="closeAdjust()">Close</button>
+            <button class="btn btn-primary pull-right" (click)="closeAdjust(thisForm)">Close</button>
         </div>
     </footer>
 </p-dialog>
+<!--</form>-->

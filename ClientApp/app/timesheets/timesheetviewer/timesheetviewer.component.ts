@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
@@ -28,12 +29,26 @@ type BookingGrid = Array<Array<CarerBooking>>;
 })
 export class TimesheetViewerComponent implements OnInit {
 
-	constructor(private http: Http, private timePro: TimesheetProvider ) {
+	constructor(private http: Http, private timePro: TimesheetProvider, private router: Router,
+		private route: ActivatedRoute) {
 
 	}
 
 	ngOnInit(): void {
 		this.bookings = this.emptyBook();
+		this.route.params.subscribe((p) => {
+			if (p['carerCode'] != undefined) {
+				this.timePro.carers$.subscribe((carers) => {
+					if (carers != null) this.carer = carers.find(carer => carer.carerCode == p['carerCode']);
+				});
+			}
+		});
+		this.timePro.weekCommencing$.subscribe((wc) => {
+			this.weekCommencing = wc;
+		});
+		this.timePro.timesheet$.subscribe((ts) => {
+			if (ts != null) this.processTimesheet(ts);
+		})
 	}
 
 	public loc: Locale = LOC_EN;
@@ -53,26 +68,27 @@ export class TimesheetViewerComponent implements OnInit {
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
 		this._weekCommencing = weekCommencing;
-		if (this._carer) this.getTimesheet();
+		if (this.carer) this.timePro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get weekCommencing() { return this._weekCommencing }
 
 	@Input()
 	set carer(carer: Carer) {
 		this._carer = carer;
-		if (this._weekCommencing) this.getTimesheet();
+		if (this.weekCommencing) this.timePro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get carer() { return this._carer }
 
-	getTimesheet(): void {
-		// TODO This should really be on the provider
-		var tsUrl = '/api/timesheet/timesheet?carerCode=' + this._carer.carerCode + '&weekCommencing=' + this._weekCommencing;
-		this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
-	}
+	// getTimesheet(): void {
+	// 	// TODO This should really be on the provider
+	// 	var tsUrl = '/api/timesheet/timesheet?carerCode=' + this.carer.carerCode
+	// 		+ '&weekCommencing=' + this.timePro.sqlDate(this.weekCommencing);
+	// 	this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
+	// }
 
-	processTimesheet(res): void {
+	processTimesheet(ts: Timesheet): void {
 		this.bookings = this.emptyBook();
-		var ts: Timesheet = res.json() as Timesheet;
+		// var ts: Timesheet = res.json() as Timesheet;
 		this.timesheet = ts;
 		console.log(this.timesheet);
 		ts.bookings.forEach(bk => this.stuffBook(bk));

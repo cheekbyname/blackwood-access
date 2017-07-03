@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Carer } from '../models/carer';
 import { Team } from '../models/team';
+import { Timesheet } from '../models/timesheet';
 import { CarerContract } from '../models/contract';
 import { Locale, LOC_EN } from '../models/locale';
 
@@ -17,6 +18,7 @@ export class TimesheetProvider
     private _selectedCarer = new BehaviorSubject<Carer>(null);
     private _teams = new BehaviorSubject<Team[]>(null);
     private _carers = new BehaviorSubject<Carer[]>(null);
+    private _timesheet = new BehaviorSubject<Timesheet>(null);
 
     weekCommencing$ = this._weekCommencing.asObservable();
     periodStart$ = this._periodStart.asObservable();
@@ -25,6 +27,7 @@ export class TimesheetProvider
     selectedCarer$ = this._selectedCarer.asObservable();
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
+    timesheet$ = this._timesheet.asObservable();
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
@@ -34,6 +37,12 @@ export class TimesheetProvider
         this.selectedTeam$.subscribe((tm) => {
             this.getCarers(tm);
         });
+        // this.selectedCarer$.subscribe((carer) => {
+        //     this.getTimesheet();
+        // });
+        // this.weekCommencing$.subscribe((wc) => {
+        //     this.getTimesheet();
+        // });
         // this.selectWeekCommencing(this.getWeekCommencingFromDate(new Date(Date.now())));
     }
 
@@ -43,6 +52,10 @@ export class TimesheetProvider
 
     selectTeam(team: Team) {
         this._selectedTeam.next(team);
+    }
+
+    selectCarer(carer: Carer) {
+        this._selectedCarer.next(carer);
     }
 
     setPeriodStart(dt: Date) {
@@ -68,6 +81,14 @@ export class TimesheetProvider
             this._carers.next(carers);
         });
     }
+
+	getTimesheet(carer: Carer, weekCommencing: Date): void {
+		var tsUrl = '/api/timesheet/timesheet?carerCode=' + carer.carerCode
+			+ '&weekCommencing=' + this.sqlDate(weekCommencing);
+		this.http.get(tsUrl).subscribe(res => {
+            this._timesheet.next(res.json() as Timesheet);
+        });
+	}
 
     // getSummaries(tm: Team, periodStart: Date, periodFinish: Date) {
     //     this.http.get('api/timesheet/summaries/?teamCode=' + this._selectedTeam.teamCode

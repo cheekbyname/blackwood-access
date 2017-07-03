@@ -1,5 +1,6 @@
-import { Component, Input, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewEncapsulation, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Team } from '../../models/team';
 import { Summary } from '../../models/summary';
@@ -12,9 +13,22 @@ import { TimesheetProvider } from '../timesheet.provider';
 	template: require('./teamtimesummary.component.html'),
 	styles: [require('./teamtimesummary.component.css')]
 })
-export class TeamTimeSummaryComponent {
+export class TeamTimeSummaryComponent implements OnInit {
 
-	constructor(private http: Http, private timePro: TimesheetProvider) {
+	ngOnInit() {
+		this.route.params.subscribe((p) => {
+			if (p['teamCode'] != undefined) {
+				this.timePro.teams$.subscribe((teams) => {
+					if (teams != null) {
+						var team = teams.find(t => t.teamCode == p['teamCode']);
+						this.team = team;
+					}
+				});
+			}
+		});
+	}
+
+	constructor(private http: Http, private timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) {
 		this.setPeriod(new Date(Date.now()));
 	}
 
@@ -101,7 +115,8 @@ export class TeamTimeSummaryComponent {
 	}
 
 	selectCarer(sum: Summary): void {
-		this.onSelectedCarer.emit(sum.carerCode);
+		this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
 		this.toggleSummary();
+		this.router.navigate([{outlets: { detail: ['timesheet', sum.carerCode] }}]);
 	}
 }

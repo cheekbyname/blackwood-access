@@ -1,5 +1,6 @@
 import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
+import { NgForm } from '@angular/forms';
 
 import { Timesheet } from '../../models/timesheet';
 import { Adjustment } from '../../models/adjustment';
@@ -10,7 +11,8 @@ import { TimesheetProvider } from '../timesheet.provider';
 @Component({
     selector: 'timesheet-adjustment',
     template: require('./timesheet.adjustment.component.html'),
-    encapsulation: ViewEncapsulation.None
+	styles: [require('./timesheet.adjustment.component.css')],
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class TimesheetAdjustmentComponent {
 
@@ -73,14 +75,15 @@ export class TimesheetAdjustmentComponent {
 		});
 	}
 
-	public closeAdjust() {
-		this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset).forEach((adj) => {
-			// TODO Validation
-			this.putAdjustment(adj);
-		});
-		this.adjustVisible = false;
-        this.adjustVisibleChange.emit(this._adjustVisible);
-        this.timesheetChange.emit(this.timesheet);
+	public closeAdjust(form: NgForm) {
+		if (this.checkForm(form)) {
+			this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset).forEach((adj) => {
+				this.putAdjustment(adj);
+			});
+			this.adjustVisible = false;
+			this.adjustVisibleChange.emit(this._adjustVisible);
+			this.timesheetChange.emit(this.timesheet);
+		}
 	}
 
 	putAdjustment(oldAdj: Adjustment) {
@@ -102,12 +105,12 @@ export class TimesheetAdjustmentComponent {
 		this.timesheet.adjustments.push(newAdj);
 	}
 
-	public prevDay() {
-		this.dayOffset--;
+	public prevDay(form: NgForm) {
+		if (this.checkForm(form)) this.dayOffset--;
 	}
 
-	public nextDay() {
-		this.dayOffset++;
+	public nextDay(form: NgForm) {
+		if (this.checkForm(form)) this.dayOffset++;
 	}
 
 	public approve(adjust: Adjustment) {
@@ -116,5 +119,12 @@ export class TimesheetAdjustmentComponent {
 
 	public reject(adjust: Adjustment) {
 		
+	}
+
+	public checkForm(form: NgForm): boolean {
+		if (form.dirty) {
+			alert("Form is dirty");
+		}
+		return !form.dirty;
 	}
 }

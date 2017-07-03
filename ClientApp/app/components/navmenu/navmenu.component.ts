@@ -16,6 +16,9 @@ export class NavMenuComponent implements OnInit {
     constructor(public timePro: TimesheetProvider, private router: Router) {
         router.events.subscribe((ev) => {
             this.showCalendar = ev.toString().includes("timesheet-manager");
+            if (ev.toString().includes("notfound")) {
+                this.router.navigate([{ outlets: [{'summary': [null]}, {'detail': [null]}]}]);
+            }
         });
     }
 
