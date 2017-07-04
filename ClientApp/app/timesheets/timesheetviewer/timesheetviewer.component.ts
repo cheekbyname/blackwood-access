@@ -209,4 +209,8 @@ export class TimesheetViewerComponent implements OnInit {
 		this.selectedBooking = bk;
 		this.bookingVisible = true;
 	}
+
+	public clearDetail() {
+		this.router.navigate([{ outlets: { 'detail': null }}]);
+	}
 }

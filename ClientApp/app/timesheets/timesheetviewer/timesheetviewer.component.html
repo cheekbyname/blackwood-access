@@ -5,7 +5,7 @@
 				<h4>{{carer.forename}} {{carer.surname}} {{isContracted ? "[Contracted]" : "[Relief]"}} w/c {{timePro.displayDate(weekCommencing)}}</h4>
 			</div>
 			<div class="col-md-6">
-				<a class="btn btn-primary btn-default pull-right"><span class="glyphicon glyphicon-remove"></span>Close</a>
+				<a class="btn btn-primary btn-default pull-right" (click)="clearDetail()"><span class="glyphicon glyphicon-remove"></span>Close</a>
 			</div>
 		</div>
 	</div>
@@ -46,7 +46,7 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th *ngFor="let day of loc.dayNames; let i = index" (click)="openAdjustments(i)"
+						<th *ngFor="let day of loc.dayOrder; let i = index" (click)="openAdjustments(i)"
 							[title]="'Click here to adjust hours for ' + day + ' ' + timePro.dateOrd(weekCommencing, i) + ' ' + timePro.monthOf(weekCommencing, i)">
 							<span>{{day}} {{timePro.dateOrd(weekCommencing, i)}}</span><br/>
 							<span>{{timePro.displayTime(actualHoursForDay(i))}}</span>
@@ -57,7 +57,7 @@
 				</thead>
 				<tbody>
 					<tr class="row" *ngFor="let bk of bookings">
-						<td *ngFor="let day of loc.dayNames; let i = index" [style.background-color]="bookColor(bk[i])">
+						<td *ngFor="let day of loc.dayOrder; let i = index" [style.background-color]="bookColor(bk[i])">
 							<booking-card *ngIf="bk[i]" [booking]="bk[i]" (click)="openBookingDetail(bk[i])"></booking-card>
 						</td>
 					</tr>

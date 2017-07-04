@@ -12,7 +12,7 @@ import { TimesheetProvider } from '../timesheet.provider';
     selector: 'timesheet-adjustment',
     template: require('./timesheet.adjustment.component.html'),
 	styles: [require('./timesheet.adjustment.component.css')],
-    encapsulation: ViewEncapsulation.Emulated
+    encapsulation: ViewEncapsulation.None
 })
 export class TimesheetAdjustmentComponent {
 
