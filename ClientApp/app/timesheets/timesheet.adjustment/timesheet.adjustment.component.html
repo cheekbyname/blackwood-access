@@ -1,4 +1,4 @@
-<!--<form #thisForm='ngForm'>-->
+<form #thisForm='ngForm'>
 <p-dialog [(visible)]="adjustVisible" modal="modal" [width]="960" [minWidth]="640" [minHeight]="480" [responsive]="true"
     [closable]="false" [closeOnEscape]="false">
     <header>
@@ -50,11 +50,11 @@
                             <span class="input-group-addon delete-button" (click)="removeAdjust(adjust)" title="Remove this adjustment">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
-                            <input class="form-control" type="text" [(ngModel)]="adjust.reason" name="adjustReason"/>
+                            <input class="form-control" type="text" [(ngModel)]="adjust.reason" [name]="'adjustReason' + adjust.guid"/>
                         </div>
                     </td>
                     <td>
-                        <select class="form-control" [(ngModel)]="adjust.contractCode" name="adjustContract">
+                        <select class="form-control" [(ngModel)]="adjust.contractCode" [name]="'adjustContract' + adjust.guid">
                             <option *ngFor="let con of timesheet.contracts" [ngValue]="con.contractCode">{{con.teamDesc}}</option>
                         </select>
                     </td>
@@ -64,8 +64,8 @@
                             <button type="button" class="btn action-button" (click)="decline(adjust)"><span class="glyphicon glyphicon-remove"></span></button>
                         </div>
                     </td>
-                    <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2" name="adjustHours"></p-spinner></td>
-                    <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2" name="adjustMins"></p-spinner></td>
+                    <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2" [name]="'adjustHours' + adjust.guid"></p-spinner></td>
+                    <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2" [name]="'adjustMins' + adjust.guid"></p-spinner></td>
                 </tr>
                 <tr *ngIf="minsForAdjustments()" class="row">
                     <td colspan="2"><strong>Adjustment Totals</strong></td>
@@ -85,4 +85,4 @@
         </div>
     </footer>
 </p-dialog>
-<!--</form>-->
+</form>

@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,8 +9,8 @@ import { CarerContract } from '../models/contract';
 import { Locale, LOC_EN } from '../models/locale';
 
 @Injectable()
-export class TimesheetProvider
-{
+export class TimesheetProvider implements OnInit {
+
     private _weekCommencing = new BehaviorSubject<Date>(new Date());
     private _periodStart = new BehaviorSubject<Date>(null);
     private _periodFinish = new BehaviorSubject<Date>(null);
@@ -35,15 +35,12 @@ export class TimesheetProvider
 
     constructor(public http: Http) {
         this.selectedTeam$.subscribe((tm) => {
-            this.getCarers(tm);
+            if (tm != undefined) this.getCarers(tm);
         });
-        // this.selectedCarer$.subscribe((carer) => {
-        //     this.getTimesheet();
-        // });
-        // this.weekCommencing$.subscribe((wc) => {
-        //     this.getTimesheet();
-        // });
-        // this.selectWeekCommencing(this.getWeekCommencingFromDate(new Date(Date.now())));
+    }
+
+    ngOnInit() {
+        this.getTeams();
     }
 
     selectWeekCommencing(dt: Date) {
@@ -83,11 +80,13 @@ export class TimesheetProvider
     }
 
 	getTimesheet(carer: Carer, weekCommencing: Date): void {
-		var tsUrl = '/api/timesheet/timesheet?carerCode=' + carer.carerCode
-			+ '&weekCommencing=' + this.sqlDate(weekCommencing);
-		this.http.get(tsUrl).subscribe(res => {
-            this._timesheet.next(res.json() as Timesheet);
-        });
+        if (carer != undefined && weekCommencing != undefined) {
+            var tsUrl = '/api/timesheet/timesheet?carerCode=' + carer.carerCode
+                + '&weekCommencing=' + this.sqlDate(weekCommencing);
+            this.http.get(tsUrl).subscribe(res => {
+                this._timesheet.next(res.json() as Timesheet);
+            });
+        }
 	}
 
     // getSummaries(tm: Team, periodStart: Date, periodFinish: Date) {

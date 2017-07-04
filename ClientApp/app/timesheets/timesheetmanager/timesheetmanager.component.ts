@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
-import { Subscription } from 'rxjs/subscription';
 
-import { Carer } from '../../models/Carer';
-import { Timesheet } from '../../models/Timesheet';
+import { Subscription } from 'rxjs/subscription';   // TODO Deprecate
+// import { Observable } from 'rxjs/Rx';
+//import 'rxjs/add/observable/zip';
+
+// import { Carer } from '../../models/Carer';
+// import { Timesheet } from '../../models/Timesheet';
 import { Team } from '../../models/Team';
 import { TimesheetProvider } from '../timesheet.provider';
 
@@ -16,35 +19,48 @@ import { TimesheetProvider } from '../timesheet.provider';
 export class TimesheetManagerComponent implements OnInit {
 
     public teams: Team[];
-    public carers: Carer[];
+    // public carers: Carer[];
     
     _selectedTeam: Team;
 
-    teamSub: Subscription;
+    // teamSub: Subscription;
     selectedDateSub: Subscription;
 
-    public selectedCarer: Carer;
+    // public selectedCarer: Carer;
     public weekCommencing: any;         // Would love to use Date but js date handling is such bullshit
-    public showManager: Boolean = true;
+    // public showManager: Boolean = true;
 
     ngOnInit() {
+        // TODO Remove, this component no longer cares about the date
         this.weekCommencing = this.getWeekCommencingFromDate(new Date(Date.now()));
-
-        // Subscribe to TimesheetService observables
-        this.teamSub = this.timePro.teams$.subscribe(teams => {
-            this.teams = teams;
-        });
-        this.route.params.subscribe((p) => {
-            if (p['teamCode'] != undefined && this.teams != null) {
-                this.selectedTeam = this.teams.find((t) => t.teamCode == p['teamCode']);
-            }
-        });
-        this.selectedDateSub = this.timePro.weekCommencing$.subscribe(dt => {
-            this.weekCommencing = this.getWeekCommencingFromDate(dt);
-        });
 
         // Init Team list in TimesheetService 
         this.timePro.getTeams();
+
+        // Subscribe to TimesheetService observables
+        // this.timePro.teams$.subscribe(teams => {
+        //     this.teams = teams;
+        // });
+        // this.route.params.subscribe((p) => {
+        //     if (p['teamCode'] != undefined && this.teams != null) {
+        //         this.selectedTeam = this.teams.find((t) => t.teamCode == p['teamCode']);
+        //     }
+        // });
+
+        this.timePro.teams$.subscribe(teams => {
+            if (teams != null) {
+                this.teams = teams;
+                this.route.params.subscribe(params => {
+                    if (params['teamCode'] != undefined )
+                        this.selectedTeam = teams.find(team => team.teamCode == params['teamCode']);
+                });
+            }
+        })
+
+        // TODO Remove, this component no longer cares about the date
+        this.selectedDateSub = this.timePro.weekCommencing$.subscribe(dt => {
+            this.weekCommencing = this.getWeekCommencingFromDate(dt);
+        });
     }
 
     @Input()
@@ -66,17 +82,15 @@ export class TimesheetManagerComponent implements OnInit {
         });
     }
 
-    constructor(private http: Http, public timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) {
+    constructor(public timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) { }
 
-    }
+    // toggleManager(): void {
+    //     this.showManager = !this.showManager;
+    // }
 
-    toggleManager(): void {
-        this.showManager = !this.showManager;
-    }
-
-    onSelectedCarer(carerCode: number): void {
-        this.selectedCarer = this.carers.find(c => c.carerCode === carerCode);
-    }
+    // onSelectedCarer(carerCode: number): void {
+    //     this.selectedCarer = this.carers.find(c => c.carerCode === carerCode);
+    // }
 
     getWeekCommencingFromDate(dt: Date): string {
         var dow = dt.getDay() || 7;
@@ -87,7 +101,7 @@ export class TimesheetManagerComponent implements OnInit {
         return dt.getFullYear() + "-" + mon.substr(mon.length - 2) + "-" + day.substr(day.length - 2);
     }
 
-    showCarer(): boolean {
-        return this.weekCommencing && this.selectedTeam && this.carers && this.carers.length > 0
-    }
+    // showCarer(): boolean {
+    //     return this.weekCommencing && this.selectedTeam && this.carers && this.carers.length > 0
+    // }
 }

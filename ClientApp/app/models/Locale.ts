@@ -8,7 +8,7 @@ export class Locale {
 }
 
 export const LOC_EN: Locale = {
-    firstDayOfWeek : 1,
+    firstDayOfWeek : 0,
     dayNames: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
     dayNamesShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     dayNamesMin: ["Mo","Tu","We","Th","Fr","Sa", "Su"],

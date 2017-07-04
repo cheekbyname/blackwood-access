@@ -65,17 +65,18 @@ export class TimesheetViewerComponent implements OnInit {
 	bookingVisible: boolean = false;
 	selectedBooking: CarerBooking = new CarerBooking();
 
+	// TODO These Input bindings are probably unnecessary now
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
 		this._weekCommencing = weekCommencing;
-		if (this.carer) this.timePro.getTimesheet(this.carer, this.weekCommencing);
+		if (this.carer != undefined) this.timePro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get weekCommencing() { return this._weekCommencing }
 
 	@Input()
 	set carer(carer: Carer) {
 		this._carer = carer;
-		if (this.weekCommencing) this.timePro.getTimesheet(this.carer, this.weekCommencing);
+		if (this.weekCommencing != undefined) this.timePro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get carer() { return this._carer }
 

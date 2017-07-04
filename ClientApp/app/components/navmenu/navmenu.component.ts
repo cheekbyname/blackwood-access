@@ -1,6 +1,7 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TimesheetProvider } from '../../timesheets/timesheet.provider';
+import { LOC_EN } from "../../models/locale";
 
 @Component({
     selector: 'nav-menu',
@@ -9,7 +10,7 @@ import { TimesheetProvider } from '../../timesheets/timesheet.provider';
 })
 export class NavMenuComponent implements OnInit {
 
-    loc: any;
+    loc: any = LOC_EN;
     selectedDate: Date;
     showCalendar: boolean = false;
 
@@ -23,7 +24,7 @@ export class NavMenuComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loc = this.timePro.locale;
+        // TODO Deprecate
     }
 
     dateSelected(ev: Event) {

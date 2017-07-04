@@ -22,6 +22,7 @@ export class TeamTimeSummaryComponent implements OnInit {
 					if (teams != null) {
 						var team = teams.find(t => t.teamCode == p['teamCode']);
 						this.team = team;
+						this.timePro.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent
 					}
 				});
 			}
@@ -74,6 +75,7 @@ export class TeamTimeSummaryComponent implements OnInit {
 		this.periodFinish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
 	}
 
+	// TODO Move this onto Provider
 	getSummaries(): void {
 		if (this.periodStart != undefined && this.periodFinish != undefined) {
 			this.summaries = undefined;
