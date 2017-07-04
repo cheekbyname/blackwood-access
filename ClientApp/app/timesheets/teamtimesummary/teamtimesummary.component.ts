@@ -11,8 +11,7 @@ import { TimesheetProvider } from '../timesheet.provider';
 @Component({
 	selector: 'team-summary',
 	template: require('./teamtimesummary.component.html'),
-	styles: [require('./teamtimesummary.component.css')],
-	encapsulation: ViewEncapsulation.None
+	styles: [require('./teamtimesummary.component.css')]
 })
 export class TeamTimeSummaryComponent implements OnInit {
 

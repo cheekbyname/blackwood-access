@@ -1,13 +1,13 @@
 <form #thisForm='ngForm'>
 <p-dialog [(visible)]="adjustVisible" modal="modal" [width]="960" [minWidth]="640" [minHeight]="480" [responsive]="true"
     [closable]="false" [closeOnEscape]="false">
-    <header>
+    <p-header>
         <div class="header-row">
             <button class="btn btn-primary pull-left" (click)="prevDay(thisForm)" [disabled]="dayOffset==0">Previous</button>
             <span class="text-center header-text">Hours for {{loc.dayNames[dayOffset]}} {{timePro.dateOrd(weekCommencing, dayOffset)}} {{timePro.monthOf(weekCommencing, dayOffset)}}</span>
             <button class="btn btn-primary pull-right" (click)="nextDay(thisForm)" [disabled]="dayOffset==6">Next</button>
         </div>
-    </header>
+    </p-header>
     <div id="adjust-modal-content">
         <table class="table table-striped">
             <thead class="row">
@@ -78,11 +78,11 @@
             </tbody>
         </table>
     </div>
-    <footer>
+    <p-footer>
         <div class="ui-dialog-buttonpane">
             <button class="btn btn-default btn-primary pull-left" (click)="addAdjust()">Add Adjustment</button>
             <button class="btn btn-primary pull-right" (click)="closeAdjust(thisForm)">Close</button>
         </div>
-    </footer>
+    </p-footer>
 </p-dialog>
 </form>
