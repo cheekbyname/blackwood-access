@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/subscription';   // TODO Deprecate
 
 // import { Carer } from '../../models/Carer';
 // import { Timesheet } from '../../models/Timesheet';
-import { Team } from '../../models/Team';
+import { Team } from '../../models/team';
 import { TimesheetProvider } from '../timesheet.provider';
 
 @Component({
