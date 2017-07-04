@@ -11,7 +11,8 @@ import { TimesheetProvider } from '../timesheet.provider';
 @Component({
 	selector: 'team-summary',
 	template: require('./teamtimesummary.component.html'),
-	styles: [require('./teamtimesummary.component.css')]
+	styles: [require('./teamtimesummary.component.css')],
+	encapsulation: ViewEncapsulation.None
 })
 export class TeamTimeSummaryComponent implements OnInit {
 
@@ -22,7 +23,7 @@ export class TeamTimeSummaryComponent implements OnInit {
 					if (teams != null) {
 						var team = teams.find(t => t.teamCode == p['teamCode']);
 						this.team = team;
-						this.timePro.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent
+						this.timePro.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
 					}
 				});
 			}
@@ -36,7 +37,6 @@ export class TeamTimeSummaryComponent implements OnInit {
 	loc: Locale = LOC_EN;
 	_team: Team;
 	summaries: Summary[];
-	// _weekCommencing: Date;	// TODO Can we remove this from summary - doesn't feel like it belongs here
 	periodStart: Date;
 	periodFinish: Date;
 
@@ -46,18 +46,9 @@ export class TeamTimeSummaryComponent implements OnInit {
 	get team() { return this._team }
 	set team(team: Team) {
 		this._team = team;
-		// if (this._weekCommencing) {
 		this.getSummaries();
 		this.showSummary = true;
-		// }
 	}
-
-	// @Input()
-	// get weekCommencing() { return this._weekCommencing }
-	// set weekCommencing(weekCommencing: Date) {
-	// 	this._weekCommencing = new Date(weekCommencing);
-	// 	if (this._team) this.getSummaries();
-	// }
 
 	@Output() onSelectedCarer = new EventEmitter<number>();
 
@@ -70,6 +61,7 @@ export class TeamTimeSummaryComponent implements OnInit {
 	}
 
 	setPeriod(dt: Date) {
+		// TODO Move this onto Provider
 		// Get first and last of month from a selected date
 		this.periodStart = new Date(dt.getFullYear(), dt.getMonth(), 1);
 		this.periodFinish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
@@ -86,16 +78,10 @@ export class TeamTimeSummaryComponent implements OnInit {
 				console.log(this.summaries);
 			});
 		}
-		// Get first and last of month from a selected date
-		// this.periodStart = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth(), 1);
-		// this.periodFinish = new Date(this._weekCommencing.getFullYear(), this._weekCommencing.getMonth()+1, 0);
-
-		// TODO Move this onto provider
 	}
 
 	public displayTime(mins: number): string {
 		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
-		//return Math.floor(mins/60) + ":" + (mins % 60);
 	}
 
 	public displayMonth(): string {

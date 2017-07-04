@@ -24,8 +24,7 @@ type BookingGrid = Array<Array<CarerBooking>>;
 @Component({
 	selector: 'timesheet-viewer',
 	template: require('./timesheetviewer.component.html'),
-	styles: [require('./timesheetviewer.component.css')],
-	encapsulation: ViewEncapsulation.None
+	styles: [require('./timesheetviewer.component.css')]
 })
 export class TimesheetViewerComponent implements OnInit {
 
@@ -79,13 +78,6 @@ export class TimesheetViewerComponent implements OnInit {
 		if (this.weekCommencing != undefined) this.timePro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get carer() { return this._carer }
-
-	// getTimesheet(): void {
-	// 	// TODO This should really be on the provider
-	// 	var tsUrl = '/api/timesheet/timesheet?carerCode=' + this.carer.carerCode
-	// 		+ '&weekCommencing=' + this.timePro.sqlDate(this.weekCommencing);
-	// 	this.http.get(tsUrl).subscribe(res => this.processTimesheet(res));
-	// }
 
 	processTimesheet(ts: Timesheet): void {
 		this.bookings = this.emptyBook();

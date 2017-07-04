@@ -24,7 +24,7 @@ export class NavMenuComponent implements OnInit {
     }
 
     ngOnInit() {
-        // TODO Deprecate
+        this.timePro.selectWeekCommencing(new Date());
     }
 
     dateSelected(ev: Event) {

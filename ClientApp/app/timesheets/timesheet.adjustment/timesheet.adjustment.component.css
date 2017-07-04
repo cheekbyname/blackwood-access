@@ -1,4 +1,4 @@
-h4, label, select, td, th {
+/*h4, label, select, td, th {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -23,7 +23,6 @@ table.table-rota th {
     width: 14.3%;
     min-width: 9em;
     background-color: rgba(191, 215, 48, 0.5);
-    /*width: 14.285714%;*/
 }
 
 table.table-rota th:hover {
@@ -92,4 +91,23 @@ span.ui-dialog-title, span.header-text {
 .action-button:hover {
     cursor: pointer;
     background-color: hotpink;
+}*/
+
+h4, label, select, td, th, p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+.ui-spinner .fa {
+    left: 3px;
+}
+
+p-spinner {
+    height: 34px!important;
 }

@@ -44,7 +44,7 @@ export class TimesheetProvider implements OnInit {
     }
 
     selectWeekCommencing(dt: Date) {
-        this._weekCommencing.next(dt);
+        this._weekCommencing.next(this.getWeekCommencingFromDate(dt));
     }
 
     selectTeam(team: Team) {
@@ -99,7 +99,8 @@ export class TimesheetProvider implements OnInit {
     // }
 
 	public sqlDate(date: Date): string {
-		return date.toISOString().slice(0, date.toISOString().indexOf("T"));
+		//return date.toISOString().slice(0, date.toISOString().indexOf("T"));
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	}
 
     // getWeekCommencingFromDate(dt: Date): Date {
@@ -156,4 +157,15 @@ export class TimesheetProvider implements OnInit {
         dt.setDate(dt.getDate() + offset);
         return this.locale.monthNames[dt.getMonth()];
     }
+
+    public getWeekCommencingFromDate(dt: Date): Date {
+        var dow = dt.getDay() || 7;
+        if (dow !== 1) dt.setHours(-24 * (dow - 1));
+        return dt;
+        // var mon = "0" + (dt.getMonth() + 1);
+        // var day = "0" + dt.getDate();
+        // // TODO Adjust this so it fits yyyy/mm/dd pattern precisely
+        // return dt.getFullYear() + "-" + mon.substr(mon.length - 2) + "-" + day.substr(day.length - 2);
+    }
+
 }

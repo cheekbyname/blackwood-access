@@ -11,8 +11,7 @@ import { TimesheetProvider } from '../timesheet.provider';
 @Component({
     selector: 'timesheet-adjustment',
     template: require('./timesheet.adjustment.component.html'),
-	styles: [require('./timesheet.adjustment.component.css')],
-    encapsulation: ViewEncapsulation.None
+	styles: [require('./timesheet.adjustment.component.css')]
 })
 export class TimesheetAdjustmentComponent {
 
