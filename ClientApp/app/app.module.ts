@@ -15,9 +15,9 @@ import { InitialAssessManagerComponent } from './careassessments/initialassessma
 import { InitialAssessComponent } from './careassessments/initialassess/initialassess.component';
 
 /* To be removed */
-import { TimesheetManagerComponent } from './timesheets/timesheetmanager/timesheetmanager.component';
-import { TimesheetViewerComponent } from './timesheets/timesheetviewer/timesheetviewer.component';
-import { TeamTimeSummaryComponent } from './timesheets/teamtimesummary/teamtimesummary.component';
+import { TimesheetManagerComponent } from './timesheets/timesheet.manager/timesheet.manager.component';
+import { TimesheetViewerComponent } from './timesheets/timesheet.viewer/timesheet.viewer.component';
+import { TimesheetSummaryComponent } from './timesheets/timesheet.summary/timesheet.summary.component';
 import { BookingCardComponent } from './timesheets/booking.card/booking.card';
 import { BookingDetailComponent } from './timesheets/booking.detail/booking.detail.component';
 import { TimesheetAdjustmentComponent } from './timesheets/timesheet.adjustment/timesheet.adjustment.component';
@@ -33,7 +33,7 @@ import { ShiftOffsetFilter } from './models/shift';
     bootstrap: [ AppComponent ],
     declarations: [ AppComponent, NavMenuComponent, InitialAssessManagerComponent, InitialAssessComponent,
         /* To be removed */
-        TimesheetManagerComponent, TimesheetViewerComponent, TeamTimeSummaryComponent, BookingCardComponent,
+        TimesheetManagerComponent, TimesheetViewerComponent, TimesheetSummaryComponent, BookingCardComponent,
         BookingDetailComponent, TimesheetAdjustmentComponent,
         /* To be removed */
         HomeComponent, AdjustmentOffsetFilter, ShiftOffsetFilter

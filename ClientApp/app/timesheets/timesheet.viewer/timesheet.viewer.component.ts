@@ -23,8 +23,8 @@ type BookingGrid = Array<Array<CarerBooking>>;
 
 @Component({
 	selector: 'timesheet-viewer',
-	template: require('./timesheetviewer.component.html'),
-	styles: [require('./timesheetviewer.component.css')]
+	template: require('./timesheet.viewer.component.html'),
+	styles: [require('./timesheet.viewer.component.css')]
 })
 export class TimesheetViewerComponent implements OnInit {
 

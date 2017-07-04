@@ -34,6 +34,7 @@ span.ui-dialog-title, span.header-text {
 
 .action-button:hover, .delete-button:hover, .btn-primary:hover {
     cursor: pointer;
+    color: black;
     background-color: hotpink;
 }
 

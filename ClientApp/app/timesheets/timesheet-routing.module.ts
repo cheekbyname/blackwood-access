@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TimesheetManagerComponent } from './timesheetmanager/timesheetmanager.component';
-import { TeamTimeSummaryComponent } from './teamtimesummary/teamtimesummary.component';
-import { TimesheetViewerComponent } from './timesheetviewer/timesheetviewer.component';
+import { TimesheetManagerComponent } from './timesheet.manager/timesheet.manager.component';
+import { TimesheetSummaryComponent } from './timesheet.summary/timesheet.summary.component';
+import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
 const TIMESHEETROUTES: Routes = [
     {
@@ -12,7 +12,7 @@ const TIMESHEETROUTES: Routes = [
     },
     {
         path: 'summary/:teamCode/:periodStart/:periodFinish',
-        component: TeamTimeSummaryComponent, outlet: 'summary'
+        component: TimesheetSummaryComponent, outlet: 'summary'
     },
     {
         path: 'timesheet/:carerCode/:weekCommencing',

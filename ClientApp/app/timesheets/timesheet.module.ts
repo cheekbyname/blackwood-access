@@ -5,16 +5,16 @@ import { TimesheetRoutingModule } from './timesheet-routing.module';
 
 import { BookingCardComponent } from './booking.card/booking.card';
 import { BookingDetailComponent } from './booking.detail/booking.detail.component';
-import { TeamTimeSummaryComponent } from './teamtimesummary/teamtimesummary.component';
+import { TimesheetSummaryComponent } from './timesheet.summary/timesheet.summary.component';
 import { TimesheetAdjustmentComponent } from './timesheet.adjustment/timesheet.adjustment.component';
-import { TimesheetManagerComponent } from './timesheetmanager/timesheetmanager.component';
-import { TimesheetViewerComponent } from './timesheetviewer/timesheetviewer.component';
+import { TimesheetManagerComponent } from './timesheet.manager/timesheet.manager.component';
+import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
 import { TimesheetProvider } from './timesheet.provider';
 
 @NgModule({
 	imports: [CommonModule, TimesheetRoutingModule],
-	declarations: [BookingCardComponent, BookingDetailComponent, TeamTimeSummaryComponent, TimesheetAdjustmentComponent,
+	declarations: [BookingCardComponent, BookingDetailComponent, TimesheetSummaryComponent, TimesheetAdjustmentComponent,
 		TimesheetManagerComponent, TimesheetViewerComponent],
 	providers: [TimesheetProvider]
 })

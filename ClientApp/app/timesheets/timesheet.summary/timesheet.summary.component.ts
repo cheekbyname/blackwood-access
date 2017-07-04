@@ -10,10 +10,10 @@ import { TimesheetProvider } from '../timesheet.provider';
 
 @Component({
 	selector: 'team-summary',
-	template: require('./teamtimesummary.component.html'),
-	styles: [require('./teamtimesummary.component.css')]
+	template: require('./timesheet.summary.component.html'),
+	styles: [require('./timesheet.summary.component.css')]
 })
-export class TeamTimeSummaryComponent implements OnInit {
+export class TimesheetSummaryComponent implements OnInit {
 
 	ngOnInit() {
 		this.route.params.subscribe((p) => {
