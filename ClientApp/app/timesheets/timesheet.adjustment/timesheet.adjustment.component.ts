@@ -2,6 +2,8 @@ import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angu
 import { Http } from '@angular/http';
 import { NgForm } from '@angular/forms';
 
+import { ConfirmDialogModule, ConfirmationService } from "primeng/primeng";
+
 import { Timesheet } from '../../models/timesheet';
 import { Adjustment } from '../../models/adjustment';
 import { Locale, LOC_EN } from '../../models/locale';
@@ -16,7 +18,7 @@ import { TimesheetProvider } from '../timesheet.provider';
 })
 export class TimesheetAdjustmentComponent {
 
-    constructor(public timePro: TimesheetProvider, private http: Http) {
+    constructor(public timePro: TimesheetProvider, private http: Http, private conServ: ConfirmationService) {
 
     }
 
@@ -67,11 +69,16 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	public removeAdjust(adjust: Adjustment) {
-		// TODO Move this onto Provider
+		// TODO Move API call onto Provider
 		// TODO Implement confirmation
-		var tsUrl = '/api/timesheet/RemoveTimesheetAdjustment?id=' + adjust.id;
-		this.http.delete(tsUrl).subscribe(res => {
-			this.timesheet.adjustments.splice(this.timesheet.adjustments.indexOf(adjust), 1);
+		this.conServ.confirm({
+			message: 'Are you sure you want to remove this adjustment?',
+			accept: () => {
+				var tsUrl = '/api/timesheet/RemoveTimesheetAdjustment?id=' + adjust.id;
+				this.http.delete(tsUrl).subscribe(res => {
+					this.timesheet.adjustments.splice(this.timesheet.adjustments.indexOf(adjust), 1);
+				});
+			}
 		});
 	}
 

@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { FormsModule } from '@angular/forms';
 
-import { CalendarModule, SliderModule, DialogModule, SpinnerModule } from 'primeng/primeng';
+import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
 
 import { AppRouterModule } from './app-routing.module';
 
@@ -43,8 +43,8 @@ import { ShiftOffsetFilter } from './models/shift';
         AppRouterModule,
         FormsModule,
         /* Consider moving into timesheet module */
-        CalendarModule, SliderModule, DialogModule, SpinnerModule
+        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule
     ],
-    providers: [ TimesheetProvider /* To be removed */, InitialAssessProvider ]
+    providers: [ TimesheetProvider /* To be removed */, InitialAssessProvider, ConfirmationService ]
 })
 export class AppModule {}

@@ -4,7 +4,7 @@
     <p-header>
         <div class="header-row">
             <button class="btn btn-primary pull-left" (click)="prevDay(thisForm)" [disabled]="dayOffset==0">Previous</button>
-            <span class="text-center header-text">Hours for {{loc.dayNames[dayOffset]}} {{timePro.dateOrd(weekCommencing, dayOffset)}} {{timePro.monthOf(weekCommencing, dayOffset)}}</span>
+            <span class="text-center header-text">Hours for {{loc.dayOrder[dayOffset]}} {{timePro.dateOrd(weekCommencing, dayOffset)}} {{timePro.monthOf(weekCommencing, dayOffset)}}</span>
             <button class="btn btn-primary pull-right" (click)="nextDay(thisForm)" [disabled]="dayOffset==6">Next</button>
         </div>
     </p-header>
@@ -86,3 +86,5 @@
     </p-footer>
 </p-dialog>
 </form>
+
+<p-confirmDialog icon="fa fa-question-circle" width="420"></p-confirmDialog>
