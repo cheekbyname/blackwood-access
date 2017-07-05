@@ -54,3 +54,28 @@ span.glyphicon-ok {
 span.glyphicon-remove {
     color: red;
 }
+
+/* ConfirmDialog stylings */
+.ui-confirmdialog .ui-dialog-content .fa {
+    color: darkorange;
+    font-size: 20pt;
+}
+
+button.ui-button.ui-state-default {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+button.ui-button.ui-state-default span {
+    font-weight: normal;
+}
+
+button.ui-button.ui-state-default:hover {
+    background-color: hotpink;
+}
+
+span.ui-confirmdialog-message {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}

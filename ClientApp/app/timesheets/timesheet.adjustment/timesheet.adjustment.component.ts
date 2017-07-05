@@ -83,14 +83,14 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	public closeAdjust(form: NgForm) {
-		if (this.checkForm(form)) {
+		if (!this.isValid(form)) {
 			this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset).forEach((adj) => {
 				this.putAdjustment(adj);
 			});
-			this.adjustVisible = false;
-			this.adjustVisibleChange.emit(this._adjustVisible);
-			this.timesheetChange.emit(this.timesheet);
 		}
+		this.adjustVisible = false;
+		this.adjustVisibleChange.emit(this._adjustVisible);
+		this.timesheetChange.emit(this.timesheet);
 	}
 
 	putAdjustment(oldAdj: Adjustment) {
@@ -113,11 +113,11 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	public prevDay(form: NgForm) {
-		if (this.checkForm(form)) this.dayOffset--;
+		if (this.isValid(form)) this.dayOffset--;
 	}
 
 	public nextDay(form: NgForm) {
-		if (this.checkForm(form)) this.dayOffset++;
+		if (this.isValid(form)) this.dayOffset++;
 	}
 
 	public approve(adjust: Adjustment) {
@@ -128,10 +128,8 @@ export class TimesheetAdjustmentComponent {
 		
 	}
 
-	public checkForm(form: NgForm): boolean {
-		if (form.dirty) {
-			alert("Form is dirty");
-		}
-		return !form.dirty;
+	public isValid(form: NgForm): boolean {
+		var valid = !form.dirty; // && any other clauses we need to cover
+		return valid;
 	}
 }

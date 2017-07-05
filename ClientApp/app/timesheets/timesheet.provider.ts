@@ -27,7 +27,7 @@ export class TimesheetProvider implements OnInit {
     selectedCarer$ = this._selectedCarer.asObservable();
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
-    timesheet$ = this._timesheet.asObservable();
+    timesheet$ = this._timesheet.asObservable().debounceTime(250);
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
