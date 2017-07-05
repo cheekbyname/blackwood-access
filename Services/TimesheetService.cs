@@ -133,12 +133,14 @@ namespace Blackwood.Access.Services
 							|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
 						|| bk.ContractCode != shift.ContractCode)
 					{
-						// Check that Shift had valid break
+						// Check that Shift had valid break and Add Adjusment if not
+						// Get ShiftBreak profile
 						shifts.Add(shift);
 						shift = new Shift() {
 							CarerCode = carerCode,
 							Sequence = shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
 							Day = day,
+							Start = bk.ThisStart,
 							ContractCode = bk.ContractCode,
 							BiggestGap = 0
 						};

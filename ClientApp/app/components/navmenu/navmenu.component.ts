@@ -25,6 +25,9 @@ export class NavMenuComponent implements OnInit {
 
     ngOnInit() {
         this.timePro.selectWeekCommencing(new Date());
+        this.timePro.weekCommencing$.subscribe((wc) => {
+            this.selectedDate = wc;
+        });
     }
 
     dateSelected(ev: Event) {

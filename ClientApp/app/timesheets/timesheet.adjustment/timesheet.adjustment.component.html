@@ -60,19 +60,19 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn action-button" (click)="approve(adjust)"><span class="glyphicon glyphicon-ok"></span></button>
-                            <button type="button" class="btn action-button" (click)="decline(adjust)"><span class="glyphicon glyphicon-remove"></span></button>
+                            <button type="button" class="btn action-button" (click)="approve(adjust)" title="Approve this Adjustment"><span class="glyphicon glyphicon-ok"></span></button>
+                            <button type="button" class="btn action-button" (click)="decline(adjust)" title="Reject this Adjustment"><span class="glyphicon glyphicon-remove"></span></button>
                         </div>
                     </td>
                     <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2" [name]="'adjustHours' + adjust.guid"></p-spinner></td>
                     <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2" [name]="'adjustMins' + adjust.guid"></p-spinner></td>
                 </tr>
                 <tr *ngIf="minsForAdjustments()" class="row">
-                    <td colspan="2"><strong>Adjustment Totals</strong></td>
+                    <td colspan="4"><strong>Adjustment Totals</strong></td>
                     <td><strong>{{timePro.displayTime(minsForAdjustments())}}</strong></td>
                 </tr>
                 <tr *ngIf="minsForAdjustments()" class="row">
-                    <td colspan="2"><strong>Daily Totals</strong></td>
+                    <td colspan="4"><strong>Daily Totals</strong></td>
                     <td><strong>{{timePro.displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
                 </tr>
             </tbody>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -38,6 +38,7 @@ export class TimesheetViewerComponent implements OnInit {
 		this.route.params.subscribe((p) => {
 			if (p['carerCode'] != undefined) {
 				this.timePro.carers$.subscribe((carers) => {
+					this.carers = carers;
 					if (carers != null) this.carer = carers.find(carer => carer.carerCode == p['carerCode']);
 				});
 			}
@@ -57,6 +58,7 @@ export class TimesheetViewerComponent implements OnInit {
 	timesheet: Timesheet;
 	bookings: BookingGrid;
 	isContracted: boolean;
+	carers: Carer[];
 
 	adjustVisible: boolean = false;
 	dayOffset: number;
@@ -78,6 +80,10 @@ export class TimesheetViewerComponent implements OnInit {
 		if (this.weekCommencing != undefined) this.timePro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get carer() { return this._carer }
+
+	selectWeekCommencing(ev: Event) {
+		this.timePro.selectWeekCommencing(this.weekCommencing);
+	}
 
 	processTimesheet(ts: Timesheet): void {
 		this.bookings = this.emptyBook();
@@ -184,7 +190,8 @@ export class TimesheetViewerComponent implements OnInit {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
 		if (this.timePro.absenceCodes.concat(this.timePro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
-		return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
+		//return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
+		return shiftColors[bk.shift - 1];
 	}
 
 	public minsAdjustOffset(offset: number) {

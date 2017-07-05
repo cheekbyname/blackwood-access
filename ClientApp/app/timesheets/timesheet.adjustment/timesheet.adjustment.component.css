@@ -61,7 +61,7 @@ span.glyphicon-remove {
     font-size: 20pt;
 }
 
-button.ui-button.ui-state-default {
+button.ui-button.ui-state-default, button.ui-button.btn-primary:active:focus {
     background-color: #bfd730;
     color: black;
     border-color: black;

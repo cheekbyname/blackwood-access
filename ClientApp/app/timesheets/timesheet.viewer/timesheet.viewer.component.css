@@ -48,11 +48,15 @@ table.table-rota td:hover {
     border-color: black;
 }
 
-p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select {
+p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select, .form-inline span, span.ui-calendar input.form-control {
     font-family: 'Century Gothic'!important;
 }
 
-p-spinner {
+.form-inline span {
+    font-size: 14pt;
+}
+
+p-spinner, p-calendar {
     height: 34px!important;
 }
 
