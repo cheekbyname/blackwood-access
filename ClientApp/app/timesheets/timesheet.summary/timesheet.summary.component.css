@@ -43,8 +43,10 @@ p-calendar > span.ui-calendar > input {
 
 .summ-toggle {
     width: 48px;
-    /*float: right;*/
     font-size: 14pt;
+    height: 36px;
+    border-color: darkslategray;
+    color: darkslategray;
 }
 
 .date-controls {

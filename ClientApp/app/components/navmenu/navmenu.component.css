@@ -34,6 +34,7 @@ a.link-active a:focus {
         border-radius: 0px;
         border-width: 0px;
         height: 100%;
+        max-width: 300px;
     }
     .navbar-header {
         float: none;
@@ -53,6 +54,7 @@ a.link-active a:focus {
     .navbar li a {
         padding: 10px 16px;
         border-radius: 4px;
+        font-family: 'Century Gothic';
     }
     .navbar a {
         /* If a menu item's text is too long, truncate it */
@@ -60,6 +62,9 @@ a.link-active a:focus {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    .navbar a.navbar-brand {
+        font-size: 18pt;
     }
 }
 
