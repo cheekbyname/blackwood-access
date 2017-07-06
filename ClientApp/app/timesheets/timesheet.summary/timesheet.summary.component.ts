@@ -103,7 +103,12 @@ export class TimesheetSummaryComponent implements OnInit {
 
 	selectCarer(sum: Summary): void {
 		this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
-		this.toggleSummary();
+		this.showSummary = false;
 		this.router.navigate([{outlets: { detail: ['timesheet', sum.carerCode] }}]);
+	}
+
+	showReview() {
+		this.showSummary = false;
+		this.router.navigate([{outlets: { detail: ['review', this.team.teamCode]}}]);
 	}
 }

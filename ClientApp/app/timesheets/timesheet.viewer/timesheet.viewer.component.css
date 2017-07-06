@@ -60,6 +60,10 @@ p-spinner, p-calendar {
     height: 34px!important;
 }
 
+.panel-heading p-calendar {
+    margin-left: 8px;
+}
+
 span.adjust-flag {
     font-size: 12pt;
     color: red;
@@ -83,9 +87,20 @@ span.ui-dialog-title, span.header-text {
     display: flex;
 }
 
-.header-row button, .ui-dialog-buttonpane button {
+.panel-heading a.btn, .ui-dialog-buttonpane button {
     font-size: 10pt;
     font-family: 'Century Gothic';
+}
+
+.panel-heading a.btn span {
+    color: black;
+    font-size: 12pt;
+    vertical-align: middle;
+    padding-right: 4px;
+}
+
+.panel-heading .form-group {
+    margin-bottom: 0px;
 }
 
 .action-button {

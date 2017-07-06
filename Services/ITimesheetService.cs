@@ -14,5 +14,6 @@ namespace Blackwood.Access.Services
         IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing);
         Adjustment AddTimesheetAdjustment(Adjustment adjust);
         void RemoveTimesheetAdjustment(int id);
+        IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd);
   	}
 }

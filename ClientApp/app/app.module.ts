@@ -21,6 +21,7 @@ import { TimesheetSummaryComponent } from './timesheets/timesheet.summary/timesh
 import { BookingCardComponent } from './timesheets/booking.card/booking.card';
 import { BookingDetailComponent } from './timesheets/booking.detail/booking.detail.component';
 import { TimesheetAdjustmentComponent } from './timesheets/timesheet.adjustment/timesheet.adjustment.component';
+import { TimesheetReviewComponent } from "./timesheets/timesheet.review/timesheet.review.component";
 
 import { InitialAssessProvider } from './careassessments/initialassess.provider';
 /* To be removed */
@@ -34,7 +35,7 @@ import { ShiftOffsetFilter } from './models/shift';
     declarations: [ AppComponent, NavMenuComponent, InitialAssessManagerComponent, InitialAssessComponent,
         /* To be removed */
         TimesheetManagerComponent, TimesheetViewerComponent, TimesheetSummaryComponent, BookingCardComponent,
-        BookingDetailComponent, TimesheetAdjustmentComponent,
+        BookingDetailComponent, TimesheetAdjustmentComponent, TimesheetReviewComponent,
         /* To be removed */
         HomeComponent, AdjustmentOffsetFilter, ShiftOffsetFilter
     ],

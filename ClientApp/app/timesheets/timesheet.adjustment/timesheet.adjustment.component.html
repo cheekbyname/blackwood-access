@@ -59,16 +59,14 @@
                         </select>
                     </td>
                     <td>
-                        <!--<div class="btn-group">-->
-                            <button type="button" class="btn action-button" (click)="approve(adjust)" title="Approve this Adjustment"
-                                [ngClass]="{'adjust-selected': adjust.authorised != null}">
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </button>
-                            <button type="button" class="btn action-button" (click)="reject(adjust)" title="Reject this Adjustment"
-                                [ngClass]="{'adjust-selected': adjust.rejected != null}">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                        <!--</div>-->
+                        <button type="button" class="btn action-button" (click)="approve(adjust)" title="Approve this Adjustment"
+                            [ngClass]="{'adjust-selected': adjust.authorised != null}">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                        <button type="button" class="btn action-button" (click)="reject(adjust)" title="Reject this Adjustment"
+                            [ngClass]="{'adjust-selected': adjust.rejected != null}">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
                     </td>
                     <td><p-spinner [(ngModel)]="adjust.hours" [max]="23" [min]="-23" size="2" [name]="'adjustHours' + adjust.guid"></p-spinner></td>
                     <td><p-spinner [(ngModel)]="adjust.mins" [max]="55" [min]="-55" [step]="5" size="2" [name]="'adjustMins' + adjust.guid"></p-spinner></td>

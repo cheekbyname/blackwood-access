@@ -1,17 +1,16 @@
 <div class="panel panel-default" *ngIf="timesheet">
 	<div class="panel-heading">
 		<div class="row">
-			<div class="col-md-6 form-group form-inline">
+			<div class="col-md-9 form-group form-inline">
 				<span>Timesheet</span>
 				<p-calendar [locale]="loc" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing"
 					(onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
 				<select class="form-control" [(ngModel)]="carer">
 					<option *ngFor="let car of carers" [ngValue]="car">{{car.forename}} {{car.surname}}</option>
 				</select>
-				<!--<h4>{{carer.forename}} {{carer.surname}} {{isContracted ? "[Contracted]" : "[Relief]"}} w/c {{timePro.displayDate(weekCommencing)}}</h4>-->
-				<!-- TODO Don't forget to reinstate Contracted/Relief flag -->
+				<span>{{isContracted ? "[Contracted]" : "[Relief]"}}</span>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-3">
 				<a class="btn btn-primary btn-default pull-right" (click)="clearDetail()"><span class="glyphicon glyphicon-remove"></span>Close</a>
 			</div>
 		</div>

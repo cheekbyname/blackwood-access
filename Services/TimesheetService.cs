@@ -190,6 +190,7 @@ namespace Blackwood.Access.Services
 					new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
 		}
 
+
 		// TODO Consider renaming this method since it's being used for upserts
 		public Adjustment AddTimesheetAdjustment(Adjustment adj)
 		{
@@ -232,5 +233,16 @@ namespace Blackwood.Access.Services
 					new SqlParameter("@PeriodFinish", periodFinish)
 					})
 				.ToList();		}
+
+        public IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
+        {
+            return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustmentsByTeam @TeamCode, @PeriodStart, @PeriodEnd",
+				parameters: new [] {
+					new SqlParameter("@TeamCode", teamCode),
+					new SqlParameter("@PeriodStart", periodStart),
+					new SqlParameter("@PeriodEnd", periodEnd)
+				})
+				.ToList();
+        }
     }
 }

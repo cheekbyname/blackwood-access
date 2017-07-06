@@ -62,5 +62,11 @@ namespace Blackwood.Access.Controllers
 		{
 			_service.AddTimesheetAdjustment(adj);	// Don't need to return the ID for updates
 		}
+
+		[HttpGet("[action]")]
+		public IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
+		{
+			return _service.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
+		}
 	}
 }
