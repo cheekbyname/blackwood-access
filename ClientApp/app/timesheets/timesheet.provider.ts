@@ -2,6 +2,7 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
 
+import { Adjustment } from "../models/adjustment";
 import { Carer } from '../models/carer';
 import { Team } from '../models/team';
 import { Timesheet } from '../models/timesheet';
@@ -168,4 +169,31 @@ export class TimesheetProvider implements OnInit {
         // return dt.getFullYear() + "-" + mon.substr(mon.length - 2) + "-" + day.substr(day.length - 2);
     }
 
+    public rejectAdjustment(adj: Adjustment): Promise<boolean> {
+        adj.authorised = null;
+        adj.authorisedBy = null;
+        adj.rejected = new Date(Date.now());
+        adj.rejectedBy = 'AlexC';               // TODO
+        return this.updateAdjustment(adj);
+    }
+
+    public approveAdjustment(adj: Adjustment): Promise<boolean> {
+        adj.authorised = new Date(Date.now());
+        adj.authorisedBy = 'AlexC';             // TODO
+        adj.rejected = null;
+        adj.rejectedBy = null;
+        return this.updateAdjustment(adj);
+    }
+
+    private updateAdjustment(adj: Adjustment): Promise<boolean> {
+        return new Promise<boolean>((res, rej) => {
+            this.http.put('api/timesheet/UpdateTimesheetAdjustment', adj).subscribe((res) => {
+                if (res.status == 200) {
+                    return Promise.resolve(true);
+                } else {
+                    return Promise.reject(false);
+                }
+            });
+        });
+    }
 }

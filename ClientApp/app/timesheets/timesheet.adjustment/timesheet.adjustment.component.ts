@@ -64,7 +64,7 @@ export class TimesheetAdjustmentComponent {
 	}
 
     public minsForAdjustments(): number {
-        return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset)
+        return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset && adj.rejected == null)
             .map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -121,11 +121,11 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	public approve(adjust: Adjustment) {
-
+		this.timePro.approveAdjustment(adjust);
 	}
 
 	public reject(adjust: Adjustment) {
-		
+		this.timePro.rejectAdjustment(adjust);
 	}
 
 	public isValid(form: NgForm): boolean {

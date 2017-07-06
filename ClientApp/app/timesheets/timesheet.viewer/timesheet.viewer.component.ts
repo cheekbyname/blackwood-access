@@ -195,7 +195,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public minsAdjustOffset(offset: number) {
-		return this.timesheet.adjustments.filter(adj => adj.dayOffset == offset)
+		return this.timesheet.adjustments.filter(adj => adj.dayOffset == offset && adj.rejected == null)
 			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 

@@ -56,5 +56,11 @@ namespace Blackwood.Access.Controllers
 		{
 			_service.RemoveTimesheetAdjustment(id);
 		}
+
+		[HttpPut("[action]")]
+		public void UpdateTimesheetAdjustment([FromBody] Adjustment adj)
+		{
+			_service.AddTimesheetAdjustment(adj);	// Don't need to return the ID for updates
+		}
 	}
 }

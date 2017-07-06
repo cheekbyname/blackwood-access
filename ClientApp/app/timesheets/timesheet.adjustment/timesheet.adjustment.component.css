@@ -79,3 +79,8 @@ span.ui-confirmdialog-message {
     font-family: 'Century Gothic';
     font-size: 11pt;
 }
+
+.adjust-selected {
+    background-color: palegreen;
+    border: 2px solid black;
+}
