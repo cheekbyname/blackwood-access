@@ -19,6 +19,7 @@ export class TimesheetProvider implements OnInit {
     private _selectedCarer = new BehaviorSubject<Carer>(null);
     private _teams = new BehaviorSubject<Team[]>(null);
     private _carers = new BehaviorSubject<Carer[]>(null);
+    private _adjustments = new BehaviorSubject<Adjustment[]>(null);
     private _timesheet = new BehaviorSubject<Timesheet>(null);
 
     weekCommencing$ = this._weekCommencing.asObservable();
@@ -28,6 +29,7 @@ export class TimesheetProvider implements OnInit {
     selectedCarer$ = this._selectedCarer.asObservable();
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
+    adjustments$ = this._adjustments.asObservable();
     timesheet$ = this._timesheet.asObservable().debounceTime(250);
 
     public locale: Locale = LOC_EN;
@@ -73,7 +75,7 @@ export class TimesheetProvider implements OnInit {
     }
 
     getCarers(tm: Team) {
-        this.http.get('/api/timesheet/carersbyteam?teamCode=' + tm.teamCode).subscribe(res => {
+        this.http.get(`/api/timesheet/carersbyteam?teamCode=${tm.teamCode}`).subscribe(res => {
             var carers = res.json();
             this._selectedCarer.next(null);
             this._carers.next(carers);
@@ -82,13 +84,19 @@ export class TimesheetProvider implements OnInit {
 
 	getTimesheet(carer: Carer, weekCommencing: Date): void {
         if (carer != undefined && weekCommencing != undefined) {
-            var tsUrl = '/api/timesheet/timesheet?carerCode=' + carer.carerCode
-                + '&weekCommencing=' + this.sqlDate(weekCommencing);
+            var tsUrl = `/api/timesheet/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
             this.http.get(tsUrl).subscribe(res => {
                 this._timesheet.next(res.json() as Timesheet);
             });
         }
 	}
+
+    getAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
+        var tsUrl = `api/timesheet/GetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
+        this.http.get(tsUrl).subscribe(res => {
+            this._adjustments.next(res.json() as Adjustment[]);
+        })
+    }
 
     // getSummaries(tm: Team, periodStart: Date, periodFinish: Date) {
     //     this.http.get('api/timesheet/summaries/?teamCode=' + this._selectedTeam.teamCode
