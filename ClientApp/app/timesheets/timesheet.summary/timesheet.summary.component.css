@@ -41,13 +41,13 @@ p-calendar > span.ui-calendar > input {
     font-family: 'Century Gothic';
 }
 
-.summ-toggle {
+/*.summ-toggle {
     width: 48px;
     font-size: 14pt;
     height: 36px;
     border-color: darkslategray;
     color: darkslategray;
-}
+}*/
 
 .date-controls {
     display: inline-block;

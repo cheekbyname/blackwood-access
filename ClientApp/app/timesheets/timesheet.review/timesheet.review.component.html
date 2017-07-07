@@ -15,7 +15,10 @@
                     <th class="col-md-6">Date</th>
                 </thead>
                 <tbody>
-                    <!-- tr *ngFor="let adjust of adjustments" -->
+                    <tr *ngFor="let adjust of adjustments" class="row">
+                        <td>{{carerForAdjust(adjust)}}</td>
+                        <td>{{adjust.reason}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

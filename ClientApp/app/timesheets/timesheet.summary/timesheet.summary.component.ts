@@ -52,10 +52,12 @@ export class TimesheetSummaryComponent implements OnInit {
 	@Output() onSelectedCarer = new EventEmitter<number>();
 
 	periodStartSelected(ev: Event) {
+		this.timePro.setPeriodStart(this.periodStart);
 		this.getSummaries();
 	}
 
 	periodFinishSelected(ev: Event) {
+		this.timePro.setPeriodFinish(this.periodFinish);
 		this.getSummaries();
 	}
 

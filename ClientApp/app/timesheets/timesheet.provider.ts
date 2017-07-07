@@ -91,9 +91,10 @@ export class TimesheetProvider implements OnInit {
         }
 	}
 
-    getAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
-        var tsUrl = `api/timesheet/GetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
+    getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
+        var tsUrl = `api/timesheet/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
         this.http.get(tsUrl).subscribe(res => {
+            console.log(res.json());
             this._adjustments.next(res.json() as Adjustment[]);
         })
     }
