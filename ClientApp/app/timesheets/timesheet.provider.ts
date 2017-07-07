@@ -118,10 +118,7 @@ export class TimesheetProvider implements OnInit {
             console.log(tsUrl);
             var adjusts = res.json() as Adjustment[];
             console.log(adjusts);
-            this._adjustments.next(adjusts.map(adj => {
-                adj.weekCommencing = new Date(adj.weekCommencing);
-                return adj;
-            }));
+            this._adjustments.next(adjusts);
         })
     }
 

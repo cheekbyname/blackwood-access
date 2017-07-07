@@ -33,7 +33,7 @@ export class TimesheetReviewComponent implements OnInit {
         this.timePro.carers$.subscribe(carers => this.carers = carers);
         this.timePro.adjustments$.subscribe(adjusts => this.adjustments = adjusts);
         this.timePro.timesheet$.subscribe(ts => this.timesheet = ts);
-        this.timePro.weekCommencing$.subscribe(wc => this.weekCommencing);
+        this.timePro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
     }
 
     carerForAdjust(adjust: Adjustment): Carer {
