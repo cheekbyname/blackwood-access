@@ -4,10 +4,11 @@ import { BehaviorSubject, Observable } from 'rxjs/Rx';
 
 import { Adjustment } from "../models/adjustment";
 import { Carer } from '../models/carer';
-import { Team } from '../models/team';
-import { Timesheet } from '../models/timesheet';
 import { CarerContract } from '../models/contract';
 import { Locale, LOC_EN } from '../models/locale';
+import { Summary } from "../models/summary";
+import { Team } from '../models/team';
+import { Timesheet } from '../models/timesheet';
 
 @Injectable()
 export class TimesheetProvider implements OnInit {
@@ -21,6 +22,7 @@ export class TimesheetProvider implements OnInit {
     private _carers = new BehaviorSubject<Carer[]>(null);
     private _adjustments = new BehaviorSubject<Adjustment[]>(null);
     private _timesheet = new BehaviorSubject<Timesheet>(null);
+    private _summaries = new BehaviorSubject<Summary[]>(null);
 
     weekCommencing$ = this._weekCommencing.asObservable();
     periodStart$ = this._periodStart.asObservable();
@@ -30,18 +32,18 @@ export class TimesheetProvider implements OnInit {
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
     adjustments$ = this._adjustments.asObservable();
-    timesheet$ = this._timesheet.asObservable().debounceTime(250);
+    timesheet$ = this._timesheet.asObservable();
+    summaries$ = this._summaries.asObservable();
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
-	public unpaidCodes: number [] = [123, 110];
+	public unpaidCodes: number [] = [123, 110, 98];
 
     constructor(public http: Http) {
         this.selectedTeam$.subscribe((tm) => {
             if (tm != undefined) this.getCarers(tm);
         });
 
-        // TODO Apply this technique liberally
         Observable.combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$,
             (team, start, finish) => { return { "team": team, "start": start, "finish": finish }})
             .subscribe(x => {
@@ -55,6 +57,15 @@ export class TimesheetProvider implements OnInit {
             (wc, carer) => { return { "weekCommencing": wc, "carer": carer }})
             .subscribe(x => {
                 this.getTimesheet(x.carer, x.weekCommencing);
+            });
+        
+        Observable.combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$,
+            (team, start, finish) => { return { "team": team, "start": start, "finish": finish }})
+            .subscribe(x => {
+                if (x.start != null && x.finish != null) {
+                    this._summaries.next(null);
+                    this.getSummaries(x.team, x.start, x.finish);
+                }
             });
     }
 
@@ -82,6 +93,14 @@ export class TimesheetProvider implements OnInit {
         this._periodFinish.next(dt);
     }
 
+	setPeriod(dt: Date) {
+		// Get first and last of month from a selected date
+		var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
+		this.setPeriodStart(start);
+		var finish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
+		this.setPeriodFinish(finish);
+	}
+
     getTeams() {
         var teams: Team[];
         this.http.get('api/timesheet/teams').subscribe(res => {
@@ -94,8 +113,6 @@ export class TimesheetProvider implements OnInit {
         var tsUrl = `/api/timesheet/carersbyteam?teamCode=${tm.teamCode}`;
         this.http.get(tsUrl).subscribe(res => {
             var carers = res.json() as Carer[];
-            console.log(tsUrl);
-            console.log(carers);
             this._selectedCarer.next(null);
             this._carers.next(carers);
         });
@@ -105,8 +122,6 @@ export class TimesheetProvider implements OnInit {
         if (carer != undefined && weekCommencing != undefined) {
             var tsUrl = `/api/timesheet/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
             this.http.get(tsUrl).subscribe(res => {
-                console.log(tsUrl);
-                console.log(res.json() as Timesheet);
                 this._timesheet.next(res.json() as Timesheet);
             });
         }
@@ -115,24 +130,19 @@ export class TimesheetProvider implements OnInit {
     getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
         var tsUrl = `api/timesheet/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
         this.http.get(tsUrl).subscribe(res => {
-            console.log(tsUrl);
             var adjusts = res.json() as Adjustment[];
-            console.log(adjusts);
             this._adjustments.next(adjusts);
         })
     }
 
-	// getSummaries(): void {
-	// 	if (this.periodStart != undefined && this.periodFinish != undefined) {
-	// 		this.summaries = undefined;
-	// 		this.http.get('api/timesheet/summaries/?teamCode=' + this._team.teamCode
-	// 			+ '&periodStart=' + this.sqlDate(this.periodStart)
-	// 			+ '&periodEnd=' + this.sqlDate(this.periodFinish)).subscribe( res => {
-	// 				this.summaries = res.json();
-	// 			console.log(this.summaries);
-	// 		});
-	// 	}
-	// }
+	getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
+		if (periodStart != undefined && periodFinish != undefined) {
+            var tsUrl = `api/timesheet/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
+			this.http.get(tsUrl).subscribe( res => {
+                this._summaries.next(res.json() as Summary[]);
+			});
+		}
+	}
 
 	public sqlDate(date: Date): string {
         return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();

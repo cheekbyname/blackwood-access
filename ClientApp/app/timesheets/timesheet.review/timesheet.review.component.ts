@@ -56,4 +56,11 @@ export class TimesheetReviewComponent implements OnInit {
         this.dayOffset = adjust.dayOffset;
         this.adjustVisible = true;
     }
+
+    handleChanges(ts: Timesheet) {
+        ts.adjustments.forEach(adjust => {
+            var idx = this.adjustments.findIndex(adj => adj.guid == adjust.guid);
+            this.adjustments[idx] = adjust;
+        });
+    }
 }

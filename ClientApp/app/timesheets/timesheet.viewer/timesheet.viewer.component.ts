@@ -87,9 +87,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 	processTimesheet(ts: Timesheet): void {
 		this.bookings = this.emptyBook();
-		// var ts: Timesheet = res.json() as Timesheet;
 		this.timesheet = ts;
-		console.log(this.timesheet);
 		ts.bookings.forEach(bk => this.stuffBook(bk));
 		this.transBook();
 		this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });

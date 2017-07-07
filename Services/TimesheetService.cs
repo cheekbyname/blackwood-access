@@ -11,7 +11,7 @@ namespace Blackwood.Access.Services
     public class TimesheetService : ITimesheetService
     {
 		private static int[] _absenceCodes = { 108, 109 };
-		private static int[] _unpaidCodes = { 123, 110 };
+		private static int[] _unpaidCodes = { 123, 110, 98 };
 		private AccessContext _context;
 
 		public TimesheetService(AccessContext context)
@@ -128,9 +128,9 @@ namespace Blackwood.Access.Services
 						shift.UnpaidMins += (bk.ThisMins);
 					}
 					// Begin new Shift if valid shift break detected or team changes
-					if ((gap >= TimeSpan.FromHours(2) &&
-						((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
-							|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
+					if (gap >= TimeSpan.FromHours(2)
+						// && ((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
+						// 	|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
 						|| bk.ContractCode != shift.ContractCode)
 					{
 						// Check that Shift had valid break and Add Adjusment if not

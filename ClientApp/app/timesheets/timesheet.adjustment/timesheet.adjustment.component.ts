@@ -70,7 +70,6 @@ export class TimesheetAdjustmentComponent {
 
 	public removeAdjust(adjust: Adjustment) {
 		// TODO Move API call onto Provider
-		// TODO Implement confirmation
 		this.conServ.confirm({
 			message: 'Are you sure you want to remove this adjustment?',
 			accept: () => {

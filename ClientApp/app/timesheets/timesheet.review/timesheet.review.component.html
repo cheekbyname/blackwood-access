@@ -12,14 +12,27 @@
             <table class="table table-striped">
                 <thead class="row">
                     <th class="col-md-3">Carer</th>
-                    <th class="col-md-2">Date</th>
+                    <th class="col-md-1">Date</th>
+                    <th class="col-md-1">Time</th>
                     <th class="col-md-3">Reason</th>
+                    <th class="col-md-2">Approval</th>
+                    <th class="col-md-2">Authorisation</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let adjust of adjustments" class="row" (click)="showAdjust(adjust)">
                         <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
                         <td>{{timePro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
+                        <td>{{timePro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
                         <td>{{adjust.reason}}</td>
+                        <td>
+                            <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.authorised != null}">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                            <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.rejected != null}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>{{adjust.authorisedBy || adjust.rejectedBy}} {{timePro.displayDate(adjust.authorised || adjust.rejected)}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -28,5 +41,5 @@
 </div>
 
 <timesheet-adjustment *ngIf="timesheet" [(timesheet)]="timesheet" [(adjustVisible)]="adjustVisible" [dayOffset]="dayOffset"
-    [weekCommencing]="weekCommencing"></timesheet-adjustment>
+    [weekCommencing]="weekCommencing" (timesheetChange)="handleChanges($event)"></timesheet-adjustment>
 

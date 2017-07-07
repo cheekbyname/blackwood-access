@@ -27,10 +27,13 @@ export class TimesheetSummaryComponent implements OnInit {
 				});
 			}
 		});
+		this.timePro.periodStart$.subscribe(start => this.periodStart = start);
+		this.timePro.periodFinish$.subscribe(finish => this.periodFinish = finish);
+		this.timePro.summaries$.subscribe(sums => this.summaries = sums);
 	}
 
 	constructor(private http: Http, private timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) {
-		this.setPeriod(new Date(Date.now()));
+		this.timePro.setPeriod(new Date(Date.now()));
 	}
 
 	loc: Locale = LOC_EN;
@@ -45,7 +48,7 @@ export class TimesheetSummaryComponent implements OnInit {
 	get team() { return this._team }
 	set team(team: Team) {
 		this._team = team;
-		this.getSummaries();
+//		this.getSummaries();
 		this.showSummary = true;
 	}
 
@@ -53,34 +56,10 @@ export class TimesheetSummaryComponent implements OnInit {
 
 	periodStartSelected(ev: Event) {
 		this.timePro.setPeriodStart(this.periodStart);
-		this.getSummaries();
 	}
 
 	periodFinishSelected(ev: Event) {
 		this.timePro.setPeriodFinish(this.periodFinish);
-		this.getSummaries();
-	}
-
-	setPeriod(dt: Date) {
-		// TODO Move this onto Provider
-		// Get first and last of month from a selected date
-		this.periodStart = new Date(dt.getFullYear(), dt.getMonth(), 1);
-		this.timePro.setPeriodStart(this.periodStart);
-		this.periodFinish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
-		this.timePro.setPeriodFinish(this.periodFinish);
-	}
-
-	// TODO Move this onto Provider
-	getSummaries(): void {
-		if (this.periodStart != undefined && this.periodFinish != undefined) {
-			this.summaries = undefined;
-			this.http.get('api/timesheet/summaries/?teamCode=' + this._team.teamCode
-				+ '&periodStart=' + this.sqlDate(this.periodStart)
-				+ '&periodEnd=' + this.sqlDate(this.periodFinish)).subscribe( res => {
-					this.summaries = res.json();
-				console.log(this.summaries);
-			});
-		}
 	}
 
 	public displayTime(mins: number): string {
