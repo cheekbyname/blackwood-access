@@ -11,12 +11,14 @@
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead class="row">
-                    <th class="col-md-6">Carer</th>
-                    <th class="col-md-6">Date</th>
+                    <th class="col-md-3">Carer</th>
+                    <th class="col-md-2">Date</th>
+                    <th class="col-md-3">Reason</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let adjust of adjustments" class="row">
-                        <td>{{carerForAdjust(adjust)}}</td>
+                    <tr *ngFor="let adjust of adjustments" class="row" (click)="showAdjust(adjust)">
+                        <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
+                        <td>{{timePro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
                         <td>{{adjust.reason}}</td>
                     </tr>
                 </tbody>
@@ -24,3 +26,7 @@
         </div>
     </div>
 </div>
+
+<timesheet-adjustment *ngIf="timesheet" [(timesheet)]="timesheet" [(adjustVisible)]="adjustVisible" [dayOffset]="dayOffset"
+    [weekCommencing]="weekCommencing"></timesheet-adjustment>
+

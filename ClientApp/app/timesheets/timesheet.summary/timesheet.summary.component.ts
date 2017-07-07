@@ -65,7 +65,9 @@ export class TimesheetSummaryComponent implements OnInit {
 		// TODO Move this onto Provider
 		// Get first and last of month from a selected date
 		this.periodStart = new Date(dt.getFullYear(), dt.getMonth(), 1);
+		this.timePro.setPeriodStart(this.periodStart);
 		this.periodFinish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
+		this.timePro.setPeriodFinish(this.periodFinish);
 	}
 
 	// TODO Move this onto Provider
