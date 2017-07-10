@@ -7,16 +7,20 @@ namespace Blackwood.Access.Services
     using System.Linq;
     using Models;
     using Microsoft.EntityFrameworkCore;
+    using System.Security.Claims;
 
     public class TimesheetService : ITimesheetService
     {
 		private static int[] _absenceCodes = { 108, 109 };
 		private static int[] _unpaidCodes = { 123, 110, 98 };
-		private AccessContext _context;
 
-		public TimesheetService(AccessContext context)
+		private AccessContext _context;
+        private IUserService _userService;
+
+		public TimesheetService(AccessContext context, IUserService userService)
 		{
 			_context = context;
+            _userService = userService;
 		}
 
 		public IEnumerable<Team> GetTeams()
@@ -71,14 +75,15 @@ namespace Blackwood.Access.Services
 			// CarerBookings
 			ts.Bookings = GetBookings(carerCode, weekCommencing, weekCommencing.AddDays(6));
 
-			// Adjustments
-			ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
-				parameters: new [] {
-					new SqlParameter("@CarerCode", carerCode),
-					new SqlParameter("@PeriodStart", weekCommencing),
-					new SqlParameter("@PeriodFinish", weekCommencing.AddDays(6))
-					})
-				.ToList();
+            // Adjustments
+            ts.Adjustments = GetTimesheetAdjustments(carerCode, weekCommencing, weekCommencing.AddDays(6)).ToList();
+			//ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
+			//	parameters: new [] {
+			//		new SqlParameter("@CarerCode", carerCode),
+			//		new SqlParameter("@PeriodStart", weekCommencing),
+			//		new SqlParameter("@PeriodFinish", weekCommencing.AddDays(6))
+			//		})
+			//	.ToList();
 
 			// Transform Bookings -> Shifts
 			ts.Shifts = BookingsToShifts(weekCommencing, weekCommencing.AddDays(6), ts.Bookings, ts.CarerCode);
@@ -134,6 +139,12 @@ namespace Blackwood.Access.Services
 						|| bk.ContractCode != shift.ContractCode)
 					{
 						// Check that Shift had valid break and Add Adjusment if not
+                        // TODO Implement BreakPolicy, with legal minimums by default
+                        if (shift.ShiftMins >= 360 && shift.UnpaidMins < 20)
+                        {
+                            // TODO Add an Adjustment or just increment UnpaidMins?
+                        }
+
 						// Get ShiftBreak profile
 						shifts.Add(shift);
 						shift = new Shift() {
@@ -175,25 +186,36 @@ namespace Blackwood.Access.Services
 				.ToList();
 			// TODO See if we can async this
 			summaries.ForEach(sum => {
-				var shifts = BookingsToShifts(periodStart, periodEnd,
+                // Get calculated shift times etc
+                var shifts = BookingsToShifts(periodStart, periodEnd,
 					GetBookings(sum.CarerCode, periodStart, periodEnd), sum.CarerCode);
 				sum.ActualMins = shifts.Sum(sh => sh.ShiftMins);
+                sum.UnpaidMins = shifts.Sum(sh => sh.UnpaidMins);
+                // Apply adjustments to shift times
+                // TODO APPROVED Adjustments only!
+                var adjusts = GetTimesheetAdjustments(sum.CarerCode, periodStart, periodEnd);
+                sum.ActualMins = sum.ActualMins + adjusts.Sum(adj => (adj.Hours * 60) + adj.Mins);
 			});
 			return summaries;
 		}
 
-		public IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime weekCommencing)
+		public IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime periodStart, DateTime periodFinish)
 		{
-			return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @WeekCommencing",
+			return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
 				parameters: new [] {
 					new SqlParameter("@CarerCode", carerCode),
-					new SqlParameter("@WeekCommencing", weekCommencing)}).ToList();
+					new SqlParameter("@PeriodStart", periodStart),
+                    new SqlParameter("@PeriodFinish", periodFinish)
+                }).ToList();
 		}
 
 
 		// TODO Consider renaming this method since it's being used for upserts
-		public Adjustment AddTimesheetAdjustment(Adjustment adj)
+		public Adjustment AddTimesheetAdjustment(Adjustment adj, ClaimsPrincipal user)
 		{
+            adj.RequestedBy = _userService.GetUserInfo(user).AccountName;
+            adj.Requested = DateTime.Now;
+
 			_context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @RejectedBy, @Rejected, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
 				new [] {
 					// TODO Consider null coalescing date values also

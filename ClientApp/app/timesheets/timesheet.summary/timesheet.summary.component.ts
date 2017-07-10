@@ -93,5 +93,9 @@ export class TimesheetSummaryComponent implements OnInit {
 	showReview() {
 		this.showSummary = false;
 		this.router.navigate([{outlets: { detail: ['review', this.team.teamCode]}}]);
-	}
+    }
+
+    public additionalHours(sum: Summary): number {
+        return sum.actualMins - sum.monthlyContractMins < 0 ? 0 : sum.actualMins - sum.monthlyContractMins;
+    }
 }

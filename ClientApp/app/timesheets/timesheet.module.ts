@@ -11,11 +11,12 @@ import { TimesheetManagerComponent } from './timesheet.manager/timesheet.manager
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
 import { TimesheetProvider } from './timesheet.provider';
+import { UserProvider } from "../user.provider";
 
 @NgModule({
 	imports: [CommonModule, TimesheetRoutingModule],
 	declarations: [BookingCardComponent, BookingDetailComponent, TimesheetSummaryComponent, TimesheetAdjustmentComponent,
 		TimesheetManagerComponent, TimesheetViewerComponent],
-	providers: [TimesheetProvider]
+	providers: [TimesheetProvider, UserProvider]
 })
 export class TimesheetModule {}

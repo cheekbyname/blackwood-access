@@ -60,7 +60,19 @@ export class TimesheetReviewComponent implements OnInit {
     handleChanges(ts: Timesheet) {
         ts.adjustments.forEach(adjust => {
             var idx = this.adjustments.findIndex(adj => adj.guid == adjust.guid);
+            // Push any newly added adjustment
+            if (idx == -1) this.adjustments.push(adjust);
             this.adjustments[idx] = adjust;
         });
+        // Check back the other way for any removed adjustments
+        this.adjustments.forEach(adjust => {
+            var idx = ts.adjustments.findIndex(adj => adj.guid == adjust.guid);
+            if (idx == -1) this.adjustments.splice(this.adjustments.indexOf(adjust), 1);
+        });
+    }
+
+    public authInfo(adjust: Adjustment): string {
+        return adjust.authorisedBy ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.timePro.displayDate(adjust.authorised || adjust.rejected)}`
+            : 'Pending';
     }
 }

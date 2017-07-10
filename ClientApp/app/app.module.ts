@@ -26,6 +26,7 @@ import { TimesheetReviewComponent } from "./timesheets/timesheet.review/timeshee
 import { InitialAssessProvider } from './careassessments/initialassess.provider';
 /* To be removed */
 import { TimesheetProvider } from './timesheets/timesheet.provider';
+import { UserProvider } from "./user.provider";
 
 import { AdjustmentOffsetFilter } from './models/adjustment';
 import { ShiftOffsetFilter } from './models/shift';
@@ -46,6 +47,6 @@ import { ShiftOffsetFilter } from './models/shift';
         /* Consider moving into timesheet module */
         CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule
     ],
-    providers: [ TimesheetProvider /* To be removed */, InitialAssessProvider, ConfirmationService ]
+    providers: [ TimesheetProvider /* To be removed */, InitialAssessProvider, ConfirmationService, UserProvider ]
 })
 export class AppModule {}

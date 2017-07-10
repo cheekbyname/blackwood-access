@@ -35,11 +35,11 @@
 						<th class="col-md-1">Contact Hours</th>
 						<th class="col-md-1">Actual Hours</th>
 						<th class="col-md-1">Additional Hours</th>
-						<th class="col-md-1">Utilisation</th>
+						<th class="col-md-1">Unpaid Hours</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="row" *ngFor="let sum of summaries" (click)="selectCarer(sum)">
+					<tr class="row" *ngFor="let sum of summaries" (click)="selectCarer(sum)" [ngClass]="{'add-hours-highlight' : additionalHours(sum) > 0}">
 						<td>{{sum.forename}} {{sum.surname}}</td>
 						<td>{{displayTime(sum.monthlyContractMins-sum.actualMins < 0 ? 0 : sum.monthlyContractMins-sum.actualMins)}}</td>
 						<td>{{displayTime(sum.superTrainMins)}}</td>
@@ -47,8 +47,8 @@
 						<td>{{displayTime(sum.monthlyContractMins)}}</td>
 						<td>{{displayTime(sum.contactTimeMins)}}</td>
 						<td>{{displayTime(sum.actualMins)}}</td>
-						<td>{{displayTime(sum.actualMins-sum.monthlyContractMins < 0 ? 0 : sum.actualMins-sum.monthlyContractMins)}}
-						<td>{{displayPercent(sum.contactTimeMins, sum.monthlyContractMins)}}
+						<td>{{displayTime(additionalHours(sum))}}
+						<td>{{displayTime(sum.unpaidMins)}}
 					</tr>
 				</tbody>
 			</table>

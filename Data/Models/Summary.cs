@@ -21,5 +21,6 @@ namespace Blackwood.Access.Models
 		public int ActualMins { get; set; }
 		public int TotalMins { get; set; }
 		public int AvailMins { get; set; }
+        public int UnpaidMins { get; set; }
 	}
 }

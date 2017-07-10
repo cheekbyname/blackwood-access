@@ -53,3 +53,8 @@ p-calendar > span.ui-calendar > input {
     display: inline-block;
     text-align: right;
 }
+
+tr.add-hours-highlight > td {
+    color:green;
+    font-weight: bold;
+}

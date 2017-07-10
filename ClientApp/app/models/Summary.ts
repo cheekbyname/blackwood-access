@@ -14,5 +14,6 @@ export class Summary {
 	public contactTimeMins: number;
 	public actualMins: number;
 	public totalMins: number;
-	public availMins: number;
+    public availMins: number;
+    public unpaidMins: number;
 }

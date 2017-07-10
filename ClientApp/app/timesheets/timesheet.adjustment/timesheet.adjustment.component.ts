@@ -9,6 +9,7 @@ import { Adjustment } from '../../models/adjustment';
 import { Locale, LOC_EN } from '../../models/locale';
 
 import { TimesheetProvider } from '../timesheet.provider';
+import { UserProvider } from '../../user.provider';
 
 @Component({
     selector: 'timesheet-adjustment',
@@ -18,7 +19,8 @@ import { TimesheetProvider } from '../timesheet.provider';
 })
 export class TimesheetAdjustmentComponent {
 
-    constructor(public timePro: TimesheetProvider, private http: Http, private conServ: ConfirmationService) {
+    constructor(public timePro: TimesheetProvider, private http: Http, private conServ: ConfirmationService,
+        private userPro: UserProvider) {
 
     }
 
@@ -70,6 +72,7 @@ export class TimesheetAdjustmentComponent {
 
 	public removeAdjust(adjust: Adjustment) {
 		// TODO Move API call onto Provider
+        // TODO Guard on what condition?
 		this.conServ.confirm({
 			message: 'Are you sure you want to remove this adjustment?',
 			accept: () => {
@@ -94,6 +97,7 @@ export class TimesheetAdjustmentComponent {
 
 	putAdjustment(oldAdj: Adjustment) {
 		// TODO Move this onto Provider
+        // TODO Guard on what condition?
 		var tsUrl = '/api/timesheet/AddTimesheetAdjustment';
 		this.http.put(tsUrl, oldAdj).subscribe((res) => {
 			// The (potentially updated) Adjustment returned by the API
@@ -105,7 +109,8 @@ export class TimesheetAdjustmentComponent {
 		});
 	}
 
-	public addAdjust() {
+    public addAdjust() {
+        // TODO Guard on what condition?
 		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
 		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
 		this.timesheet.adjustments.push(newAdj);
@@ -119,12 +124,20 @@ export class TimesheetAdjustmentComponent {
 		if (this.isValid(form)) this.dayOffset++;
 	}
 
-	public approve(adjust: Adjustment) {
-		this.timePro.approveAdjustment(adjust);
+    public approve(adjust: Adjustment) {
+        if (this.userPro.userInfo.canAuthoriseAdjustments) {
+            this.timePro.approveAdjustment(adjust);
+        } else {
+            alert("You are not authorised to approve timesheet adjustments");
+        }
 	}
 
-	public reject(adjust: Adjustment) {
-		this.timePro.rejectAdjustment(adjust);
+    public reject(adjust: Adjustment) {
+        if (this.userPro.userInfo.canRejectAdjustments) {
+            this.timePro.rejectAdjustment(adjust);
+        } else {
+            alert("You are not authorised to reject timesheet adjustments");
+        }
 	}
 
 	public isValid(form: NgForm): boolean {
