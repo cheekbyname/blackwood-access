@@ -44,9 +44,17 @@ export class TimesheetProvider implements OnInit {
 	public unpaidCodes: number [] = [123, 110, 98];
 
     constructor(public http: Http) {
-        this.selectedTeam$.subscribe((tm) => {
-            if (tm != undefined) this.getCarers(tm);
-        });
+        // this.selectedTeam$.subscribe((tm) => {
+        //     if (tm != undefined) this.getCarers(tm);
+        // });
+
+        Observable.combineLatest(this.weekCommencing$, this.selectedTeam$,
+            (wc, tm) => { return { "weekCommencing": wc, "selectedTeam": tm}})
+            .subscribe(x => {
+                if (x.selectedTeam.teamCode && x.weekCommencing) {
+                    this.getCarers(x.selectedTeam, x.weekCommencing);
+                }
+            });
 
         Observable.combineLatest(this.weekCommencing$, this.selectedCarer$,
             (wc, carer) => { return { "weekCommencing": wc, "carer": carer }})
@@ -116,16 +124,14 @@ export class TimesheetProvider implements OnInit {
         });
     }
 
-    getCarers(tm: Team) {
-        if (tm.teamCode) {
-            var tsUrl = `/api/timesheet/carersbyteam?teamCode=${tm.teamCode}`;
-            console.log(tsUrl);
-            this.http.get(tsUrl).subscribe(res => {
-                var carers = res.json() as Carer[];
-                this._selectedCarer.next(null);
-                this._carers.next(carers);
-            });
-        }
+    getCarers(tm: Team, wc: Date) {
+        var tsUrl = `/api/timesheet/carersbyteam?teamCode=${tm.teamCode}&periodStart=${this.sqlDate(wc)}`;
+        console.log(tsUrl);
+        this.http.get(tsUrl).subscribe(res => {
+            var carers = res.json() as Carer[];
+            this._selectedCarer.next(null);
+            this._carers.next(carers);
+        });
     }
 
 	getTimesheet(carer: Carer, weekCommencing: Date): void {

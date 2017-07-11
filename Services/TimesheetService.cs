@@ -26,17 +26,19 @@ namespace Blackwood.Access.Services
 		public IEnumerable<Team> GetTeams()
 		{
             return _context.Set<Team>().FromSql("GetTeams").OrderBy(t => t.TeamDesc).ToList();
-			//return _context.Teams.OrderBy(c => c.TeamDesc).ToList();
 		}
+
         public IEnumerable<Carer> GetCarers()
         {
 			return _context.Carers.OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
         }
 
-		public IEnumerable<Carer> GetCarersByTeam(int TeamCode)
+		public IEnumerable<Carer> GetCarersByTeam(int TeamCode, DateTime? periodStart)
 		{
-			return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode", new SqlParameter("@TeamCode", TeamCode)).ToList()
-				.OrderBy(c => c.Forename).ThenBy(c => c.Surname);
+			return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode, @PeriodStart", parameters: new [] {
+				new SqlParameter("@TeamCode", TeamCode),
+				new SqlParameter() { ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value }
+			}).ToList().OrderBy(c => c.Forename).ThenBy(c => c.Surname);
 		}
 
         public Timesheet GetTimesheet(int carerCode, DateTime weekCommencing)
@@ -77,18 +79,11 @@ namespace Blackwood.Access.Services
 
             // Adjustments
             ts.Adjustments = GetTimesheetAdjustments(carerCode, weekCommencing, weekCommencing.AddDays(6)).ToList();
-			//ts.Adjustments = _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
-			//	parameters: new [] {
-			//		new SqlParameter("@CarerCode", carerCode),
-			//		new SqlParameter("@PeriodStart", weekCommencing),
-			//		new SqlParameter("@PeriodFinish", weekCommencing.AddDays(6))
-			//		})
-			//	.ToList();
 
 			// Transform Bookings -> Shifts
 			ts.Shifts = BookingsToShifts(weekCommencing, weekCommencing.AddDays(6), ts.Bookings, ts.CarerCode);
 
-			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture
+			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture?
 
             return ts;
         }

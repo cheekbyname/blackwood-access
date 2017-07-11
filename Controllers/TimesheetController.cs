@@ -23,15 +23,9 @@ namespace Blackwood.Access.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IEnumerable<Carer> Carers()
+		public IEnumerable<Carer> CarersByTeam(int TeamCode, DateTime periodStart)
 		{
-			return _service.GetCarers();
-		}
-
-		[HttpGet("[action]")]
-		public IEnumerable<Carer> CarersByTeam(int TeamCode)
-		{
-            return _service.GetCarersByTeam(TeamCode);
+            return _service.GetCarersByTeam(TeamCode, periodStart);
 		}
 
 		[HttpGet("[action]")]
