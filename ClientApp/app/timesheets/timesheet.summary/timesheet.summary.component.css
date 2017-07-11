@@ -27,11 +27,11 @@ h4, label, select, td, th {
     border-color: black;
 }
 
-table tr {
+table tbody tr {
     cursor: pointer;
 }
 
-table tr:hover {
+table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
 }
 
@@ -57,4 +57,14 @@ p-calendar > span.ui-calendar > input {
 tr.add-hours-highlight > td {
     color:green;
     font-weight: bold;
+}
+
+span.contract-status {
+    font-size: 14pt;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+thead > tr:first-child() {
+    margin-left: 8px;
 }

@@ -19,7 +19,16 @@ namespace Blackwood.Access.Controllers
         [HttpGet("[action]")]
         public AccessUser GetUserInfo()
         {
-            return _service.GetUserInfo(this.HttpContext.User);
+            try
+            {
+                return _service.GetUserInfo(HttpContext.User);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+                return _service.GetInvalidUser();
+            }
+            
         }
     }
 }

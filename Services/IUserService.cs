@@ -7,5 +7,6 @@ namespace Blackwood.Access.Services
     public interface IUserService
     {
         AccessUser GetUserInfo(ClaimsPrincipal user);
+        AccessUser GetInvalidUser();
     }
 }

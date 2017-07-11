@@ -14,9 +14,22 @@ namespace Blackwood.Access.Services
             _context = context;
         }
 
+        public AccessUser GetInvalidUser()
+        {
+             return new AccessUser()
+                {
+                    DomainUsername = "M_BLACKWOOD\\Domain Users",
+                    AccountName = "Unknown",
+                    CanAuthoriseAdjustments = false,
+                    CanRejectAdjustments = false,
+                    DefaultTeamCode = 0
+                };
+       }
+
         public AccessUser GetUserInfo(ClaimsPrincipal user)
         {
             AccessUser accessUser = _context.AccessUsers.FirstOrDefault(u => u.DomainUsername == user.Identity.Name);
+
             if (accessUser == null)
             {
                 accessUser = new AccessUser()

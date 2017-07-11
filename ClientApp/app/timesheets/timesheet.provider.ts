@@ -1,6 +1,6 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
-import { BehaviorSubject, Observable } from 'rxjs/Rx';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
 
 import { Adjustment } from "../models/adjustment";
 import { Carer } from '../models/carer';
@@ -24,16 +24,20 @@ export class TimesheetProvider implements OnInit {
     private _timesheet = new BehaviorSubject<Timesheet>(null);
     private _summaries = new BehaviorSubject<Summary[]>(null);
 
-    weekCommencing$ = this._weekCommencing.asObservable();
-    periodStart$ = this._periodStart.asObservable();
-    periodFinish$ = this._periodFinish.asObservable();
-    selectedTeam$ = this._selectedTeam.asObservable();
-    selectedCarer$ = this._selectedCarer.asObservable();
+    weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
+    periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
+    periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
+    selectedTeam$ = this._selectedTeam.asObservable().distinctUntilChanged();
+    selectedCarer$ = this._selectedCarer.asObservable().distinctUntilChanged();
+
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
     adjustments$ = this._adjustments.asObservable();
     timesheet$ = this._timesheet.asObservable();
     summaries$ = this._summaries.asObservable();
+
+    paramObserver$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
+    paramSub: Subscription;
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
@@ -44,33 +48,31 @@ export class TimesheetProvider implements OnInit {
             if (tm != undefined) this.getCarers(tm);
         });
 
-        Observable.combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$,
-            (team, start, finish) => { return { "team": team, "start": start, "finish": finish }})
-            .subscribe(x => {
-                if (x.start != null && x.finish != null) {
-                    this._adjustments.next(undefined);
-                    this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
-                }
-            });
-
         Observable.combineLatest(this.weekCommencing$, this.selectedCarer$,
             (wc, carer) => { return { "weekCommencing": wc, "carer": carer }})
             .subscribe(x => {
+                this._timesheet.next(null);
                 this.getTimesheet(x.carer, x.weekCommencing);
             });
         
-        Observable.combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$,
-            (team, start, finish) => { return { "team": team, "start": start, "finish": finish }})
-            .subscribe(x => {
-                if (x.start != null && x.finish != null) {
-                    this._summaries.next(null);
-                    this.getSummaries(x.team, x.start, x.finish);
-                }
-            });
+        this.paramObserver$ = Observable.combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$,
+            (team, start, finish) => { return { "team": team, "start": start, "finish": finish }});
+        
+        this.paramSub = this.paramObserver$.subscribe(x => this.handleParams(x));
     }
 
     ngOnInit() {
         this.getTeams();
+    }
+
+    handleParams(x) {
+        if (x.start != null && x.finish != null && x.finish > x.start && x.team.teamCode) {
+            this._summaries.next(null);
+            this._adjustments.next(undefined);
+            // TODO Async plx
+            this.getSummaries(x.team, x.start, x.finish);
+            this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
+        }
     }
 
     selectWeekCommencing(dt: Date) {
@@ -96,31 +98,40 @@ export class TimesheetProvider implements OnInit {
 	setPeriod(dt: Date) {
 		// Get first and last of month from a selected date
 		var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
-		this.setPeriodStart(start);
 		var finish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
+
+        this.paramSub.unsubscribe();
+
 		this.setPeriodFinish(finish);
+		this.setPeriodStart(start);
+
+        this.paramSub = this.paramObserver$.subscribe(x => this.handleParams(x));
 	}
 
     getTeams() {
         var teams: Team[];
-        this.http.get('api/timesheet/teams').subscribe(res => {
+        this.http.get('/api/timesheet/teams').subscribe(res => {
             var teams = res.json();
             this._teams.next(teams);
         });
     }
 
     getCarers(tm: Team) {
-        var tsUrl = `/api/timesheet/carersbyteam?teamCode=${tm.teamCode}`;
-        this.http.get(tsUrl).subscribe(res => {
-            var carers = res.json() as Carer[];
-            this._selectedCarer.next(null);
-            this._carers.next(carers);
-        });
+        if (tm.teamCode) {
+            var tsUrl = `/api/timesheet/carersbyteam?teamCode=${tm.teamCode}`;
+            console.log(tsUrl);
+            this.http.get(tsUrl).subscribe(res => {
+                var carers = res.json() as Carer[];
+                this._selectedCarer.next(null);
+                this._carers.next(carers);
+            });
+        }
     }
 
 	getTimesheet(carer: Carer, weekCommencing: Date): void {
         if (carer != undefined && weekCommencing != undefined) {
             var tsUrl = `/api/timesheet/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
+            console.log(tsUrl);
             this.http.get(tsUrl).subscribe(res => {
                 this._timesheet.next(res.json() as Timesheet);
             });
@@ -128,7 +139,8 @@ export class TimesheetProvider implements OnInit {
 	}
 
     getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
-        var tsUrl = `api/timesheet/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
+        var tsUrl = `/api/timesheet/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
+        console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             var adjusts = res.json() as Adjustment[];
             this._adjustments.next(adjusts);
@@ -137,7 +149,8 @@ export class TimesheetProvider implements OnInit {
 
 	getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
 		if (periodStart != undefined && periodFinish != undefined) {
-            var tsUrl = `api/timesheet/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
+            var tsUrl = `/api/timesheet/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
+            console.log(tsUrl);
 			this.http.get(tsUrl).subscribe( res => {
                 this._summaries.next(res.json() as Summary[]);
 			});
