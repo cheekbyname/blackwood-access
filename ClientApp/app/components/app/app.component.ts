@@ -7,7 +7,7 @@ import { UserProvider } from "../../user.provider";
 @Component({
     selector: 'app',
     template: require('./app.component.html'),
-    styles: [require('./app.component.css')],
+    styles: [require('./app.component.css'), require('../../assets/century-gothic.css')],
     providers: [ InitialAssessProvider, TimesheetProvider, UserProvider]
 })
 export class AppComponent {

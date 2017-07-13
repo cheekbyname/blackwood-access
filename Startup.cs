@@ -29,13 +29,13 @@ namespace Blackwood.Access
 
             services.AddDbContext<AccessContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Integration")));
             
-            // Add framework services.
-            services.AddMvc();
-
             services.Configure<IISOptions>(options =>
             {
                 options.ForwardWindowsAuthentication = true;
             });
+
+            // Add framework services.
+            services.AddMvc();
 
             // Add Application services
             services.AddTransient<ITimesheetService, TimesheetService>();

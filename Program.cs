@@ -17,6 +17,7 @@ namespace Blackwood.Access
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://localhost:5005/")
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
