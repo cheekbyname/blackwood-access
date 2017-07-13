@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
         <router-outlet name="timesheet"></router-outlet>
     `
 })
-export class TimesheetsComponent {
+export class PayrollComponent {
 
 }

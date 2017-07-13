@@ -11,7 +11,7 @@ import { Team } from '../models/team';
 import { Timesheet } from '../models/timesheet';
 
 @Injectable()
-export class TimesheetProvider implements OnInit {
+export class PayrollProvider implements OnInit {
 
     private _weekCommencing = new BehaviorSubject<Date>(new Date());
     private _periodStart = new BehaviorSubject<Date>(null);

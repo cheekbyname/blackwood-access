@@ -7,15 +7,15 @@ import { Adjustment } from "../../models/adjustment";
 import { Carer } from "../../models/carer";
 import { Team } from "../../models/team";
 import { Timesheet } from "../../models/timesheet";
-import { TimesheetProvider } from "../timesheet.provider";
+import { PayrollProvider } from "../payroll.provider";
 import { TimesheetAdjustmentComponent } from "../timesheet.adjustment/timesheet.adjustment.component";
 
 @Component({
-    selector: 'timesheet-review',
-    template: require('./timesheet.review.component.html'),
-    styles: [require('./timesheet.review.component.css')]
+    selector: 'payroll-review',
+    template: require('./payroll.review.component.html'),
+    styles: [require('./payroll.review.component.css')]
 })
-export class TimesheetReviewComponent implements OnInit {
+export class PayrollReviewComponent implements OnInit {
 
     public adjustments: Adjustment[];
     public carers: Carer[];
@@ -26,14 +26,14 @@ export class TimesheetReviewComponent implements OnInit {
     public dayOffset: number;
     public weekCommencing: Date;
 
-    constructor(private timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) { }
+    constructor(private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         // Sub to provider data
-        this.timePro.carers$.subscribe(carers => this.carers = carers);
-        this.timePro.adjustments$.subscribe(adjusts => this.adjustments = adjusts);
-        this.timePro.timesheet$.subscribe(ts => this.timesheet = ts);
-        this.timePro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
+        this.payPro.carers$.subscribe(carers => this.carers = carers);
+        this.payPro.adjustments$.subscribe(adjusts => this.adjustments = adjusts);
+        this.payPro.timesheet$.subscribe(ts => this.timesheet = ts);
+        this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
     }
 
     carerForAdjust(adjust: Adjustment): Carer {
@@ -51,8 +51,8 @@ export class TimesheetReviewComponent implements OnInit {
     }
 
     showAdjust(adjust: Adjustment) {
-        this.timePro.selectCarer(this.carerForAdjust(adjust));
-        this.timePro.selectWeekCommencing(new Date(adjust.weekCommencing));     // TODO Not a date? Why not?
+        this.payPro.selectCarer(this.carerForAdjust(adjust));
+        this.payPro.selectWeekCommencing(new Date(adjust.weekCommencing));     // TODO Not a date? Why not?
         this.dayOffset = adjust.dayOffset;
         this.adjustVisible = true;
     }
@@ -72,7 +72,7 @@ export class TimesheetReviewComponent implements OnInit {
     }
 
     public authInfo(adjust: Adjustment): string {
-        return adjust.authorisedBy ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.timePro.displayDate(adjust.authorised || adjust.rejected)}`
+        return adjust.authorisedBy ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.payPro.displayDate(adjust.authorised || adjust.rejected)}`
             : 'Pending';
     }
 }

@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TimesheetManagerComponent } from './timesheet.manager/timesheet.manager.component';
-import { TimesheetSummaryComponent } from './timesheet.summary/timesheet.summary.component';
+import { PayrollManagerComponent } from './payroll.manager/payroll.manager.component';
+import { PayrollSummaryComponent } from './payroll.summary/payroll.summary.component';
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
 const TIMESHEETROUTES: Routes = [
     {
         path: '',
-        component: TimesheetManagerComponent
+        component: PayrollManagerComponent
     },
     {
         path: 'summary/:teamCode/:periodStart/:periodFinish',
-        component: TimesheetSummaryComponent, outlet: 'summary'
+        component: PayrollSummaryComponent, outlet: 'summary'
     },
     {
         path: 'timesheet/:carerCode/:weekCommencing',
@@ -25,4 +25,4 @@ const TIMESHEETROUTES: Routes = [
     imports: [ RouterModule.forChild(TIMESHEETROUTES) ],
     exports: [ RouterModule ]
 })
-export class TimesheetRoutingModule { }
+export class PayrollRoutingModule { }

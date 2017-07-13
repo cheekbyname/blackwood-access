@@ -3,14 +3,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 
 import { Team } from '../../models/team';
-import { TimesheetProvider } from '../timesheet.provider';
+import { PayrollProvider } from '../payroll.provider';
 
 @Component({
-    selector: 'timesheet-manager',
-    template: require('./timesheet.manager.component.html'),
-    styles: [ require('./timesheet.manager.component.css')]
+    selector: 'payroll-manager',
+    template: require('./payroll.manager.component.html'),
+    styles: [ require('./payroll.manager.component.css')]
 })
-export class TimesheetManagerComponent implements OnInit {
+export class PayrollManagerComponent implements OnInit {
 
     public teams: Team[];
     
@@ -18,9 +18,9 @@ export class TimesheetManagerComponent implements OnInit {
 
     ngOnInit() {
         // Init Team list in TimesheetService TODO Check why this is necessary
-        this.timePro.getTeams();
+        this.payPro.getTeams();
 
-        this.timePro.teams$.subscribe(teams => {
+        this.payPro.teams$.subscribe(teams => {
             if (teams != null) {
                 this.teams = teams;
                 this.route.params.subscribe(params => {
@@ -35,15 +35,15 @@ export class TimesheetManagerComponent implements OnInit {
     get selectedTeam() { return this._selectedTeam }
     set selectedTeam(team: Team ) {
         this._selectedTeam = team;
-        this.timePro.selectTeam(team);
+        this.payPro.selectTeam(team);
 
         // Navigate to aux route for summary
         this.router.navigate([{ outlets: { 'detail': null }}]).then((q) => {
-            this.router.navigate(['timesheet-manager', this.selectedTeam.teamCode]).then((p) => {
+            this.router.navigate(['payroll-manager', this.selectedTeam.teamCode]).then((p) => {
                 this.router.navigate([{outlets: { 'summary': ['summary', this.selectedTeam.teamCode] }}]);
             });
         });
     }
 
-    constructor(public timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) { }
+    constructor(public payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) { }
 }

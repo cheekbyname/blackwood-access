@@ -6,34 +6,34 @@ import { Team } from '../../models/team';
 import { Summary } from '../../models/summary';
 import { Locale, LOC_EN} from '../../models/locale';
 
-import { TimesheetProvider } from '../timesheet.provider';
+import { PayrollProvider } from '../payroll.provider';
 
 @Component({
 	selector: 'team-summary',
-	template: require('./timesheet.summary.component.html'),
-	styles: [require('./timesheet.summary.component.css')]
+	template: require('./payroll.summary.component.html'),
+	styles: [require('./payroll.summary.component.css')]
 })
-export class TimesheetSummaryComponent implements OnInit {
+export class PayrollSummaryComponent implements OnInit {
 
 	ngOnInit() {
 		this.route.params.subscribe((p) => {
 			if (p['teamCode'] != undefined) {
-				this.timePro.teams$.subscribe((teams) => {
+				this.payPro.teams$.subscribe((teams) => {
 					if (teams != null) {
 						var team = teams.find(t => t.teamCode == p['teamCode']);
 						this.team = team;
-						this.timePro.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
+						this.payPro.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
 					}
 				});
 			}
 		});
-		this.timePro.periodStart$.subscribe(start => this.periodStart = start);
-		this.timePro.periodFinish$.subscribe(finish => this.periodFinish = finish);
-		this.timePro.summaries$.subscribe(sums => this.summaries = sums);
+		this.payPro.periodStart$.subscribe(start => this.periodStart = start);
+		this.payPro.periodFinish$.subscribe(finish => this.periodFinish = finish);
+		this.payPro.summaries$.subscribe(sums => this.summaries = sums);
 	}
 
-	constructor(private http: Http, private timePro: TimesheetProvider, private router: Router, private route: ActivatedRoute) {
-		this.timePro.setPeriod(new Date(Date.now()));
+	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) {
+		this.payPro.setPeriod(new Date(Date.now()));
 	}
 
 	loc: Locale = LOC_EN;
@@ -55,11 +55,11 @@ export class TimesheetSummaryComponent implements OnInit {
 	@Output() onSelectedCarer = new EventEmitter<number>();
 
 	periodStartSelected(ev: Event) {
-		this.timePro.setPeriodStart(this.periodStart);
+		this.payPro.setPeriodStart(this.periodStart);
 	}
 
 	periodFinishSelected(ev: Event) {
-		this.timePro.setPeriodFinish(this.periodFinish);
+		this.payPro.setPeriodFinish(this.periodFinish);
 	}
 
 	public displayTime(mins: number): string {

@@ -17,7 +17,7 @@ import { Shift } from '../../models/shift';
 import { Adjustment, AdjustmentOffsetFilter } from '../../models/adjustment';
 import { Team } from '../../models/team';
 
-import { TimesheetProvider } from '../timesheet.provider';
+import { PayrollProvider } from '../payroll.provider';
 
 type BookingGrid = Array<Array<CarerBooking>>;
 
@@ -28,7 +28,7 @@ type BookingGrid = Array<Array<CarerBooking>>;
 })
 export class TimesheetViewerComponent implements OnInit {
 
-	constructor(private http: Http, private timePro: TimesheetProvider, private router: Router,
+	constructor(private http: Http, private payPro: PayrollProvider, private router: Router,
 		private route: ActivatedRoute) {
 
 	}
@@ -37,16 +37,16 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = this.emptyBook();
 		this.route.params.subscribe((p) => {
 			if (p['carerCode'] != undefined) {
-				this.timePro.carers$.subscribe((carers) => {
+				this.payPro.carers$.subscribe((carers) => {
 					this.carers = carers;
 					if (carers != null) this.carer = carers.find(carer => carer.carerCode == p['carerCode']);
 				});
 			}
 		});
-		this.timePro.weekCommencing$.subscribe((wc) => {
+		this.payPro.weekCommencing$.subscribe((wc) => {
 			this.weekCommencing = wc;
 		});
-		this.timePro.timesheet$.subscribe((ts) => {
+		this.payPro.timesheet$.subscribe((ts) => {
 			if (ts != null) this.processTimesheet(ts);
 		})
 	}
@@ -70,19 +70,19 @@ export class TimesheetViewerComponent implements OnInit {
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
 		this._weekCommencing = weekCommencing;
-		if (this.carer != undefined) this.timePro.getTimesheet(this.carer, this.weekCommencing);
+		if (this.carer != undefined) this.payPro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get weekCommencing() { return this._weekCommencing }
 
 	@Input()
 	set carer(carer: Carer) {
 		this._carer = carer;
-		if (this.weekCommencing != undefined) this.timePro.getTimesheet(this.carer, this.weekCommencing);
+		if (this.weekCommencing != undefined) this.payPro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get carer() { return this._carer }
 
 	selectWeekCommencing(ev: Event) {
-		this.timePro.selectWeekCommencing(this.weekCommencing);
+		this.payPro.selectWeekCommencing(this.weekCommencing);
 	}
 
 	processTimesheet(ts: Timesheet): void {
@@ -151,7 +151,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookedHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
 			.filter(bk => bk.contractCode === contractCode)
-			.filter(bk => !(this.timePro.absenceCodes.concat(this.timePro.unpaidCodes)).some(uc => uc === bk.bookingType))
+			.filter(bk => !(this.payPro.absenceCodes.concat(this.payPro.unpaidCodes)).some(uc => uc === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -180,14 +180,14 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public leaveSickHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
-			.filter(bk => bk.contractCode === contractCode && (this.timePro.absenceCodes).some(ac => ac === bk.bookingType))
+			.filter(bk => bk.contractCode === contractCode && (this.payPro.absenceCodes).some(ac => ac === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
-		if (this.timePro.absenceCodes.concat(this.timePro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
+		if (this.payPro.absenceCodes.concat(this.payPro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		//return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
 		return shiftColors[bk.shift - 1];
 	}

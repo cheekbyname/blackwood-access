@@ -4,7 +4,7 @@
     <p-header>
         <div class="header-row">
             <button class="btn btn-primary pull-left" (click)="prevDay(thisForm)" [disabled]="dayOffset==0">Previous</button>
-            <span class="text-center header-text">Hours for {{loc.dayOrder[dayOffset]}} {{timePro.dateOrd(weekCommencing, dayOffset)}} {{timePro.monthOf(weekCommencing, dayOffset)}}</span>
+            <span class="text-center header-text">Hours for {{loc.dayOrder[dayOffset]}} {{payPro.dateOrd(weekCommencing, dayOffset)}} {{payPro.monthOf(weekCommencing, dayOffset)}}</span>
             <button class="btn btn-primary pull-right" (click)="nextDay(thisForm)" [disabled]="dayOffset==6">Next</button>
         </div>
     </p-header>
@@ -20,18 +20,18 @@
             </thead>
             <tbody>
                 <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
-                    <td>{{timePro.teamForContract(shift.contractCode, timesheet.contracts)}}</td>
-                    <td>{{timePro.timeFromDate(shift.start)}}</td>
-                    <td>{{timePro.timeFromDate(shift.finish)}}</td>
-                    <td>{{timePro.displayTime(shift.shiftMins + shift.unpaidMins)}}</td>
-                    <td>{{timePro.displayTime(shift.unpaidMins)}}</td>
-                    <td>{{timePro.displayTime(shift.shiftMins)}}</td>
+                    <td>{{payPro.teamForContract(shift.contractCode, timesheet.contracts)}}</td>
+                    <td>{{payPro.timeFromDate(shift.start)}}</td>
+                    <td>{{payPro.timeFromDate(shift.finish)}}</td>
+                    <td>{{payPro.displayTime(shift.shiftMins + shift.unpaidMins)}}</td>
+                    <td>{{payPro.displayTime(shift.unpaidMins)}}</td>
+                    <td>{{payPro.displayTime(shift.shiftMins)}}</td>
                 </tr>
                 <tr class="row">
                     <td colspan="3"><strong>Shift Totals</strong></td>
-                    <td>{{timePro.displayTime(totalUnpaidHoursForDay(dayOffset) + totalActualHoursForDay(dayOffset))}}</td>
-                    <td>{{timePro.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
-                    <td>{{timePro.displayTime(totalActualHoursForDay(dayOffset))}}</td>
+                    <td>{{payPro.displayTime(totalUnpaidHoursForDay(dayOffset) + totalActualHoursForDay(dayOffset))}}</td>
+                    <td>{{payPro.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
+                    <td>{{payPro.displayTime(totalActualHoursForDay(dayOffset))}}</td>
                 </tr>
             </tbody>
         </table>
@@ -73,11 +73,11 @@
                 </tr>
                 <tr *ngIf="minsForAdjustments()" class="row">
                     <td colspan="4"><strong>Adjustment Totals</strong></td>
-                    <td><strong>{{timePro.displayTime(minsForAdjustments())}}</strong></td>
+                    <td><strong>{{payPro.displayTime(minsForAdjustments())}}</strong></td>
                 </tr>
                 <tr *ngIf="minsForAdjustments()" class="row">
                     <td colspan="4"><strong>Daily Totals</strong></td>
-                    <td><strong>{{timePro.displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
+                    <td><strong>{{payPro.displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
                 </tr>
             </tbody>
         </table>

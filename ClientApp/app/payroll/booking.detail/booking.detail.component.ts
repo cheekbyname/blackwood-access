@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CarerBooking } from '../../models/booking';
 import { CarerContract } from '../../models/contract';
 
-import { TimesheetProvider } from '../timesheet.provider';
+import { PayrollProvider } from '../payroll.provider';
 
 @Component({
     selector: 'booking-detail',
@@ -11,7 +11,7 @@ import { TimesheetProvider } from '../timesheet.provider';
 })
 export class BookingDetailComponent {
 
-    constructor(public timePro: TimesheetProvider) {
+    constructor(public payPro: PayrollProvider) {
 
     }
 

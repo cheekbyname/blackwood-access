@@ -1,6 +1,6 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { TimesheetProvider } from '../../timesheets/timesheet.provider';
+import { PayrollProvider } from '../../payroll/payroll.provider';
 import { LOC_EN } from "../../models/locale";
 
 @Component({
@@ -14,9 +14,9 @@ export class NavMenuComponent implements OnInit {
     selectedDate: Date;
     showCalendar: boolean = false;
 
-    constructor(public timePro: TimesheetProvider, private router: Router) {
+    constructor(public payPro: PayrollProvider, private router: Router) {
         router.events.subscribe((ev) => {
-            this.showCalendar = ev.toString().includes("timesheet-manager");
+            this.showCalendar = ev.toString().includes("payroll-manager");
             if (ev.toString().includes("notfound")) {
                 this.router.navigate([{ outlets: [{'summary': [null]}, {'detail': [null]}]}]);
             }
@@ -24,14 +24,14 @@ export class NavMenuComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.timePro.selectWeekCommencing(new Date());
-        this.timePro.weekCommencing$.subscribe((wc) => {
+        this.payPro.selectWeekCommencing(new Date());
+        this.payPro.weekCommencing$.subscribe((wc) => {
             this.selectedDate = wc;
         });
     }
 
     dateSelected(ev: Event) {
-        this.timePro.selectWeekCommencing(this.selectedDate);
-        this.timePro.setPeriod(this.selectedDate);
+        this.payPro.selectWeekCommencing(this.selectedDate);
+        this.payPro.setPeriod(this.selectedDate);
     }
 }

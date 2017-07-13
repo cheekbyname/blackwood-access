@@ -37,12 +37,12 @@
 						<td>{{contract.payrollNumber}}</td>
 						<td>{{contract.teamDesc}}</td>
 						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- This is out by one on the first digit under certain circumstances -->
-						<td>{{timePro.displayTime(contract.contractMins)}}</td>
-						<td>{{timePro.displayTime(availHoursForContract(contract.contractCode))}}</td>
-						<td>{{timePro.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
-						<td>{{timePro.displayTime(actualHoursForContract(contract.contractCode))}}</td>
-						<td>{{timePro.displayTime(additionalHoursForContract(contract.contractCode))}}</td>
-						<td>{{timePro.displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
+						<td>{{payPro.displayTime(contract.contractMins)}}</td>
+						<td>{{payPro.displayTime(availHoursForContract(contract.contractCode))}}</td>
+						<td>{{payPro.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
+						<td>{{payPro.displayTime(actualHoursForContract(contract.contractCode))}}</td>
+						<td>{{payPro.displayTime(additionalHoursForContract(contract.contractCode))}}</td>
+						<td>{{payPro.displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -53,9 +53,9 @@
 				<thead>
 					<tr class="row">
 						<th *ngFor="let day of loc.dayOrder; let i = index" (click)="openAdjustments(i)"
-							[title]="'Click here to adjust hours for ' + day + ' ' + timePro.dateOrd(weekCommencing, i) + ' ' + timePro.monthOf(weekCommencing, i)">
-							<span>{{day}} {{timePro.dateOrd(weekCommencing, i)}}</span><br/>
-							<span>{{timePro.displayTime(actualHoursForDay(i))}}</span>
+							[title]="'Click here to adjust hours for ' + day + ' ' + payPro.dateOrd(weekCommencing, i) + ' ' + payPro.monthOf(weekCommencing, i)">
+							<span>{{day}} {{payPro.dateOrd(weekCommencing, i)}}</span><br/>
+							<span>{{payPro.displayTime(actualHoursForDay(i))}}</span>
 							<span *ngIf="minsAdjustOffset(i) != 0" title="There are adjustments for this day"
 								class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
 						</th>

@@ -15,18 +15,19 @@ import { InitialAssessManagerComponent } from './careassessments/initialassessma
 import { InitialAssessComponent } from './careassessments/initialassess/initialassess.component';
 
 /* To be removed */
-import { TimesheetManagerComponent } from './timesheets/timesheet.manager/timesheet.manager.component';
-import { TimesheetViewerComponent } from './timesheets/timesheet.viewer/timesheet.viewer.component';
-import { TimesheetSummaryComponent } from './timesheets/timesheet.summary/timesheet.summary.component';
-import { BookingCardComponent } from './timesheets/booking.card/booking.card';
-import { BookingDetailComponent } from './timesheets/booking.detail/booking.detail.component';
-import { TimesheetAdjustmentComponent } from './timesheets/timesheet.adjustment/timesheet.adjustment.component';
-import { TimesheetReviewComponent } from "./timesheets/timesheet.review/timesheet.review.component";
+import { PayrollManagerComponent } from './payroll/payroll.manager/payroll.manager.component';
+import { TimesheetViewerComponent } from './payroll/timesheet.viewer/timesheet.viewer.component';
+import { PayrollSummaryComponent } from './payroll/payroll.summary/payroll.summary.component';
+import { BookingCardComponent } from './payroll/booking.card/booking.card';
+import { BookingDetailComponent } from './payroll/booking.detail/booking.detail.component';
+import { TimesheetAdjustmentComponent } from './payroll/timesheet.adjustment/timesheet.adjustment.component';
+import { PayrollReviewComponent } from "./payroll/payroll.review/payroll.review.component";
 
 import { InitialAssessProvider } from './careassessments/initialassess.provider';
-/* To be removed */
-import { TimesheetProvider } from './timesheets/timesheet.provider';
 import { UserProvider } from "./user.provider";
+
+/* To be removed */
+import { PayrollProvider } from './payroll/payroll.provider';
 
 import { AdjustmentOffsetFilter } from './models/adjustment';
 import { ShiftOffsetFilter } from './models/shift';
@@ -35,8 +36,8 @@ import { ShiftOffsetFilter } from './models/shift';
     bootstrap: [ AppComponent ],
     declarations: [ AppComponent, NavMenuComponent, InitialAssessManagerComponent, InitialAssessComponent,
         /* To be removed */
-        TimesheetManagerComponent, TimesheetViewerComponent, TimesheetSummaryComponent, BookingCardComponent,
-        BookingDetailComponent, TimesheetAdjustmentComponent, TimesheetReviewComponent,
+        PayrollManagerComponent, TimesheetViewerComponent, PayrollSummaryComponent, BookingCardComponent,
+        BookingDetailComponent, TimesheetAdjustmentComponent, PayrollReviewComponent,
         /* To be removed */
         HomeComponent, AdjustmentOffsetFilter, ShiftOffsetFilter
     ],
@@ -47,6 +48,6 @@ import { ShiftOffsetFilter } from './models/shift';
         /* Consider moving into timesheet module */
         CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule
     ],
-    providers: [ TimesheetProvider /* To be removed */, InitialAssessProvider, ConfirmationService, UserProvider ]
+    providers: [ PayrollProvider /* To be removed */, InitialAssessProvider, ConfirmationService, UserProvider ]
 })
 export class AppModule {}

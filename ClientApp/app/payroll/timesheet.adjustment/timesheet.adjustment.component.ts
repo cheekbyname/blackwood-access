@@ -8,7 +8,7 @@ import { Timesheet } from '../../models/timesheet';
 import { Adjustment } from '../../models/adjustment';
 import { Locale, LOC_EN } from '../../models/locale';
 
-import { TimesheetProvider } from '../timesheet.provider';
+import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
 
 @Component({
@@ -19,7 +19,7 @@ import { UserProvider } from '../../user.provider';
 })
 export class TimesheetAdjustmentComponent {
 
-    constructor(public timePro: TimesheetProvider, private http: Http, private conServ: ConfirmationService,
+    constructor(public payPro: PayrollProvider, private http: Http, private conServ: ConfirmationService,
         private userPro: UserProvider) {
 
     }
@@ -126,7 +126,7 @@ export class TimesheetAdjustmentComponent {
 
     public approve(adjust: Adjustment) {
         if (this.userPro.userInfo.canAuthoriseAdjustments) {
-            this.timePro.approveAdjustment(adjust);
+            this.payPro.approveAdjustment(adjust);
         } else {
             alert("You are not authorised to approve timesheet adjustments");
         }
@@ -134,7 +134,7 @@ export class TimesheetAdjustmentComponent {
 
     public reject(adjust: Adjustment) {
         if (this.userPro.userInfo.canRejectAdjustments) {
-            this.timePro.rejectAdjustment(adjust);
+            this.payPro.rejectAdjustment(adjust);
         } else {
             alert("You are not authorised to reject timesheet adjustments");
         }
