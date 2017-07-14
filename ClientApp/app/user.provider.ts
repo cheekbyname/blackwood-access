@@ -3,10 +3,15 @@ import { Http } from "@angular/http";
 
 import { AccessUser } from "./models/AccessUser";
 
+import { Observable, Subject } from "rxjs/Rx";
+
 @Injectable()
 export class UserProvider implements OnInit {
 
     public userInfo: AccessUser;
+    private _allUsers = new Subject<AccessUser[]>();
+
+    public allUsers$ = this._allUsers.asObservable();
 
     constructor(private http: Http) { }
 
@@ -17,7 +22,12 @@ export class UserProvider implements OnInit {
     public GetUserInfo() {
         this.http.get('/api/user/GetUserInfo').subscribe(res => {
             this.userInfo = res.json() as AccessUser;
-            console.log(this.userInfo);
         })
+    }
+
+    public GetAllUsers() {
+        this.http.get('/api/user/GetAllUsers').subscribe(res => {
+            this._allUsers.next(res.json() as AccessUser[]);
+        });
     }
 }

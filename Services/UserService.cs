@@ -1,6 +1,7 @@
 namespace Blackwood.Access.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using Blackwood.Access.Models;
@@ -14,15 +15,24 @@ namespace Blackwood.Access.Services
             _context = context;
         }
 
+        public IEnumerable<AccessUser> GetAllUsers()
+        {
+            return _context.AccessUsers.OrderBy(ac => ac.AccountName);
+        }
+
         public AccessUser GetInvalidUser()
         {
              return new AccessUser()
                 {
                     DomainUsername = "M_BLACKWOOD\\Domain Users",
                     AccountName = "Unknown",
+                    IsActive = false,
+                    IsAdmin = false,
+                    IsPayrollUser = false,
+                    DefaultTeamCode = 0,
                     CanAuthoriseAdjustments = false,
                     CanRejectAdjustments = false,
-                    DefaultTeamCode = 0
+                    IsAssessmentUser = false
                 };
        }
 

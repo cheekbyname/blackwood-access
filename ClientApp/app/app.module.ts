@@ -11,6 +11,8 @@ import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 
+import { AdminModule } from "./admin/admin.module";
+
 import { InitialAssessManagerComponent } from './careassessments/initialassessmanager/initialassessmanager.component';
 import { InitialAssessComponent } from './careassessments/initialassess/initialassess.component';
 
@@ -42,11 +44,14 @@ import { ShiftOffsetFilter } from './models/shift';
         HomeComponent, AdjustmentOffsetFilter, ShiftOffsetFilter
     ],
     imports: [
-        UniversalModule,
-        AppRouterModule,
-        FormsModule,
-        /* Consider moving into timesheet module */
-        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule
+        /* Platform Modules */
+        UniversalModule, FormsModule,
+        /* Application Feature Modules */
+        AdminModule,
+        /* Third-Party Component Modules */
+        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule,
+        /* Application Router */
+        AppRouterModule
     ],
     providers: [ PayrollProvider /* To be removed */, InitialAssessProvider, ConfirmationService, UserProvider ]
 })

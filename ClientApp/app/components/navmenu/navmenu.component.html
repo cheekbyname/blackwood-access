@@ -26,6 +26,11 @@
                         <span class="glyphicon glyphicon-list-alt"></span>Initial Assessments
                     </a>
                 </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin'}}]">
+                        <span class="glyphicon glyphicon-user"></span>Administration
+                    </a>
+                </li>
             </ul>
             <div *ngIf="showCalendar" class="calendar-div" align="center">
                 <p-calendar class="datepicker" [inline]="true" [locale]="loc" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"

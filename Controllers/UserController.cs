@@ -5,8 +5,9 @@ namespace Blackwood.Access.Controllers
     using Blackwood.Access.Models;
     using Blackwood.Access.Services;
     using System.Security.Claims;
+    using System.Collections.Generic;
 
-	[Route("api/[Controller]")]
+    [Route("api/[Controller]")]
     public class UserController : ControllerBase
     {
         private IUserService _service;
@@ -28,7 +29,12 @@ namespace Blackwood.Access.Controllers
                 Console.WriteLine(ex.Message.ToString());
                 return _service.GetInvalidUser();
             }
-            
+        }
+
+        [HttpGet("[action]")]
+        public IEnumerable<AccessUser> GetAllUsers()
+        {
+            return _service.GetAllUsers();
         }
     }
 }

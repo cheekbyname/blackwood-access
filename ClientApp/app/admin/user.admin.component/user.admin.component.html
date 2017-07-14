@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>User Administration</h4>
+    </div>
+    <div class="panel-body">
+        <table class="table table-responsive">
+            <thead>
+                <tr class="row">
+                    <th class="col-md-3">Username</th>
+                    <th class="col-md-1">Is Active</th>
+                    <th class="col-md-1">Is Admin</th>
+                    <th class="col-md-1">Is Payroll User</th>
+                    <th class="col-md-3">Default Team</th>
+                    <th class="col-md-1">Can Authorise Payroll Adjustments</th>
+                    <th class="col-md-1">Can Reject Payroll Adjustments</th>
+                    <th class="col-md-1">Is Assessment User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row" *ngFor="let user of allUsers">
+                    <td>{{user.accountName}}</td>
+                    <td>{{user.isActive}}</td>
+                    <td>{{user.isAdmin}}</td>
+                    <td>{{user.isPayrollUser}}</td>
+                    <td>{{user.defaultTeamCode}}</td>
+                    <td>{{user.canAuthoriseAdjustments}}</td>
+                    <td>{{user.canRejectAdjustments}}</td>
+                    <td>{{user.isAssessmentUser}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

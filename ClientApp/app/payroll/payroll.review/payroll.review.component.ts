@@ -65,9 +65,10 @@ export class PayrollReviewComponent implements OnInit {
             this.adjustments[idx] = adjust;
         });
         // Check back the other way for any removed adjustments
-        this.adjustments.forEach(adjust => {
-            var idx = ts.adjustments.findIndex(adj => adj.guid == adjust.guid);
-            if (idx == -1) this.adjustments.splice(this.adjustments.indexOf(adjust), 1);
+        this.adjustments.filter(adj => adj.weekCommencing == ts.weekCommencing && adj.carerCode == ts.carerCode)
+            .forEach(adjust => {
+                var idx = ts.adjustments.findIndex(adj => adj.guid == adjust.guid);
+                if (idx == -1) this.adjustments.splice(this.adjustments.indexOf(adjust), 1);
         });
     }
 

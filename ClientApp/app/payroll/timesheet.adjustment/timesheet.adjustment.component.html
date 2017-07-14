@@ -10,13 +10,15 @@
     </p-header>
     <div id="adjust-modal-content">
         <table class="table table-striped">
-            <thead class="row">
-                <th class="col-md-7">Team</th>
-                <th class="col-md-1">Start</th>
-                <th class="col-md-1">Finish</th>
-                <th class="col-md-1">Total</th>
-                <th class="col-md-1">Unpaid</th>
-                <th class="col-md-1">Actual</th>
+            <thead>
+                <tr class="row">
+                    <th class="col-md-7">Team</th>
+                    <th class="col-md-1">Start</th>
+                    <th class="col-md-1">Finish</th>
+                    <th class="col-md-1">Total</th>
+                    <th class="col-md-1">Unpaid</th>
+                    <th class="col-md-1">Actual</th>
+                </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
@@ -36,12 +38,14 @@
             </tbody>
         </table>
         <table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0" class="table table-striped">
-            <thead class="row">
-                <th class="col-md-4">Reason for Adjustment</th>
-                <th class="col-md-4">Team</th>
-                <th class="col-md-2">Approval</th>
-                <th class="col-md-1">Hours</th>
-                <th class="col-md-1">Mins</th>
+            <thead>
+                <tr class="row">
+                    <th class="col-md-4">Reason for Adjustment</th>
+                    <th class="col-md-4">Team</th>
+                    <th class="col-md-2">Approval</th>
+                    <th class="col-md-1">Hours</th>
+                    <th class="col-md-1">Mins</th>
+                </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let adjust of timesheet.adjustments | adjustmentOffsetFilter:dayOffset" class="row">
