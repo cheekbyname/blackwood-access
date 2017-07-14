@@ -9,7 +9,7 @@ namespace Blackwood.Access.Services
     using Microsoft.EntityFrameworkCore;
     using System.Security.Claims;
 
-    public class TimesheetService : ITimesheetService
+    public class PayrollService : IPayrollService
     {
 		private static int[] _absenceCodes = { 108, 109 };
 		private static int[] _unpaidCodes = { 123, 110, 98 };
@@ -17,7 +17,7 @@ namespace Blackwood.Access.Services
 		private AccessContext _context;
         private IUserService _userService;
 
-		public TimesheetService(AccessContext context, IUserService userService)
+		public PayrollService(AccessContext context, IUserService userService)
 		{
 			_context = context;
             _userService = userService;

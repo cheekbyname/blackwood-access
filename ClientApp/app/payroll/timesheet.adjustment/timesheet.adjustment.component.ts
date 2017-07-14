@@ -76,7 +76,7 @@ export class TimesheetAdjustmentComponent {
 		this.conServ.confirm({
 			message: 'Are you sure you want to remove this adjustment?',
 			accept: () => {
-				var tsUrl = '/api/timesheet/RemoveTimesheetAdjustment?id=' + adjust.id;
+				var tsUrl = '/api/payroll/RemoveTimesheetAdjustment?id=' + adjust.id;
 				this.http.delete(tsUrl).subscribe(res => {
 					this.timesheet.adjustments.splice(this.timesheet.adjustments.indexOf(adjust), 1);
 				});
@@ -98,7 +98,7 @@ export class TimesheetAdjustmentComponent {
 	putAdjustment(oldAdj: Adjustment) {
 		// TODO Move this onto Provider
         // TODO Guard on what condition?
-		var tsUrl = '/api/timesheet/AddTimesheetAdjustment';
+		var tsUrl = '/api/payroll/AddTimesheetAdjustment';
 		this.http.put(tsUrl, oldAdj).subscribe((res) => {
 			// The (potentially updated) Adjustment returned by the API
 			console.log(res.json());

@@ -7,11 +7,11 @@ namespace Blackwood.Access.Controllers
 	using Microsoft.AspNetCore.Mvc;
 
 	[Route("api/[Controller]")]
-	public class TimesheetController : ControllerBase
+	public class PayrollController : ControllerBase
 	{
-		private ITimesheetService _service;
+		private IPayrollService _service;
 
-		public TimesheetController(ITimesheetService service)
+		public PayrollController(IPayrollService service)
 		{
 			_service = service;
 		}

@@ -5,7 +5,7 @@ namespace Blackwood.Access.Services
     using Models;
     using System.Security.Claims;
 
-    public interface ITimesheetService
+    public interface IPayrollService
     {
         IEnumerable<Team> GetTeams();
         IEnumerable<Carer> GetCarers();

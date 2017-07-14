@@ -21,8 +21,8 @@
                 <tbody>
                     <tr *ngFor="let adjust of adjustments" class="row" (click)="showAdjust(adjust)">
                         <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
-                        <td>{{timePro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
-                        <td>{{timePro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
+                        <td>{{payPro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
+                        <td>{{payPro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
                         <td>{{adjust.reason}}</td>
                         <td>
                             <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.authorised != null}">

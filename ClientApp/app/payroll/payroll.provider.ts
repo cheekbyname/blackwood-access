@@ -118,14 +118,14 @@ export class PayrollProvider implements OnInit {
 
     getTeams() {
         var teams: Team[];
-        this.http.get('/api/timesheet/teams').subscribe(res => {
+        this.http.get('/api/payroll/teams').subscribe(res => {
             var teams = res.json();
             this._teams.next(teams);
         });
     }
 
     getCarers(tm: Team, wc: Date) {
-        var tsUrl = `/api/timesheet/carersbyteam?teamCode=${tm.teamCode}&periodStart=${this.sqlDate(wc)}`;
+        var tsUrl = `/api/payroll/carersbyteam?teamCode=${tm.teamCode}&periodStart=${this.sqlDate(wc)}`;
         console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             var carers = res.json() as Carer[];
@@ -136,7 +136,7 @@ export class PayrollProvider implements OnInit {
 
 	getTimesheet(carer: Carer, weekCommencing: Date): void {
         if (carer != undefined && weekCommencing != undefined) {
-            var tsUrl = `/api/timesheet/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
+            var tsUrl = `/api/payroll/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
             console.log(tsUrl);
             this.http.get(tsUrl).subscribe(res => {
                 this._timesheet.next(res.json() as Timesheet);
@@ -145,7 +145,7 @@ export class PayrollProvider implements OnInit {
 	}
 
     getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
-        var tsUrl = `/api/timesheet/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
+        var tsUrl = `/api/payroll/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
         console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             var adjusts = res.json() as Adjustment[];
@@ -155,7 +155,7 @@ export class PayrollProvider implements OnInit {
 
 	getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
 		if (periodStart != undefined && periodFinish != undefined) {
-            var tsUrl = `/api/timesheet/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
+            var tsUrl = `/api/payroll/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
             console.log(tsUrl);
 			this.http.get(tsUrl).subscribe( res => {
                 this._summaries.next(res.json() as Summary[]);
@@ -237,7 +237,7 @@ export class PayrollProvider implements OnInit {
 
     private updateAdjustment(adj: Adjustment): Promise<boolean> {
         return new Promise<boolean>((res, rej) => {
-            this.http.put('api/timesheet/UpdateTimesheetAdjustment', adj).subscribe((res) => {
+            this.http.put('api/payroll/UpdateTimesheetAdjustment', adj).subscribe((res) => {
                 if (res.status == 200) {
                     return Promise.resolve(true);
                 } else {
