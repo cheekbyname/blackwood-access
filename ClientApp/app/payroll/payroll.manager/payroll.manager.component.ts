@@ -18,7 +18,7 @@ export class PayrollManagerComponent implements OnInit {
 
     ngOnInit() {
         // Init Team list in TimesheetService TODO Check why this is necessary
-        this.payPro.getTeams();
+        //this.payPro.getTeams();
 
         this.payPro.teams$.subscribe(teams => {
             if (teams != null) {

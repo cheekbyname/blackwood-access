@@ -21,7 +21,7 @@ export class UserAdminComponent implements OnInit {
     ngOnInit() {
         this.payPro.teams$.subscribe(teams => this.allTeams = teams);
         this.userPro.allUsers$.subscribe(users => this.allUsers = users);
-        this.payPro.getTeams();
+        //this.payPro.getTeams();
         this.userPro.GetAllUsers();
     }
 }

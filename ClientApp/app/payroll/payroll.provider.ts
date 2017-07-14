@@ -67,10 +67,12 @@ export class PayrollProvider implements OnInit {
             (team, start, finish) => { return { "team": team, "start": start, "finish": finish }});
         
         this.paramSub = this.paramObserver$.subscribe(x => this.handleParams(x));
+
+        this.getTeams();
     }
 
     ngOnInit() {
-        this.getTeams();
+        
     }
 
     handleParams(x) {
