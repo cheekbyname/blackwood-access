@@ -1,9 +1,10 @@
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4>User Administration</h4>
     </div>
     <div class="panel-body">
-        <table class="table table-responsive">
+        <table class="table table-responsive table-striped">
             <thead>
                 <tr class="row">
                     <th class="col-md-3">Username</th>
@@ -19,13 +20,17 @@
             <tbody>
                 <tr class="row" *ngFor="let user of allUsers">
                     <td>{{user.accountName}}</td>
-                    <td>{{user.isActive}}</td>
-                    <td>{{user.isAdmin}}</td>
-                    <td>{{user.isPayrollUser}}</td>
-                    <td>{{user.defaultTeamCode}}</td>
-                    <td>{{user.canAuthoriseAdjustments}}</td>
-                    <td>{{user.canRejectAdjustments}}</td>
-                    <td>{{user.isAssessmentUser}}</td>
+                    <td><p-checkbox [(ngModel)]="user.isActive" binary="true"></p-checkbox></td>
+                    <td><p-checkbox [(ngModel)]="user.isAdmin" binary="true"></p-checkbox></td>
+                    <td><p-checkbox [(ngModel)]="user.isPayrollUser" binary="true"></p-checkbox></td>
+                    <td>
+                        <select class="form-control" id="teamSelect" [(ngModel)]="user.defaultTeamCode" name="defaultTeamCode" required>
+                            <option *ngFor="let team of allTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
+                        </select>
+                    </td>
+                    <td><p-checkbox [(ngModel)]="user.canAuthoriseAdjustments" binary="true"></p-checkbox></td>
+                    <td><p-checkbox [(ngModel)]="user.canRejectAdjustments" binary="true"></p-checkbox></td>
+                    <td><p-checkbox [(ngModel)]="user.isAssessmentUser" binary="true"></p-checkbox></td>
                 </tr>
             </tbody>
         </table>

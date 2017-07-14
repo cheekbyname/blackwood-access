@@ -3,7 +3,8 @@ import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { FormsModule } from '@angular/forms';
 
-import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
+import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, ConfirmationService,
+    CheckboxModule } from 'primeng/primeng';
 
 import { AppRouterModule } from './app-routing.module';
 
@@ -48,8 +49,8 @@ import { ShiftOffsetFilter } from './models/shift';
         UniversalModule, FormsModule,
         /* Application Feature Modules */
         AdminModule,
-        /* Third-Party Component Modules */
-        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule,
+        /* PrimeNg Component Modules */
+        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
         /* Application Router */
         AppRouterModule
     ],
