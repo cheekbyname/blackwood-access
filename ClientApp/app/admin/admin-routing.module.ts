@@ -12,7 +12,8 @@ const adminRoutes: Routes = [
             {
                 path: '',
                 component: UserAdminComponent
-            }]
+            }
+        ]
     }
 ];
 

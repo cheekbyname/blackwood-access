@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
     template: `
         <router-outlet></router-outlet>
         <router-outlet name="summary"></router-outlet>
-        <router-outlet name="timesheet"></router-outlet>
+        <router-outlet name="detail"></router-outlet>
     `
 })
 export class PayrollComponent {

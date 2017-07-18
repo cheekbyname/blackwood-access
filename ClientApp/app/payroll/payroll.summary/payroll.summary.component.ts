@@ -87,12 +87,14 @@ export class PayrollSummaryComponent implements OnInit {
 	selectCarer(sum: Summary): void {
 		this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
 		this.showSummary = false;
-		this.router.navigate([{outlets: { detail: ['timesheet', sum.carerCode] }}]);
+		this.router.navigate(['/payroll-manager', this.team.teamCode,
+			{ outlets: { detail: ['timesheet', sum.carerCode], summary: ['summary', this.team.teamCode] }}]);
 	}
 
 	showReview() {
 		this.showSummary = false;
-		this.router.navigate([{outlets: { detail: ['review', this.team.teamCode]}}]);
+		this.router.navigate(['/payroll-manager', this.team.teamCode,
+			{ outlets: { detail: ['review', this.team.teamCode], summary: ['summary', this.team.teamCode] }}]);
     }
 
     public additionalHours(sum: Summary): number {
