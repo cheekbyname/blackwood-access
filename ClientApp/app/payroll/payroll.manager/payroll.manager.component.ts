@@ -39,7 +39,7 @@ export class PayrollManagerComponent implements OnInit {
 
         // Navigate to aux route for summary
         this.router.navigate([{ outlets: { 'detail': null }}]).then((q) => {
-            this.router.navigate(['payroll-manager', this.selectedTeam.teamCode,
+            this.router.navigate(['payroll', this.selectedTeam.teamCode,
                 { outlets: { 'summary': ['summary', this.selectedTeam.teamCode] }}]);
         });
     }

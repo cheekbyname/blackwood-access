@@ -8,7 +8,7 @@ import { PayrollSummaryComponent } from './payroll.summary/payroll.summary.compo
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
 const TIMESHEETROUTES: Routes = [
-	{ path: 'payroll-manager', component: PayrollComponent, children: [
+	{ path: 'payroll', component: PayrollComponent, children: [
 		{ path: '', component: PayrollManagerComponent },
 		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
 		{ path: 'summary/:teamCode', component: PayrollSummaryComponent, outlet: 'summary'},
@@ -16,7 +16,7 @@ const TIMESHEETROUTES: Routes = [
 		{ path: 'timesheet/:carerCode', component: TimesheetViewerComponent, outlet: 'detail' },
 		{ path: 'review/:teamCode', component: PayrollReviewComponent, outlet: 'detail'},
 	] },
-	{ path: 'payroll-manager/:teamCode', component: PayrollComponent, children: [
+	{ path: 'payroll/:teamCode', component: PayrollComponent, children: [
 		{ path: '', component: PayrollManagerComponent },
 		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
 		{ path: 'summary/:teamCode', component: PayrollSummaryComponent, outlet: 'summary'},
