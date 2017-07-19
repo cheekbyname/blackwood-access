@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 
 import { ConfirmDialogModule, ConfirmationService } from "primeng/primeng";
 
+import { AccessUser } from "../../models/accessuser";
 import { Timesheet } from '../../models/timesheet';
 import { Adjustment } from '../../models/adjustment';
 import { Locale, LOC_EN } from '../../models/locale';
@@ -21,7 +22,7 @@ export class TimesheetAdjustmentComponent {
 
     constructor(public payPro: PayrollProvider, private http: Http, private conServ: ConfirmationService,
         private userPro: UserProvider) {
-
+			this.userPro.userInfo$.subscribe(ui => { this.user = ui; console.log(ui); });
     }
 
     public loc: Locale = LOC_EN;
@@ -29,7 +30,8 @@ export class TimesheetAdjustmentComponent {
     private _weekCommencing: Date;
     private _timesheet: Timesheet;
     private _adjustVisible: boolean;
-    private _dayOffset: number;
+	private _dayOffset: number;
+	private user: AccessUser;
 
     @Input()
     set weekCommencing(dt: Date) { this._weekCommencing = dt; }
@@ -125,7 +127,7 @@ export class TimesheetAdjustmentComponent {
 	}
 
     public approve(adjust: Adjustment) {
-        if (this.userPro.userInfo.canAuthoriseAdjustments) {
+        if (this.user.canAuthoriseAdjustments) {
             this.payPro.approveAdjustment(adjust);
         } else {
             alert("You are not authorised to approve timesheet adjustments");
@@ -133,7 +135,7 @@ export class TimesheetAdjustmentComponent {
 	}
 
     public reject(adjust: Adjustment) {
-        if (this.userPro.userInfo.canRejectAdjustments) {
+        if (this.user.canRejectAdjustments) {
             this.payPro.rejectAdjustment(adjust);
         } else {
             alert("You are not authorised to reject timesheet adjustments");

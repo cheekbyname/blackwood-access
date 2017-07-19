@@ -1,28 +1,30 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 
 import { AccessUser } from "./models/AccessUser";
 
 import { Observable, Subject } from "rxjs/Rx";
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class UserProvider implements OnInit {
+export class UserProvider {
 
-    public userInfo: AccessUser;
+    private _userInfo = new Subject<AccessUser>();
     private _allUsers = new Subject<AccessUser[]>();
 
     public allUsers$ = this._allUsers.asObservable();
+    public userInfo$ = this._userInfo.asObservable();
 
-    constructor(private http: Http) { }
-
-    ngOnInit() {
+    constructor(private http: Http) {
         this.GetUserInfo();
     }
 
-    public GetUserInfo() {
-        this.http.get('/api/user/GetUserInfo').subscribe(res => {
-            this.userInfo = res.json() as AccessUser;
-        })
+    public GetUserInfo(): Promise<AccessUser> {
+        return this.http.get('/api/user/GetUserInfo').toPromise().then(res => {
+            var user = res.json() as AccessUser;
+            this._userInfo.next(user);
+            return user;
+        });
     }
 
     public GetAllUsers() {
