@@ -7,7 +7,7 @@ import { PayrollReviewComponent } from "./payroll.review/payroll.review.componen
 import { PayrollSummaryComponent } from './payroll.summary/payroll.summary.component';
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
-const TIMESHEETROUTES: Routes = [
+const timesheetRoutes: Routes = [
 	{ path: 'payroll', component: PayrollComponent, children: [
 		{ path: '', component: PayrollManagerComponent },
 		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
@@ -27,7 +27,7 @@ const TIMESHEETROUTES: Routes = [
 ];
 
 @NgModule({
-    imports: [ RouterModule.forChild(TIMESHEETROUTES) ],
+    imports: [ RouterModule.forChild(timesheetRoutes) ],
     exports: [ RouterModule ]
 })
 export class PayrollRoutingModule { }

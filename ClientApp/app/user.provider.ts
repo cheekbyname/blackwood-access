@@ -30,4 +30,13 @@ export class UserProvider implements OnInit {
             this._allUsers.next(res.json() as AccessUser[]);
         });
     }
+
+    public PutUser(user: AccessUser) {
+        this.http.put('/api/user/PutUser', user).subscribe(res => {
+            if (res.status !== 200) {
+                // TODO Handle in some meaningful way
+                console.log(res);
+            }
+        });
+    }
 }

@@ -52,5 +52,19 @@ namespace Blackwood.Access.Services
             }
             return accessUser;
         }
+
+        public void PutUser(AccessUser user)
+        {
+            var old = _context.AccessUsers.FirstOrDefault(u => u.Id == user.Id);
+            // The boring way
+            old.IsActive = user.IsActive;
+            old.IsAdmin = user.IsAdmin;
+            old.IsPayrollUser = user.IsPayrollUser;
+            old.DefaultTeamCode = user.DefaultTeamCode;
+            old.CanAuthoriseAdjustments = user.CanAuthoriseAdjustments;
+            old.CanRejectAdjustments = user.CanRejectAdjustments;
+            old.IsAssessmentUser = user.IsAssessmentUser;
+            _context.SaveChanges();
+        }
     }
 }

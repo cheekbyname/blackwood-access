@@ -9,5 +9,6 @@ namespace Blackwood.Access.Services
         AccessUser GetUserInfo(ClaimsPrincipal user);
         AccessUser GetInvalidUser();
         IEnumerable<AccessUser> GetAllUsers();
+        void PutUser(AccessUser user);
     }
 }

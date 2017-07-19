@@ -20,3 +20,26 @@ table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
     cursor: pointer;
 }
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-primary:enabled:hover {
+    cursor: pointer;
+    color: black;
+    background-color: hotpink;
+}
+
+.btn-primary[disabled="true"]:hover {
+    cursor: not-allowed;
+    color: black;
+    background-color: #bfd730;
+}
+
+/*.admin-buttons:first-child {
+    margin-right:16px;
+}*/

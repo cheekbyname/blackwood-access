@@ -36,5 +36,11 @@ namespace Blackwood.Access.Controllers
         {
             return _service.GetAllUsers();
         }
+
+        [HttpPut("[action]")]
+        public void PutUser([FromBody] AccessUser user)
+        {
+            _service.PutUser(user);
+        }
     }
 }
