@@ -22,7 +22,8 @@ export class TimesheetAdjustmentComponent {
 
     constructor(public payPro: PayrollProvider, private http: Http, private conServ: ConfirmationService,
         private userPro: UserProvider) {
-			this.userPro.userInfo$.subscribe(ui => { this.user = ui; console.log(ui); });
+			//this.userPro.userInfo$.subscribe(ui => { this.user = ui; console.log(ui); });
+			this.userPro.GetUserInfo().then(ui => this.user = ui);
     }
 
     public loc: Locale = LOC_EN;

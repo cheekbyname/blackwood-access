@@ -19,6 +19,8 @@ export class PayrollReviewComponent implements OnInit {
 
     public adjustments: Adjustment[];
     public carers: Carer[];
+    public revisions: { carer: Carer, reason: string }[] = [];
+    public team: Team;
 
     // To support timesheet-adjustment component
     public timesheet: Timesheet;
@@ -30,10 +32,24 @@ export class PayrollReviewComponent implements OnInit {
 
     ngOnInit() {
         // Sub to provider data
-        this.payPro.carers$.subscribe(carers => this.carers = carers);
+        this.payPro.carers$.subscribe(carers => {
+            this.carers = carers;
+            if (carers !== null) {
+                this.checkValid(this.carers);
+            }
+        });
         this.payPro.adjustments$.subscribe(adjusts => this.adjustments = adjusts);
         this.payPro.timesheet$.subscribe(ts => this.timesheet = ts);
         this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
+        this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
+    }
+
+    checkValid(carers: Carer[]) {
+        this.revisions = [];
+        carers.filter(ca => ca.personnelNumber == '' || ca.personnelNumber == null).forEach(car => {
+            this.revisions.push({carer: car, reason: 'Missing Payroll Number'});
+        });
+        // TODO Check for inconsistent contracted hours?
     }
 
     carerForAdjust(adjust: Adjustment): Carer {
@@ -41,7 +57,9 @@ export class PayrollReviewComponent implements OnInit {
     }
 
     public clearDetail() {
-		this.router.navigate([{ outlets: { 'detail': null }}]);
+        //this.router.navigate([{ outlets: { 'detail': null }}]);
+        this.router.navigate(['/payroll', this.team.teamCode,
+			{ outlets: { detail: null, summary: ['summary', this.team.teamCode] }}]);
 	}
 
     public addDays(dt: Date, offset: number): Date {
@@ -73,7 +91,7 @@ export class PayrollReviewComponent implements OnInit {
     }
 
     public authInfo(adjust: Adjustment): string {
-        return adjust.authorisedBy ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.payPro.displayDate(adjust.authorised || adjust.rejected)}`
+        return (adjust.authorisedBy || adjust.rejectedBy) ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.payPro.displayDate(adjust.authorised || adjust.rejected)}`
             : 'Pending';
     }
 }

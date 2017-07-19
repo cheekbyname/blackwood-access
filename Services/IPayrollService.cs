@@ -16,5 +16,6 @@ namespace Blackwood.Access.Services
         Adjustment AddTimesheetAdjustment(Adjustment adjust, ClaimsPrincipal user);
         void RemoveTimesheetAdjustment(int id);
         IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd);
+        IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd);
   	}
 }

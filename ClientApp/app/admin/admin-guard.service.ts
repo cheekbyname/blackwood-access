@@ -9,22 +9,21 @@ export class AdminGuard implements CanActivate {
 
     user: AccessUser;
 
-    constructor(private userPro: UserProvider, private router: Router) {
-        // TODO Subscribe to userInfo Observable to handle in-use scenarios
-    }
+    constructor(private userPro: UserProvider, private router: Router) { }
 
     canActivate(): Promise<boolean> {
         return new Promise((res) => {
             if (!this.user) {
                 this.userPro.GetUserInfo().then(ui => {
                     this.user = ui;
-                    if (!ui.isAdmin) this.router.navigate(["no-auth"]);
                     res(ui.isAdmin);
                 });
             } else {
-                if (!this.user.isAdmin) this.router.navigate(["no-auth"]);
                 res(this.user.isAdmin);
             }
+        }).then((res) => {
+            if (!this.user.isAdmin) this.router.navigate(['no-auth']);
+            return res;
         });
     }
 }

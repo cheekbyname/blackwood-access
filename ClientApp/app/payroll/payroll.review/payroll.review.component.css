@@ -7,6 +7,10 @@ td, th {
     font-size: 11pt;
 }
 
+th {
+    font-weight: bold;
+}
+
 .panel {
     border: 1px solid;
     border-color: slategray;
@@ -23,6 +27,7 @@ td, th {
     background-color: #bfd730;
     color: black;
     border-color: black;
+    font-family: 'Century Gothic';
 }
 
 .btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {

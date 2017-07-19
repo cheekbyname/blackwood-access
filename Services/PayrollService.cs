@@ -261,5 +261,17 @@ namespace Blackwood.Access.Services
 				})
 				.ToList();
         }
+
+		public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
+		{
+			// Get Carers for Payroll run
+			// Extract Contracted Hours
+			// Get OT Hours (Actual-Contract)
+			// Subtract non-default area hours
+			// Add non-default area hours
+			// Get Unit Code Info (SleepOver & NightPremium)
+
+			throw new NotImplementedException();
+		}
     }
 }

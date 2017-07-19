@@ -1,7 +1,7 @@
 <div class="panel">
     <div class="panel-heading">
         <div class="row">
-            <h4 class="col-md-6">Period Summary Review</h4>
+            <h4 class="col-md-6">Payroll Review</h4>
             <div class="col-md-6">
                 <a class="btn btn-primary btn-default pull-right" (click)="clearDetail()"><span class="glyphicon glyphicon-remove"></span>Close</a>
             </div>
@@ -9,6 +9,8 @@
     </div>
     <div class="panel-body">
         <div class="table-responsive">
+            <h4>Adjustments for Approval</h4>
+            <hr/>
             <table class="table table-striped">
                 <thead class="row">
                     <th class="col-md-3">Carer</th>
@@ -33,6 +35,22 @@
                             </button>
                         </td>
                         <td>{{authInfo(adjust)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <h4>Data Revisions Required</h4>
+            <hr/>
+            <table class="table table-striped">
+                <thead class="row">
+                    <th class="col-md-6">Carer</th>
+                    <th class="col-md-6">Revision Required</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rev of revisions" class="row">
+                        <td>{{rev.carer.forename}} {{rev.carer.surname}}</td>
+                        <td>{{rev.reason}}</td>
                     </tr>
                 </tbody>
             </table>

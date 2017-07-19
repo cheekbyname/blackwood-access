@@ -27,7 +27,8 @@
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr class="row">
-						<th class="col-md-4">Staff Name</th>
+						<th class="col-md-3">Staff Name</th>
+						<th class="col-md-1">Payroll Number</th>
 						<th class="col-md-1">Hours Accruing</th>
 						<th class="col-md-1">Supervision / Training</th>
 						<th class="col-md-1">Sickness / Annual Leave</th>
@@ -45,6 +46,7 @@
 							<span *ngIf="sum.monthlyContractMins != 0" class="contract-status glyphicon glyphicon-copyright-mark" title="Contracted"></span>
 							{{sum.forename}} {{sum.surname}}
 						</td>
+						<td>{{sum.personnelNumber}}</td>
 						<td>{{displayTime(sum.monthlyContractMins-sum.actualMins < 0 ? 0 : sum.monthlyContractMins-sum.actualMins)}}</td>
 						<td>{{displayTime(sum.superTrainMins)}}</td>
 						<td>{{displayTime(sum.leaveSickMins)}}</td>
