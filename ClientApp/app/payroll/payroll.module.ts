@@ -5,6 +5,7 @@ import { FormsModule } from "@angular/forms";
 import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
 	ConfirmationService } from "primeng/primeng";
 
+import { PayrollGuard } from "./payroll-guard.service";
 import { PayrollRoutingModule } from './payroll-routing.module';
 
 import { PayrollComponent } from "./payroll.component";
@@ -28,6 +29,6 @@ import { ShiftOffsetFilter } from '../models/shift';
 	declarations: [PayrollComponent, BookingCardComponent, BookingDetailComponent, PayrollSummaryComponent,
 		TimesheetAdjustmentComponent, PayrollManagerComponent, TimesheetViewerComponent, PayrollReviewComponent,
 		AdjustmentOffsetFilter, ShiftOffsetFilter],
-	providers: [PayrollProvider, UserProvider, ConfirmationService]
+	providers: [PayrollGuard, PayrollProvider, UserProvider, ConfirmationService]
 })
 export class PayrollModule {}

@@ -10,6 +10,7 @@ import { AppRouterModule } from './app-routing.module';
 
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
+import { NotAuthorisedComponent } from "./components/notauthorised/notauthorised.component";
 import { HomeComponent } from './components/home/home.component';
 
 import { AdminModule } from "./admin/admin.module";
@@ -23,7 +24,9 @@ import { UserProvider } from "./user.provider";
 
 @NgModule({
     bootstrap: [ AppComponent ],
-    declarations: [ AppComponent, NavMenuComponent, InitialAssessManagerComponent, InitialAssessComponent, HomeComponent ],
+    declarations: [ AppComponent, NavMenuComponent, NotAuthorisedComponent, HomeComponent,
+        /* Initial Assessments to be modularised */
+        InitialAssessManagerComponent, InitialAssessComponent ],
     imports: [
         /* Platform Modules */
         UniversalModule, FormsModule,

@@ -5,7 +5,7 @@ import { AccessUser } from "../models/accessuser";
 import { UserProvider } from "../user.provider";
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class PayrollGuard implements CanActivate {
 
     user: AccessUser;
 
@@ -18,12 +18,12 @@ export class AdminGuard implements CanActivate {
             if (!this.user) {
                 this.userPro.GetUserInfo().then(ui => {
                     this.user = ui;
-                    if (!ui.isAdmin) this.router.navigate(["no-auth"]);
-                    res(ui.isAdmin);
+                    if (!ui.isPayrollUser) this.router.navigate(['no-auth']);
+                    res(ui.isPayrollUser);
                 });
             } else {
-                if (!this.user.isAdmin) this.router.navigate(["no-auth"]);
-                res(this.user.isAdmin);
+                if (!this.user.isPayrollUser) this.router.navigate(['no-auth']);
+                res(this.user.isPayrollUser);
             }
         });
     }

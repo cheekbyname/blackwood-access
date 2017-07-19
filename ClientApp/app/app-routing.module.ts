@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { NotAuthorisedComponent } from "./components/notauthorised/notauthorised.component";
 import { HomeComponent } from './components/home/home.component';
 import { InitialAssessManagerComponent } from './careassessments/initialassessmanager/initialassessmanager.component';
 import { InitialAssessComponent } from './careassessments/initialassess/initialassess.component';
@@ -10,6 +11,7 @@ const APPROUTES: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'initial-assess-manager', component: InitialAssessManagerComponent },
 	{ path: 'initial-assess/:id', component: InitialAssessComponent },
+	{ path: 'no-auth', component: NotAuthorisedComponent },
 	{ path: '**', redirectTo: 'home' }
 ];
 
