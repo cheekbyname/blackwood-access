@@ -21,5 +21,6 @@ namespace Blackwood.Access
         public DbSet<TileGroup> TileGroups { get; set; }
         public DbSet<TileItem> TileItems { get; set; }
 		public DbSet<Adjustment> Adjustments { get; set; }
+		public DbSet<PayrollCodeMap> PayrollCodeMap { get; set; }
 	}
 }

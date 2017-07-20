@@ -11,8 +11,9 @@ namespace Blackwood.Access.Services
 
     public class PayrollService : IPayrollService
     {
-		private static int[] _absenceCodes = { 108, 109 };
-		private static int[] _unpaidCodes = { 123, 110, 98 };
+		// TODO - Replace these two with PayrollCodeMap entries
+		private int[] _absenceCodes = { 108, 109 };
+		private int[] _unpaidCodes;
 
 		private AccessContext _context;
         private IUserService _userService;
@@ -21,6 +22,9 @@ namespace Blackwood.Access.Services
 		{
 			_context = context;
             _userService = userService;
+			_unpaidCodes = _context.PayrollCodeMap
+				.Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
+			// TODO Do the same for _absenceCodes
 		}
 
 		public IEnumerable<Team> GetTeams()
@@ -264,6 +268,8 @@ namespace Blackwood.Access.Services
 
 		public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
+			// Validation
+			// - Unmapped Booking Types (Default to Hours Paid/OT10?)
 			// Get Carers for Payroll run
 			// Extract Contracted Hours
 			// Get OT Hours (Actual-Contract)
