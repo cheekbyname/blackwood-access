@@ -47,9 +47,20 @@ export class PayrollReviewComponent implements OnInit {
     checkValid(carers: Carer[]) {
         this.revisions = [];
         carers.filter(ca => ca.personnelNumber == '' || ca.personnelNumber == null).forEach(car => {
-            this.revisions.push({carer: car, reason: 'Missing Payroll Number'});
+            this.pushRevision(car, 'Missing Payroll Number');
         });
-        // TODO Check for inconsistent contracted hours?
+        carers.filter(ca => ca.careSysGuid === null).forEach(car => {
+            this.pushRevision(car, 'No CareSys mapping for Default Team');
+        });
+    }
+
+    pushRevision(carer: Carer, rev: string) {
+        var pos = this.revisions.map(rev => {return rev.carer}).indexOf(carer);
+        if (pos == -1) {
+            this.revisions.push({carer: carer, reason: rev});
+        } else {
+            this.revisions[pos].reason += (', ' + rev);
+        }
     }
 
     carerForAdjust(adjust: Adjustment): Carer {

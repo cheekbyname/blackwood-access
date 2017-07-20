@@ -113,7 +113,8 @@ export class TimesheetAdjustmentComponent {
 	}
 
     public addAdjust() {
-        // TODO Guard on what condition?
+		// TODO Guard on what condition?
+		// TODO Approve automatically if user adding has authority to do so
 		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
 		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
 		this.timesheet.adjustments.push(newAdj);
