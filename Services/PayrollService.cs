@@ -1,6 +1,7 @@
 namespace Blackwood.Access.Services
 {
     using System;
+    using System.IO;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
@@ -62,12 +63,8 @@ namespace Blackwood.Access.Services
 				Carer = carer
 			};
 
-			// CarerContracts
-			ts.Contracts = _context.Set<CarerContract>()
-                .FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
-				    parameters: new []
-                    { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
-                ).ToList();
+            // CarerContracts
+            ts.Contracts = GetContracts(carerCode, weekCommencing);
 
 			bool isContracted = ts.Contracts.Any(c => c.ContractMins > 0);
 
@@ -286,8 +283,21 @@ namespace Blackwood.Access.Services
                 ).ToList();
         }
 
+        public ICollection<CarerContract> GetContracts(int carerCode, DateTime periodStart)
+        {
+            return _context.Set<CarerContract>()
+                .FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
+                    parameters: new[]
+                    { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", periodStart) }
+                ).ToList();
+        }
+
 		public ICollection<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
+            string logFile = "C:\\Dev\\PayrollDataLog.csv";
+            if (File.Exists(logFile)) File.Delete(logFile);
+            File.AppendAllText(logFile, $"Carer,Team,Total Mins\n");
+
             ICollection<Payroll> payrollData = new List<Payroll>();
 
             ICollection<Summary> summaries = GetSummaries(teamCode, periodStart, periodEnd);
@@ -297,21 +307,37 @@ namespace Blackwood.Access.Services
             // - Unmapped Booking Types (Default to Hours Paid/OT10?)
 
             // Get Carers for Payroll run
+            // TODO We are probably looking to narrow this down to only carers who are DEFAULT for this Team
             List<Carer> carers = GetCarersByTeam(teamCode, periodStart).ToList();
 
             carers.ForEach(car =>
             {
+                ICollection<CarerContract> contracts = GetContracts(car.CarerCode, periodStart);
                 ICollection<CarerBooking> bookings = GetBookings(car.CarerCode, periodStart, periodEnd);
                 ICollection<Shift> shifts = BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
-
-                // Are Adjustments necessary if Summaries are looking at this?
-                // Can we rely on the summaries at all if not?
-                // Are the summaries unusable here because they don't break the hours down by contract?
-
                 ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
                     && adj.Authorised != null).ToList();
 
-                Summary sum = summaries.FirstOrDefault(s => s.CarerCode == car.CarerCode);
+                // We don't use the summaries here because they aren't broken down by Contract/Team
+                // We may want to refactor the Summaries to be an aggregation of the Contract/Team aggregations
+
+                // Project aggregation of hours
+                List<Team> teams = shifts
+                    .SelectMany(sh => contracts.Where(cc => cc.ContractCode == sh.ContractCode)).Distinct()
+                    .SelectMany(cc => _context.Teams.Where(tm => tm.TeamCode == cc.TeamCode)).Distinct().ToList();
+                List<PayrollAgg> agg = teams.Select(tm => new PayrollAgg()
+                    {
+                        Carer = car,
+                        Team = tm,
+                        ActualAdjustedMins = shifts.Where(sh => contracts
+                            .Where(cn => cn.TeamCode == tm.TeamCode).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
+                            .Sum(sh => sh.ShiftMins)
+                    }).ToList();
+
+                agg.ForEach(line =>
+                {
+                    File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{line.Team.TeamDesc},{line.ActualAdjustedMins}\n");
+                });
 
                 // Get OT Hours (Actual-Contract)
                 
@@ -328,11 +354,11 @@ namespace Blackwood.Access.Services
             return payrollData;
 		}
 
-        private class PayrollTeamResults
+        private class PayrollAgg
         {
-            Carer Carer { get; set; }
-            Team Team { get; set; }
-            double Hours { get; set; }
+            public Carer Carer { get; set; }
+            public Team Team { get; set; }
+            public double ActualAdjustedMins { get; set; }
         }
     }
 }

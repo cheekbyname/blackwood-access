@@ -62,5 +62,11 @@ namespace Blackwood.Access.Controllers
 		{
 			return _service.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
 		}
+
+        [HttpGet("[action]")]
+        public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
+        {
+            return _service.GetPayrollData(teamCode, periodStart, periodEnd);
+        }
 	}
 }
