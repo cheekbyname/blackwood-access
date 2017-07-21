@@ -289,7 +289,9 @@ namespace Blackwood.Access.Services
 		public ICollection<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
             ICollection<Payroll> payrollData = new List<Payroll>();
+
             ICollection<Summary> summaries = GetSummaries(teamCode, periodStart, periodEnd);
+            ICollection<Adjustment> adjusts = GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
 
             // Validation
             // - Unmapped Booking Types (Default to Hours Paid/OT10?)
@@ -301,15 +303,36 @@ namespace Blackwood.Access.Services
             {
                 ICollection<CarerBooking> bookings = GetBookings(car.CarerCode, periodStart, periodEnd);
                 ICollection<Shift> shifts = BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
+
+                // Are Adjustments necessary if Summaries are looking at this?
+                // Can we rely on the summaries at all if not?
+                // Are the summaries unusable here because they don't break the hours down by contract?
+
+                ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
+                    && adj.Authorised != null).ToList();
+
                 Summary sum = summaries.FirstOrDefault(s => s.CarerCode == car.CarerCode);
 
                 // Get OT Hours (Actual-Contract)
+                
+                // Get non-default hours
+                // TeamCode, CostCentre, Adjusted Hours
+
                 // Subtract non-default area hours
+                
                 // Add non-default area hours
                 // Get Unit Code Info (SleepOver & NightPremium)
+
             });
 
             return payrollData;
 		}
+
+        private class PayrollTeamResults
+        {
+            Carer Carer { get; set; }
+            Team Team { get; set; }
+            double Hours { get; set; }
+        }
     }
 }
