@@ -24,25 +24,31 @@ namespace Blackwood.Access.Services
             _userService = userService;
 			_unpaidCodes = _context.PayrollCodeMap
 				.Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
-			// TODO Do the same for _absenceCodes
+			// TODO Do something similar for _absenceCodes?
 		}
 
-		public IEnumerable<Team> GetTeams()
+		public ICollection<Team> GetTeams()
 		{
             return _context.Set<Team>().FromSql("GetTeams").OrderBy(t => t.TeamDesc).ToList();
 		}
 
-        public IEnumerable<Carer> GetCarers()
+        public ICollection<Carer> GetCarers()
         {
 			return _context.Carers.OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
         }
 
-		public IEnumerable<Carer> GetCarersByTeam(int TeamCode, DateTime? periodStart)
+		public ICollection<Carer> GetCarersByTeam(int TeamCode, DateTime? periodStart)
 		{
-			return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode, @PeriodStart", parameters: new [] {
-				new SqlParameter("@TeamCode", TeamCode),
-				new SqlParameter() { ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value }
-			}).ToList().OrderBy(c => c.Forename).ThenBy(c => c.Surname);
+			return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode, @PeriodStart",
+                parameters: new []
+                    {
+				        new SqlParameter("@TeamCode", TeamCode),
+				        new SqlParameter()
+                        {
+                            ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value
+                        }
+			        }
+                ).OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
 		}
 
         public Timesheet GetTimesheet(int carerCode, DateTime weekCommencing)
@@ -57,18 +63,27 @@ namespace Blackwood.Access.Services
 			};
 
 			// CarerContracts
-			ts.Contracts = _context.Set<CarerContract>().FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
-				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+			ts.Contracts = _context.Set<CarerContract>()
+                .FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
+				    parameters: new []
+                    { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
+                ).ToList();
 
 			bool isContracted = ts.Contracts.Any(c => c.ContractMins > 0);
 
 			// ScheduledAvailability
-			ts.ScheduledAvailability = _context.Set<Availability>().FromSql("GetCarerScheduledAvailability @CarerCode, @WeekCommencing",
-				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+			ts.ScheduledAvailability = _context.Set<Availability>()
+                .FromSql("GetCarerScheduledAvailability @CarerCode, @WeekCommencing",
+				    parameters: new []
+                    { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
+                ).ToList();
 
 			// ActualAvailability
-			ts.ActualAvailability = _context.Set<Availability>().FromSql("GetCarerActualAvailability @CarerCode, @WeekCommencing",
-				parameters: new [] { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }).ToList();
+			ts.ActualAvailability = _context.Set<Availability>()
+                .FromSql("GetCarerActualAvailability @CarerCode, @WeekCommencing",
+				    parameters: new []
+                        { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
+                ).ToList();
 
 			// TODO Remove Scheduled Availability on Actual Availability Days
 			// DELETE FROM @Scheduled WHERE CONVERT(DATE, ThisStart) IN (SELECT CONVERT(DATE, ThisStart) FROM @ActAvail)
@@ -174,7 +189,7 @@ namespace Blackwood.Access.Services
 			return shifts;
 		}
 
-        public IEnumerable<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
+        public ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
 			List<Summary> summaries = _context.Set<Summary>()
 				.FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
@@ -198,14 +213,16 @@ namespace Blackwood.Access.Services
 			return summaries;
 		}
 
-		public IEnumerable<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime periodStart, DateTime periodFinish)
+		public ICollection<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime periodStart, DateTime periodFinish)
 		{
 			return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
-				parameters: new [] {
-					new SqlParameter("@CarerCode", carerCode),
-					new SqlParameter("@PeriodStart", periodStart),
-                    new SqlParameter("@PeriodFinish", periodFinish)
-                }).ToList();
+				    parameters: new []
+                    {
+					    new SqlParameter("@CarerCode", carerCode),
+					    new SqlParameter("@PeriodStart", periodStart),
+                        new SqlParameter("@PeriodFinish", periodFinish)
+                    }
+                ).ToList();
 		}
 
 
@@ -248,36 +265,51 @@ namespace Blackwood.Access.Services
 		private ICollection<CarerBooking> GetBookings(int carerCode, DateTime periodStart, DateTime periodFinish)
 		{
 			return _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @PeriodStart, @PeriodFinish",
-				parameters: new [] {
-					new SqlParameter("@CarerCode", carerCode),
-					new SqlParameter("@PeriodStart", periodStart),
-					new SqlParameter("@PeriodFinish", periodFinish)
-					})
-				.ToList();		}
-
-        public IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
-        {
-            return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustmentsByTeam @TeamCode, @PeriodStart, @PeriodEnd",
-				parameters: new [] {
-					new SqlParameter("@TeamCode", teamCode),
-					new SqlParameter("@PeriodStart", periodStart),
-					new SqlParameter("@PeriodEnd", periodEnd)
-				})
-				.ToList();
+				    parameters: new []
+                    {
+					    new SqlParameter("@CarerCode", carerCode),
+					    new SqlParameter("@PeriodStart", periodStart),
+					    new SqlParameter("@PeriodFinish", periodFinish)
+				    }
+                ).ToList();
         }
 
-		public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
-		{
-			// Validation
-			// - Unmapped Booking Types (Default to Hours Paid/OT10?)
-			// Get Carers for Payroll run
-			// Extract Contracted Hours
-			// Get OT Hours (Actual-Contract)
-			// Subtract non-default area hours
-			// Add non-default area hours
-			// Get Unit Code Info (SleepOver & NightPremium)
+        public ICollection<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
+        {
+            return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustmentsByTeam @TeamCode, @PeriodStart, @PeriodEnd",
+				    parameters: new []
+                    {
+					    new SqlParameter("@TeamCode", teamCode),
+					    new SqlParameter("@PeriodStart", periodStart),
+					    new SqlParameter("@PeriodEnd", periodEnd)
+				    }
+                ).ToList();
+        }
 
-			throw new NotImplementedException();
+		public ICollection<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
+		{
+            ICollection<Payroll> payrollData = new List<Payroll>();
+            ICollection<Summary> summaries = GetSummaries(teamCode, periodStart, periodEnd);
+
+            // Validation
+            // - Unmapped Booking Types (Default to Hours Paid/OT10?)
+
+            // Get Carers for Payroll run
+            List<Carer> carers = GetCarersByTeam(teamCode, periodStart).ToList();
+
+            carers.ForEach(car =>
+            {
+                ICollection<CarerBooking> bookings = GetBookings(car.CarerCode, periodStart, periodEnd);
+                ICollection<Shift> shifts = BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
+                Summary sum = summaries.FirstOrDefault(s => s.CarerCode == car.CarerCode);
+
+                // Get OT Hours (Actual-Contract)
+                // Subtract non-default area hours
+                // Add non-default area hours
+                // Get Unit Code Info (SleepOver & NightPremium)
+            });
+
+            return payrollData;
 		}
     }
 }
