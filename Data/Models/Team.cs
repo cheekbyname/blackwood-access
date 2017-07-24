@@ -17,5 +17,6 @@ namespace Blackwood.Access.Models
 		// public bool EnableSync { get; set; }
 
 		// public string PrimaryContact { get; set; }
+		public string CostCentre { get; set; }
 	}
 }

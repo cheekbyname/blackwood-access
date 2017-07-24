@@ -298,66 +298,90 @@ namespace Blackwood.Access.Services
             if (File.Exists(logFile)) File.Delete(logFile);
             File.AppendAllText(logFile, $"Carer,Team,Total Mins\n");
 
-            ICollection<Payroll> payrollData = new List<Payroll>();
+            ICollection<Payroll> data = new List<Payroll>();
 
             ICollection<Summary> summaries = GetSummaries(teamCode, periodStart, periodEnd);
             ICollection<Adjustment> adjusts = GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
 
             // Validation
             // - Unmapped Booking Types (Default to Hours Paid/OT10?)
+            // - No contract for default team
 
             // Get Carers for Payroll run
             // TODO We are probably looking to narrow this down to only carers who are DEFAULT for this Team
+			// Q: If someone works in more than one team, is it always the default team that submits data?
             List<Carer> carers = GetCarersByTeam(teamCode, periodStart).ToList();
 
             carers.ForEach(car =>
             {
                 ICollection<CarerContract> contracts = GetContracts(car.CarerCode, periodStart);
                 ICollection<CarerBooking> bookings = GetBookings(car.CarerCode, periodStart, periodEnd);
-                ICollection<Shift> shifts = BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
-                ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
-                    && adj.Authorised != null).ToList();
 
-                // We don't use the summaries here because they aren't broken down by Contract/Team
-                // We may want to refactor the Summaries to be an aggregation of the Contract/Team aggregations
+                if (bookings.Count > 0)     // TODO Consider if there are any scenarios where valid payroll but no bookings
+                {
+                    ICollection<Shift> shifts = BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
+                    ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
+                        && adj.Authorised != null).ToList();
 
-                // Project aggregation of hours
-                List<Team> teams = shifts
-                    .SelectMany(sh => contracts.Where(cc => cc.ContractCode == sh.ContractCode)).Distinct()
-                    .SelectMany(cc => _context.Teams.Where(tm => tm.TeamCode == cc.TeamCode)).Distinct().ToList();
-                List<PayrollAgg> agg = teams.Select(tm => new PayrollAgg()
+                    // We don't use the summaries here because they aren't broken down by Contract/Team
+                    // We may want to refactor the Summaries to be an aggregation of the Contract/Team aggregations
+
+                    // Project aggregation of hours
+                    // TODO Refactor to aggregate over CostCentre & NominalCode
+                    List<Team> teams = shifts
+                        .SelectMany(sh => contracts.Where(cc => cc.ContractCode == sh.ContractCode)).Distinct()
+                        .SelectMany(cc => _context.Teams.Where(tm => tm.TeamCode == cc.TeamCode)).Distinct().ToList();
+                    List<PayrollAgg> aggs = teams.Select(tm => new PayrollAgg()
                     {
                         Carer = car,
                         Team = tm,
                         ActualAdjustedMins = shifts.Where(sh => contracts
                             .Where(cn => cn.TeamCode == tm.TeamCode).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
-                            .Sum(sh => sh.ShiftMins)
+                                .Sum(sh => sh.ShiftMins)
                     }).ToList();
 
-                agg.ForEach(line =>
-                {
-                    File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{line.Team.TeamDesc},{line.ActualAdjustedMins}\n");
-                });
+                    // Add a default area entry if one does not exist - can strip out later if zero
+                    // TODO And, uh, if they don't have one?
+                    if (!aggs.Any(agg => agg.Team.TeamCode == agg.Carer.DefaultTeamCode))
+                    {
+                        aggs.Add(new PayrollAgg()
+                        {
+                            Carer = car,
+                            Team = _context.Teams.FirstOrDefault(tm => tm.TeamCode == car.DefaultTeamCode),
+                            ActualAdjustedMins = 0
+                        });
+                    }
 
-                // Get OT Hours (Actual-Contract)
-                
-                // Get non-default hours
-                // TeamCode, CostCentre, Adjusted Hours
+                    // Adjust for non-default area time (down to zero min)
+                    double defaultTime = aggs.FirstOrDefault(agg => agg.Team.TeamCode == agg.Carer.DefaultTeamCode).ActualAdjustedMins;
+                    double nonDefaultTime = aggs.Where(agg => agg.Team.TeamCode != agg.Carer.DefaultTeamCode)
+                        .Sum(agg => agg.ActualAdjustedMins);
+                    double contractTime = contracts.Max(cn => cn.ContractMins) * 52 / 12;
+                    if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.Team.TeamCode == agg.Carer.DefaultTeamCode)
+                        .ActualAdjustedMins = defaultTime - (nonDefaultTime > contractTime ? contractTime : nonDefaultTime);
 
-                // Subtract non-default area hours
-                
-                // Add non-default area hours
-                // Get Unit Code Info (SleepOver & NightPremium)
+                    aggs.ForEach(agg =>
+                    {
+                        File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.Team.TeamDesc},{agg.ActualAdjustedMins}\n");
+                    });
+
+                    // Get OT Hours (Actual-Contract)
+
+                    // Get Unit Code Info (SleepOver & NightPremium)
+
+                    // Strip out any aggregate records with zero time
+                }
 
             });
 
-            return payrollData;
+            return data;
 		}
 
         private class PayrollAgg
         {
             public Carer Carer { get; set; }
             public Team Team { get; set; }
+            public string CostCentre { get; set; }
             public double ActualAdjustedMins { get; set; }
         }
     }

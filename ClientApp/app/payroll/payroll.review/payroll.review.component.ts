@@ -52,6 +52,7 @@ export class PayrollReviewComponent implements OnInit {
         carers.filter(ca => ca.careSysGuid === null).forEach(car => {
             this.pushRevision(car, 'No CareSys mapping for Default Team');
         });
+        // TODO Check there is a contract on StaffPlan for the primary location on CareSys
     }
 
     pushRevision(carer: Carer, rev: string) {
