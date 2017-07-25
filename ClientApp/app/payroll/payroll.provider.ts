@@ -1,7 +1,9 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
+import 'rxjs/add/operator/ToPromise';
 
+import { AccessUser } from "../models/accessuser";
 import { Adjustment } from "../models/adjustment";
 import { Carer } from '../models/carer';
 import { CarerContract } from '../models/contract';
@@ -10,8 +12,10 @@ import { Summary } from "../models/summary";
 import { Team } from '../models/team';
 import { Timesheet } from '../models/timesheet';
 
+import { UserProvider } from "../user.provider";
+
 @Injectable()
-export class PayrollProvider implements OnInit {
+export class PayrollProvider {
 
     private _weekCommencing = new BehaviorSubject<Date>(new Date());
     private _periodStart = new BehaviorSubject<Date>(null);
@@ -41,9 +45,11 @@ export class PayrollProvider implements OnInit {
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
-	public unpaidCodes: number [] = [123, 110, 98];
+    public unpaidCodes: number [] = [123, 110, 98];
+    
+    private user: AccessUser;
 
-    constructor(public http: Http) {
+    constructor(public http: Http, private userPro: UserProvider) {
         // this.selectedTeam$.subscribe((tm) => {
         //     if (tm != undefined) this.getCarers(tm);
         // });
@@ -67,19 +73,17 @@ export class PayrollProvider implements OnInit {
             (team, start, finish) => { return { "team": team, "start": start, "finish": finish }});
         
         this.paramSub = this.paramObserver$.subscribe(x => this.handleParams(x));
+        this.userPro.userInfo$.subscribe(x => this.user = x);
 
         this.getTeams();
-    }
-
-    ngOnInit() {
-        
+        // TODO We might need this.userPro.GetUserInfo();
     }
 
     handleParams(x) {
         if (x.start != null && x.finish != null && x.finish > x.start && x.team.teamCode) {
             this._summaries.next(null);
             this._adjustments.next(undefined);
-            // TODO Async plx
+            // TODO Async plx?
             this.getSummaries(x.team, x.start, x.finish);
             this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
         }
@@ -106,7 +110,8 @@ export class PayrollProvider implements OnInit {
     }
 
 	setPeriod(dt: Date) {
-		// Get first and last of month from a selected date
+        // Get first and last of month from a selected date
+        // TODO Refactor this to take Dundee's pathological timetable into account
 		var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
 		var finish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
 
@@ -225,16 +230,23 @@ export class PayrollProvider implements OnInit {
         adj.authorised = null;
         adj.authorisedBy = null;
         adj.rejected = new Date(Date.now());
-        adj.rejectedBy = 'AlexC';               // TODO
+        adj.rejectedBy = this.user.accountName;
         return this.updateAdjustment(adj);
     }
 
     public approveAdjustment(adj: Adjustment): Promise<boolean> {
         adj.authorised = new Date(Date.now());
-        adj.authorisedBy = 'AlexC';             // TODO
+        adj.authorisedBy = this.user.accountName;
         adj.rejected = null;
         adj.rejectedBy = null;
         return this.updateAdjustment(adj);
+    }
+
+    public putAdjustment(adj: Adjustment): Promise<Adjustment> {
+        var tsUrl = '/api/payroll/AddTimesheetAdjustment';
+        return this.http.put(tsUrl, adj).toPromise().then((res) => {
+            return Promise.resolve(res.json() as Adjustment);
+        });
     }
 
     private updateAdjustment(adj: Adjustment): Promise<boolean> {

@@ -53,6 +53,7 @@ export class PayrollReviewComponent implements OnInit {
             this.pushRevision(car, 'No CareSys mapping for Default Team');
         });
         // TODO Check there is a contract on StaffPlan for the primary location on CareSys
+        // carers.filter(ca => )
     }
 
     pushRevision(carer: Carer, rev: string) {

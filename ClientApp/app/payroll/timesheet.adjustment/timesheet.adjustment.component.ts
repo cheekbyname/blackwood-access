@@ -99,14 +99,8 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	putAdjustment(oldAdj: Adjustment) {
-		// TODO Move this onto Provider
         // TODO Guard on what condition?
-		var tsUrl = '/api/payroll/AddTimesheetAdjustment';
-		this.http.put(tsUrl, oldAdj).subscribe((res) => {
-			// The (potentially updated) Adjustment returned by the API
-			console.log(res.json());
-			var newAdj = res.json() as Adjustment;
-			// Splice into Timesheet adjustments
+		this.payPro.putAdjustment(oldAdj).then((newAdj) => {
 			var idx = this.timesheet.adjustments.indexOf(oldAdj);
 			this.timesheet.adjustments.splice(idx, 1, newAdj);
 		});
@@ -114,9 +108,14 @@ export class TimesheetAdjustmentComponent {
 
     public addAdjust() {
 		// TODO Guard on what condition?
-		// TODO Approve automatically if user adding has authority to do so
 		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
+
+		// Automatically assign CarerContract if only one for this timesheet
 		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
+
+		// Automatically Approve if user adding has authority to do so
+		if (this.user.canAuthoriseAdjustments) this.approve(newAdj);
+
 		this.timesheet.adjustments.push(newAdj);
 	}
 
