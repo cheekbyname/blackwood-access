@@ -326,43 +326,51 @@ namespace Blackwood.Access.Services
                     // We don't use the summaries here because they aren't broken down by Contract/Team
                     // We may want to refactor the Summaries to be an aggregation of the Contract/Team aggregations
 
-                    // Project aggregation of hours
-                    // TODO Refactor to aggregate over CostCentre & NominalCode
-                    List<Team> teams = shifts
-                        .SelectMany(sh => contracts.Where(cc => cc.ContractCode == sh.ContractCode)).Distinct()
-                        .SelectMany(cc => _context.Teams.Where(tm => tm.TeamCode == cc.TeamCode)).Distinct().ToList();
-                    List<PayrollAgg> aggs = teams.Select(tm => new PayrollAgg()
+                    // Extract CostCenters & Build Aggregation List
+                    List<string> costCentres = shifts
+                        .Select(sh => contracts.FirstOrDefault(cn => sh.ContractCode == cn.ContractCode).CostCentre)
+                        .Distinct().ToList();
+					
+					CarerContract primaryContract = contracts.FirstOrDefault(cn => cn.TeamCode == car.DefaultTeamCode);
+					if (primaryContract == null)
+					{
+						
+					}
+                    string primaryCostCentre = primaryContract.CostCentre;
+
+                    List<PayrollAgg> aggs = costCentres.Select(cc => new PayrollAgg()
                     {
                         Carer = car,
-                        Team = tm,
+                        CostCentre = cc,
+                        // TODO Check these shifts include authorised adjustments
                         ActualAdjustedMins = shifts.Where(sh => contracts
-                            .Where(cn => cn.TeamCode == tm.TeamCode).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
+                            .Where(cn => cn.CostCentre == cc).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
                                 .Sum(sh => sh.ShiftMins)
                     }).ToList();
 
                     // Add a default area entry if one does not exist - can strip out later if zero
                     // TODO And, uh, if they don't have one?
-                    if (!aggs.Any(agg => agg.Team.TeamCode == agg.Carer.DefaultTeamCode))
+                    if (!aggs.Any(agg => agg.CostCentre == primaryCostCentre))
                     {
                         aggs.Add(new PayrollAgg()
                         {
                             Carer = car,
-                            Team = _context.Teams.FirstOrDefault(tm => tm.TeamCode == car.DefaultTeamCode),
+                            CostCentre = primaryCostCentre,
                             ActualAdjustedMins = 0
                         });
                     }
 
                     // Adjust for non-default area time (down to zero min)
-                    double defaultTime = aggs.FirstOrDefault(agg => agg.Team.TeamCode == agg.Carer.DefaultTeamCode).ActualAdjustedMins;
-                    double nonDefaultTime = aggs.Where(agg => agg.Team.TeamCode != agg.Carer.DefaultTeamCode)
+                    double defaultTime = aggs.FirstOrDefault(agg => agg.CostCentre == primaryCostCentre).ActualAdjustedMins;
+                    double nonDefaultTime = aggs.Where(agg => agg.CostCentre != primaryCostCentre)
                         .Sum(agg => agg.ActualAdjustedMins);
                     double contractTime = contracts.Max(cn => cn.ContractMins) * 52 / 12;
-                    if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.Team.TeamCode == agg.Carer.DefaultTeamCode)
+                    if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.CostCentre == primaryCostCentre)
                         .ActualAdjustedMins = defaultTime - (nonDefaultTime > contractTime ? contractTime : nonDefaultTime);
 
                     aggs.ForEach(agg =>
                     {
-                        File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.Team.TeamDesc},{agg.ActualAdjustedMins}\n");
+                        File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CostCentre},{agg.ActualAdjustedMins}\n");
                     });
 
                     // Get OT Hours (Actual-Contract)
@@ -380,7 +388,6 @@ namespace Blackwood.Access.Services
         private class PayrollAgg
         {
             public Carer Carer { get; set; }
-            public Team Team { get; set; }
             public string CostCentre { get; set; }
             public double ActualAdjustedMins { get; set; }
         }
