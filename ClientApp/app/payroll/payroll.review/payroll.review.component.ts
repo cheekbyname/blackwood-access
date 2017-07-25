@@ -45,6 +45,8 @@ export class PayrollReviewComponent implements OnInit {
     }
 
     checkValid(carers: Carer[]) {
+        // TODO Refactor to general-purpose validatino method on controller, as sensible to keep this in sync
+        // TODO with whatever validation is done at the final output stage
         this.revisions = [];
         carers.filter(ca => ca.personnelNumber == '' || ca.personnelNumber == null).forEach(car => {
             this.pushRevision(car, 'Missing Payroll Number');
@@ -53,7 +55,7 @@ export class PayrollReviewComponent implements OnInit {
             this.pushRevision(car, 'No CareSys mapping for Default Team');
         });
         // TODO Check there is a contract on StaffPlan for the primary location on CareSys
-        // carers.filter(ca => )
+        //carers.filter(ca => )
     }
 
     pushRevision(carer: Carer, rev: string) {
@@ -70,7 +72,6 @@ export class PayrollReviewComponent implements OnInit {
     }
 
     public clearDetail() {
-        //this.router.navigate([{ outlets: { 'detail': null }}]);
         this.router.navigate(['/payroll', this.team.teamCode,
 			{ outlets: { detail: null, summary: ['summary', this.team.teamCode] }}]);
 	}

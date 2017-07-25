@@ -36,7 +36,7 @@
 					<tr class="row" *ngFor="let contract of timesheet.contracts">
 						<td>{{contract.payrollNumber}}</td>
 						<td>{{contract.teamDesc}}</td>
-						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- This is out by one on the first digit under certain circumstances -->
+						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- "Future" cycles still an issue here -->
 						<td>{{payPro.displayTime(contract.contractMins)}}</td>
 						<td>{{payPro.displayTime(availHoursForContract(contract.contractCode))}}</td>
 						<td>{{payPro.displayTime(bookedHoursForContract(contract.contractCode))}}</td>

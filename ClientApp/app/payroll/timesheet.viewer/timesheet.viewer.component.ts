@@ -39,7 +39,11 @@ export class TimesheetViewerComponent implements OnInit {
 			if (p['carerCode'] != undefined) {
 				this.payPro.carers$.subscribe((carers) => {
 					this.carers = carers;
-					if (carers != null) this.carer = carers.find(carer => carer.carerCode == p['carerCode']);
+					if (carers != null) {
+						let car = carers.find(carer => carer.carerCode == p['carerCode']);
+						this._carer = car;
+						this.payPro.selectCarer(car);
+					}
 				});
 			}
 		});
@@ -48,7 +52,9 @@ export class TimesheetViewerComponent implements OnInit {
 		});
 		this.payPro.timesheet$.subscribe((ts) => {
 			if (ts != null) this.processTimesheet(ts);
-		})
+		});
+		this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
+		this.payPro.selectedCarer$.subscribe(ca => this.carer = ca);
 	}
 
 	public loc: Locale = LOC_EN;
@@ -59,6 +65,7 @@ export class TimesheetViewerComponent implements OnInit {
 	bookings: BookingGrid;
 	isContracted: boolean;
 	carers: Carer[];
+	team: Team;		// This required purely for navigation on close -_-
 
 	adjustVisible: boolean = false;
 	dayOffset: number;
@@ -70,14 +77,15 @@ export class TimesheetViewerComponent implements OnInit {
 	@Input()
 	set weekCommencing(weekCommencing: Date) {
 		this._weekCommencing = weekCommencing;
-		if (this.carer != undefined) this.payPro.getTimesheet(this.carer, this.weekCommencing);
 	}
 	get weekCommencing() { return this._weekCommencing }
 
 	@Input()
 	set carer(carer: Carer) {
-		this._carer = carer;
-		if (this.weekCommencing != undefined) this.payPro.getTimesheet(this.carer, this.weekCommencing);
+		if (carer !== undefined && carer !== null) {
+			this.router.navigate(['/payroll', this.team.teamCode,
+				{ outlets: { detail: ['timesheet', carer.carerCode], summary: ['summary', this.team.teamCode] }}]);
+		}
 	}
 	get carer() { return this._carer }
 
@@ -208,6 +216,9 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public clearDetail() {
-		this.router.navigate([{ outlets: { 'detail': null }}]);
+		//this.router.navigate([{ outlets: { 'detail': null }}]);
+		this.router.navigate(['/payroll', this.team.teamCode,
+			{ outlets: { detail: null, summary: ['summary', this.team.teamCode] }}]);
+
 	}
 }

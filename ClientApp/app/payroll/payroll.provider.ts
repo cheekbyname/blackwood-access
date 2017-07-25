@@ -1,7 +1,7 @@
 import { Component, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
-import 'rxjs/add/operator/ToPromise';
+import 'rxjs/add/operator/toPromise';
 
 import { AccessUser } from "../models/accessuser";
 import { Adjustment } from "../models/adjustment";
@@ -31,8 +31,10 @@ export class PayrollProvider {
     weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
     periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
-    selectedTeam$ = this._selectedTeam.asObservable().distinctUntilChanged();
-    selectedCarer$ = this._selectedCarer.asObservable().distinctUntilChanged();
+    selectedTeam$ = this._selectedTeam.asObservable()
+        .distinctUntilChanged((a, b) => a.teamCode === b.teamCode);
+    selectedCarer$ = this._selectedCarer.asObservable()
+        .distinctUntilChanged((a, b) => a !== null && b !== null && a.carerCode === b.carerCode);
 
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
@@ -40,8 +42,10 @@ export class PayrollProvider {
     timesheet$ = this._timesheet.asObservable();
     summaries$ = this._summaries.asObservable();
 
-    paramObserver$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
-    paramSub: Subscription;
+    weekObserver$: Observable<{"weekCommencing": Date, "carer": Carer}>;
+    weekSub: Subscription;
+    periodObserver$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
+    periodSub: Subscription;
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
@@ -54,38 +58,69 @@ export class PayrollProvider {
         //     if (tm != undefined) this.getCarers(tm);
         // });
 
-        Observable.combineLatest(this.weekCommencing$, this.selectedTeam$,
-            (wc, tm) => { return { "weekCommencing": wc, "selectedTeam": tm}})
+        Observable
+            .combineLatest(this.weekCommencing$, this.selectedTeam$, (wc, tm) => {
+                return { "weekCommencing": wc, "selectedTeam": tm}
+            })
+            .distinctUntilChanged((a, b) => {
+                if (a.selectedTeam === null || b.selectedTeam === null) return false;
+                return (a.selectedTeam.teamCode === b.selectedTeam.teamCode) && (a.weekCommencing === b.weekCommencing);
+            })
             .subscribe(x => {
                 if (x.selectedTeam.teamCode && x.weekCommencing) {
+                    // TODO Consider suspending this.weekSub until carers refreshed
                     this.getCarers(x.selectedTeam, x.weekCommencing);
                 }
             });
 
-        Observable.combineLatest(this.weekCommencing$, this.selectedCarer$,
-            (wc, carer) => { return { "weekCommencing": wc, "carer": carer }})
-            .subscribe(x => {
-                this._timesheet.next(null);
-                this.getTimesheet(x.carer, x.weekCommencing);
+        // Observable.combineLatest(this.weekCommencing$, this.selectedCarer$,
+        //     (wc, carer) => { return { "weekCommencing": wc, "carer": carer }})
+        //     .subscribe(x => {
+        //         this._timesheet.next(null);
+        //         this.getTimesheet(x.carer, x.weekCommencing);
+        //     });
+        
+        this.weekObserver$ = Observable
+            .combineLatest(this.weekCommencing$, this.selectedCarer$, (wc, carer) => {
+                return { "weekCommencing": wc, "carer": carer}
             });
-        
-        this.paramObserver$ = Observable.combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$,
-            (team, start, finish) => { return { "team": team, "start": start, "finish": finish }});
-        
-        this.paramSub = this.paramObserver$.subscribe(x => this.handleParams(x));
+        this.weekSub = this.weekObserver$
+            .distinctUntilChanged((a, b) => {
+                if (a.carer === null || b.carer === null) return false;
+                return (a.carer.carerCode === b.carer.carerCode) && (a.weekCommencing === b.weekCommencing);
+            })
+            .subscribe(x => this.handleWeek(x));
+
+        this.periodObserver$ = Observable
+            .combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$, (team, start, finish) => {
+                return { "team": team, "start": start, "finish": finish }
+            });
+        this.periodSub = this.periodObserver$
+            .distinctUntilChanged((a, b) => {
+                if (a.team === null || b.team === null) return false;
+                return (a.team.teamCode === b.team.teamCode) && (a.start === b.start) && (a.finish === b.finish);
+            })
+            .subscribe(x => this.handlePeriod(x));
+
         this.userPro.userInfo$.subscribe(x => this.user = x);
 
         this.getTeams();
-        // TODO We might need this.userPro.GetUserInfo();
     }
 
-    handleParams(x) {
+    handlePeriod(x) {
         if (x.start != null && x.finish != null && x.finish > x.start && x.team.teamCode) {
             this._summaries.next(null);
             this._adjustments.next(undefined);
             // TODO Async plx?
             this.getSummaries(x.team, x.start, x.finish);
             this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
+        }
+    }
+
+    handleWeek(x) {
+        if (x.weekCommencing != null && x.carer != null) {
+            this._timesheet.next(null);
+            this.getTimesheet(x.carer, x.weekCommencing);
         }
     }
 
@@ -115,12 +150,12 @@ export class PayrollProvider {
 		var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
 		var finish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
 
-        this.paramSub.unsubscribe();
+        this.periodSub.unsubscribe();
 
 		this.setPeriodFinish(finish);
 		this.setPeriodStart(start);
 
-        this.paramSub = this.paramObserver$.subscribe(x => this.handleParams(x));
+        this.periodSub = this.periodObserver$.subscribe(x => this.handlePeriod(x));
 	}
 
     getTeams() {

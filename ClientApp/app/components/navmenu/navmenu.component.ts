@@ -31,7 +31,7 @@ export class NavMenuComponent implements OnInit {
     }
 
     dateSelected(ev: Event) {
-        this.payPro.selectWeekCommencing(this.selectedDate);
         this.payPro.setPeriod(this.selectedDate);
+        this.payPro.selectWeekCommencing(this.selectedDate);
     }
 }
