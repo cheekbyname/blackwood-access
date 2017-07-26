@@ -11,6 +11,7 @@ import { Locale, LOC_EN } from '../models/locale';
 import { Summary } from "../models/summary";
 import { Team } from '../models/team';
 import { Timesheet } from '../models/timesheet';
+import { CarerValidationItem, ValidationResult } from "../models/validation";
 
 import { UserProvider } from "../user.provider";
 
@@ -27,6 +28,7 @@ export class PayrollProvider {
     private _adjustments = new BehaviorSubject<Adjustment[]>(null);
     private _timesheet = new BehaviorSubject<Timesheet>(null);
     private _summaries = new BehaviorSubject<Summary[]>(null);
+    private _validation = new BehaviorSubject<ValidationResult>(null);
 
     weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
@@ -35,6 +37,7 @@ export class PayrollProvider {
         .distinctUntilChanged((a, b) => a.teamCode === b.teamCode);
     selectedCarer$ = this._selectedCarer.asObservable()
         .distinctUntilChanged((a, b) => a !== null && b !== null && a.carerCode === b.carerCode);
+    validation$ = this._validation.asObservable();
 
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
@@ -111,9 +114,11 @@ export class PayrollProvider {
         if (x.start != null && x.finish != null && x.finish > x.start && x.team.teamCode) {
             this._summaries.next(null);
             this._adjustments.next(undefined);
-            // TODO Async plx?
+            this._validation.next(undefined);
+            
             this.getSummaries(x.team, x.start, x.finish);
             this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
+            this.getValidationResult(x.team, x.start, x.finish);
         }
     }
 
@@ -204,6 +209,14 @@ export class PayrollProvider {
 			});
 		}
 	}
+
+    getValidationResult(team: Team, periodStart: Date, periodFinish: Date) {
+        var tsUrl = `/api/payroll/validate/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
+        console.log(tsUrl);
+        this.http.get(tsUrl).subscribe(res => {
+            this._validation.next(res.json() as ValidationResult);
+        });
+    }
 
 	public sqlDate(date: Date): string {
         return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();

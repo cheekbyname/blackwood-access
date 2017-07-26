@@ -1,14 +1,14 @@
-using Blackwood.Access.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
 namespace Blackwood.Access
 {
+    using Blackwood.Access.Services;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.SpaServices.Webpack;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -41,6 +41,7 @@ namespace Blackwood.Access
             services.AddTransient<IPayrollService, PayrollService>();
             services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPayrollValidationService, PayrollValidationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

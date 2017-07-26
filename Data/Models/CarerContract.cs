@@ -1,4 +1,5 @@
 namespace Blackwood.Access.Models {
+	
     using System;
     using System.ComponentModel.DataAnnotations;
 

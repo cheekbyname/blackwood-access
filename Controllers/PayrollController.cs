@@ -10,10 +10,12 @@ namespace Blackwood.Access.Controllers
 	public class PayrollController : ControllerBase
 	{
 		private IPayrollService _service;
+		private IPayrollValidationService _validation;
 
-		public PayrollController(IPayrollService service)
+		public PayrollController(IPayrollService service, IPayrollValidationService validation)
 		{
 			_service = service;
+			_validation = validation;
 		}
 
 		[HttpGet("[action]")]
@@ -68,5 +70,10 @@ namespace Blackwood.Access.Controllers
         {
             return _service.GetPayrollData(teamCode, periodStart, periodEnd);
         }
+
+		public ValidationResult Validate(int teamCode, DateTime periodStart, DateTime periodFinish)
+		{
+			return _validation.Validate(teamCode, periodStart, periodFinish);
+		}
 	}
 }

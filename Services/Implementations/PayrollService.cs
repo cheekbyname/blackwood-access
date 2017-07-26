@@ -18,11 +18,14 @@ namespace Blackwood.Access.Services
 
 		private AccessContext _context;
         private IUserService _userService;
+		private IPayrollValidationService _validationService;
 
-		public PayrollService(AccessContext context, IUserService userService)
+		public PayrollService(AccessContext context, IUserService userService, IPayrollValidationService validationService)
 		{
 			_context = context;
             _userService = userService;
+			_validationService = validationService;
+			
 			_unpaidCodes = _context.PayrollCodeMap
 				.Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
 			// TODO Do something similar for _absenceCodes?
@@ -195,7 +198,6 @@ namespace Blackwood.Access.Services
 						new SqlParameter("@periodStart", periodStart),
 						new SqlParameter("@periodEnd", periodEnd)})
 				.ToList();
-			// TODO See if we can async this
 			summaries.ForEach(sum => {
                 // Get calculated shift times etc
                 var shifts = BookingsToShifts(periodStart, periodEnd,
@@ -203,9 +205,9 @@ namespace Blackwood.Access.Services
 				sum.ActualMins = shifts.Sum(sh => sh.ShiftMins);
                 sum.UnpaidMins = shifts.Sum(sh => sh.UnpaidMins);
                 // Apply adjustments to shift times
-                // TODO APPROVED Adjustments only!
                 var adjusts = GetTimesheetAdjustments(sum.CarerCode, periodStart, periodEnd);
-                sum.ActualMins = sum.ActualMins + adjusts.Sum(adj => (adj.Hours * 60) + adj.Mins);
+                sum.ActualMins = sum.ActualMins + adjusts.Where(adj => adj.Authorised != null)
+					.Sum(adj => (adj.Hours * 60) + adj.Mins);
 			});
 			return summaries;
 		}
@@ -338,7 +340,7 @@ namespace Blackwood.Access.Services
 					}
                     string primaryCostCentre = primaryContract.CostCentre;
 
-                    List<PayrollAgg> aggs = costCentres.Select(cc => new PayrollAgg()
+                    List<PayrollAggregate> aggs = costCentres.Select(cc => new PayrollAggregate()
                     {
                         Carer = car,
                         CostCentre = cc,
@@ -352,7 +354,7 @@ namespace Blackwood.Access.Services
                     // TODO And, uh, if they don't have one?
                     if (!aggs.Any(agg => agg.CostCentre == primaryCostCentre))
                     {
-                        aggs.Add(new PayrollAgg()
+                        aggs.Add(new PayrollAggregate()
                         {
                             Carer = car,
                             CostCentre = primaryCostCentre,
@@ -384,12 +386,5 @@ namespace Blackwood.Access.Services
 
             return data;
 		}
-
-        private class PayrollAgg
-        {
-            public Carer Carer { get; set; }
-            public string CostCentre { get; set; }
-            public double ActualAdjustedMins { get; set; }
-        }
     }
 }
