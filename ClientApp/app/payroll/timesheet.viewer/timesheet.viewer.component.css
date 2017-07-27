@@ -64,9 +64,14 @@ p-spinner, p-calendar {
     margin-left: 8px;
 }
 
-span.adjust-flag {
+span.adjust-crit {
     font-size: 12pt;
     color: red;
+}
+
+span.adjust-flag {
+    font-size: 12pt;
+    color: green;
 }
 
 span.glyphicon-ok {

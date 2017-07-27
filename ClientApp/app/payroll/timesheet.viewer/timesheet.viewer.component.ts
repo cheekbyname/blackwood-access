@@ -200,9 +200,13 @@ export class TimesheetViewerComponent implements OnInit {
 		return shiftColors[bk.shift - 1];
 	}
 
-	public minsAdjustOffset(offset: number) {
+	public minsAdjustOffset(offset: number): number {
 		return this.timesheet.adjustments.filter(adj => adj.dayOffset == offset && adj.rejected == null)
 			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
+	}
+
+	public hasAdjustOffset(offset: number): boolean {
+		return (this.timesheet.adjustments.filter(adj => adj.dayOffset == offset).length > 0) && !(this.minsAdjustOffset(offset) > 0);
 	}
 
 	public openAdjustments(offset: number) {

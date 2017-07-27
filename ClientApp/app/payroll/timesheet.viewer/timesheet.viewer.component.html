@@ -56,7 +56,9 @@
 							[title]="'Click here to adjust hours for ' + day + ' ' + payPro.dateOrd(weekCommencing, i) + ' ' + payPro.monthOf(weekCommencing, i)">
 							<span>{{day}} {{payPro.dateOrd(weekCommencing, i)}}</span><br/>
 							<span>{{payPro.displayTime(actualHoursForDay(i))}}</span>
-							<span *ngIf="minsAdjustOffset(i) != 0" title="There are adjustments for this day"
+							<span *ngIf="minsAdjustOffset(i) != 0" title="There are adjustments for this day that require attention"
+								class="glyphicon glyphicon-exclamation-sign adjust-crit pull-right"></span>
+							<span *ngIf="hasAdjustOffset(i)" title="There are adjustments for this day"
 								class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
 						</th>
 					</tr>

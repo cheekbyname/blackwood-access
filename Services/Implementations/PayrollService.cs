@@ -3,11 +3,8 @@ namespace Blackwood.Access.Services
     using System;
     using System.IO;
     using System.Collections.Generic;
-    using System.Data;
-    using System.Data.SqlClient;
     using System.Linq;
     using Models;
-    using Microsoft.EntityFrameworkCore;
     using System.Security.Claims;
 
     public class PayrollService : IPayrollService
@@ -16,51 +13,26 @@ namespace Blackwood.Access.Services
 		private int[] _absenceCodes = { 108, 109 };
 		private int[] _unpaidCodes;
 
-		private AccessContext _context;
         private IPayrollDataService _dataService;
         private IPayrollValidationService _validationService;
         private IUserService _userService;
 
-		public PayrollService(AccessContext context, IUserService userService, IPayrollValidationService validationService,
+		public PayrollService(IUserService userService, IPayrollValidationService validationService,
             IPayrollDataService dataService)
 		{
-			_context = context;
             _dataService = dataService;
             _userService = userService;
 			_validationService = validationService;
 			
-			_unpaidCodes = _context.PayrollCodeMap
+			_unpaidCodes = _dataService.GetPayrollCodeMap()
 				.Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
 			// TODO Do something similar for _absenceCodes?
 		}
 
-		public ICollection<Team> GetTeams()
-		{
-            return _context.Set<Team>().FromSql("GetTeams").OrderBy(t => t.TeamDesc).ToList();
-		}
-
-        public ICollection<Carer> GetCarers()
-        {
-			return _context.Carers.OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
-        }
-
-		//public ICollection<Carer> GetCarersByTeam(int TeamCode, DateTime? periodStart)
-		//{
-		//	return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode, @PeriodStart",
-  //              parameters: new []
-  //                  {
-		//		        new SqlParameter("@TeamCode", TeamCode),
-		//		        new SqlParameter()
-  //                      {
-  //                          ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value
-  //                      }
-		//	        }
-  //              ).OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
-		//}
 
         public Timesheet GetTimesheet(int carerCode, DateTime weekCommencing)
         {
-			Carer carer = _context.Carers.FirstOrDefault(c => c.CarerCode == carerCode);
+			Carer carer = _dataService.GetCarers().FirstOrDefault(c => c.CarerCode == carerCode);
 
 			Timesheet ts = new Timesheet()
 			{
@@ -70,26 +42,17 @@ namespace Blackwood.Access.Services
 			};
 
             // CarerContracts
-            ts.Contracts = GetContracts(carerCode, weekCommencing);
+            ts.Contracts = _dataService.GetContracts(carerCode, weekCommencing);
 
 			bool isContracted = ts.Contracts.Any(c => c.ContractMins > 0);
 
-			// ScheduledAvailability
-			ts.ScheduledAvailability = _context.Set<Availability>()
-                .FromSql("GetCarerScheduledAvailability @CarerCode, @WeekCommencing",
-				    parameters: new []
-                    { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
-                ).ToList();
+            // ScheduledAvailability
+            ts.ScheduledAvailability = _dataService.GetScheduledAvailability(carerCode, weekCommencing);
 
-			// ActualAvailability
-			ts.ActualAvailability = _context.Set<Availability>()
-                .FromSql("GetCarerActualAvailability @CarerCode, @WeekCommencing",
-				    parameters: new []
-                        { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
-                ).ToList();
+            // ActualAvailability
+            ts.ActualAvailability = _dataService.GetActualAvailability(carerCode, weekCommencing);
 
-			// TODO Remove Scheduled Availability on Actual Availability Days
-			// DELETE FROM @Scheduled WHERE CONVERT(DATE, ThisStart) IN (SELECT CONVERT(DATE, ThisStart) FROM @ActAvail)
+			// Remove Scheduled Availability on Actual Availability Days
 			ts.ActualAvailability.Select(aa => aa.ThisStart.Date).Distinct().ToList().ForEach(dt => {
 				ts.ScheduledAvailability.Where(sa => sa.ThisStart.Date == dt).ToList().ForEach(sa => {
 					ts.ScheduledAvailability.Remove(sa);
@@ -97,10 +60,10 @@ namespace Blackwood.Access.Services
 			});
 
 			// CarerBookings
-			ts.Bookings = GetBookings(carerCode, weekCommencing, weekCommencing.AddDays(6));
+			ts.Bookings = _dataService.GetBookings(carerCode, weekCommencing, weekCommencing.AddDays(6));
 
             // Adjustments
-            ts.Adjustments = GetTimesheetAdjustments(carerCode, weekCommencing, weekCommencing.AddDays(6)).ToList();
+            ts.Adjustments = _dataService.GetTimesheetAdjustments(carerCode, weekCommencing, weekCommencing.AddDays(6)).ToList();
 
 			// Transform Bookings -> Shifts
 			ts.Shifts = BookingsToShifts(weekCommencing, weekCommencing.AddDays(6), ts.Bookings, ts.CarerCode);
@@ -192,110 +155,34 @@ namespace Blackwood.Access.Services
 			return shifts;
 		}
 
-        public ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
+        public ICollection<Summary> GetAdjustedSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
-			List<Summary> summaries = _context.Set<Summary>()
-				.FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
-					parameters: new [] {
-						new SqlParameter("@teamCode", teamCode),
-						new SqlParameter("@periodStart", periodStart),
-						new SqlParameter("@periodEnd", periodEnd)})
-				.ToList();
-			summaries.ForEach(sum => {
+            List<Summary> summaries = _dataService.GetSummaries(teamCode, periodStart, periodEnd).ToList();
+
+            summaries.ForEach(sum => {
                 // Get calculated shift times etc
                 var shifts = BookingsToShifts(periodStart, periodEnd,
-					GetBookings(sum.CarerCode, periodStart, periodEnd), sum.CarerCode);
+					_dataService.GetBookings(sum.CarerCode, periodStart, periodEnd), sum.CarerCode);
 				sum.ActualMins = shifts.Sum(sh => sh.ShiftMins);
                 sum.UnpaidMins = shifts.Sum(sh => sh.UnpaidMins);
                 // Apply adjustments to shift times
-                var adjusts = GetTimesheetAdjustments(sum.CarerCode, periodStart, periodEnd);
+                var adjusts = _dataService.GetTimesheetAdjustments(sum.CarerCode, periodStart, periodEnd);
                 sum.ActualMins = sum.ActualMins + adjusts.Where(adj => adj.Authorised != null)
 					.Sum(adj => (adj.Hours * 60) + adj.Mins);
 			});
-			return summaries;
+            return summaries;
 		}
-
-		public ICollection<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime periodStart, DateTime periodFinish)
-		{
-			return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustments @CarerCode, @PeriodStart, @PeriodFinish",
-				    parameters: new []
-                    {
-					    new SqlParameter("@CarerCode", carerCode),
-					    new SqlParameter("@PeriodStart", periodStart),
-                        new SqlParameter("@PeriodFinish", periodFinish)
-                    }
-                ).ToList();
-		}
-
 
 		// TODO Consider renaming this method since it's being used for upserts
-		public Adjustment AddTimesheetAdjustment(Adjustment adj, ClaimsPrincipal user)
+		public Adjustment PutTimesheetAdjustment(Adjustment adj, ClaimsPrincipal user)
 		{
             adj.RequestedBy = _userService.GetUserInfo(user).AccountName;
             adj.Requested = DateTime.Now;
 
-			_context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @RejectedBy, @Rejected, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
-				new [] {
-					// TODO Consider null coalescing date values also
-					new SqlParameter { ParameterName = "@Id", Value = adj.Id },
-					new SqlParameter { ParameterName = "@Guid", Value = adj.Guid },
-					new SqlParameter { ParameterName = "@CarerCode", Value = adj.CarerCode },
-					new SqlParameter { ParameterName = "@WeekCommencing", Value = adj.WeekCommencing },
-					new SqlParameter { ParameterName = "@RequestedBy", Value = adj.RequestedBy ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@Requested", SqlDbType = SqlDbType.DateTime2, Value = adj.Requested ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@AuthorisedBy",  Value = adj.AuthorisedBy ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@Authorised", SqlDbType = SqlDbType.DateTime2, Value=adj.Authorised ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@RejectedBy", Value = adj.RejectedBy ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@Rejected", SqlDbType = SqlDbType.DateTime2, Value = adj.Rejected ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@ContractCode", Value = adj.ContractCode },
-					new SqlParameter { ParameterName = "@DayOffset", Value = adj.DayOffset },
-					new SqlParameter { ParameterName = "@Reason", Value = adj.Reason ?? (object)DBNull.Value },
-					new SqlParameter { ParameterName = "@Hours", Value = adj.Hours },
-					new SqlParameter { ParameterName = "@Mins", Value = adj.Mins }
-				});
-			
-			return _context.Adjustments.FirstOrDefault(a => a.Guid == adj.Guid);
+            _dataService.PutTimesheetAdjustment(adj);
+
+			return _dataService.GetAllAdjustments().FirstOrDefault(a => a.Guid == adj.Guid);
 		}
-
-		public void RemoveTimesheetAdjustment(int id)
-		{
-			_context.Database.ExecuteSqlCommand("RemoveTimeSheetAdjustment @AdjustId", new [] {
-				new SqlParameter("@AdjustId", id)
-			});
-		}
-
-		private ICollection<CarerBooking> GetBookings(int carerCode, DateTime periodStart, DateTime periodFinish)
-		{
-			return _context.Set<CarerBooking>().FromSql("GetCarerBookings @CarerCode, @PeriodStart, @PeriodFinish",
-				    parameters: new []
-                    {
-					    new SqlParameter("@CarerCode", carerCode),
-					    new SqlParameter("@PeriodStart", periodStart),
-					    new SqlParameter("@PeriodFinish", periodFinish)
-				    }
-                ).ToList();
-        }
-
-        public ICollection<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
-        {
-            return _context.Set<Adjustment>().FromSql("GetTimesheetAdjustmentsByTeam @TeamCode, @PeriodStart, @PeriodEnd",
-				    parameters: new []
-                    {
-					    new SqlParameter("@TeamCode", teamCode),
-					    new SqlParameter("@PeriodStart", periodStart),
-					    new SqlParameter("@PeriodEnd", periodEnd)
-				    }
-                ).ToList();
-        }
-
-        public ICollection<CarerContract> GetContracts(int carerCode, DateTime periodStart)
-        {
-            return _context.Set<CarerContract>()
-                .FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
-                    parameters: new[]
-                    { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", periodStart) }
-                ).ToList();
-        }
 
 		public ICollection<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
@@ -305,8 +192,8 @@ namespace Blackwood.Access.Services
 
             ICollection<Payroll> data = new List<Payroll>();
 
-            ICollection<Summary> summaries = GetSummaries(teamCode, periodStart, periodEnd);
-            ICollection<Adjustment> adjusts = GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
+            ICollection<Summary> summaries = _dataService.GetSummaries(teamCode, periodStart, periodEnd);
+            ICollection<Adjustment> adjusts = _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
 
             // Validation
             // - Unmapped Booking Types (Default to Hours Paid/OT10?)
@@ -319,8 +206,8 @@ namespace Blackwood.Access.Services
 
             carers.ForEach(car =>
             {
-                ICollection<CarerContract> contracts = GetContracts(car.CarerCode, periodStart);
-                ICollection<CarerBooking> bookings = GetBookings(car.CarerCode, periodStart, periodEnd);
+                ICollection<CarerContract> contracts = _dataService.GetContracts(car.CarerCode, periodStart);
+                ICollection<CarerBooking> bookings = _dataService.GetBookings(car.CarerCode, periodStart, periodEnd);
 
                 if (bookings.Count > 0)     // TODO Consider if there are any scenarios where valid payroll but no bookings
                 {
