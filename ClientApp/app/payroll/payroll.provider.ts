@@ -57,9 +57,6 @@ export class PayrollProvider {
     private user: AccessUser;
 
     constructor(public http: Http, private userPro: UserProvider) {
-        // this.selectedTeam$.subscribe((tm) => {
-        //     if (tm != undefined) this.getCarers(tm);
-        // });
 
         Observable
             .combineLatest(this.weekCommencing$, this.selectedTeam$, (wc, tm) => {
@@ -76,13 +73,6 @@ export class PayrollProvider {
                 }
             });
 
-        // Observable.combineLatest(this.weekCommencing$, this.selectedCarer$,
-        //     (wc, carer) => { return { "weekCommencing": wc, "carer": carer }})
-        //     .subscribe(x => {
-        //         this._timesheet.next(null);
-        //         this.getTimesheet(x.carer, x.weekCommencing);
-        //     });
-        
         this.weekObserver$ = Observable
             .combineLatest(this.weekCommencing$, this.selectedCarer$, (wc, carer) => {
                 return { "weekCommencing": wc, "carer": carer}
@@ -113,8 +103,8 @@ export class PayrollProvider {
     handlePeriod(x) {
         if (x.start != null && x.finish != null && x.finish > x.start && x.team.teamCode) {
             this._summaries.next(null);
-            this._adjustments.next(undefined);
-            this._validation.next(undefined);
+            this._adjustments.next(null);
+            this._validation.next(null);
             
             this.getSummaries(x.team, x.start, x.finish);
             this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);

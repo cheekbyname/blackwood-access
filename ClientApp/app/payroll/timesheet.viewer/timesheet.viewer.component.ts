@@ -206,7 +206,11 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public hasAdjustOffset(offset: number): boolean {
-		return (this.timesheet.adjustments.filter(adj => adj.dayOffset == offset).length > 0) && !(this.minsAdjustOffset(offset) > 0);
+		return this.timesheet.adjustments.some(adj => adj.dayOffset == offset) && !this.hasAdjustOffsetAction(offset);
+	}
+
+	public hasAdjustOffsetAction(offset: number): boolean {
+		return this.timesheet.adjustments.some(adj => adj.dayOffset == offset && adj.authorised == null && adj.rejected == null);
 	}
 
 	public openAdjustments(offset: number) {
