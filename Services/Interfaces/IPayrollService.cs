@@ -9,7 +9,7 @@ namespace Blackwood.Access.Services
     {
         ICollection<Team> GetTeams();
         ICollection<Carer> GetCarers();
-        ICollection<Carer> GetCarersByTeam(int teamCode, DateTime? periodStart);
+        //ICollection<Carer> GetCarersByTeam(int teamCode, DateTime? periodStart);
         Timesheet GetTimesheet(int carerCode, DateTime weekCommencing);
         ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd);
         ICollection<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime periodStart, DateTime periodFinish);

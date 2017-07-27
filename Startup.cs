@@ -38,10 +38,11 @@ namespace Blackwood.Access
             services.AddMvc();
 
             // Add Application services
-            services.AddTransient<IPayrollService, PayrollService>();
             services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPayrollDataService, PayrollDataService>();
+            services.AddTransient<IPayrollService, PayrollService>();
             services.AddTransient<IPayrollValidationService, PayrollValidationService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

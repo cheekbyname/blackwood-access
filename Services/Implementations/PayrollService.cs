@@ -17,12 +17,15 @@ namespace Blackwood.Access.Services
 		private int[] _unpaidCodes;
 
 		private AccessContext _context;
+        private IPayrollDataService _dataService;
+        private IPayrollValidationService _validationService;
         private IUserService _userService;
-		private IPayrollValidationService _validationService;
 
-		public PayrollService(AccessContext context, IUserService userService, IPayrollValidationService validationService)
+		public PayrollService(AccessContext context, IUserService userService, IPayrollValidationService validationService,
+            IPayrollDataService dataService)
 		{
 			_context = context;
+            _dataService = dataService;
             _userService = userService;
 			_validationService = validationService;
 			
@@ -41,19 +44,19 @@ namespace Blackwood.Access.Services
 			return _context.Carers.OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
         }
 
-		public ICollection<Carer> GetCarersByTeam(int TeamCode, DateTime? periodStart)
-		{
-			return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode, @PeriodStart",
-                parameters: new []
-                    {
-				        new SqlParameter("@TeamCode", TeamCode),
-				        new SqlParameter()
-                        {
-                            ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value
-                        }
-			        }
-                ).OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
-		}
+		//public ICollection<Carer> GetCarersByTeam(int TeamCode, DateTime? periodStart)
+		//{
+		//	return _context.Set<Carer>().FromSql("GetCarersByTeam @TeamCode, @PeriodStart",
+  //              parameters: new []
+  //                  {
+		//		        new SqlParameter("@TeamCode", TeamCode),
+		//		        new SqlParameter()
+  //                      {
+  //                          ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value
+  //                      }
+		//	        }
+  //              ).OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
+		//}
 
         public Timesheet GetTimesheet(int carerCode, DateTime weekCommencing)
         {
@@ -312,7 +315,7 @@ namespace Blackwood.Access.Services
             // Get Carers for Payroll run
             // TODO We are probably looking to narrow this down to only carers who are DEFAULT for this Team
 			// Q: If someone works in more than one team, is it always the default team that submits data?
-            List<Carer> carers = GetCarersByTeam(teamCode, periodStart).ToList();
+            List<Carer> carers = _dataService.GetCarersByTeam(teamCode, periodStart).ToList();
 
             carers.ForEach(car =>
             {
@@ -329,6 +332,7 @@ namespace Blackwood.Access.Services
                     // We may want to refactor the Summaries to be an aggregation of the Contract/Team aggregations
 
                     // Extract CostCenters & Build Aggregation List
+                    // TODO Refactor again to aggregate against Position (i.e. Grade)
                     List<string> costCentres = shifts
                         .Select(sh => contracts.FirstOrDefault(cn => sh.ContractCode == cn.ContractCode).CostCentre)
                         .Distinct().ToList();
