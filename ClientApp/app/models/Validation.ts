@@ -5,6 +5,7 @@ export class ValidationResult {
     public teamCode: number;
     public periodStart: Date;
     public periodFinish: Date;
+    public carers: Carer[];
     public pendingAdjustments: Adjustment[];
     public carerValidationItems: CarerValidationItem[];
 }

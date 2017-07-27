@@ -8,7 +8,8 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="table-responsive">
+        <h4 *ngIf="!valid">Please wait, retrieving your data...</h4>
+        <div *ngIf="valid && valid.pendingAdjustments.length > 0" class="table-responsive">
             <h4>Adjustments for Approval</h4>
             <hr/>
             <table class="table table-striped">
@@ -21,7 +22,7 @@
                     <th class="col-md-2">Authorisation</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let adjust of adjustments" class="row" (click)="showAdjust(adjust)">
+                    <tr *ngFor="let adjust of valid.pendingAdjustments" class="row" (click)="showAdjust(adjust)">
                         <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
                         <td>{{payPro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
                         <td>{{payPro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
@@ -39,7 +40,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="table-responsive">
+        <div *ngIf="valid && valid.carerDataValidationItems.length > 0" class="table-responsive">
             <h4>Data Revisions Required</h4>
             <hr/>
             <table class="table table-striped">
@@ -48,9 +49,9 @@
                     <th class="col-md-9">Revision(s) Required</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rev of revisions" class="row">
+                    <tr *ngFor="let rev of valid.carerDataValidationItems" class="row">
                         <td>{{rev.carer.forename}} {{rev.carer.surname}}</td>
-                        <td>{{rev.reason}}</td>
+                        <td>{{rev.revision}}</td>
                     </tr>
                 </tbody>
             </table>

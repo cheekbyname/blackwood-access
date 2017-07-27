@@ -8,8 +8,17 @@ namespace Blackwood.Access.Models
         public int TeamCode { get; set; }
         public DateTime PeriodStart { get; set; }
         public DateTime PeriodFinish { get; set; }
+        public ICollection<Carer> Carers { get; set; }
         public ICollection<Adjustment> PendingAdjustments { get; set; }
         public ICollection<CarerDataValidationItem> CarerDataValidationItems { get; set; }
+
+        public ValidationResult(int teamCode, DateTime periodStart, DateTime periodFinish)
+        {
+            TeamCode = teamCode;
+            PeriodStart = periodStart;
+            PeriodFinish = periodFinish;
+            CarerDataValidationItems = new List<CarerDataValidationItem>();
+        }
     }
 
     public class CarerDataValidationItem
