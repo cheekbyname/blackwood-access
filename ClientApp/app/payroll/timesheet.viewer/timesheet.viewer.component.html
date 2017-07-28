@@ -60,6 +60,8 @@
 								class="glyphicon glyphicon-exclamation-sign adjust-crit pull-right"></span>
 							<span *ngIf="hasAdjustOffset(i)" title="There are adjustments for this day"
 								class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
+							<span *ngIf="hasInvalidShift(i)" title="There is one or more invalid shifts on this day"
+								class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
 						</th>
 					</tr>
 				</thead>

@@ -65,12 +65,12 @@ p-spinner, p-calendar {
 }
 
 span.adjust-crit {
-    font-size: 12pt;
+    font-size: 14pt;
     color: red;
 }
 
 span.adjust-flag {
-    font-size: 12pt;
+    font-size: 14pt;
     color: green;
 }
 

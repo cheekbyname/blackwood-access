@@ -12,6 +12,7 @@ namespace Blackwood.Access.Models
         public ICollection<Adjustment> PendingAdjustments { get; set; }
         public ICollection<Adjustment> OtherAdjustments { get; set; }
         public ICollection<CarerDataValidationItem> CarerDataValidationItems { get; set; }
+        public ICollection<Shift> InvalidShifts { get; set; }
 
         public ValidationResult(int teamCode, DateTime periodStart, DateTime periodFinish)
         {
@@ -19,6 +20,7 @@ namespace Blackwood.Access.Models
             PeriodStart = periodStart;
             PeriodFinish = periodFinish;
             CarerDataValidationItems = new List<CarerDataValidationItem>();
+            InvalidShifts = new List<Shift>();
         }
     }
 

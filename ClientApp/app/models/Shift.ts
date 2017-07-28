@@ -10,6 +10,7 @@ export class Shift {
     public finish: Date;
     public shiftMins: number;
     public unpaidMins: number;
+    public validBreak: boolean;
 }
 
 @Pipe({

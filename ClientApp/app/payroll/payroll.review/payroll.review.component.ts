@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Rx";
 
 import { Adjustment } from "../../models/adjustment";
 import { Carer } from "../../models/carer";
+import { Shift } from "../../models/shift";
 import { Team } from "../../models/team";
 import { Timesheet } from "../../models/timesheet";
 import { PayrollProvider } from "../payroll.provider";
@@ -38,6 +39,10 @@ export class PayrollReviewComponent implements OnInit {
 
     carerForAdjust(adjust: Adjustment): Carer {
         return this.valid.carers.find(car => car.carerCode == adjust.carerCode);
+    }
+
+    carerForShift(shift: Shift): Carer {
+        return this.valid.carers.find(car => car.carerCode == shift.carerCode);
     }
 
     public clearDetail() {
@@ -94,6 +99,8 @@ export class PayrollReviewComponent implements OnInit {
             }
 
         });
+
+        // TODO This needs refactoring
         // Check back the other way for any removed adjustments
         this.valid.pendingAdjustments.filter(adj => adj.weekCommencing == ts.weekCommencing && adj.carerCode == ts.carerCode)
             .forEach(adjust => {

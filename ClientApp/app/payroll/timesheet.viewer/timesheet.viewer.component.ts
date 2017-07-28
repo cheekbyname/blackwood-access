@@ -123,7 +123,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	// Display BookingGrid in rough chronological order by sliding Bookings down if they start after another on the same row finishes
-	// Not currently used
+	// Not currently used because it "looks wrong"
 	chronOrder(bookings: BookingGrid): BookingGrid {
 		var row = 0;
 		while (row < bookings.length - 1) {
@@ -211,6 +211,10 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public hasAdjustOffsetAction(offset: number): boolean {
 		return this.timesheet.adjustments.some(adj => adj.dayOffset == offset && adj.authorised == null && adj.rejected == null);
+	}
+
+	public hasInvalidShift(offset: number): boolean {
+		return this.timesheet.shifts.filter(shift => shift.day === offset).some(shift => shift.validBreak == false);
 	}
 
 	public openAdjustments(offset: number) {

@@ -16,5 +16,6 @@ namespace Blackwood.Access.Models
         public int ShiftMins { get; set; }
         public int UnpaidMins { get; set; }
         public int BiggestGap { get; set; }
+        public bool? ValidBreak { get; set; } = null;
     }
 }

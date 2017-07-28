@@ -1,5 +1,6 @@
 import { Adjustment } from "./adjustment";
 import { Carer } from "./carer";
+import { Shift } from "./shift";
 
 export class ValidationResult {
     public teamCode: number;
@@ -9,6 +10,7 @@ export class ValidationResult {
     public pendingAdjustments: Adjustment[];
     public otherAdjustments: Adjustment[];
     public carerValidationItems: CarerValidationItem[];
+    public invalidShifts: Shift[];
 }
 
 export class CarerValidationItem {

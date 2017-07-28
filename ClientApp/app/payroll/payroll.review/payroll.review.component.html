@@ -71,6 +71,22 @@
                 </tbody>
             </table>
         </div>
+        <div *ngIf="valid && valid.invalidShifts.length > 0" class="table-responsive">
+            <h4>Invalid Shifts</h4>
+            <hr/>
+            <table class="table table-striped">
+                <thead class="row">
+                    <th>Carer</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let shift of valid.invalidShifts" class="row">
+                        <td>{{carerForShift(shift).forename}} {{carerForShift(shift).surname}}</td>
+                        <td>{{shift.start}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div *ngIf="valid && valid.carerDataValidationItems.length > 0" class="table-responsive">
             <h4>Data Revisions Required</h4>
             <hr/>

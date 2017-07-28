@@ -1,6 +1,6 @@
 namespace Blackwood.Access
 {
-    using Blackwood.Access.Services;
+    using Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -41,6 +41,7 @@ namespace Blackwood.Access
             services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
             services.AddTransient<IPayrollDataService, PayrollDataService>();
             services.AddTransient<IPayrollService, PayrollService>();
+            services.AddTransient<IPayrollShiftService, PayrollShiftService>();
             services.AddTransient<IPayrollValidationService, PayrollValidationService>();
             services.AddTransient<IUserService, UserService>();
         }

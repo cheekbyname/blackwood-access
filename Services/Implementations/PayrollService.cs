@@ -9,24 +9,18 @@ namespace Blackwood.Access.Services
 
     public class PayrollService : IPayrollService
     {
-		// TODO - Replace these two with PayrollCodeMap entries
-		private int[] _absenceCodes = { 108, 109 };
-		private int[] _unpaidCodes;
-
         private IPayrollDataService _dataService;
         private IPayrollValidationService _validationService;
+        private IPayrollShiftService _shiftService;
         private IUserService _userService;
 
 		public PayrollService(IUserService userService, IPayrollValidationService validationService,
-            IPayrollDataService dataService)
+            IPayrollDataService dataService, IPayrollShiftService shiftService)
 		{
             _dataService = dataService;
+            _shiftService = shiftService;
             _userService = userService;
 			_validationService = validationService;
-			
-			_unpaidCodes = _dataService.GetPayrollCodeMap()
-				.Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
-			// TODO Do something similar for _absenceCodes?
 		}
 
 
@@ -66,94 +60,12 @@ namespace Blackwood.Access.Services
             ts.Adjustments = _dataService.GetTimesheetAdjustments(carerCode, weekCommencing, weekCommencing.AddDays(6)).ToList();
 
 			// Transform Bookings -> Shifts
-			ts.Shifts = BookingsToShifts(weekCommencing, weekCommencing.AddDays(6), ts.Bookings, ts.CarerCode);
+			ts.Shifts = _shiftService.BookingsToShifts(weekCommencing, weekCommencing.AddDays(6), ts.Bookings, ts.CarerCode);
 
 			// TODO Overlay Annual Leave and Sickness Absence on Scheduled Availability for truer picture?
 
             return ts;
         }
-
-		// Establish Shifts for each day in period
-		// Definitions:
-		// A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
-		// The Shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
-		// The Shift finishes at the end of the end of the last booking in that Shift, if the first Shift
-		// The Shift finishes at the end of the Availability block if the second Shift 
-		// A Shift which contains a gap of two hours or more should be split into two Shifts
-		// !But only if at least part of that gap falls between 2PM and 4PM!
-		// The first Shift ends at the end of the last Booking before the split
-		// The second Shift begins at the beginning of the first booking after the split
-		// The actual hours paid are counted from the beginning of the Shift to the finish of it
-		// Any Shift of four hours or more is deducted thirty minutes as an unpaid break
-		private ICollection<Shift> BookingsToShifts(DateTime startDate, DateTime finishDate, ICollection<CarerBooking> bookings, int carerCode)
-		{
-			List<DateTime> dates = Enumerable.Range(0, (finishDate - startDate).Days + 1).Select(d => startDate.AddDays(d)).ToList();
-			List<Shift> shifts = new List<Shift>();
-
-			dates.ForEach(dt => {
-				TimeSpan gap;
-				int day = dates.IndexOf(dt);
-
-				// First Shift of this day
-				Shift shift = new Shift() { CarerCode = carerCode, Sequence = 1, Day = day, UnpaidMins = 0,
-					BiggestGap = 0 };
-
-				bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
-					.OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
-
-					// Calculate gap from last booking and adjust Shift Start/Finish times
-					gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
-					shift.BiggestGap = Math.Max(gap.Minutes, shift.BiggestGap);
-					shift.ContractCode = shift.ContractCode ?? bk.ContractCode;
-					shift.Start = shift.Start ?? bk.ThisStart;
-
-					//  Check for Unpaid Break Booking Type
-					if (_unpaidCodes.Any(uc => uc == bk.BookingType))
-					{
-						shift.UnpaidMins += (bk.ThisMins);
-					}
-					// Begin new Shift if valid shift break detected or team changes
-					if (gap >= TimeSpan.FromHours(2)
-						// && ((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
-						// 	|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
-						|| bk.ContractCode != shift.ContractCode)
-					{
-						// Check that Shift had valid break and Add Adjusment if not
-                        // TODO Implement BreakPolicy, with legal minimums by default
-                        if (shift.ShiftMins >= 360 && shift.UnpaidMins < 20)
-                        {
-                            // TODO Add an Adjustment or just increment UnpaidMins?
-                        }
-
-						// Get ShiftBreak profile
-						shifts.Add(shift);
-						shift = new Shift() {
-							CarerCode = carerCode,
-							Sequence = shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
-							Day = day,
-							Start = bk.ThisStart,
-							ContractCode = bk.ContractCode,
-							BiggestGap = 0
-						};
-					}
-					else
-					{
-						shift.Finish = bk.ThisFinish;
-						// Shift time from beginning to end minus unpaid breaks
-						shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes) - shift.UnpaidMins;
-					}
-
-					// Tag Booking with Shift Sequence
-					bk.Shift = shift.Sequence;
-				});
-				shifts.Add(shift);
-			});
-
-			// Strip out blank Shifts
-			shifts = shifts.Where(sh => sh.Start != null && sh.Finish != null).ToList();
-
-			return shifts;
-		}
 
         public ICollection<Summary> GetAdjustedSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
@@ -161,7 +73,7 @@ namespace Blackwood.Access.Services
 
             summaries.ForEach(sum => {
                 // Get calculated shift times etc
-                var shifts = BookingsToShifts(periodStart, periodEnd,
+                var shifts = _shiftService.BookingsToShifts(periodStart, periodEnd,
 					_dataService.GetBookings(sum.CarerCode, periodStart, periodEnd), sum.CarerCode);
 				sum.ActualMins = shifts.Sum(sh => sh.ShiftMins);
                 sum.UnpaidMins = shifts.Sum(sh => sh.UnpaidMins);
@@ -211,7 +123,7 @@ namespace Blackwood.Access.Services
 
                 if (bookings.Count > 0)     // TODO Consider if there are any scenarios where valid payroll but no bookings
                 {
-                    ICollection<Shift> shifts = BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
+                    ICollection<Shift> shifts = _shiftService.BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
                     ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
                         && adj.Authorised != null).ToList();
 

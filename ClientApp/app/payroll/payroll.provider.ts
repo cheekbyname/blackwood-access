@@ -177,6 +177,7 @@ export class PayrollProvider {
             console.log(tsUrl);
             this.http.get(tsUrl).subscribe(res => {
                 this._timesheet.next(res.json() as Timesheet);
+                console.log(res.json());
             });
         }
 	}
