@@ -10,6 +10,7 @@ namespace Blackwood.Access.Models
         public DateTime PeriodFinish { get; set; }
         public ICollection<Carer> Carers { get; set; }
         public ICollection<Adjustment> PendingAdjustments { get; set; }
+        public ICollection<Adjustment> OtherAdjustments { get; set; }
         public ICollection<CarerDataValidationItem> CarerDataValidationItems { get; set; }
 
         public ValidationResult(int teamCode, DateTime periodStart, DateTime periodFinish)

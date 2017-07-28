@@ -60,10 +60,39 @@ export class PayrollReviewComponent implements OnInit {
 
     handleChanges(ts: Timesheet) {
         ts.adjustments.forEach(adjust => {
-            var idx = this.valid.pendingAdjustments.findIndex(adj => adj.guid == adjust.guid);
-            // Push any newly added adjustment
-            if (idx == -1) this.valid.pendingAdjustments.push(adjust);
-            this.valid.pendingAdjustments[idx] = adjust;
+            // Tuple expressing previous state
+            let prev: [number, number, number] = [0,
+                this.valid.pendingAdjustments.findIndex(adj => adj.guid == adjust.guid),
+                this.valid.otherAdjustments.findIndex(adj => adj.guid == adjust.guid),
+            ];
+            prev[0] += (prev[1] >= 0 ? 1: 0) + (prev[2] >= 0 ? 2: 0);
+            var newArr = this.validArrayFor(adjust);
+
+            switch(prev[0]) {
+                // Push any newly added adjustment
+                case 0: 
+                    newArr.push(adjust);
+                    break;
+                // Was pending
+                case 1:
+                    if (newArr !== this.valid.pendingAdjustments) {
+                        this.valid.pendingAdjustments.splice(prev[1], 1);
+                        newArr.push(adjust);
+                    } else {
+                        newArr[prev[1]] = adjust;
+                    }
+                    break;
+                // Was other
+                case 2:
+                    if (newArr !== this.valid.otherAdjustments) {
+                        this.valid.otherAdjustments.splice(prev[2], 1);
+                        newArr.push(adjust);
+                    } else {
+                        newArr[prev[2]] = adjust;
+                    }
+                    break;
+            }
+
         });
         // Check back the other way for any removed adjustments
         this.valid.pendingAdjustments.filter(adj => adj.weekCommencing == ts.weekCommencing && adj.carerCode == ts.carerCode)
@@ -71,6 +100,10 @@ export class PayrollReviewComponent implements OnInit {
                 var idx = ts.adjustments.findIndex(adj => adj.guid == adjust.guid);
                 if (idx == -1) this.valid.pendingAdjustments.splice(this.valid.pendingAdjustments.indexOf(adjust), 1);
         });
+    }
+
+    validArrayFor(adjust: Adjustment): Adjustment[] {
+        return adjust.authorised === null && adjust.rejected === null ? this.valid.pendingAdjustments : this.valid.otherAdjustments;
     }
 
     public authInfo(adjust: Adjustment): string {

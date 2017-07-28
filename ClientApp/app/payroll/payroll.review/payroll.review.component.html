@@ -40,6 +40,37 @@
                 </tbody>
             </table>
         </div>
+        <div *ngIf="valid && valid.otherAdjustments.length > 0" class="table-responsive">
+            <h4>Adjustments Approved/Rejected</h4>
+            <hr/>
+            <table class="table table-striped">
+                <thead class="row">
+                    <th class="col-md-3">Carer</th>
+                    <th class="col-md-1">Date</th>
+                    <th class="col-md-1">Time</th>
+                    <th class="col-md-3">Reason</th>
+                    <th class="col-md-2">Approval</th>
+                    <th class="col-md-2">Authorisation</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let adjust of valid.otherAdjustments" class="row" (click)="showAdjust(adjust)">
+                        <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
+                        <td>{{payPro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
+                        <td>{{payPro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
+                        <td>{{adjust.reason}}</td>
+                        <td>
+                            <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.authorised != null}">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                            <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.rejected != null}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>{{authInfo(adjust)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div *ngIf="valid && valid.carerDataValidationItems.length > 0" class="table-responsive">
             <h4>Data Revisions Required</h4>
             <hr/>
