@@ -20,6 +20,7 @@ import { ValidationResult } from "../../models/validation";
 export class PayrollReviewComponent implements OnInit {
 
     public valid: ValidationResult;
+    public showInvalidShifts: boolean = true;
 
     // To support timesheet-adjustment component
     public timesheet: Timesheet;

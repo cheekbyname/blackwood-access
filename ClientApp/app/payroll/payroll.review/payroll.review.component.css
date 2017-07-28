@@ -63,3 +63,18 @@ span.glyphicon-ok {
 span.glyphicon-remove {
     color: red;
 }
+
+.badge {
+    font-size: 12pt;
+    margin-left: 12px;
+}
+
+p-inputswitch {
+    padding: 4px;
+    height: 26px;
+}
+
+p-inputswitch span {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+}

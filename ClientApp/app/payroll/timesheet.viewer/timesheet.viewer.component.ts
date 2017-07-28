@@ -214,7 +214,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public hasInvalidShift(offset: number): boolean {
-		return this.timesheet.shifts.filter(shift => shift.day === offset).some(shift => shift.validBreak == false);
+		return this.timesheet.shifts.some(shift => shift.day === offset && shift.validBreak == false);
 	}
 
 	public openAdjustments(offset: number) {

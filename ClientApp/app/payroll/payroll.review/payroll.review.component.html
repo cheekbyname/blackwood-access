@@ -10,7 +10,7 @@
     <div class="panel-body">
         <h4 *ngIf="!valid">Please wait, retrieving your data...</h4>
         <div *ngIf="valid && valid.pendingAdjustments.length > 0" class="table-responsive">
-            <h4>Adjustments for Approval</h4>
+            <h4>Adjustments for Approval<span class="badge btn-primary">{{valid.pendingAdjustments.length}}</span></h4>
             <hr/>
             <table class="table table-striped">
                 <thead class="row">
@@ -72,20 +72,29 @@
             </table>
         </div>
         <div *ngIf="valid && valid.invalidShifts.length > 0" class="table-responsive">
-            <h4>Invalid Shifts</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Invalid Shifts<span class="badge btn-primary">{{valid.invalidShifts.length}}</span></h4>
+                </div>
+                <div class="col-md-6">
+                    <p-inputSwitch [(ngModel)]="showInvalidShifts" onLabel="Hide" offLabel="Show" class="pull-right"></p-inputSwitch>
+                </div>
+            </div>
             <hr/>
-            <table class="table table-striped">
-                <thead class="row">
-                    <th>Carer</th>
-                    <th>Date</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let shift of valid.invalidShifts" class="row">
-                        <td>{{carerForShift(shift).forename}} {{carerForShift(shift).surname}}</td>
-                        <td>{{shift.start}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table *ngIf="showInvalidShifts" class="table table-striped">
+                    <thead class="row">
+                        <th>Carer</th>
+                        <th>Date</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let shift of valid.invalidShifts" class="row">
+                            <td>{{carerForShift(shift).forename}} {{carerForShift(shift).surname}}</td>
+                            <td>{{shift.start}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div *ngIf="valid && valid.carerDataValidationItems.length > 0" class="table-responsive">
             <h4>Data Revisions Required</h4>

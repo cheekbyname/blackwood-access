@@ -4,7 +4,7 @@ import { UniversalModule } from 'angular2-universal';
 import { FormsModule } from '@angular/forms';
 
 import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, ConfirmationService,
-    CheckboxModule } from 'primeng/primeng';
+    CheckboxModule, InputSwitchModule } from 'primeng/primeng';
 
 import { AppRouterModule } from './app-routing.module';
 
@@ -33,7 +33,7 @@ import { UserProvider } from "./user.provider";
         /* Application Feature Modules */
         AdminModule, PayrollModule,
         /* PrimeNg Component Modules */
-        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
+        CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule, InputSwitchModule,
         /* Application Router */
         AppRouterModule
     ],
