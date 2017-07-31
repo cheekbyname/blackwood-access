@@ -1,13 +1,13 @@
-h4, label, select, td, th {
+h4, label, select, .table-norm td, .table-norm th {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
 
-td, th {
+.table-norm td, .table-norm th {
     font-size: 11pt;
 }
 
-th {
+.table-norm th {
     font-weight: bold;
 }
 
@@ -43,11 +43,11 @@ th {
     padding-right: 4px;
 }
 
-table tr {
+table.table-norm tr {
     cursor: pointer;
 }
 
-table tr:hover {
+table.table-norm tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
 }
 
@@ -68,13 +68,22 @@ span.glyphicon-remove {
     font-size: 12pt;
     margin-left: 12px;
 }
-
-p-inputswitch {
-    padding: 4px;
+  
+p-inputswitch .ui-widget {
     height: 26px;
+    border: 1px solid black;
 }
 
-p-inputswitch span {
+p-inputswitch .ui-widget span {
     font-family: 'Century Gothic';
-    font-size: 14pt;
+    font-size: 12pt;
+}
+
+p-inputswitch .ui-inputswitch-onlabel {
+    background-color: #bfd730;
+    color: black;
+}
+
+p-inputswitch .ui-inputswitch-offlabel {
+    background-color: hotpink;
 }

@@ -43,6 +43,11 @@
                 ).ToList();
         }
 
+        public Carer GetCarerByCode(int carerCode)
+        {
+            return _context.Carers.FirstOrDefault(c => c.CarerCode == carerCode);
+        }
+
         public ICollection<Carer> GetCarers()
         {
             return _context.Carers.OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();

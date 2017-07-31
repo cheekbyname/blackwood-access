@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { Observable } from "rxjs/Rx";
@@ -15,12 +15,16 @@ import { ValidationResult } from "../../models/validation";
 @Component({
     selector: 'payroll-review',
     template: require('./payroll.review.component.html'),
-    styles: [require('./payroll.review.component.css')]
+    styles: [require('./payroll.review.component.css')],
+    encapsulation: ViewEncapsulation.None
 })
 export class PayrollReviewComponent implements OnInit {
 
     public valid: ValidationResult;
-    public showInvalidShifts: boolean = true;
+    public showAdjustmentsHandled: boolean = false;
+    public showAdjustmentsPending: boolean = false;
+    public showInvalidShifts: boolean = false;
+    public showDataRevisions: boolean = false;
 
     // To support timesheet-adjustment component
     public timesheet: Timesheet;
@@ -62,6 +66,16 @@ export class PayrollReviewComponent implements OnInit {
         this.payPro.selectWeekCommencing(new Date(adjust.weekCommencing));     // TODO Not a date? Why not?
         this.dayOffset = adjust.dayOffset;
         this.adjustVisible = true;
+    }
+
+    timesheetFor(shift: Shift) {
+        this.payPro.selectWeekCommencing(new Date(shift.start));
+        this.router.navigate(['/payroll', this.valid.teamCode,
+            { outlets: {
+                detail: ['timesheet', shift.carerCode],
+                summary: ['summary', this.valid.teamCode]
+            }
+        }]);
     }
 
     handleChanges(ts: Timesheet) {

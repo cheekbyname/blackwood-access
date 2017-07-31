@@ -36,15 +36,11 @@ export class TimesheetViewerComponent implements OnInit {
 	ngOnInit(): void {
 		this.bookings = this.emptyBook();
 		this.route.params.subscribe((p) => {
-			if (p['carerCode'] != undefined) {
-				this.payPro.carers$.subscribe((carers) => {
-					this.carers = carers;
-					if (carers != null) {
-						let car = carers.find(carer => carer.carerCode == p['carerCode']);
-						this._carer = car;
-						this.payPro.selectCarer(car);
-					}
-				});
+			if (p['carer'] !== undefined && this.carers !== null) {
+				this.payPro.selectCarerByCode(p['carer']);
+			}
+			if (p['week'] != undefined) {
+				this.payPro.selectWeekCommencing(new Date(p['week']));
 			}
 		});
 		this.payPro.weekCommencing$.subscribe((wc) => {
@@ -53,8 +49,11 @@ export class TimesheetViewerComponent implements OnInit {
 		this.payPro.timesheet$.subscribe((ts) => {
 			if (ts != null) this.processTimesheet(ts);
 		});
+		this.payPro.carers$.subscribe(carers => this.carers = carers);
 		this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
-		this.payPro.selectedCarer$.subscribe(ca => this.carer = ca);
+		this.payPro.selectedCarer$.subscribe(ca => {
+			if (this.carers !== null && ca !== null)  this._carer = this.carers.find(carer => carer.carerCode === ca.carerCode );
+		});
 	}
 
 	public loc: Locale = LOC_EN;
@@ -84,7 +83,15 @@ export class TimesheetViewerComponent implements OnInit {
 	set carer(carer: Carer) {
 		if (carer !== undefined && carer !== null) {
 			this.router.navigate(['/payroll', this.team.teamCode,
-				{ outlets: { detail: ['timesheet', carer.carerCode], summary: ['summary', this.team.teamCode] }}]);
+				{
+					outlets: {
+					detail: ['timesheet', {
+						carer: carer.carerCode,
+						week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.weekCommencing))
+					}],
+					summary: ['summary', this.team.teamCode]
+				}
+			}]);
 		}
 	}
 	get carer() { return this._carer }

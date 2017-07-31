@@ -12,6 +12,7 @@
         IQueryable<PayrollCodeMap> GetPayrollCodeMap();
         ICollection<Team> GetTeams();
         ICollection<Carer> GetCarers();
+        Carer GetCarerByCode(int carerCode);
         ICollection<Availability> GetScheduledAvailability(int carerCode, DateTime weekCommencing);
         ICollection<Availability> GetActualAvailability(int carerCode, DateTime weekCommencing);
         ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd);

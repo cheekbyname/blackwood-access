@@ -88,7 +88,14 @@ export class PayrollSummaryComponent implements OnInit {
 		this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
 		this.showSummary = false;
 		this.router.navigate(['/payroll', this.team.teamCode,
-			{ outlets: { detail: ['timesheet', sum.carerCode], summary: ['summary', this.team.teamCode] }}]);
+			{ outlets: {
+				detail: ['timesheet', {
+					carer: sum.carerCode,
+					week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.periodStart))
+				}],
+				summary: ['summary', this.team.teamCode]
+			}
+		}]);
 	}
 
 	showReview() {

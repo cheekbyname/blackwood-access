@@ -57,7 +57,7 @@
 
                         // Calculate gap from last booking and adjust Shift Start/Finish times
                         gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
-                        shift.BiggestGap = Math.Max(gap.Minutes, shift.BiggestGap);
+                        shift.BiggestGap = Math.Max((int)gap.TotalMinutes, shift.BiggestGap);
                         shift.ContractCode = shift.ContractCode ?? bk.ContractCode;
                         shift.Start = shift.Start ?? bk.ThisStart;
 
@@ -66,12 +66,13 @@
                         {
                             shift.UnpaidMins += (bk.ThisMins);
                         }
-                        // Begin new Shift if valid shift break detected or contract changes
+                        // Begin new Shift if valid shift break detected
                         // TODO Think about this contract change thing
-                        if (gap >= TimeSpan.FromHours(2)
+                        if (gap >= TimeSpan.FromHours(2))
+                            // TODO Or Booking is not of a Shiftable type
                             // && ((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
                             // 	|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
-                            || bk.ContractCode != shift.ContractCode)
+                            // TODO This is problematic || bk.ContractCode != shift.ContractCode)
                         {
                             shifts.Add(shift);
                             shift = new Shift()

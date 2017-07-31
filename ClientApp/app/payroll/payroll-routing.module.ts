@@ -10,22 +10,24 @@ import { PayrollSummaryComponent } from './payroll.summary/payroll.summary.compo
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
 const timesheetRoutes: Routes = [
-	{ path: 'payroll', component: PayrollComponent, canActivate: [PayrollGuard], children: [
-		{ path: '', component: PayrollManagerComponent },
-		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
-		{ path: 'summary/:teamCode', component: PayrollSummaryComponent, outlet: 'summary'},
-		{ path: 'timesheet', component: TimesheetViewerComponent, outlet: 'detail' },
-		{ path: 'timesheet/:carerCode', component: TimesheetViewerComponent, outlet: 'detail' },
-		{ path: 'review/:teamCode', component: PayrollReviewComponent, outlet: 'detail'},
-	] },
 	{ path: 'payroll/:teamCode', component: PayrollComponent, canActivate: [PayrollGuard], children: [
 		{ path: '', component: PayrollManagerComponent },
 		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
 		{ path: 'summary/:teamCode', component: PayrollSummaryComponent, outlet: 'summary'},
+		{ path: 'timesheet/:carer/:week', component: TimesheetViewerComponent, outlet: 'detail'},
+		{ path: 'timesheet/:carer', component: TimesheetViewerComponent, outlet: 'detail' },
 		{ path: 'timesheet', component: TimesheetViewerComponent, outlet: 'detail' },
-		{ path: 'timesheet/:carerCode', component: TimesheetViewerComponent, outlet: 'detail' },
 		{ path: 'review/:teamCode', component: PayrollReviewComponent, outlet: 'detail'},
 	] },
+	{ path: 'payroll', component: PayrollComponent, canActivate: [PayrollGuard], children: [
+		{ path: '', component: PayrollManagerComponent },
+		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
+		{ path: 'summary/:teamCode', component: PayrollSummaryComponent, outlet: 'summary'},
+		{ path: 'timesheet/:carer/:week', component: TimesheetViewerComponent, outlet: 'detail'},
+		{ path: 'timesheet/:carer', component: TimesheetViewerComponent, outlet: 'detail' },
+		{ path: 'timesheet', component: TimesheetViewerComponent, outlet: 'detail' },
+		{ path: 'review/:teamCode', component: PayrollReviewComponent, outlet: 'detail'},
+	] }
 ];
 
 @NgModule({

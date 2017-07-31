@@ -78,5 +78,11 @@ namespace Blackwood.Access.Controllers
 		{
 			return _validation.Validate(teamCode, periodStart, periodFinish);
 		}
+
+        [HttpGet("[action]")]
+        public Carer GetCarerByCode(int carerCode)
+        {
+            return _dataService.GetCarerByCode(carerCode);
+        }
 	}
 }

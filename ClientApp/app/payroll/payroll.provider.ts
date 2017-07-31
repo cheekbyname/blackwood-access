@@ -131,6 +131,16 @@ export class PayrollProvider {
         this._selectedCarer.next(carer);
     }
 
+    selectCarerByCode(carerCode: number) {
+        var tsUrl = `/api/payroll/getCarerByCode?carerCode=${carerCode}`;
+        console.log(tsUrl);
+        this.http.get(tsUrl).subscribe(res => {
+                this._selectedCarer.next(res.json() as Carer);
+            }
+        );
+        //this._selectedCarer.next(this._carers.getValue().find(ca => ca.carerCode == carerCode));
+    }
+
     setPeriodStart(dt: Date) {
         this._periodStart.next(dt);
     }
@@ -210,7 +220,9 @@ export class PayrollProvider {
     }
 
 	public sqlDate(date: Date): string {
-        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        return date.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + date.getDate();
 	}
 
     // Convenience methods
