@@ -85,13 +85,13 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
 	selectCarer(sum: Summary): void {
-		this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
+		//this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
 		this.showSummary = false;
 		this.router.navigate(['/payroll', this.team.teamCode,
 			{ outlets: {
 				detail: ['timesheet', {
 					carer: sum.carerCode,
-					week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.periodStart))
+					week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.periodFinish))
 				}],
 				summary: ['summary', this.team.teamCode]
 			}

@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Observable } from "rxjs/Rx";
+
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
 import { BookingCardComponent } from '../booking.card/booking.card';
@@ -36,35 +38,56 @@ export class TimesheetViewerComponent implements OnInit {
 	ngOnInit(): void {
 		this.bookings = this.emptyBook();
 		this.route.params.subscribe((p) => {
-			if (p['carer'] !== undefined && this.carers !== null) {
-				this.payPro.selectCarerByCode(p['carer']);
-			}
+			// if (p['carer'] !== undefined && this.carers !== undefined) {
+			// 	var carer = this.carers.find(ca => ca.carerCode == p['carer']);
+			// 	this.payPro.selectCarer(carer);
+			// }
 			if (p['week'] != undefined) {
 				this.payPro.selectWeekCommencing(new Date(p['week']));
 			}
 		});
+
+		Observable
+			.combineLatest(this.route.params, this.payPro.carers$, (params, carers) => {
+				return { "params": params, "carers": carers }
+			})
+			.distinctUntilChanged((a, b) => {
+				if (a.params['carer'] == null || b.params['carer'] == null) return false;
+				return a.params['carer'] == b.params['carer'] && a.carers == b.carers;
+			})
+			.subscribe(x => {
+				if (x.params['carer'] && x.carers) {
+					this.payPro.selectCarer(x.carers.find(ca => ca.carerCode == x.params['carer']));
+				}
+			});
+
+		this.payPro.selectedCarer$.subscribe(ca => {
+			this.carer = ca;
+			this.navigateTo();
+		});
+
 		this.payPro.weekCommencing$.subscribe((wc) => {
 			this.weekCommencing = wc;
+			this.navigateTo();
 		});
-		this.payPro.timesheet$.subscribe((ts) => {
-			if (ts != null) this.processTimesheet(ts);
-		});
+
 		this.payPro.carers$.subscribe(carers => this.carers = carers);
 		this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
-		this.payPro.selectedCarer$.subscribe(ca => {
-			if (this.carers !== null && ca !== null)  this._carer = this.carers.find(carer => carer.carerCode === ca.carerCode );
+
+		this.payPro.timesheet$.subscribe((ts) => {
+			if (ts != null) this.processTimesheet(ts);
 		});
 	}
 
 	public loc: Locale = LOC_EN;
 
-	_carer: Carer;
-	_weekCommencing: Date;
+	carer: Carer;
+	weekCommencing: Date;
 	timesheet: Timesheet;
 	bookings: BookingGrid;
 	isContracted: boolean;
 	carers: Carer[];
-	team: Team;		// This required purely for navigation on close -_-
+	team: Team;		// This required purely for navigation -_-
 
 	adjustVisible: boolean = false;
 	dayOffset: number;
@@ -72,21 +95,13 @@ export class TimesheetViewerComponent implements OnInit {
 	bookingVisible: boolean = false;
 	selectedBooking: CarerBooking = new CarerBooking();
 
-	// TODO These Input bindings are probably unnecessary now
-	@Input()
-	set weekCommencing(weekCommencing: Date) {
-		this._weekCommencing = weekCommencing;
-	}
-	get weekCommencing() { return this._weekCommencing }
-
-	@Input()
-	set carer(carer: Carer) {
-		if (carer !== undefined && carer !== null) {
+	navigateTo() {
+		if (this.carer !== undefined && this.carer !== null && this.team !== undefined) {
 			this.router.navigate(['/payroll', this.team.teamCode,
 				{
 					outlets: {
 					detail: ['timesheet', {
-						carer: carer.carerCode,
+						carer: this.carer.carerCode,
 						week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.weekCommencing))
 					}],
 					summary: ['summary', this.team.teamCode]
@@ -94,7 +109,11 @@ export class TimesheetViewerComponent implements OnInit {
 			}]);
 		}
 	}
-	get carer() { return this._carer }
+
+	// selectCarer(car: Carer) {
+	// 	//if (this.carers !== null && car !== null)  this.carer = this.carers.find(carer => carer.carerCode === car.carerCode );
+	// 	this.payPro.selectCarer(car);
+	// }
 
 	selectWeekCommencing(ev: Event) {
 		this.payPro.selectWeekCommencing(this.weekCommencing);

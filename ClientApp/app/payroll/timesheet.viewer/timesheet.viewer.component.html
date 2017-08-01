@@ -5,7 +5,7 @@
 				<span>Timesheet</span>
 				<p-calendar [locale]="loc" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing"
 					(onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
-				<select class="form-control" [(ngModel)]="carer">
+				<select class="form-control" [(ngModel)]="carer" (ngModelChange)="payPro.selectCarer($event)">
 					<option *ngFor="let car of carers" [ngValue]="car">{{car.forename}} {{car.surname}}</option>
 				</select>
 				<span>{{isContracted ? "[Contracted]" : "[Relief]"}}</span>

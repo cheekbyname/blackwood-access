@@ -59,17 +59,19 @@ export class PayrollProvider {
     constructor(public http: Http, private userPro: UserProvider) {
 
         Observable
-            .combineLatest(this.weekCommencing$, this.selectedTeam$, (wc, tm) => {
-                return { "weekCommencing": wc, "selectedTeam": tm}
+            .combineLatest(this.periodStart$, this.selectedTeam$, (wc, tm) => {
+                return { "periodStart": wc, "selectedTeam": tm}
             })
             .distinctUntilChanged((a, b) => {
-                if (a.selectedTeam === null || b.selectedTeam === null) return false;
-                return (a.selectedTeam.teamCode === b.selectedTeam.teamCode) && (a.weekCommencing === b.weekCommencing);
+                if (a.selectedTeam === null || b.selectedTeam === null || a.periodStart === null || b.periodStart === null)
+                    return false;
+                return (a.selectedTeam.teamCode === b.selectedTeam.teamCode)
+                    && (a.periodStart.toLocaleDateString() === b.periodStart.toLocaleDateString());
             })
             .subscribe(x => {
-                if (x.selectedTeam.teamCode && x.weekCommencing) {
+                if (x.selectedTeam.teamCode && x.periodStart) {
                     // TODO Consider suspending this.weekSub until carers refreshed
-                    this.getCarers(x.selectedTeam, x.weekCommencing);
+                    this.getCarers(x.selectedTeam, x.periodStart);
                 }
             });
 
@@ -79,8 +81,10 @@ export class PayrollProvider {
             });
         this.weekSub = this.weekObserver$
             .distinctUntilChanged((a, b) => {
-                if (a.carer === null || b.carer === null) return false;
-                return (a.carer.carerCode === b.carer.carerCode) && (a.weekCommencing === b.weekCommencing);
+                if (a.carer === null || b.carer === null || a.weekCommencing === null || b.weekCommencing === null)
+                    return false;
+                return (a.carer.carerCode === b.carer.carerCode)
+                    && (a.weekCommencing.toLocaleDateString() === b.weekCommencing.toLocaleDateString());
             })
             .subscribe(x => this.handleWeek(x));
 
@@ -90,8 +94,11 @@ export class PayrollProvider {
             });
         this.periodSub = this.periodObserver$
             .distinctUntilChanged((a, b) => {
-                if (a.team === null || b.team === null) return false;
-                return (a.team.teamCode === b.team.teamCode) && (a.start === b.start) && (a.finish === b.finish);
+                if (a.team === null || b.team === null || a.start === null || b.start === null || a.finish === null || b.finish === null)
+                    return false;
+                return (a.team.teamCode === b.team.teamCode)
+                    && (a.start.toLocaleDateString() === b.start.toLocaleDateString())
+                    && (a.finish.toLocaleDateString() === b.finish.toLocaleDateString());
             })
             .subscribe(x => this.handlePeriod(x));
 
@@ -129,16 +136,6 @@ export class PayrollProvider {
 
     selectCarer(carer: Carer) {
         this._selectedCarer.next(carer);
-    }
-
-    selectCarerByCode(carerCode: number) {
-        var tsUrl = `/api/payroll/getCarerByCode?carerCode=${carerCode}`;
-        console.log(tsUrl);
-        this.http.get(tsUrl).subscribe(res => {
-                this._selectedCarer.next(res.json() as Carer);
-            }
-        );
-        //this._selectedCarer.next(this._carers.getValue().find(ca => ca.carerCode == carerCode));
     }
 
     setPeriodStart(dt: Date) {
