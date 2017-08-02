@@ -84,3 +84,8 @@ span.ui-confirmdialog-message {
     background-color: palegreen;
     border: 2px solid black;
 }
+
+span.adjust-crit {
+    font-size: 14pt;
+    color: red;
+}

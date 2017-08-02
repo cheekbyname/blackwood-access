@@ -8,5 +8,7 @@ export class CarerContract {
 	public limitMins: number;
 	public teamCode: number;
 	public teamDesc: string;
-	public costCentre: string;
+    public costCentre: string;
+    public carerGradeCode: number;
+    public carerGradeDesc: string;
 }

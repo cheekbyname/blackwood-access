@@ -100,7 +100,7 @@ namespace Blackwood.Access.Services
 		{
             string logFile = "C:\\Dev\\PayrollDataLog.csv";
             if (File.Exists(logFile)) File.Delete(logFile);
-            File.AppendAllText(logFile, $"Carer,Team,Total Mins\n");
+            File.AppendAllText(logFile, $"Carer,Position,Total Mins,Hours,Add.Hours\n");
 
             ICollection<Payroll> data = new List<Payroll>();
 
@@ -127,55 +127,51 @@ namespace Blackwood.Access.Services
                     ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
                         && adj.Authorised != null).ToList();
 
-                    // We don't use the summaries here because they aren't broken down by Contract/Team
-                    // We may want to refactor the Summaries to be an aggregation of the Contract/Team aggregations
+                    // We don't use the summaries here because they aren't broken down by Contract
+                    // We may want to refactor the Summaries to be an aggregation of the Contract aggregations
 
-                    // Extract CostCenters & Build Aggregation List
-                    // TODO Refactor again to aggregate against Position (i.e. Grade)
-                    List<string> costCentres = shifts
-                        .Select(sh => contracts.FirstOrDefault(cn => sh.ContractCode == cn.ContractCode).CostCentre)
-                        .Distinct().ToList();
-					
-					CarerContract primaryContract = contracts.FirstOrDefault(cn => cn.TeamCode == car.DefaultTeamCode);
-					if (primaryContract == null)
-					{
-						
-					}
-                    string primaryCostCentre = primaryContract.CostCentre;
+                    // Extract Positions & Build Aggregation List
+                    List<short> positions = shifts
+                        .SelectMany(sh => contracts.Select(cn => cn.CarerGradeCode)).Distinct().ToList();
 
-                    List<PayrollAggregate> aggs = costCentres.Select(cc => new PayrollAggregate()
+                    // Default to first available (arbitrary) if no designated primary position
+                    CarerContract primaryContract = contracts.FirstOrDefault(cn => cn.TeamCode == car.DefaultTeamCode)
+                        ?? contracts.FirstOrDefault();
+                    short primaryPosition = primaryContract.CarerGradeCode;
+
+                    List<PayrollAggregate> aggs = positions.Select(pos => new PayrollAggregate()
                     {
                         Carer = car,
-                        CostCentre = cc,
+                        CarerGrade = pos,
                         // TODO Check these shifts include authorised adjustments
                         ActualAdjustedMins = shifts.Where(sh => contracts
-                            .Where(cn => cn.CostCentre == cc).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
+                            .Where(cn => cn.CarerGradeCode == pos).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
                                 .Sum(sh => sh.ShiftMins)
                     }).ToList();
 
-                    // Add a default area entry if one does not exist - can strip out later if zero
+                    // Add a default position entry if one does not exist - can strip out later if zero
                     // TODO And, uh, if they don't have one?
-                    if (!aggs.Any(agg => agg.CostCentre == primaryCostCentre))
+                    if (!aggs.Any(agg => agg.CarerGrade == primaryPosition))
                     {
                         aggs.Add(new PayrollAggregate()
                         {
                             Carer = car,
-                            CostCentre = primaryCostCentre,
+                            CarerGrade = primaryPosition,
                             ActualAdjustedMins = 0
                         });
                     }
 
-                    // Adjust for non-default area time (down to zero min)
-                    double defaultTime = aggs.FirstOrDefault(agg => agg.CostCentre == primaryCostCentre).ActualAdjustedMins;
-                    double nonDefaultTime = aggs.Where(agg => agg.CostCentre != primaryCostCentre)
+                    // Adjust for non-default contract time (down to zero min)
+                    double defaultTime = aggs.FirstOrDefault(agg => agg.CarerGrade == primaryPosition).ActualAdjustedMins;
+                    double nonDefaultTime = aggs.Where(agg => agg.CarerGrade != primaryPosition)
                         .Sum(agg => agg.ActualAdjustedMins);
                     double contractTime = contracts.Max(cn => cn.ContractMins) * 52 / 12;
-                    if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.CostCentre == primaryCostCentre)
+                    if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.CarerGrade == primaryPosition)
                         .ActualAdjustedMins = defaultTime - (nonDefaultTime > contractTime ? contractTime : nonDefaultTime);
 
                     aggs.ForEach(agg =>
                     {
-                        File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CostCentre},{agg.ActualAdjustedMins}\n");
+                        File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CarerGrade},{agg.ActualAdjustedMins},{agg.ActualAdjustedMins/60},{(agg.ActualAdjustedMins - contractTime < 0 ? 0 : agg.ActualAdjustedMins - contractTime)/60}\n");
                     });
 
                     // Get OT Hours (Actual-Contract)

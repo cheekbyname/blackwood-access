@@ -30,6 +30,7 @@ export class PayrollSummaryComponent implements OnInit {
 		this.payPro.periodStart$.subscribe(start => this.periodStart = start);
 		this.payPro.periodFinish$.subscribe(finish => this.periodFinish = finish);
 		this.payPro.summaries$.subscribe(sums => this.summaries = sums);
+		this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
 	}
 
 	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) {
@@ -41,6 +42,7 @@ export class PayrollSummaryComponent implements OnInit {
 	summaries: Summary[];
 	periodStart: Date;
 	periodFinish: Date;
+	weekCommencing: Date;	// For navigation
 
 	public showSummary: Boolean = true;
 
@@ -85,13 +87,16 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
 	selectCarer(sum: Summary): void {
-		//this.onSelectedCarer.emit(sum.carerCode);	// TODO Can we remove this now?
 		this.showSummary = false;
-		this.router.navigate(['/payroll', this.team.teamCode,
+
+		var navDate = this.weekCommencing >= this.periodStart && this.weekCommencing <= this.periodFinish
+			? this.weekCommencing : this.payPro.getWeekCommencingFromDate(this.periodFinish);
+
+			this.router.navigate(['/payroll', this.team.teamCode,
 			{ outlets: {
 				detail: ['timesheet', {
 					carer: sum.carerCode,
-					week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.periodFinish))
+					week: this.payPro.sqlDate(navDate)
 				}],
 				summary: ['summary', this.team.teamCode]
 			}

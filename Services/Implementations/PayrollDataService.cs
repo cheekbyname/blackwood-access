@@ -90,14 +90,15 @@
                 ).ToList();
         }
 
-        public ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodEnd)
+        public ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodFinish)
         {
             return _context.Set<Summary>()
                 .FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
                     parameters: new[] {
                         new SqlParameter("@teamCode", teamCode),
                         new SqlParameter("@periodStart", periodStart),
-                        new SqlParameter("@periodEnd", periodEnd)})
+                        new SqlParameter("@periodEnd", periodFinish)
+                    })
                 .ToList();
         }
 

@@ -68,9 +68,9 @@ namespace Blackwood.Access.Controllers
 		}
 
         [HttpGet("[action]")]
-        public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
+        public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodFinish)
         {
-            return _service.GetPayrollData(teamCode, periodStart, periodEnd);
+            return _service.GetPayrollData(teamCode, periodStart, periodFinish);
         }
 
         [HttpGet("[action]")]

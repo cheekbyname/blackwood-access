@@ -22,7 +22,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
-                    <td>{{payPro.teamForContract(shift.contractCode, timesheet.contracts)}}</td>
+                    <td>
+                        <span *ngIf="!shift.validBreak" title="This shift has no gaps large enough to accommodate a 20 min break"
+                            class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
+                        <span>{{payPro.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
+                    </td>
                     <td>{{payPro.timeFromDate(shift.start)}}</td>
                     <td>{{payPro.timeFromDate(shift.finish)}}</td>
                     <td>{{payPro.displayTime(shift.shiftMins + shift.unpaidMins)}}</td>
