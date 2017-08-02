@@ -1,10 +1,11 @@
 <p-dialog [(visible)]="bookingVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
-    [closable]="false" [closeOnEscape]="false">
-    <!--<header><span>Booking Detail</span></header>-->
+    [closable]="false" [closeOnEscape]="false" header="Booking Detail">
+    <!-- <header><span>Booking Detail</span></header> -->
     <div id="booking-modal-content" class="container" style="width:100%;">
         <div class="row">
             <label class="col-md-4">Client</label>
-            <span class="col-md-8">{{booking.forename}} {{booking.surname}}</span>
+            <span *ngIf="booking.forename" class="col-md-8">{{booking.forename}} {{booking.surname}}</span>
+            <span *ngIf="!booking.forename" class="col-md-8">N/A</span>
         </div>
         <div class="row">
             <label class="col-md-4">Type</label>
