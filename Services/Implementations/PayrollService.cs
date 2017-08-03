@@ -98,23 +98,25 @@ namespace Blackwood.Access.Services
 
 		public ICollection<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodEnd)
 		{
-            string logFile = "C:\\Dev\\PayrollDataLog.csv";
-            if (File.Exists(logFile)) File.Delete(logFile);
-            File.AppendAllText(logFile, $"Carer,Position,Total Mins,Hours,Add.Hours\n");
-
-            ICollection<Payroll> data = new List<Payroll>();
-
-            ICollection<Summary> summaries = _dataService.GetSummaries(teamCode, periodStart, periodEnd);
-            ICollection<Adjustment> adjusts = _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
-
             // Validation
             // - Unmapped Booking Types (Default to Hours Paid/OT10?)
             // - No contract for default team
 
+            string logFile = "C:\\Dev\\PayrollDataLog.csv";
+            if (File.Exists(logFile)) File.Delete(logFile);
+            File.AppendAllText(logFile, $"Carer,Position,ContractMins,Total Mins,Hours,AddHours\n");
+
+            ICollection<Payroll> data = new List<Payroll>();
+
+            // TODO Are we only using this to extract Carers? Seems excessive
+            ICollection<Summary> summaries = GetAdjustedSummaries(teamCode, periodStart, periodEnd);
+            //ICollection<Adjustment> adjusts = _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
+
             // Get Carers for Payroll run
             // TODO We are probably looking to narrow this down to only carers who are DEFAULT for this Team
-			// Q: If someone works in more than one team, is it always the default team that submits data?
-            List<Carer> carers = _dataService.GetCarersByTeam(teamCode, periodStart).ToList();
+            // Q: If someone works in more than one team, is it always the default team that submits data?
+            // Current compromise: Aggregate Carers from Summaries so that they match up
+            List<Carer> carers = summaries.SelectMany(sum => _dataService.GetCarers().Where(ca => ca.CarerCode == sum.CarerCode)).ToList();
 
             carers.ForEach(car =>
             {
@@ -124,13 +126,13 @@ namespace Blackwood.Access.Services
                 if (bookings.Count > 0)     // TODO Consider if there are any scenarios where valid payroll but no bookings
                 {
                     ICollection<Shift> shifts = _shiftService.BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
-                    ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
-                        && adj.Authorised != null).ToList();
+                    //ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
+                    //    && adj.Authorised != null).ToList();
 
                     // We don't use the summaries here because they aren't broken down by Contract
                     // We may want to refactor the Summaries to be an aggregation of the Contract aggregations
 
-                    // Extract Positions & Build Aggregation List
+                    // Extract Positions
                     List<short> positions = shifts
                         .SelectMany(sh => contracts.Select(cn => cn.CarerGradeCode)).Distinct().ToList();
 
@@ -139,15 +141,17 @@ namespace Blackwood.Access.Services
                         ?? contracts.FirstOrDefault();
                     short primaryPosition = primaryContract.CarerGradeCode;
 
+                    // Aggregate over position
                     List<PayrollAggregate> aggs = positions.Select(pos => new PayrollAggregate()
-                    {
-                        Carer = car,
-                        CarerGrade = pos,
-                        // TODO Check these shifts include authorised adjustments
-                        ActualAdjustedMins = shifts.Where(sh => contracts
-                            .Where(cn => cn.CarerGradeCode == pos).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
-                                .Sum(sh => sh.ShiftMins)
-                    }).ToList();
+                        {
+                            Carer = car,
+                            CarerGrade = pos,
+                            // TODO Check these shifts include authorised adjustments
+                            ActualAdjustedMins = shifts.Where(sh => contracts
+                                .Where(cn => cn.CarerGradeCode == pos).Select(cn => cn.ContractCode).ToList().Contains(sh.ContractCode ?? 0))
+                                    .Sum(sh => sh.ShiftMins)
+                        })
+                        .ToList();
 
                     // Add a default position entry if one does not exist - can strip out later if zero
                     // TODO And, uh, if they don't have one?
@@ -168,11 +172,29 @@ namespace Blackwood.Access.Services
                     double contractTime = contracts.Max(cn => cn.ContractMins) * 52 / 12;
                     if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.CarerGrade == primaryPosition)
                         .ActualAdjustedMins = defaultTime - (nonDefaultTime > contractTime ? contractTime : nonDefaultTime);
+                    double addTime = (defaultTime + nonDefaultTime - contractTime);
 
-                    aggs.ForEach(agg =>
+                    // Build output
+                    if (addTime > 0)
                     {
-                        File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CarerGrade},{agg.ActualAdjustedMins},{agg.ActualAdjustedMins/60},{(agg.ActualAdjustedMins - contractTime < 0 ? 0 : agg.ActualAdjustedMins - contractTime)/60}\n");
-                    });
+                        int seq = 1;
+                        aggs.ForEach(agg =>
+                        {
+                            data.Add(new Payroll()
+                            {
+                                StaffMember = car.PersonnelNumber,
+                                Date = periodEnd.AddDays(1),
+                                Sequence = seq,
+                                NEPay = "N",
+                                Code = "OT10",
+                                Hours = addTime / 60
+                            });
+
+                            seq++;
+
+                            File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CarerGrade},{contractTime},{agg.ActualAdjustedMins},{agg.ActualAdjustedMins / 60},{(agg.ActualAdjustedMins - contractTime < 0 ? 0 : agg.ActualAdjustedMins - contractTime) / 60}\n");
+                        });
+                    }
 
                     // Get OT Hours (Actual-Contract)
 

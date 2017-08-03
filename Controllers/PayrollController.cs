@@ -84,5 +84,12 @@ namespace Blackwood.Access.Controllers
         {
             return _dataService.GetCarerByCode(carerCode);
         }
+
+        // This method for debug purposes only
+        [HttpGet("[action]")]
+        public IEnumerable<CarerBooking> GetBookings(int carerCode, DateTime periodStart, DateTime periodFinish)
+        {
+            return _dataService.GetBookings(carerCode, periodStart, periodFinish);
+        }
 	}
 }

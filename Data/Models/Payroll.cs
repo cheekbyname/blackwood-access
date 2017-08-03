@@ -11,7 +11,7 @@ namespace Blackwood.Access.Models
         public DateTime Date { get; set; }
         public int Sequence { get; set; }
         public string NEPay { get; set; } = "N";
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public string Position { get; set;}
         public string ContractNo { get; set; }
         public string Code { get; set; }

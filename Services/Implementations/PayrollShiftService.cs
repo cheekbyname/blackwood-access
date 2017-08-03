@@ -20,6 +20,7 @@
                 .Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
             // TODO Do something similar for _absenceCodes?
         }
+
         // Establish Shifts for each day in period
         // Definitions:
         // A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
