@@ -107,16 +107,7 @@ namespace Blackwood.Access.Services
             File.AppendAllText(logFile, $"Carer,Position,ContractMins,Total Mins,Hours,AddHours\n");
 
             ICollection<Payroll> data = new List<Payroll>();
-
-            // TODO Are we only using this to extract Carers? Seems excessive
-            ICollection<Summary> summaries = GetAdjustedSummaries(teamCode, periodStart, periodEnd);
-            //ICollection<Adjustment> adjusts = _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
-
-            // Get Carers for Payroll run
-            // TODO We are probably looking to narrow this down to only carers who are DEFAULT for this Team
-            // Q: If someone works in more than one team, is it always the default team that submits data?
-            // Current compromise: Aggregate Carers from Summaries so that they match up
-            List<Carer> carers = summaries.SelectMany(sum => _dataService.GetCarers().Where(ca => ca.CarerCode == sum.CarerCode)).ToList();
+            List<Carer> carers = _dataService.GetCarersByTeam(teamCode, periodStart).ToList();
 
             carers.ForEach(car =>
             {
@@ -140,7 +131,7 @@ namespace Blackwood.Access.Services
                     CarerContract primaryContract = contracts.FirstOrDefault(cn => cn.TeamCode == car.DefaultTeamCode)
                         ?? contracts.FirstOrDefault();
                     short primaryPosition = primaryContract.CarerGradeCode;
-
+                    
                     // Aggregate over position
                     List<PayrollAggregate> aggs = positions.Select(pos => new PayrollAggregate()
                         {

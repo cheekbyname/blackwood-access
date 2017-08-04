@@ -23,7 +23,7 @@
                 .FromSql("GetCarerActualAvailability @CarerCode, @WeekCommencing",
                     parameters: new[]
                         { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
-                ).ToList();
+                ).AsNoTracking().ToList();
         }
 
         public IQueryable<Adjustment> GetAllAdjustments()
@@ -40,7 +40,7 @@
                         new SqlParameter("@PeriodStart", periodStart),
                         new SqlParameter("@PeriodFinish", periodFinish)
                     }
-                ).ToList();
+                ).AsNoTracking().ToList();
         }
 
         public Carer GetCarerByCode(int carerCode)
@@ -64,7 +64,7 @@
                             ParameterName = "@PeriodStart", SqlDbType = SqlDbType.Date, Value = periodStart ?? (object)DBNull.Value
                         }
                     }
-                ).OrderBy(c => c.Forename).ThenBy(c => c.Surname).ToList();
+                ).OrderBy(c => c.Forename).ThenBy(c => c.Surname).AsNoTracking().ToList();
         }
 
         public ICollection<CarerContract> GetContracts(int carerCode, DateTime periodStart)
@@ -73,7 +73,7 @@
                 .FromSql("GetCarerContractInfo @CarerCode, @WeekCommencing",
                     parameters: new[]
                     { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", periodStart) }
-                ).ToList();
+                ).AsNoTracking().ToList();
         }
 
         public IQueryable<PayrollCodeMap> GetPayrollCodeMap()
@@ -87,24 +87,25 @@
                 .FromSql("GetCarerScheduledAvailability @CarerCode, @WeekCommencing",
                     parameters: new[]
                     { new SqlParameter("@CarerCode", carerCode), new SqlParameter("@WeekCommencing", weekCommencing) }
-                ).ToList();
+                ).AsNoTracking().ToList();
         }
 
         public ICollection<Summary> GetSummaries(int teamCode, DateTime periodStart, DateTime periodFinish)
         {
             return _context.Set<Summary>()
                 .FromSql("GetTeamTimesheetSummary @teamCode, @periodStart, @periodEnd",
-                    parameters: new[] {
+                    parameters: new[]
+                    {
                         new SqlParameter("@teamCode", teamCode),
                         new SqlParameter("@periodStart", periodStart),
                         new SqlParameter("@periodEnd", periodFinish)
-                    })
-                .ToList();
+                    }
+                ).AsNoTracking().ToList();
         }
 
         public ICollection<Team> GetTeams()
         {
-            return _context.Set<Team>().FromSql("GetTeams").OrderBy(t => t.TeamDesc).ToList();
+            return _context.Set<Team>().FromSql("GetTeams").OrderBy(t => t.TeamDesc).AsNoTracking().ToList();
         }
 
         public ICollection<Adjustment> GetTimesheetAdjustments(int carerCode, DateTime periodStart, DateTime periodFinish)
@@ -116,7 +117,7 @@
                         new SqlParameter("@PeriodStart", periodStart),
                         new SqlParameter("@PeriodFinish", periodFinish)
                     }
-                ).ToList();
+                ).AsNoTracking().ToList();
         }
 
         public ICollection<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
@@ -128,7 +129,7 @@
                         new SqlParameter("@PeriodStart", periodStart),
                         new SqlParameter("@PeriodEnd", periodEnd)
                     }
-                ).ToList();
+                ).AsNoTracking().ToList();
         }
 
         public void PutTimesheetAdjustment(Adjustment adj)
