@@ -4,3 +4,20 @@
         padding-top: 50px;
     }
 }
+
+.table-layout {
+    display: table;
+    width: 100%;
+}
+
+.table-layout > div {
+    display: table-cell;
+}
+
+.col-fixed {
+    width: 300px;
+}
+
+.col-fluid {
+    padding: 0px 16px;
+}
