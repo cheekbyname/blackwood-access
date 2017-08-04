@@ -120,6 +120,10 @@
                         shift.UnpaidMins += 20;
                     }
                 }
+                else
+                {
+                    shift.ValidBreak = true;
+                }
             });
 
             return shifts;
