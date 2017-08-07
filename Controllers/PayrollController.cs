@@ -91,5 +91,12 @@ namespace Blackwood.Access.Controllers
         {
             return _dataService.GetBookings(carerCode, periodStart, periodFinish);
         }
+
+        // TODO Remove - This method for debug purposes only
+        [HttpGet("[action]")]
+        public IEnumerable<PayrollCodeMap> GetPayrollCodeMap()
+        {
+            return _dataService.GetPayrollCodeMap();
+        }
 	}
 }

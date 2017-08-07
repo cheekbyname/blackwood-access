@@ -17,7 +17,7 @@
             _dataService = dataService;
 
             _unpaidCodes = _dataService.GetPayrollCodeMap()
-                .Where(map => map.Type == 0 && !map.PayHours).Select(map => map.TypeCode).ToArray();
+                .Where(map => map.Type == 0 && !(map.PayHours ?? false)).Select(map => map.TypeCode).ToArray();
             // TODO Do something similar for _absenceCodes?
         }
 
@@ -38,6 +38,8 @@
         {
             List<DateTime> dates = Enumerable.Range(0, (finishDate - startDate).Days + 1).Select(d => startDate.AddDays(d)).ToList();
             List<Shift> shifts = new List<Shift>();
+            //List<PayrollCodeMap> codeMap = new List<PayrollCodeMap>(_dataService.GetPayrollCodeMap().ToList());
+            List<PayrollCodeMap> codeMap = new List<PayrollCodeMap>(_dataService.GetPayrollCodeMap());
 
             dates.ForEach(dt => {
                 TimeSpan gap;
@@ -55,10 +57,8 @@
                     .OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
 
                         // Retrieve Booking & Availability Type code maps
-                        PayrollCodeMap bkMap = _dataService.GetPayrollCodeMap()
-                            .FirstOrDefault(map => map.Type == 0 && map.TypeCode == bk.BookingType);
-                        PayrollCodeMap avMap = _dataService.GetPayrollCodeMap()
-                            .FirstOrDefault(map => map.TypeCode == 1 && map.TypeCode == bk.AvailType);
+                        PayrollCodeMap bkMap = codeMap.FirstOrDefault(map => map.Type == 0 && map.TypeCode == bk.BookingType);
+                        PayrollCodeMap avMap = codeMap.FirstOrDefault(map => map.Type == 1 && map.TypeCode == bk.AvailType);
 
                         // Calculate gap from last booking and adjust Shift Start/Finish times
                         gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
@@ -100,7 +100,7 @@
                         else
                         {
                             shift.Finish = bk.ThisFinish;
-                            if (avMap.PayGaps)
+                            if (avMap.PayGaps ?? false)
                             {
                                 // Shift time from beginning to end minus unpaid breaks
                                 shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes) - shift.UnpaidMins;

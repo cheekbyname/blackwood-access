@@ -108,6 +108,7 @@ namespace Blackwood.Access.Services
 
             ICollection<Payroll> data = new List<Payroll>();
             List<Carer> carers = _dataService.GetCarersByTeam(teamCode, periodStart).ToList();
+            List<PayrollCodeMap> codeMap = new List<PayrollCodeMap>(_dataService.GetPayrollCodeMap());
 
             carers.ForEach(car =>
             {
@@ -116,6 +117,8 @@ namespace Blackwood.Access.Services
 
                 if (bookings.Count > 0)     // TODO Consider if there are any scenarios where valid payroll but no bookings
                 {
+                    int seq = 1;
+
                     ICollection<Shift> shifts = _shiftService.BookingsToShifts(periodStart, periodEnd, bookings, car.CarerCode);
                     //ICollection<Adjustment> adjs = adjusts.Where(adj => adj.CarerCode == car.CarerCode
                     //    && adj.Authorised != null).ToList();
@@ -163,12 +166,13 @@ namespace Blackwood.Access.Services
                     double contractTime = contracts.Max(cn => cn.ContractMins) * 52 / 12;
                     if (nonDefaultTime > 0) aggs.FirstOrDefault(agg => agg.CarerGrade == primaryPosition)
                         .ActualAdjustedMins = defaultTime - (nonDefaultTime > contractTime ? contractTime : nonDefaultTime);
+
+                    // Get OT Hours (Actual-Contract)
                     double addTime = (defaultTime + nonDefaultTime - contractTime);
 
                     // Build output
                     if (addTime > 0)
                     {
-                        int seq = 1;
                         aggs.ForEach(agg =>
                         {
                             data.Add(new Payroll()
@@ -187,9 +191,24 @@ namespace Blackwood.Access.Services
                         });
                     }
 
-                    // Get OT Hours (Actual-Contract)
+                    // Get Instance Code Bookings (SleepOver, NightPremium, On-Call)
+                    List<CarerBooking> inst = bookings.Where(bk => InstMapForBooking(bk, codeMap) != null).ToList();
 
-                    // Get Unit Code Info (SleepOver, NightPremium, On-Call)
+                    // Aggregate Count by Instance Code
+                    inst.Select(ins => InstMapForBooking(ins, codeMap)).Distinct().ToList().ForEach(map =>
+                    {
+                        data.Add(new Payroll()
+                        {
+                            StaffMember = car.PersonnelNumber,
+                            Date = periodEnd.AddDays(1),
+                            Sequence = seq,
+                            NEPay = "N",
+                            Code = map.Code,
+                            Hours = inst.Count(ins => InstMapForBooking(ins, codeMap) == map)
+                        });
+
+                        seq++;
+                    });
 
                     // Strip out any aggregate records with zero time
                 }
@@ -198,5 +217,12 @@ namespace Blackwood.Access.Services
 
             return data;
 		}
+
+        private PayrollCodeMap InstMapForBooking(CarerBooking bk, List<PayrollCodeMap> codeMap)
+        {
+            return codeMap.FirstOrDefault(map => (map.PayInstance ?? false)
+                && ((map.Type == 0 && map.TypeCode == bk.BookingType)
+                || (map.Type == 1 && map.TypeCode == bk.AvailType)));
+        }
     }
 }
