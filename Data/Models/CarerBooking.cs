@@ -14,7 +14,9 @@ namespace Blackwood.Access.Models {
 		public string Forename {get;set;}
 		public string Surname {get;set;}
 		public int Shift { get; set; }
-		public Int16? TeamCode { get; set;}
+		public short? TeamCode { get; set;}
 		public string TeamDesc { get; set; }
+        public short? AvailType { get; set; }
+        public string AvailDesc { get; set; }
 	}
 }

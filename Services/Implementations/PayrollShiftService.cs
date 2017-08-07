@@ -48,17 +48,24 @@
                 {
                     CarerCode = carerCode,
                     Sequence = 1,
-                    Day = day,
-                    UnpaidMins = 0,
-                    BiggestGap = 0
+                    Day = day
                 };
 
                 bookings.Where(bk => bk.ThisStart.Date == dt && !_absenceCodes.Any(ac => ac == bk.BookingType))
                     .OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
 
+                        // Retrieve Booking & Availability Type code maps
+                        PayrollCodeMap bkMap = _dataService.GetPayrollCodeMap()
+                            .FirstOrDefault(map => map.Type == 0 && map.TypeCode == bk.BookingType);
+                        PayrollCodeMap avMap = _dataService.GetPayrollCodeMap()
+                            .FirstOrDefault(map => map.TypeCode == 1 && map.TypeCode == bk.AvailType);
+
                         // Calculate gap from last booking and adjust Shift Start/Finish times
                         gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
+
+                        // Track biggest (total?) gap for fitting breaks in
                         shift.BiggestGap = Math.Max((int)gap.TotalMinutes, shift.BiggestGap);
+
                         shift.ContractCode = shift.ContractCode ?? bk.ContractCode;
                         shift.Start = shift.Start ?? bk.ThisStart;
 
@@ -67,10 +74,15 @@
                         {
                             shift.UnpaidMins += (bk.ThisMins);
                         }
+                        else
+                        {
+                            shift.ShiftMins += bk.ThisMins;
+                        }
                         // Begin new Shift if valid shift break detected
                         // TODO Think about this contract change thing
                         if (gap >= TimeSpan.FromHours(2))
                             // TODO Or Booking is not of a Shiftable type
+                            // TODO Or not ShiftCode
                             // && ((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
                             // 	|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
                             // TODO This is problematic || bk.ContractCode != shift.ContractCode)
@@ -82,15 +94,17 @@
                                 Sequence = shifts.Where(sh => sh.Day == day).Select(sh => sh.Sequence).Max() + 1,
                                 Day = day,
                                 Start = bk.ThisStart,
-                                ContractCode = bk.ContractCode,
-                                BiggestGap = 0
+                                ContractCode = bk.ContractCode
                             };
                         }
                         else
                         {
                             shift.Finish = bk.ThisFinish;
-                            // Shift time from beginning to end minus unpaid breaks
-                            shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes) - shift.UnpaidMins;
+                            if (avMap.PayGaps)
+                            {
+                                // Shift time from beginning to end minus unpaid breaks
+                                shift.ShiftMins = (int)((shift.Finish - shift.Start).Value.TotalMinutes) - shift.UnpaidMins;
+                            }
                         }
 
                         // Tag Booking with Shift Sequence

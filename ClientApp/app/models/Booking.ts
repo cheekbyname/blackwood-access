@@ -8,5 +8,7 @@ export class CarerBooking {
 	public bookingDesc: string;
 	public forename: string;
 	public surname: string;
-	public shift: number;
+    public shift: number;
+    public availType: number;
+    public availDesc: string;
 }

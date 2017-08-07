@@ -13,9 +13,9 @@ namespace Blackwood.Access.Models
         public int Day { get; set; }
         public DateTime? Start { get; set; }
         public DateTime? Finish { get; set; }
-        public int ShiftMins { get; set; }
-        public int UnpaidMins { get; set; }
-        public int BiggestGap { get; set; }
+        public int ShiftMins { get; set; } = 0;
+        public int UnpaidMins { get; set; } = 0;
+        public int BiggestGap { get; set; } = 0;
         public bool? ValidBreak { get; set; } = null;
     }
 }
