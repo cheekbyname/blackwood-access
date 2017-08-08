@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
 
 import { DataTableModule, SharedModule } from "primeng/primeng";
 
@@ -9,7 +9,8 @@ import { PayrollProvider } from "../payroll.provider";
 
 @Component({
     template: require('./payroll.export.component.html'),
-    styles: [require('./payroll.export.component.css')]
+    styles: [require('./payroll.export.component.css')],
+    encapsulation: ViewEncapsulation.None
 })
 export class PayrollExportComponent {
 

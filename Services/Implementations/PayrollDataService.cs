@@ -136,7 +136,6 @@
         {
             _context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @RejectedBy, @Rejected, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
                 new[] {
-					// TODO Consider null coalescing date values also
 					new SqlParameter { ParameterName = "@Id", Value = adj.Id },
                     new SqlParameter { ParameterName = "@Guid", Value = adj.Guid },
                     new SqlParameter { ParameterName = "@CarerCode", Value = adj.CarerCode },

@@ -8,17 +8,19 @@
     public class PayrollShiftService : IPayrollShiftService
     {
         IPayrollDataService _dataService;
-        // TODO - Replace these two with PayrollCodeMap entries
-        private int[] _absenceCodes = { 108, 109 };
+        private int[] _absenceCodes;
         private int[] _unpaidCodes;
+        List<PayrollCodeMap> _codeMap;
 
         public PayrollShiftService(IPayrollDataService dataService)
         {
             _dataService = dataService;
+            _codeMap = _dataService.GetPayrollCodeMap().ToList();
 
-            _unpaidCodes = _dataService.GetPayrollCodeMap()
-                .Where(map => map.Type == 0 && !(map.PayHours ?? false)).Select(map => map.TypeCode).ToArray();
-            // TODO Do something similar for _absenceCodes?
+            _unpaidCodes = _codeMap.Where(map => map.Type == 0 && !(map.PayHours ?? false))
+                .Select(map => map.TypeCode).ToArray();
+            _absenceCodes = _codeMap.Where(map => map.Type == 0 && (map.PayHours ?? false) && !(map.ShiftCode ?? false))
+                .Select(map => map.TypeCode).ToArray();
         }
 
         // Establish Shifts for each day in period
@@ -38,8 +40,6 @@
         {
             List<DateTime> dates = Enumerable.Range(0, (finishDate - startDate).Days + 1).Select(d => startDate.AddDays(d)).ToList();
             List<Shift> shifts = new List<Shift>();
-            //List<PayrollCodeMap> codeMap = new List<PayrollCodeMap>(_dataService.GetPayrollCodeMap().ToList());
-            List<PayrollCodeMap> codeMap = new List<PayrollCodeMap>(_dataService.GetPayrollCodeMap());
 
             dates.ForEach(dt => {
                 TimeSpan gap;
@@ -57,8 +57,8 @@
                     .OrderBy(bk => bk.ThisStart).ToList().ForEach(bk => {
 
                         // Retrieve Booking & Availability Type code maps
-                        PayrollCodeMap bkMap = codeMap.FirstOrDefault(map => map.Type == 0 && map.TypeCode == bk.BookingType);
-                        PayrollCodeMap avMap = codeMap.FirstOrDefault(map => map.Type == 1 && map.TypeCode == bk.AvailType);
+                        PayrollCodeMap bkMap = _codeMap.FirstOrDefault(map => map.Type == 0 && map.TypeCode == bk.BookingType);
+                        PayrollCodeMap avMap = _codeMap.FirstOrDefault(map => map.Type == 1 && map.TypeCode == bk.AvailType);
 
                         // Calculate gap from last booking and adjust Shift Start/Finish times
                         gap = (bk.ThisStart - shift.Finish) ?? TimeSpan.FromMinutes(0);
@@ -79,10 +79,8 @@
                             shift.ShiftMins += bk.ThisMins;
                         }
                         // Begin new Shift if valid shift break detected
-                        // TODO Think about this contract change thing
                         if (gap >= TimeSpan.FromHours(2))
-                            // TODO Or Booking is not of a Shiftable type
-                            // TODO Or not ShiftCode
+                            // || !bkMap.ShiftCode
                             // && ((bk.ThisStart.Hour >= 14 && bk.ThisStart.Hour <= 16) 
                             // 	|| (bk.ThisFinish.Hour >= 14 && bk.ThisFinish.Hour <= 16 )))
                             // TODO This is problematic || bk.ContractCode != shift.ContractCode)
