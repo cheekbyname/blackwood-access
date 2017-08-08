@@ -177,10 +177,9 @@ namespace Blackwood.Access.Services
                         {
                             data.Add(new Payroll()
                             {
-                                StaffMember = car.PersonnelNumber,
+                                StaffMember = car.PersonnelNumber ?? "",
                                 Date = periodEnd.AddDays(1),
                                 Sequence = seq,
-                                NEPay = "N",
                                 Code = "OT10",
                                 Hours = addTime / 60
                             });
@@ -199,10 +198,9 @@ namespace Blackwood.Access.Services
                     {
                         data.Add(new Payroll()
                         {
-                            StaffMember = car.PersonnelNumber,
+                            StaffMember = car.PersonnelNumber ?? "",
                             Date = periodEnd.AddDays(1),
                             Sequence = seq,
-                            NEPay = "N",
                             Code = map.Code,
                             Hours = inst.Count(ins => InstMapForBooking(ins, codeMap) == map)
                         });

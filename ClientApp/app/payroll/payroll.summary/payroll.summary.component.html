@@ -15,6 +15,10 @@
 					<span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
 					<span>{{showSummary ? "Hide" : "Show"}}</span>
 				</a>
+				<a class="btn btn-primary" (click)="showExport()">
+					<span class="glyphicon glyphicon-export"></span>
+					<span>Export</span>
+				</a>
 				<a class="btn btn-primary" (click)="showReview()">
 					<span class="glyphicon glyphicon-thumbs-up"></span>
 					<span>Review</span>

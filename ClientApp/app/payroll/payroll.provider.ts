@@ -218,7 +218,6 @@ export class PayrollProvider {
             console.log(tsUrl);
 			this.http.get(tsUrl).subscribe(res => {
                 this._export.next(res.json() as Payroll[]);
-                console.log(res.json());
 			});
 		}
     }

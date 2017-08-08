@@ -109,6 +109,12 @@ export class PayrollSummaryComponent implements OnInit {
 			{ outlets: { detail: ['review', this.team.teamCode], summary: ['summary', this.team.teamCode] }}]);
     }
 
+	showExport() {
+		this.showSummary = false;
+		this.router.navigate(['/payroll', this.team.teamCode,
+			{ outlets: { detail: ['export', this.team.teamCode], summary: ['summary', this.team.teamCode] }}]);
+	}
+
     public additionalHours(sum: Summary): number {
         return sum.actualMins - sum.monthlyContractMins < 0 ? 0 : sum.actualMins - sum.monthlyContractMins;
     }
