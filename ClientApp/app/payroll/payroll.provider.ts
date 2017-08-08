@@ -8,6 +8,7 @@ import { Adjustment } from "../models/adjustment";
 import { Carer } from '../models/carer';
 import { CarerContract } from '../models/contract';
 import { Locale, LOC_EN } from '../models/locale';
+import { Payroll } from "../models/payroll";
 import { Summary } from "../models/summary";
 import { Team } from '../models/team';
 import { Timesheet } from '../models/timesheet';
@@ -29,6 +30,7 @@ export class PayrollProvider {
     private _timesheet = new BehaviorSubject<Timesheet>(null);
     private _summaries = new BehaviorSubject<Summary[]>(null);
     private _validation = new BehaviorSubject<ValidationResult>(null);
+    private _export = new BehaviorSubject<Payroll[]>(undefined);
 
     weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
@@ -38,6 +40,7 @@ export class PayrollProvider {
     selectedCarer$ = this._selectedCarer.asObservable()
         .distinctUntilChanged((a, b) => a !== null && b !== null && a.carerCode === b.carerCode);
     validation$ = this._validation.asObservable();
+    export$ = this._export.asObservable();
 
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
@@ -112,10 +115,12 @@ export class PayrollProvider {
             this._summaries.next(null);
             this._adjustments.next(null);
             this._validation.next(null);
+            this._export.next(undefined);
             
             this.getSummaries(x.team, x.start, x.finish);
             this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
             this.getValidationResult(x.team, x.start, x.finish);
+            this.getPayrollExport(x.team, x.start, x.finish);
         }
     }
 
@@ -184,7 +189,6 @@ export class PayrollProvider {
             console.log(tsUrl);
             this.http.get(tsUrl).subscribe(res => {
                 this._timesheet.next(res.json() as Timesheet);
-                console.log(res.json());
             });
         }
 	}
@@ -202,11 +206,22 @@ export class PayrollProvider {
 		if (periodStart != undefined && periodFinish != undefined) {
             var tsUrl = `/api/payroll/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
             console.log(tsUrl);
-			this.http.get(tsUrl).subscribe( res => {
+			this.http.get(tsUrl).subscribe(res => {
                 this._summaries.next(res.json() as Summary[]);
 			});
 		}
 	}
+
+    getPayrollExport(team: Team, periodStart: Date, periodFinish: Date) {
+		if (periodStart != undefined && periodFinish != undefined) {
+            var tsUrl = `/api/payroll/getPayrollData/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
+            console.log(tsUrl);
+			this.http.get(tsUrl).subscribe(res => {
+                this._export.next(res.json() as Payroll[]);
+                console.log(res.json());
+			});
+		}
+    }
 
     getValidationResult(team: Team, periodStart: Date, periodFinish: Date) {
         var tsUrl = `/api/payroll/validate/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
