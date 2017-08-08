@@ -81,28 +81,28 @@ export class PayrollProvider {
         this.weekObserver$ = Observable
             .combineLatest(this.weekCommencing$, this.selectedCarer$, (wc, carer) => {
                 return { "weekCommencing": wc, "carer": carer}
-            });
-        this.weekSub = this.weekObserver$
+            })
             .distinctUntilChanged((a, b) => {
                 if (a.carer === null || b.carer === null || a.weekCommencing === null || b.weekCommencing === null)
                     return false;
                 return (a.carer.carerCode === b.carer.carerCode)
                     && (a.weekCommencing.toLocaleDateString() === b.weekCommencing.toLocaleDateString());
-            })
+            });
+        this.weekSub = this.weekObserver$
             .subscribe(x => this.handleWeek(x));
 
         this.periodObserver$ = Observable
             .combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$, (team, start, finish) => {
                 return { "team": team, "start": start, "finish": finish }
-            });
-        this.periodSub = this.periodObserver$
+            })
             .distinctUntilChanged((a, b) => {
                 if (a.team === null || b.team === null || a.start === null || b.start === null || a.finish === null || b.finish === null)
                     return false;
                 return (a.team.teamCode === b.team.teamCode)
                     && (a.start.toLocaleDateString() === b.start.toLocaleDateString())
                     && (a.finish.toLocaleDateString() === b.finish.toLocaleDateString());
-            })
+            });
+        this.periodSub = this.periodObserver$
             .subscribe(x => this.handlePeriod(x));
 
         this.userPro.userInfo$.subscribe(x => this.user = x);

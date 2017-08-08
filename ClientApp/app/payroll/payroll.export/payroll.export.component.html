@@ -8,10 +8,16 @@
                 <div class="form-group form-inline">
                     <label class="control-label">File Name</label>
                     <input class="form-control" type="text" [(ngModel)]="fileName" placeholder="Enter export file name"/>
-                    <a class="btn btn-primary pull-right" (click)="dt.exportCSV()">
-                        <span class="glyphicon glyphicon-floppy-save"></span>
-                        <span>Save CSV</span>
-                    </a>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" (click)="dt.exportCSV()">
+                            <span class="glyphicon glyphicon-floppy-save"></span>
+                            <span>Save CSV</span>
+                        </a>
+                        <a class="btn btn-primary" (click)="clearDetail()">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            <span>Close</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

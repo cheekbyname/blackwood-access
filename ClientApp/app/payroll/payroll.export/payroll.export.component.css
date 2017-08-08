@@ -7,6 +7,10 @@ label, input {
     font-size: 11pt;
 }
 
+.form-inline div:last-child {
+    margin-left: 8px;
+}
+
 .panel {
     border: 1px solid;
     border-color: slategray;
