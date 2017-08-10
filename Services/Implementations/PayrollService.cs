@@ -102,9 +102,9 @@ namespace Blackwood.Access.Services
             // - Unmapped Booking Types (Default to Hours Paid/OT10?)
             // - No contract for default team
 
-            string logFile = "C:\\Dev\\PayrollDataLog.csv";
-            if (File.Exists(logFile)) File.Delete(logFile);
-            File.AppendAllText(logFile, $"Carer,Position,ContractMins,Total Mins,Hours,AddHours\n");
+            //string logFile = "C:\\Dev\\PayrollDataLog.csv";
+            //if (File.Exists(logFile)) File.Delete(logFile);
+            //File.AppendAllText(logFile, $"Carer,Position,ContractMins,Total Mins,Hours,AddHours\n");
 
             ICollection<Payroll> data = new List<Payroll>();
             List<Carer> carers = _dataService.GetCarersByTeam(teamCode, periodStart).ToList();
@@ -186,7 +186,7 @@ namespace Blackwood.Access.Services
 
                             seq++;
 
-                            File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CarerGrade},{contractTime},{agg.ActualAdjustedMins},{agg.ActualAdjustedMins / 60},{(agg.ActualAdjustedMins - contractTime < 0 ? 0 : agg.ActualAdjustedMins - contractTime) / 60}\n");
+                            //File.AppendAllText(logFile, $"{car.Forename} {car.Surname},{agg.CarerGrade},{contractTime},{agg.ActualAdjustedMins},{agg.ActualAdjustedMins / 60},{(agg.ActualAdjustedMins - contractTime < 0 ? 0 : agg.ActualAdjustedMins - contractTime) / 60}\n");
                         });
                     }
 

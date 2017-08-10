@@ -7,7 +7,7 @@
             <div class="col-md-6">
                 <div class="form-group form-inline">
                     <label class="control-label">File Name</label>
-                    <input class="form-control" type="text" [(ngModel)]="fileName" placeholder="Enter export file name"/>
+                    <input class="form-control" type="text" [(ngModel)]="fileName" placeholder="Enter export file name" />
                     <div class="pull-right">
                         <a class="btn btn-primary" (click)="dt.exportCSV()">
                             <span class="glyphicon glyphicon-floppy-save"></span>
@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <p-dataTable #dt [value]="export" [exportFilename]="fileName">
+        <p-dataTable *ngIf="export" #dt [value]="export" [exportFilename]="fileName">
             <p-column field="staffMember" header="StaffMember"></p-column>
             <p-column field="dateFormatted" header="Date"></p-column>
             <p-column field="sequence" header="Sequence"></p-column>
@@ -34,5 +34,9 @@
             <p-column field="code" header="Code"></p-column>
             <p-column field="hours" header="Hours"></p-column>
         </p-dataTable>
+        <div *ngIf="!export">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retrieving your data...</span>
+        </div>
     </div>
 </div>

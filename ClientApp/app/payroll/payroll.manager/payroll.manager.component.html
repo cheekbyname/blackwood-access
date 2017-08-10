@@ -3,10 +3,16 @@
         <div class="row">
             <h4 class="col-md-6">Payroll Management</h4>
             <div class="col-md-6 form-inline text-right">
-                <label for="teamSelect">Select Team</label>
-                <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
-                    <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
-                </select>
+                <div *ngIf="!teams">
+                    <i class="fa fa-cog fa-spin fa-2x"></i>
+                    <span class="loading">Loading...</span>
+                </div>
+                <div *ngIf="teams">
+                    <label for="teamSelect">Select Team</label>
+                    <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
+                        <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>

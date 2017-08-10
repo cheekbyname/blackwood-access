@@ -13,7 +13,7 @@ export class UserProvider {
     private _allUsers = new Subject<AccessUser[]>();
 
     public allUsers$ = this._allUsers.asObservable();
-    public userInfo$ = this._userInfo.asObservable();
+    public userInfo$ = this._userInfo.asObservable().distinctUntilChanged((a, b) => a.accountName == b.accountName);
 
     constructor(private http: Http) {
         this.GetUserInfo();

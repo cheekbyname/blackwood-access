@@ -1,4 +1,4 @@
-h4, label, select, td, th {
+h4, label, select, td, th{
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -67,5 +67,11 @@ span.contract-status {
 }
 
 thead > tr:first-child() {
+    margin-left: 8px;
+}
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
     margin-left: 8px;
 }
