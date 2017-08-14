@@ -59,3 +59,9 @@ label, select, input, .input-group {
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);
 }
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+    margin-left: 8px;
+}
