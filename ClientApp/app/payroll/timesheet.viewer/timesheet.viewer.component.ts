@@ -96,7 +96,7 @@ export class TimesheetViewerComponent implements OnInit {
 	selectedBooking: CarerBooking = new CarerBooking();
 
 	navigateTo() {
-		if (this.carer !== undefined && this.carer !== null && this.team !== undefined) {
+		if (this.carer !== undefined && this.carer !== null && this.team !== undefined && this.router.url.includes('timesheet')) {
 			this.router.navigate(['/payroll', this.team.teamCode,
 				{
 					outlets: {
