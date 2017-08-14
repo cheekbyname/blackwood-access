@@ -22,15 +22,8 @@ const timesheetRoutes: Routes = [
 		{ path: 'export/:teamCode', component: PayrollExportComponent, outlet: 'detail'}
 	] },
 	{ path: 'payroll', component: PayrollComponent, canActivate: [PayrollGuard], children: [
-		{ path: '', component: PayrollManagerComponent },
-		{ path: 'summary', component: PayrollSummaryComponent, outlet: 'summary'},
-		{ path: 'summary/:teamCode', component: PayrollSummaryComponent, outlet: 'summary'},
-		{ path: 'timesheet/:carer/:week', component: TimesheetViewerComponent, outlet: 'detail'},
-		{ path: 'timesheet/:carer', component: TimesheetViewerComponent, outlet: 'detail' },
-		{ path: 'timesheet', component: TimesheetViewerComponent, outlet: 'detail' },
-		{ path: 'review/:teamCode', component: PayrollReviewComponent, outlet: 'detail'},
-		{ path: 'export:/teamCode', component: PayrollExportComponent, outlet: 'detail'}
-	] }
+		{ path: '', component: PayrollManagerComponent }
+	]}
 ];
 
 @NgModule({
