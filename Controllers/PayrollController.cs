@@ -84,5 +84,11 @@ namespace Blackwood.Access.Controllers
         {
             return _dataService.GetCarerByCode(carerCode);
         }
+
+        [HttpGet("[action]")]
+        public WorkPattern WorkPatterns(int carer)
+        {
+            return _dataService.WorkPattern(carer);
+        }
 	}
 }

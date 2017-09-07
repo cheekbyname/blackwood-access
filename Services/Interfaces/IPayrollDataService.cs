@@ -22,5 +22,6 @@
         void RemoveTimesheetAdjustment(int id);
         ICollection<CarerBooking> GetBookings(int carerCode, DateTime periodStart, DateTime periodFinish);
         ICollection<CarerContract> GetContracts(int carerCode, DateTime periodStart);
+        WorkPattern WorkPattern(int carer);
     }
 }

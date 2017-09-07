@@ -26,7 +26,7 @@
         // Establish Shifts for each day in period
         // Definitions:
         // A Shift is a block of contiguous time within an Availability block which contains one or more Bookings
-        // The Shift starts at the beginning of the Availability block or the first Booking, which ever is earliest
+        // The Shift starts at the beginning of the Availability block or the first Booking, which ever is earliest NOT IN USE
         // The Shift finishes at the end of the end of the last booking in that Shift, if the first Shift
         // The Shift finishes at the end of the Availability block if the second Shift 
         // A Shift which contains a gap of two hours or more should be split into two Shifts

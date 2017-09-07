@@ -264,6 +264,7 @@ export class PayrollProvider {
 		var dt = new Date(wc);
 		dt.setDate(dt.getDate() + offset);
 		var dy = dt.getDate().toString();
+		if ((dy.length > 1) && (dy.substr(0, 1) == '1')) return dy + 'th';
 		switch (dy.substr(dy.length - 1)) {
 			case "1":
 				return dy + "st";

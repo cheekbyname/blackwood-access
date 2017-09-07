@@ -136,7 +136,7 @@
         {
             _context.Database.ExecuteSqlCommand("PutTimesheetAdjustment @Id, @Guid, @CarerCode, @WeekCommencing, @RequestedBy, @Requested, @AuthorisedBy, @Authorised, @RejectedBy, @Rejected, @ContractCode, @DayOffset, @Reason, @Hours, @Mins",
                 new[] {
-					new SqlParameter { ParameterName = "@Id", Value = adj.Id },
+                    new SqlParameter { ParameterName = "@Id", Value = adj.Id },
                     new SqlParameter { ParameterName = "@Guid", Value = adj.Guid },
                     new SqlParameter { ParameterName = "@CarerCode", Value = adj.CarerCode },
                     new SqlParameter { ParameterName = "@WeekCommencing", Value = adj.WeekCommencing },
@@ -159,6 +159,47 @@
             _context.Database.ExecuteSqlCommand("RemoveTimeSheetAdjustment @AdjustId", new[] {
                 new SqlParameter("@AdjustId", id)
             });
+        }
+
+        public WorkPattern WorkPattern(int carer)
+        {
+            string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+            //int[] carers = { 2043, 1542, 5335, 2588, 1544, 1522, 5150, 3476, 1836, 3832, 3492, 3081, 3147, 3153, 3221, 1547, 5320, 3502 };
+            //carers.ToList().ForEach(carer =>
+            //{
+            WorkPattern pat = new WorkPattern();
+            pat.Carer = _context.Carers.FirstOrDefault(c => c.CarerCode == carer);
+            pat.Contracts = GetContracts(carer, DateTime.Now).ToList();
+
+            pat.Contracts.ForEach(contract =>
+                {
+                    for (int i = 0; i <= contract.CycleLength; i++)
+                    {
+                        List<Availability> contractAvail = GetScheduledAvailability(carer, contract.CycleStart.AddDays(i * 7)).ToList();
+                        var avail = Tuple.Create(i, contractAvail.ToList());
+                        if (contractAvail.Count > 0 && !pat.Schedule.Any(sch => sch.Item1 == avail.Item1)) pat.Schedule.Add(avail);
+                    }
+                });
+
+            for (int i = 0; i <= pat.Contracts.Max(con => con.CycleLength); i++)
+            {
+                for (int j = 1; j <= 7; j++)
+                {
+                    Availability dayAvail = pat.Schedule.FirstOrDefault(sch => sch.Item1 == i)
+                        .Item2.FirstOrDefault(av => (int)av.ThisStart.DayOfWeek == j);
+                    pat.Pattern.Add(new WorkPattern.Display()
+                    {
+                        CycleWeek = i + 1,
+                        DayOfWeek = days[j - 1],
+                        StartTime = dayAvail == null ? TimeSpan.FromMinutes(0) : dayAvail.ThisStart.TimeOfDay,
+                        FinishTime = dayAvail == null ? TimeSpan.FromMinutes(0) : dayAvail.ThisFinish.TimeOfDay,
+                        Duration = dayAvail == null ? TimeSpan.FromMinutes(0) : dayAvail.ThisFinish - dayAvail.ThisStart
+                    });
+                }
+            }
+
+            return pat;
+            //});
         }
     }
 }
