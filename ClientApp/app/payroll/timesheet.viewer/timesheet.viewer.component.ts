@@ -192,7 +192,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public actualHoursForDay(offset: number): number {
 		return this.timesheet.shifts
 			.filter(sh => sh.day === offset)
-			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
+			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
 	}
 
 	public totalActualHoursForDay(offset: number): number {

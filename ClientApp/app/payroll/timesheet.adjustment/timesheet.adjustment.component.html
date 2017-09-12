@@ -29,9 +29,9 @@
                     </td>
                     <td>{{payPro.timeFromDate(shift.start)}}</td>
                     <td>{{payPro.timeFromDate(shift.finish)}}</td>
-                    <td>{{payPro.displayTime(shift.shiftMins + shift.unpaidMins)}}</td>
-                    <td>{{payPro.displayTime(shift.unpaidMins)}}</td>
                     <td>{{payPro.displayTime(shift.shiftMins)}}</td>
+                    <td>{{payPro.displayTime(shift.unpaidMins)}}</td>
+                    <td>{{payPro.displayTime(shift.shiftMins - shift.unpaidMins)}}</td>
                 </tr>
                 <tr class="row">
                     <td colspan="3"><strong>Shift Totals</strong></td>
