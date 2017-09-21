@@ -29,7 +29,8 @@
     "Microsoft.EntityFrameworkCore": "1.0.1",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
     "Payroll.Service": "1.0.0-*",
-    "Data.Models": "1.0.0-*"
+    "Data.Models": "1.0.0-*",
+    "Messaging.Service": "1.0.0-*"
     },
   "tools": {
     "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",

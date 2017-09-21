@@ -1,5 +1,6 @@
 namespace Blackwood.Access
 {
+    using Active.Messaging.Service;
     using Core.Data.Models;
     using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,7 @@ namespace Blackwood.Access
             services.AddTransient<IPayrollService, PayrollService>();
             services.AddTransient<IPayrollShiftService, PayrollShiftService>();
             services.AddTransient<IPayrollValidationService, PayrollValidationService>();
+            services.AddTransient<IPushService, PushService>();
             services.AddTransient<IUserService, UserService>();
         }
 

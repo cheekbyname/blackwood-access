@@ -2,5 +2,5 @@
   "sdk": {
     "version": "1.0.0-preview2-003131"
   },
-  "projects": [ "P:/Visual Studio/Projects/Blackwood.Core" ]
+  "projects": [ "P:/Visual Studio/Projects/Blackwood.Core", "P:/Visual Studio/Projects/Blackwood.Active" ]
 }
