@@ -1,6 +1,7 @@
 namespace Blackwood.Access
 {
-    using Services;
+    using Core.Data.Models;
+    using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -26,8 +27,9 @@ namespace Blackwood.Access
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<AccessContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Integration")));
+            string dbConnection = Configuration.GetConnectionString("Integration");
+            services.AddDbContext<AccessContext>(options => options.UseSqlServer(dbConnection));
+            services.AddDbContext<PayrollContext>(options => options.UseSqlServer(dbConnection));
             
             services.Configure<IISOptions>(options =>
             {

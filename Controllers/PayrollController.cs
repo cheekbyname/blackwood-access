@@ -1,12 +1,12 @@
 namespace Blackwood.Access.Controllers
 {
-	using System;
-	using System.Collections.Generic;
-	using Models;
-	using Services;
-	using Microsoft.AspNetCore.Mvc;
+    using Core.Data.Models;
+    using Core.Payroll.Service.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
 
-	[Route("api/[Controller]")]
+    [Route("api/[Controller]")]
 	public class PayrollController : ControllerBase
 	{
 		private IPayrollService _service;

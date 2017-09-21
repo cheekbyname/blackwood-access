@@ -1,10 +1,9 @@
 namespace Blackwood.Access.Controllers
 {
+    using Core.Data.Models;
+    using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using Blackwood.Access.Models;
-    using Blackwood.Access.Services;
-    using System.Security.Claims;
     using System.Collections.Generic;
 
     [Route("api/[Controller]")]

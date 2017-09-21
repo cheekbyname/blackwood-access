@@ -1,7 +1,7 @@
 ﻿namespace Blackwood.Access.Controllers
 {
-    using Models;
-    using Services;
+    using Core.Data.Models;
+    using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
 
