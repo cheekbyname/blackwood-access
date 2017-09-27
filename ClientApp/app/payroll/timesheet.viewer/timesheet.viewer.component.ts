@@ -133,7 +133,8 @@ export class TimesheetViewerComponent implements OnInit {
 
 	stuffBook(bk: CarerBooking): void {
 		// Because we want whole days and valueOf returns milliseconds
-		var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
+        //var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
+        var offset = Math.round((new Date(bk.thisStart).getTime() - new Date(this.weekCommencing).getTime()) / (1000 * 60 * 60 * 24));
 		offset = offset < 0 ? 0 : offset;
 		this.bookings[offset].push(bk);
 	}

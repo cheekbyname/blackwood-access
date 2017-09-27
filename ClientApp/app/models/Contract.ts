@@ -10,5 +10,6 @@ export class CarerContract {
 	public teamDesc: string;
     public costCentre: string;
     public carerGradeCode: number;
-    public carerGradeDesc: string;
+	public carerGradeDesc: string;
+	public cycleDaysWorked: number;
 }
