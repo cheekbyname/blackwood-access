@@ -134,9 +134,9 @@ export class TimesheetViewerComponent implements OnInit {
 	stuffBook(bk: CarerBooking): void {
 		// Because we want whole days and valueOf returns milliseconds
         //var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
-        var offset = Math.round((new Date(bk.thisStart).getTime() - new Date(this.weekCommencing).getTime()) / (1000 * 60 * 60 * 24));
-		offset = offset < 0 ? 0 : offset;
-		this.bookings[offset].push(bk);
+  //      var offset = Math.round((new Date(bk.thisStart).getTime() - new Date(this.weekCommencing).getTime()) / (1000 * 60 * 60 * 24));
+		//offset = offset < 0 ? 0 : offset;
+        this.bookings[this.offsetFor(this.weekCommencing, bk.thisStart)].push(bk);
 	}
 
 	// Transpose Bookings array
@@ -191,16 +191,29 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public actualHoursForDay(offset: number): number {
-		return this.timesheet.shifts
+		let shiftTime = this.timesheet.shifts
 			.filter(sh => sh.day === offset)
-			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
+            .map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
+        return shiftTime;
 	}
 
-	public totalActualHoursForDay(offset: number): number {
-		return this.timesheet.shifts
+    public totalActualHoursForDay(offset: number): number {
+        let shiftTime = this.timesheet.shifts
 			.filter(sh => sh.day == offset)
-			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc +cur }, 0);
+            .map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0);
+        let leaveSickTime = this.timesheet.bookings
+            .filter(bk => this.offsetFor(this.weekCommencing, bk.thisStart) == offset && this.payPro.absenceCodes.some(ac => ac == bk.bookingType))
+            .map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
+        return shiftTime + leaveSickTime;
 	}
+
+    public offsetFor(dt1: Date, dt2: Date): number {
+        let start = new Date(dt1);
+        start.setHours(0);
+        let finish = new Date(dt2);
+        let offset = Math.floor((finish.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+        return offset < 0 ? 0 : offset;
+    }
 
 	public actualHoursForContract(contractCode: number): number {
 		return this.timesheet.shifts.filter(sh => sh.contractCode === contractCode)
