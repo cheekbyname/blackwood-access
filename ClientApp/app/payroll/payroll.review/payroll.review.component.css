@@ -87,3 +87,9 @@ p-inputswitch .ui-inputswitch-onlabel {
 p-inputswitch .ui-inputswitch-offlabel {
     background-color: hotpink;
 }
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+    margin-left: 8px;
+}

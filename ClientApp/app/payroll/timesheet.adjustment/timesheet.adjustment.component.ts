@@ -2,7 +2,7 @@ import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angu
 import { Http } from '@angular/http';
 import { NgForm } from '@angular/forms';
 
-import { ConfirmDialogModule, ConfirmationService } from "primeng/primeng";
+import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
 
 import { AccessUser } from "../../models/accessuser";
 import { Timesheet } from '../../models/timesheet';
@@ -33,6 +33,8 @@ export class TimesheetAdjustmentComponent {
     private _adjustVisible: boolean;
 	private _dayOffset: number;
 	private user: AccessUser;
+
+	public breakInfoVisible: boolean = false;
 
     @Input()
     set weekCommencing(dt: Date) { this._weekCommencing = dt; }
@@ -146,5 +148,13 @@ export class TimesheetAdjustmentComponent {
 	public isValid(form: NgForm): boolean {
 		var valid = !form.dirty; // && any other clauses we need to cover
 		return valid;
+	}
+
+	public showBreakPolicyInfo() {
+		this.breakInfoVisible = true;
+	}
+
+	public dismissBreakPolicyInfo() {
+		this.breakInfoVisible = false;
 	}
 }

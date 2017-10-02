@@ -22,8 +22,8 @@
             </thead>
             <tbody>
                 <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
-                    <td>
-                        <span *ngIf="!shift.validBreak" title="This shift has no gaps large enough to accommodate a 20 min break"
+                    <td (click)="showBreakPolicyInfo()">
+                        <span *ngIf="!shift.validBreak" title="There are insufficient breaks in this shift. Click for more information."
                             class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
                         <span>{{payPro.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
                     </td>
@@ -100,3 +100,9 @@
 </form>
 
 <p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>
+
+<p-dialog header="Break Policy Not Met" [(visible)]="breakInfoVisible" [modal]="true" [closeOnEscape]="false"
+    (onHide)="dismissBreakPolicyInfo()">
+    <p>This shift does not meet the requirements of the break policy for this team or area.</p>
+    <button class="btn btn-primary pull-right" (click)="dismissBreakPolicyInfo()">Ok</button>
+</p-dialog>

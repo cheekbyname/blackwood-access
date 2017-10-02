@@ -1,18 +1,18 @@
-import { Component, Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+import { Injectable } from "@angular/core";
+import { Http } from "@angular/http";
+import { BehaviorSubject, Observable, Subscription } from "rxjs/Rx";
+import "rxjs/add/operator/toPromise";
 
 import { AccessUser } from "../models/accessuser";
 import { Adjustment } from "../models/adjustment";
-import { Carer } from '../models/carer';
-import { CarerContract } from '../models/contract';
-import { Locale, LOC_EN } from '../models/locale';
+import { Carer } from "../models/carer";
+import { CarerContract } from "../models/contract";
+import { Locale, LOC_EN } from "../models/locale";
 import { Payroll } from "../models/payroll";
 import { Summary } from "../models/summary";
-import { Team } from '../models/team';
-import { Timesheet } from '../models/timesheet';
-import { CarerValidationItem, ValidationResult } from "../models/validation";
+import { Team } from "../models/team";
+import { Timesheet } from "../models/timesheet";
+import { ValidationResult } from "../models/validation";
 
 import { UserProvider } from "../user.provider";
 
@@ -36,9 +36,9 @@ export class PayrollProvider {
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
     periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
     selectedTeam$ = this._selectedTeam.asObservable()
-        .distinctUntilChanged((a, b) => a.teamCode === b.teamCode);
+        .distinctUntilChanged((a: Team, b: Team) => a.teamCode === b.teamCode);
     selectedCarer$ = this._selectedCarer.asObservable()
-        .distinctUntilChanged((a, b) => a !== null && b !== null && a.carerCode === b.carerCode);
+        .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
     validation$ = this._validation.asObservable();
     export$ = this._export.asObservable();
 
@@ -56,14 +56,14 @@ export class PayrollProvider {
     public locale: Locale = LOC_EN;
     public absenceCodes: number [] = [108, 109];
     public unpaidCodes: number [] = [123, 110, 98];
-    
+
     private user: AccessUser;
 
     constructor(public http: Http, private userPro: UserProvider) {
 
         Observable
-            .combineLatest(this.periodStart$, this.selectedTeam$, (wc, tm) => {
-                return { "periodStart": wc, "selectedTeam": tm}
+            .combineLatest(this.periodStart$, this.selectedTeam$, (wc: Date, tm: Team) => {
+                return { "periodStart": wc, "selectedTeam": tm };
             })
             .distinctUntilChanged((a, b) => {
                 if (a.selectedTeam === null || b.selectedTeam === null || a.periodStart === null || b.periodStart === null)

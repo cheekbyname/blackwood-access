@@ -12,4 +12,5 @@ export class CarerContract {
     public carerGradeCode: number;
 	public carerGradeDesc: string;
 	public cycleDaysWorked: number;
+	public breakPolicyId: number;
 }
