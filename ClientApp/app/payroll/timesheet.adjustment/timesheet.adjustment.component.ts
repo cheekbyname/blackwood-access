@@ -5,9 +5,12 @@ import { NgForm } from '@angular/forms';
 import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
 
 import { AccessUser } from "../../models/accessuser";
-import { Timesheet } from '../../models/timesheet';
 import { Adjustment } from '../../models/adjustment';
 import { Locale, LOC_EN } from '../../models/locale';
+import { BreakDefinition } from "../../models/breakdefinition";
+import { BreakPolicy } from "../../models/breakpolicy";
+import { Timesheet } from '../../models/timesheet';
+import { Shift } from "../../models/Shift";
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
@@ -35,6 +38,7 @@ export class TimesheetAdjustmentComponent {
 	private user: AccessUser;
 
 	public breakInfoVisible: boolean = false;
+	public shiftBreakPolicy: BreakPolicy;
 
     @Input()
     set weekCommencing(dt: Date) { this._weekCommencing = dt; }
@@ -150,7 +154,11 @@ export class TimesheetAdjustmentComponent {
 		return valid;
 	}
 
-	public showBreakPolicyInfo() {
+	public showBreakPolicyInfo(shift: Shift) {
+		this.shiftBreakPolicy = this.timesheet.breakPolicies.find(bp => bp.id == shift.breakPolicyId);
+		this.shiftBreakPolicy.definitions = this.timesheet.breakDefinitions
+			.filter(bd => bd.breakPolicyId == this.shiftBreakPolicy.id
+				&& shift.shiftMins >= bd.minThreshold && (shift.shiftMins <= bd.maxThreshold || bd.maxThreshold == null));
 		this.breakInfoVisible = true;
 	}
 

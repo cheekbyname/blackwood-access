@@ -1,5 +1,5 @@
-.header-text, label, .ui-widget select, td, th, .input-group input, p-dialog input, p-dialog button, p-dialog .row > span,
-    p-dialog select, p-dialog p {
+.header-text, label, .ui-widget select, td, th, .input-group input, p-dialog input, p-dialog .row > span,
+    p-dialog select, p-dialog p, p-dialog button.btn.btn-primary {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -7,6 +7,11 @@
 .action-button {
     border: 1px solid silver;
     background: white;
+}
+
+.action-icon:hover {
+    cursor: pointer;
+    color: green;
 }
 
 .header-text {

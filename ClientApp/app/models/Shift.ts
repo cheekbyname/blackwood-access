@@ -11,6 +11,7 @@ export class Shift {
     public shiftMins: number;
     public unpaidMins: number;
     public validBreak: boolean;
+    public breakPolicyId: number;
 }
 
 @Pipe({

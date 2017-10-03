@@ -4,6 +4,8 @@ import { Availability } from './Availability';
 import { CarerBooking } from './Booking';
 import { Shift } from './Shift';
 import { Adjustment } from './Adjustment';
+import { BreakPolicy } from "./BreakPolicy";
+import { BreakDefinition } from "./BreakDefinition";
 
 export class Timesheet {
 	public carerCode: number;
@@ -15,4 +17,6 @@ export class Timesheet {
 	public bookings: CarerBooking[];
 	public shifts: Shift[];
 	public adjustments: Adjustment[];
+	public breakPolicies: BreakPolicy[];
+	public breakDefinitions: BreakDefinition[];
 }

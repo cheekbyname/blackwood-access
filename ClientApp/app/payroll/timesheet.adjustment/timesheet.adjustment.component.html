@@ -22,9 +22,9 @@
             </thead>
             <tbody>
                 <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
-                    <td (click)="showBreakPolicyInfo()">
-                        <span *ngIf="!shift.validBreak" title="There are insufficient breaks in this shift. Click for more information."
-                            class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
+                    <td>
+                        <span (click)="showBreakPolicyInfo(shift)" *ngIf="!shift.validBreak" title="There are insufficient breaks in this shift. Click for more information."
+                            class="glyphicon glyphicon-warning-sign adjust-crit pull-right action-icon"></span>
                         <span>{{payPro.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
                     </td>
                     <td>{{payPro.timeFromDate(shift.start)}}</td>
@@ -103,6 +103,22 @@
 
 <p-dialog header="Break Policy Not Met" [(visible)]="breakInfoVisible" [modal]="true" [closeOnEscape]="false"
     (onHide)="dismissBreakPolicyInfo()">
-    <p>This shift does not meet the requirements of the break policy for this team or area.</p>
+    <p>This shift does not meet the requirements of the break policy for {{shiftBreakPolicy ? shiftBreakPolicy.description : "this area"}}.</p>
+    <table *ngIf="shiftBreakPolicy" class="table table-striped table-responsive">
+        <thead>
+            <tr class="row">
+                <th>Length of Shift</th>
+                <th>Length of Break</th>
+                <th>Paid or Unpaid?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let def of shiftBreakPolicy.definitions" class="row">
+                <td>{{payPro.displayTime(def.minThreshold)}} or more</td>
+                <td>{{payPro.displayTime(def.breakLength)}}</td>
+                <td>{{def.paid ? "Paid" : "Unpaid"}}</td>
+            </tr>
+        </tbody>
+    </table>
     <button class="btn btn-primary pull-right" (click)="dismissBreakPolicyInfo()">Ok</button>
 </p-dialog>
