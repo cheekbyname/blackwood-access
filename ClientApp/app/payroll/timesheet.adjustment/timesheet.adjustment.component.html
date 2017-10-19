@@ -104,6 +104,7 @@
 <p-dialog header="Break Policy Not Met" [(visible)]="breakInfoVisible" [modal]="true" [closeOnEscape]="false"
     (onHide)="dismissBreakPolicyInfo()">
     <p>This shift does not meet the requirements of the break policy for {{shiftBreakPolicy ? shiftBreakPolicy.description : "this area"}}.</p>
+    <p>This shift should contain the below listed breaks, but there are insufficient gaps in the shift to do so.</p>
     <table *ngIf="shiftBreakPolicy" class="table table-striped table-responsive">
         <thead>
             <tr class="row">

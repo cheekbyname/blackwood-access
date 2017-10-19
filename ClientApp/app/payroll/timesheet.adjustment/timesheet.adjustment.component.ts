@@ -159,6 +159,7 @@ export class TimesheetAdjustmentComponent {
 		this.shiftBreakPolicy.definitions = this.timesheet.breakDefinitions
 			.filter(bd => bd.breakPolicyId == this.shiftBreakPolicy.id
 				&& shift.shiftMins >= bd.minThreshold && (shift.shiftMins <= bd.maxThreshold || bd.maxThreshold == null));
+				// TODO Add filter clause for valid dates
 		this.breakInfoVisible = true;
 	}
 
