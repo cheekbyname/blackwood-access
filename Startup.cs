@@ -28,9 +28,12 @@ namespace Blackwood.Access
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string dbConnection = Configuration.GetConnectionString("Integration");
-            services.AddDbContext<AccessContext>(options => options.UseSqlServer(dbConnection));
-            services.AddDbContext<PayrollContext>(options => options.UseSqlServer(dbConnection));
+            string dbConIntegration = Configuration.GetConnectionString("Integration");
+            services.AddDbContext<AccessContext>(options => options.UseSqlServer(dbConIntegration));
+            services.AddDbContext<PayrollContext>(options => options.UseSqlServer(dbConIntegration));
+
+            string dbConAccident = Configuration.GetConnectionString("Accident");
+            services.AddDbContext<AccidentContext>(options => options.UseSqlServer(dbConAccident));
             
             services.Configure<IISOptions>(options =>
             {
