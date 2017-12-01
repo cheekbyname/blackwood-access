@@ -1,6 +1,7 @@
 namespace Blackwood.Access
 {
     using Active.Messaging.Service;
+    using Core.Accident.Service;
     using Core.Data.Models;
     using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,8 @@ namespace Blackwood.Access
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public class Startup
     {
@@ -41,7 +44,10 @@ namespace Blackwood.Access
             });
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             // Add Application services
             services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
@@ -51,6 +57,7 @@ namespace Blackwood.Access
             services.AddTransient<IPayrollValidationService, PayrollValidationService>();
             services.AddTransient<IPushService, PushService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAccidentService, AccidentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -28,6 +28,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.EntityFrameworkCore": "1.0.1",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
+    "Accident.Service": "1.0.0-*",
     "Payroll.Service": "1.0.0-*",
     "Data.Models": "1.0.0-*",
     "Messaging.Service": "1.0.0-*"
