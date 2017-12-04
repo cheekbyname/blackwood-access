@@ -13,6 +13,7 @@ import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { NotAuthorisedComponent } from "./components/notauthorised/notauthorised.component";
 import { HomeComponent } from './components/home/home.component';
 
+import { AccidentModule } from "./accident/accident.module";
 import { AdminModule } from "./admin/admin.module";
 import { PayrollModule } from "./payroll/payroll.module";
 
@@ -31,7 +32,7 @@ import { UserProvider } from "./user.provider";
         /* Platform Modules */
         UniversalModule, FormsModule,
         /* Application Feature Modules */
-        AdminModule, PayrollModule,
+        AccidentModule, AdminModule, PayrollModule,
         /* PrimeNg Component Modules */
         CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule, InputSwitchModule,
         /* Application Router */
