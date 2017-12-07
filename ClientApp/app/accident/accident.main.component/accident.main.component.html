@@ -1,9 +1,35 @@
-<div class="panel panel-default">
+<div class="panel panel-default accident-panel">
     <div class="panel-heading">
         <div class="row">
             <div class="col-md-6">
-                <h4>Accident &amp; Incident Reporting</h4>
+                <h4>
+                    <strong>Accident &amp; Incident Reporting</strong>
+                </h4>
             </div>
         </div>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr class="row">
+                    <th>Id</th>
+                    <th>Person Involved</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let sum of summaries" class="row">
+                    <td class="col-md-1">{{sum.id}}</td>
+                    <td class="col-md-2">{{sum.personInvolvedName}}</td>
+                    <td class="col-md-2">{{sum.locationName}}</td>
+                    <td class="col-md-1">{{displayDate(sum.dateAndTime)}}</td>
+                    <td class="col-md-1">{{displayTime(sum.dateAndTime)}}</td>
+                    <td class="col-md-5">{{(sum.incidentDetails || "").substring(0, 256)}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

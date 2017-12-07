@@ -8,11 +8,12 @@ import { AccidentComponent } from "./accident.component";
 import { AccidentMainComponent } from "./accident.main.component/accident.main.component";
 import { AccidentRoutingModule } from "./accident-routing.module";
 
+import { AccidentProvider } from "./accident-provider";
 import { UserProvider } from "../user.provider";
 
 @NgModule({
     imports: [CommonModule, FormsModule, AccidentRoutingModule, CheckboxModule],
     declarations: [AccidentComponent, AccidentMainComponent],
-    providers: [UserProvider]
+    providers: [AccidentProvider, UserProvider]
 })
 export class AccidentModule { }

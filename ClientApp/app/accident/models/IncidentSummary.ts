@@ -4,8 +4,10 @@ import { Person } from "./Person";
 export class IncidentSummary {
     public id: number;
     public incidentDetails: string;
-    public locationId: number;
-    public personId: number;
+    public locationName: string;
+    public personInvolvedName: string;
+    public user: string;
+    public dateAndTime: Date;
 
     public location: Location;
     public person: Person;

@@ -4,6 +4,7 @@ namespace Blackwood.Access
     using Core.Accident.Service;
     using Core.Data.Models;
     using Core.Payroll.Service.Services;
+    using Core.User.Service;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.SpaServices.Webpack;
