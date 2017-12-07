@@ -1,10 +1,20 @@
 <div class="panel panel-default accident-panel">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <h4>
                     <strong>Accident &amp; Incident Reporting</strong>
                 </h4>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group" style="vertical-align:middle">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                        <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Type here to search"
+                            (input)="searchChanged($event.target.value)"/>
+                        <span class="input-group-addon search-clear"><i class="glyphicon glyphicon-remove" (click)="clearSearch()"></i></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

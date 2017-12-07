@@ -17,7 +17,17 @@ export class AccidentMainComponent {
         });
     }
 
+    public searchTerm: string;
     public summaries: IncidentSummary[];
+
+    public searchChanged(term: string) {
+        this.accPro.setSearchTerm(term);
+    }
+
+    public clearSearch() {
+        this.accPro.setSearchTerm("");
+        this.searchTerm = "";
+    }
 
     public displayDate(dt: Date) {
         return new Date(dt).toLocaleDateString();

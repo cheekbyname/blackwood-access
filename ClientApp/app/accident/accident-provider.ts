@@ -8,16 +8,24 @@ import { IncidentSummary } from "./models/IncidentSummary";
 @Injectable()
 export class AccidentProvider {
     constructor(private http: Http) {
-        this.getSummaries();
+        this.getSummaries(this.searchTerm);
     }
 
     private _summaries = new BehaviorSubject<IncidentSummary[]>(null);
 
-    public summaries$ = this._summaries.asObservable().distinctUntilChanged();
+    private searchTerm: string ="";
 
-    public getSummaries() {
-        this.http.get('api/accident/summaries').toPromise().then(res => {
+    public summaries$ = this._summaries.asObservable().debounceTime(250).distinctUntilChanged();
+
+    public getSummaries(term: string) {
+        var url = 'api/accident/summaries' + ((term && term.length > 0) ? '/' + term : '');
+        this.http.get(url).toPromise().then(res => {
             this._summaries.next(res.json());
         });
+    }
+
+    public setSearchTerm(term: string) {
+        this.searchTerm = term;
+        this.getSummaries(term);
     }
 }

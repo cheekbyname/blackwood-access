@@ -11,11 +11,15 @@
     overflow-y:scroll;
 }
 
-h4, table {
+h4, table, input {
     font-family: 'Century Gothic';
 }
 
-tbody tr:hover {
+tbody tr:hover, .search-clear:hover {
     cursor: pointer;
     background-color: rgba(255, 105, 180, 0.5);
+}
+
+input {
+    font-size: 11pt;
 }
