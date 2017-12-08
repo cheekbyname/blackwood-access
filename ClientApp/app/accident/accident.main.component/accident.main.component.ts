@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 
+import { Observable } from "rxjs/Rx";
+
 import { AccidentProvider } from "../accident-provider";
 import { UserProvider } from "../../user.provider";
 
@@ -15,8 +17,12 @@ export class AccidentMainComponent {
         this.accPro.summaries$.subscribe(sum => {
             this.summaries = sum;
         });
+        this.accPro.errors$.subscribe(err => {
+            if (err !== null) this.errored = true;
+        });
     }
 
+    public errored: boolean = false;
     public searchTerm: string;
     public summaries: IncidentSummary[];
 
@@ -25,11 +31,13 @@ export class AccidentMainComponent {
     }
 
     public searchChanged(term: string) {
+        this.errored = false;
         this.summaries = undefined;
         this.accPro.setSearchTerm(term);
     }
 
     public clearSearch() {
+        this.errored = false;
         this.summaries = undefined;
         this.accPro.setSearchTerm("");
         this.searchTerm = "";

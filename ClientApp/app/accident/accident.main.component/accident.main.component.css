@@ -28,3 +28,12 @@ input {
     font-size: 14pt;
     margin-left: 18px;
 }
+
+tr, td {
+    max-height: 60px;
+}
+
+.overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
