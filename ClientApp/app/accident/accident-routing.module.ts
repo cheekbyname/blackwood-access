@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
 
 import { AccidentComponent } from './accident.component'
+import { AccidentIncidentComponent } from "./accident.incident.component/accident.incident.component";
 import { AccidentMainComponent } from "./accident.main.component/accident.main.component"
 
 const accidentRoutes: Routes = [
@@ -12,6 +13,10 @@ const accidentRoutes: Routes = [
             {
                 path: '',
                 component: AccidentMainComponent
+            },
+            {
+                path: 'incident/:id',
+                component: AccidentIncidentComponent
             }
         ]
     }

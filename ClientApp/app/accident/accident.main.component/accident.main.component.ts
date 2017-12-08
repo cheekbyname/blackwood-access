@@ -26,10 +26,6 @@ export class AccidentMainComponent {
     public searchTerm: string;
     public summaries: IncidentSummary[];
 
-    public viewIncident(sum: IncidentSummary) {
-        console.log(sum);
-    }
-
     public searchChanged(term: string) {
         this.errored = false;
         this.summaries = undefined;
