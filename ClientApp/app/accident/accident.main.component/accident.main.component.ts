@@ -20,11 +20,17 @@ export class AccidentMainComponent {
     public searchTerm: string;
     public summaries: IncidentSummary[];
 
+    public viewIncident(sum: IncidentSummary) {
+        console.log(sum);
+    }
+
     public searchChanged(term: string) {
+        this.summaries = undefined;
         this.accPro.setSearchTerm(term);
     }
 
     public clearSearch() {
+        this.summaries = undefined;
         this.accPro.setSearchTerm("");
         this.searchTerm = "";
     }

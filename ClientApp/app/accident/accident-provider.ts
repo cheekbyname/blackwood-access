@@ -15,7 +15,7 @@ export class AccidentProvider {
 
     private searchTerm: string ="";
 
-    public summaries$ = this._summaries.asObservable().debounceTime(250).distinctUntilChanged();
+    public summaries$ = this._summaries.asObservable().debounceTime(500).distinctUntilChanged();
 
     public getSummaries(term: string) {
         var url = 'api/accident/summaries' + ((term && term.length > 0) ? '/' + term : '');

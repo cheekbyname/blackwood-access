@@ -11,7 +11,7 @@
     overflow-y:scroll;
 }
 
-h4, table, input {
+h4, table, input, .loading {
     font-family: 'Century Gothic';
 }
 
@@ -22,4 +22,9 @@ tbody tr:hover, .search-clear:hover {
 
 input {
     font-size: 11pt;
+}
+
+.loading {
+    font-size: 14pt;
+    margin-left: 18px;
 }
