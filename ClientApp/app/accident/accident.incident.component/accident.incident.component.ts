@@ -11,13 +11,16 @@ import { AccidentProvider } from "../accident-provider";
     styles: [require('./accident.incident.component.css')]
 })
 export class AccidentIncidentComponent implements OnInit {
-    constructor(private route: ActivatedRoute) {
-
+    constructor(private route: ActivatedRoute, public accPro: AccidentProvider) {
+        this.accPro.incident$.subscribe(inc => this.incident = inc);
     }
 
     ngOnInit() {
         this.route.params.subscribe(p => {
-            console.log(p['id']);
+            var id = p['id'];
+            if (id) this.accPro.getIncident(id);
         });
     }
+
+    incident: Incident;
 }

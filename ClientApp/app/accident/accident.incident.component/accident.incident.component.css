@@ -1,0 +1,17 @@
+.accident-panel {
+    margin-top: 16px;
+}
+
+.panel-heading {
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+.panel-body {
+    height:89vh;
+    overflow-y:scroll;
+}
+
+h4, table, input, .loading {
+    font-family: 'Century Gothic';
+}
+
