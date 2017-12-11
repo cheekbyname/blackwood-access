@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { Location } from "@angular/common";
+import { ActivatedRoute } from "@angular/router";
 
 import { Observable } from "rxjs/Rx";
 
@@ -13,12 +15,20 @@ import { IncidentSummary } from "../models/IncidentSummary";
     styles: [require('./accident.main.component.css')]
 })
 export class AccidentMainComponent {
-    constructor(private userPro: UserProvider, private accPro: AccidentProvider) {
+    constructor(private userPro: UserProvider, private accPro: AccidentProvider, private loc: Location,
+        private route: ActivatedRoute) {
         this.accPro.summaries$.subscribe(sum => {
             this.summaries = sum;
         });
         this.accPro.errors$.subscribe(err => {
             if (err !== null) this.errored = true;
+        });
+        this.route.queryParams.subscribe(p => {
+            var term = p["searchTerm"];
+            if (term) {
+                this.searchTerm = term;
+                this.searchChanged(term);
+            }
         });
     }
 
@@ -27,12 +37,18 @@ export class AccidentMainComponent {
     public summaries: IncidentSummary[];
 
     public searchChanged(term: string) {
+        if (term == "") {
+            this.loc.go("/accident");
+        } else {
+            this.loc.go("/accident?searchTerm=" + term);
+        }
         this.errored = false;
         this.summaries = undefined;
         this.accPro.setSearchTerm(term);
     }
 
     public clearSearch() {
+        this.loc.go("/accident");
         this.errored = false;
         this.summaries = undefined;
         this.accPro.setSearchTerm("");
