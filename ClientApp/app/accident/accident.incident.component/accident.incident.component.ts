@@ -2,6 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { Incident } from "../models/Incident";
+import { Category } from "../models/Category";
+import { Location } from "../models/Location";
+import { Type } from "../models/Type";
 
 import { AccidentProvider } from "../accident-provider";
 
@@ -13,6 +16,9 @@ import { AccidentProvider } from "../accident-provider";
 export class AccidentIncidentComponent implements OnInit {
     constructor(private route: ActivatedRoute, public accPro: AccidentProvider) {
         this.accPro.incident$.subscribe(inc => this.incident = inc);
+        this.accPro.locations$.subscribe(locs => this.locations = locs);
+        this.accPro.categories$.subscribe(cats => this.categories = cats);
+        this.accPro.types$.subscribe(typs => this.types = typs);
     }
 
     ngOnInit() {
@@ -23,4 +29,7 @@ export class AccidentIncidentComponent implements OnInit {
     }
 
     incident: Incident;
+    locations: Location[];
+    categories: Category[];
+    types: Type[];
 }

@@ -9,9 +9,10 @@
 .panel-body {
     height:89vh;
     overflow-y:scroll;
+    font-family: 'Century Gothic';
 }
 
-h4, table, input, .loading {
+h4, table, .loading {
     font-family: 'Century Gothic';
 }
 

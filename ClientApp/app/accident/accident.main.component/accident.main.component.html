@@ -14,7 +14,7 @@
                         </span>
                         <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Type here to search" (input)="searchChanged($event.target.value)"
                         />
-                        <span class="input-group-addon search-clear" (click)="clearSearch()">
+                        <span class="input-group-addon search-clear" (click)="clearSearch()" title="Click here to clear your search">
                             <i class="glyphicon glyphicon-remove"></i>
                         </span>
                     </div>
