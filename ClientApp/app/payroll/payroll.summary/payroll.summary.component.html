@@ -5,11 +5,11 @@
 			<h4 class="col-md-3">Payroll Summary</h4>
 			<div class="col-md-9 form-inline date-controls">
 				<label class="control-label" for="periodStart">From</label>
-				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy"
-					(onSelect)="periodStartSelected($event)"></p-calendar>	<!-- Add [showIcon]="true" -->
+				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodStartSelected($event)"></p-calendar>
+				<!-- Add [showIcon]="true" -->
 				<label class="control-label" for="periodFinish">To</label>
-				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy"
-					(onSelect)="periodFinishSelected($event)"></p-calendar>	<!-- Add [showIcon]="true" -->
+				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodFinishSelected($event)"></p-calendar>
+				<!-- Add [showIcon]="true" -->
 				<a class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
 					<span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
 					<span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
@@ -51,22 +51,23 @@
 							{{sum.forename}} {{sum.surname}}
 						</td>
 						<td>{{sum.personnelNumber}}</td>
-						<td>{{displayTime(sum.monthlyContractMins-sum.actualMins < 0 ? 0 : sum.monthlyContractMins-sum.actualMins)}}</td>
+						<td>{{displayTime((sum.monthlyContractMins-sum.actualMins < 0) ? 0 : sum.monthlyContractMins-sum.actualMins)}}</td>
 						<td>{{displayTime(sum.superTrainMins)}}</td>
 						<td>{{displayTime(sum.leaveSickMins)}}</td>
 						<td>{{displayTime(sum.monthlyContractMins)}}</td>
 						<td>{{displayTime(sum.contactTimeMins)}}</td>
 						<td>{{displayTime(sum.actualMins)}}</td>
-						<td>{{displayTime(additionalHours(sum))}}
-						<td>{{displayTime(sum.unpaidMins)}}
+						<td>{{displayTime(additionalHours(sum))}}</td>
+						<td>{{displayTime(sum.unpaidMins)}}</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<div class="panel-body" *ngIf="showSummary && !summaries">
-		<i class="fa fa-cog fa-spin fa-2x"></i>
-		<span class="loading">Please wait, retrieving your data...</span>
+		<div class="alert alert-info">
+			<i class="fa fa-cog fa-spin fa-2x"></i>
+			<span class="loading">Please wait, retrieving your data...</span>
+		</div>
 	</div>
-</div>		
-
+</div>

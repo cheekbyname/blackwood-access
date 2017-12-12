@@ -34,7 +34,7 @@
             <p-column field="code" header="Code"></p-column>
             <p-column field="hours" header="Hours"></p-column>
         </p-dataTable>
-        <div *ngIf="!export">
+        <div *ngIf="!export" class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
