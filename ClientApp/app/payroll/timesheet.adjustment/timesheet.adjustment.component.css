@@ -95,3 +95,11 @@ span.adjust-crit {
     font-size: 14pt;
     color: red;
 }
+
+p-dialog .ui-dialog-footer.ui-widget-content {
+    border: none !important;
+}
+
+p-dialog .ui-dialog-titlebar {
+    cursor: move;
+}

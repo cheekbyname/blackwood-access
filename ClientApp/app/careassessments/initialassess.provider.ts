@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Subject, Observable } from 'rxjs';
 import 'rxjs/Rx';
 
-import { CareInitialAssessment } from '../models/careinitialassessment';
+import { CareInitialAssessment } from '../models/CareInitialAssessment';
 
 @Injectable()
 export class InitialAssessProvider {

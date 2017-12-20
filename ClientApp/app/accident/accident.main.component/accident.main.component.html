@@ -35,7 +35,7 @@
                         <th>Details</th>
                     </tr>
                 </thead>
-                <tbody *ngIf="!errored && summaries">
+                <tbody *ngIf="!errored && summaries != undefined">
                     <tr *ngFor="let sum of summaries" class="row" [routerLink]="['/accident/incident/' + sum.id]">
                         <td class="col-md-1">{{sum.id}}</td>
                         <td class="col-md-2">{{sum.personInvolvedName}}</td>

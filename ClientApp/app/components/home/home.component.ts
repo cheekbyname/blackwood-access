@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
-import { AccessUser } from '../../models/accessuser';
+import { AccessUser } from '../../models/AccessUser';
+
 import { UserProvider } from '../../user.provider';
 
 @Component({
     selector: 'home',
-    template: require('./home.component.html'),
-    styles: [require('./home.component.css')]
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
 

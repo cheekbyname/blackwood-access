@@ -3,16 +3,19 @@
     using Core.Data.Models;
     using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
 
     [Route("api/[Controller]")]
     public class CareInitialAssessmentController : ControllerBase
     {
-        private ICareInitialAssessmentService _service;
+        private readonly ICareInitialAssessmentService _service;
+        private readonly ILogger<CareInitialAssessmentController> _logger;
 
-        public CareInitialAssessmentController(ICareInitialAssessmentService service)
+        public CareInitialAssessmentController(ICareInitialAssessmentService service, ILogger<CareInitialAssessmentController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet("[action]")]

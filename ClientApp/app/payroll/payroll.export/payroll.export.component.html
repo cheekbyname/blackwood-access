@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <p-dataTable *ngIf="export" #dt [value]="export" [exportFilename]="fileName">
+        <p-dataTable #dt [value]="export" [exportFilename]="fileName" [hidden]="!export">
             <p-column field="staffMember" header="StaffMember"></p-column>
             <p-column field="dateFormatted" header="Date"></p-column>
             <p-column field="sequence" header="Sequence"></p-column>

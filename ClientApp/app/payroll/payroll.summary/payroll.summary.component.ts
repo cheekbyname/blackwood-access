@@ -1,17 +1,17 @@
-import { Component, Input, EventEmitter, Output, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, ViewEncapsulation, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Team } from '../../models/team';
-import { Summary } from '../../models/summary';
-import { Locale, LOC_EN} from '../../models/locale';
+import { Team } from '../../models/Team';
+import { Summary } from '../../models/Summary';
+import { Locale, LOC_EN} from '../../models/Locale';
 
 import { PayrollProvider } from '../payroll.provider';
 
 @Component({
 	selector: 'team-summary',
-	template: require('./payroll.summary.component.html'),
-	styles: [require('./payroll.summary.component.css')]
+	templateUrl: './payroll.summary.component.html',
+    styleUrls: ['./payroll.summary.component.css']
 })
 export class PayrollSummaryComponent implements OnInit {
 
@@ -46,7 +46,7 @@ export class PayrollSummaryComponent implements OnInit {
 
 	public showSummary: Boolean = true;
 
-	@Input()
+	//@Input()
 	get team() { return this._team }
 	set team(team: Team) {
 		this._team = team;

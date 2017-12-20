@@ -7,6 +7,7 @@ import { Category } from "./models/Category";
 import { Incident } from "./models/Incident";
 import { IncidentSummary } from "./models/IncidentSummary";
 import { Location } from "./models/Location";
+import { Person } from "./models/Person";
 import { Type } from "./models/Type";
 
 @Injectable()
@@ -16,6 +17,7 @@ export class AccidentProvider {
         this.getLocations().catch(err => this.handle(err));
         this.getCategories().catch(err => this.handle(err));
         this.getTypes().catch(err => this.handle(err));
+        this.getPeople().catch(err => this.handle(err));
     }
 
     private _errors = new BehaviorSubject<string>(null);
@@ -24,6 +26,7 @@ export class AccidentProvider {
     private _summaries = new BehaviorSubject<IncidentSummary[]>(null);
     private _locations = new BehaviorSubject<Location[]>(null);
     private _types = new BehaviorSubject<Type[]>(null);
+    private _people = new BehaviorSubject<Person[]>(null);
 
     private searchTerm: string = "";
 
@@ -33,6 +36,7 @@ export class AccidentProvider {
     public summaries$ = this._summaries.asObservable().distinctUntilChanged();
     public locations$ = this._locations.asObservable();
     public types$ = this._types.asObservable();
+    public people$ = this._people.asObservable();
 
     public setSearchTerm(term: string) {
         this.searchTerm = term;
@@ -64,7 +68,6 @@ export class AccidentProvider {
                 return Promise.reject('Error retrieving Incident');
             })
             .then(res => {
-                console.log(res.json());
                 this._incident.next(res.json());
                 return res.json() as Incident;
             });
@@ -104,5 +107,17 @@ export class AccidentProvider {
                 this._types.next(res.json());
                 return res.json() as Type[];
             })
+    }
+
+    public getPeople(): Promise<Person[]> {
+        var url = 'api/accident/people';
+        return this.http.get(url).toPromise()
+            .catch(err => {
+                return Promise.reject('Error retrieving People');
+            })
+            .then(res => {
+                this._people.next(res.json());
+                return res.json() as Person[];
+            });
     }
 }

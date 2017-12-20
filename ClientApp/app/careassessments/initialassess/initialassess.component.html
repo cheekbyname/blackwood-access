@@ -303,14 +303,16 @@
             <div *ngIf="section=='checklist'" class="panel-section" id="checklist">
                 <table class="table table-striped table-fixedheader">
                     <thead class="thead-inverse">
-                        <th class="col-md-8">Home Visit Checklist Item</th>
-                        <th class="col-md-1 checklist-cell">Yes</th>
-                        <th class="col-md-1 checklist-cell">No</th>
-                        <th class="col-md-1 checklist-cell" title="Not Applicable">N/A</th>
-                        <th class="col-md-1 checklist-cell" title="Further Information Required">F/I</th>
+                        <tr class="table-row">
+                            <th class="col-md-8">Home Visit Checklist Item</th>
+                            <th class="col-md-1 checklist-cell">Yes</th>
+                            <th class="col-md-1 checklist-cell">No</th>
+                            <th class="col-md-1 checklist-cell" title="Not Applicable">N/A</th>
+                            <th class="col-md-1 checklist-cell" title="Further Information Required">F/I</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <template let-check ngFor [ngForOf]="assess.checkItems">
+                        <ng-template let-check ngFor [ngForOf]="assess.checkItems">
                             <tr class="table-row">
                                 <td class="col-md-8"><span>{{check.itemName}}</span></td>
                                 <td class="col-md-1 checklist-cell"><input name="check-{{check.itemId}}" type="radio" [ngModel]="check.value" value="yes" disabled
@@ -325,7 +327,7 @@
                                     <textarea class="form-control nudge-down" [value]="check.further" rows="3" readonly></textarea>
                                 </td>
                             </tr>
-                        </template>
+                        </ng-template>
                     </tbody>
                 </table>
                 <hr/>
@@ -684,12 +686,12 @@
             </div>
 
             <div *ngIf="section=='tile'" class="panel-section" id="tile">
-                <template let-group ngFor [ngForOf]="assess.tileGroups">
+                <ng-template let-group ngFor [ngForOf]="assess.tileGroups">
                     <h4>{{group.title}}</h4>
                     <p style="background-color:silver;">{{group.desc}}</p>
                     <table class="table table-striped">
                         <tbody>
-                            <template let-item ngFor [ngForOf]="group.items">
+                            <ng-template let-item ngFor [ngForOf]="group.items">
                                 <tr class="table-row">
                                     <td class="col-md-8">{{item.task}}</td>
                                     <td class="col-md-2">
@@ -707,10 +709,10 @@
                                         <textarea class="form-control" [value]="item.remedialAction" [name]="'tile-item-remedial-' + item.groupId + '-' + item.itemId" rows="3" readonly></textarea>
                                     </td>
                                 </tr>
-                            </template>
+                            </ng-template>
                         </tbody>
                     </table>
-                </template>
+                </ng-template>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="overallRisk" style="text-align:left;">After considering the totality and complexity of the overall Moving &amp; Handling operation, what is your overall assessment of the risk?</label>

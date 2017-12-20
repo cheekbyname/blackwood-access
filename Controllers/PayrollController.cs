@@ -3,21 +3,25 @@ namespace Blackwood.Access.Controllers
     using Core.Data.Models;
     using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
 
     [Route("api/[Controller]")]
 	public class PayrollController : ControllerBase
 	{
-		private IPayrollService _service;
-        private IPayrollDataService _dataService;
-		private IPayrollValidationService _validation;
+		private readonly IPayrollService _service;
+        private readonly IPayrollDataService _dataService;
+		private readonly IPayrollValidationService _validation;
+        private readonly ILogger<PayrollController> _logger;
 
-		public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService)
+		public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
+            ILogger<PayrollController> logger)
 		{
 			_service = service;
             _dataService = dataService;
 			_validation = validation;
+            _logger = logger;
 		}
 
 		[HttpGet("[action]")]

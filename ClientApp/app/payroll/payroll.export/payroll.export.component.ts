@@ -1,19 +1,20 @@
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation, ViewChild } from "@angular/core";
 import { Router, Route } from "@angular/router";
 
 import { DataTableModule, SharedModule } from "primeng/primeng";
 
-import { Payroll } from "../../models/payroll";
-import { Team } from "../../models/team";
+import { Payroll } from "../../models/Payroll";
+import { Team } from "../../models/Team";
 
 import { PayrollProvider } from "../payroll.provider";
 
 @Component({
-    template: require('./payroll.export.component.html'),
-    styles: [require('./payroll.export.component.css')],
+    templateUrl: './payroll.export.component.html',
+    styleUrls: ['./payroll.export.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 export class PayrollExportComponent {
+    @ViewChild('dt') dt;
 
     export: Payroll[];
     team: Team;

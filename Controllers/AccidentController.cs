@@ -4,18 +4,21 @@ namespace Blackwood.Access.Controllers
     using Core.Data.Models;
     using Core.User.Service;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
 
     [Route("api/[controller]")]
     public class AccidentController : ControllerBase
     {
-        private IAccidentService _accidentService;
-        private IUserService _userService;
+        private readonly IAccidentService _accidentService;
+        private readonly IUserService _userService;
+        private readonly ILogger<AccidentController> _logger;
 
-        public AccidentController(IAccidentService accidentService, IUserService userService)
+        public AccidentController(IAccidentService accidentService, IUserService userService, ILogger<AccidentController> logger)
         {
             _accidentService = accidentService;
             _userService = userService;
+            _logger = logger;
         }
 
         [HttpGet("[action]/{term?}")]

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from "@angular/forms";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
 	ConfirmationService, InputSwitchModule, DataTableModule, SharedModule } from "primeng/primeng";
@@ -21,12 +22,12 @@ import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.co
 import { PayrollProvider } from './payroll.provider';
 import { UserProvider } from "../user.provider";
 
-import { AdjustmentOffsetFilter } from '../models/adjustment';
-import { ShiftOffsetFilter } from '../models/shift';
+import { AdjustmentOffsetFilter } from '../models/Adjustment';
+import { ShiftOffsetFilter } from '../models/Shift';
 
 @NgModule({
-	imports: [CommonModule, FormsModule, CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
-		InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule],
+    imports: [CommonModule, FormsModule, BrowserAnimationsModule, CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule,
+        CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule],
 	declarations: [PayrollComponent, BookingCardComponent, BookingDetailComponent, PayrollExportComponent, PayrollSummaryComponent,
 		TimesheetAdjustmentComponent, PayrollManagerComponent, TimesheetViewerComponent, PayrollReviewComponent,
 		AdjustmentOffsetFilter, ShiftOffsetFilter],

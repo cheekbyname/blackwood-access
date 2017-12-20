@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
 
-import { AccessUser } from "../models/accessuser";
+import { AccessUser } from "../models/AccessUser";
 import { UserProvider } from "../user.provider";
 
 @Injectable()
@@ -16,14 +16,18 @@ export class PayrollGuard implements CanActivate {
             if (!this.user) {
                 this.userPro.GetUserInfo().then(ui => {
                     this.user = ui;
-                    res(ui.isPayrollUser);
+                    return Promise.resolve(res(ui.isPayrollUser));
                 });
             } else {
-                res(this.user.isPayrollUser);
+                return Promise.resolve(res(this.user.isPayrollUser));
             }
-        }).then((res) => {
-            if (!this.user.isPayrollUser) this.router.navigate(['no-auth']);
-            return res;
+        }).then((res: boolean) => {
+            if (!this.user.isPayrollUser) {
+                this.router.navigate(['no-auth']);
+                return Promise.reject(res);
+            } else {
+                return Promise.resolve(res);
+            }
         });
     }
 }

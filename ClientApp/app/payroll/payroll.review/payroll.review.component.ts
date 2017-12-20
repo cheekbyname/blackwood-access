@@ -3,19 +3,20 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 import { Observable } from "rxjs/Rx";
 
-import { Adjustment } from "../../models/adjustment";
-import { Carer } from "../../models/carer";
-import { Shift } from "../../models/shift";
-import { Team } from "../../models/team";
-import { Timesheet } from "../../models/timesheet";
+import { Adjustment } from "../../models/Adjustment";
+import { Carer } from "../../models/Carer";
+import { Shift } from "../../models/Shift";
+import { Team } from "../../models/Team";
+import { Timesheet } from "../../models/Timesheet";
+import { ValidationResult } from "../../models/Validation";
+
 import { PayrollProvider } from "../payroll.provider";
 import { TimesheetAdjustmentComponent } from "../timesheet.adjustment/timesheet.adjustment.component";
-import { ValidationResult } from "../../models/validation";
 
 @Component({
     selector: 'payroll-review',
-    template: require('./payroll.review.component.html'),
-    styles: [require('./payroll.review.component.css')],
+    templateUrl: './payroll.review.component.html',
+    styleUrls: ['./payroll.review.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 export class PayrollReviewComponent implements OnInit {

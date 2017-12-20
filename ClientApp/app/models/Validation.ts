@@ -9,7 +9,7 @@ export class ValidationResult {
     public carers: Carer[];
     public pendingAdjustments: Adjustment[];
     public otherAdjustments: Adjustment[];
-    public carerValidationItems: CarerValidationItem[];
+    public carerDataValidationItems: CarerValidationItem[];
     public invalidShifts: Shift[];
 }
 

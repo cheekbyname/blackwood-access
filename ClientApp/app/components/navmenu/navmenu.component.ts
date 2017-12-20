@@ -1,12 +1,14 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { PayrollProvider } from '../../payroll/payroll.provider';
-import { LOC_EN } from "../../models/locale";
+
+import { LOC_EN } from "../../models/Locale";
 
 @Component({
     selector: 'nav-menu',
-    template: require('./navmenu.component.html'),
-    styles: [require('./navmenu.component.css')]
+    templateUrl: './navmenu.component.html',
+    styleUrls: ['./navmenu.component.css']
 })
 export class NavMenuComponent implements OnInit {
 

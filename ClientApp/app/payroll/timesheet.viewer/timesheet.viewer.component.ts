@@ -10,14 +10,14 @@ import { BookingCardComponent } from '../booking.card/booking.card';
 import { BookingDetailComponent } from '../booking.detail/booking.detail.component';
 import { TimesheetAdjustmentComponent } from '../timesheet.adjustment/timesheet.adjustment.component';
 
-import { Locale, LOC_EN} from '../../models/locale';
-import { Timesheet } from '../../models/timesheet';
-import { CarerBooking } from '../../models/booking';
-import { Carer } from '../../models/carer';
-import { Availability } from '../../models/availability';
-import { Shift } from '../../models/shift';
-import { Adjustment, AdjustmentOffsetFilter } from '../../models/adjustment';
-import { Team } from '../../models/team';
+import { Locale, LOC_EN } from '../../models/Locale';
+import { Timesheet } from '../../models/Timesheet';
+import { CarerBooking } from '../../models/Booking';
+import { Carer } from '../../models/Carer';
+import { Availability } from '../../models/Availability';
+import { Shift } from '../../models/Shift';
+import { Adjustment, AdjustmentOffsetFilter } from '../../models/Adjustment';
+import { Team } from '../../models/Team';
 
 import { PayrollProvider } from '../payroll.provider';
 
@@ -25,8 +25,8 @@ type BookingGrid = Array<Array<CarerBooking>>;
 
 @Component({
 	selector: 'timesheet-viewer',
-	template: require('./timesheet.viewer.component.html'),
-	styles: [require('./timesheet.viewer.component.css')]
+	templateUrl: './timesheet.viewer.component.html',
+	styleUrls: ['./timesheet.viewer.component.css']
 })
 export class TimesheetViewerComponent implements OnInit {
 
@@ -235,6 +235,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
+        if (bk.bookingCode === 133) return 'palegreen';
 		if (this.payPro.absenceCodes.concat(this.payPro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		//return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
 		return shiftColors[bk.shift - 1];

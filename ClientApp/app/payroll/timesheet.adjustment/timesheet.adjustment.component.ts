@@ -4,12 +4,12 @@ import { NgForm } from '@angular/forms';
 
 import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
 
-import { AccessUser } from "../../models/accessuser";
-import { Adjustment } from '../../models/adjustment';
-import { Locale, LOC_EN } from '../../models/locale';
-import { BreakDefinition } from "../../models/breakdefinition";
-import { BreakPolicy } from "../../models/breakpolicy";
-import { Timesheet } from '../../models/timesheet';
+import { AccessUser } from "../../models/AccessUser";
+import { Adjustment } from '../../models/Adjustment';
+import { Locale, LOC_EN } from '../../models/Locale';
+import { BreakDefinition } from "../../models/BreakDefinition";
+import { BreakPolicy } from "../../models/BreakPolicy";
+import { Timesheet } from '../../models/Timesheet';
 import { Shift } from "../../models/Shift";
 
 import { PayrollProvider } from '../payroll.provider';
@@ -17,8 +17,8 @@ import { UserProvider } from '../../user.provider';
 
 @Component({
     selector: 'timesheet-adjustment',
-    template: require('./timesheet.adjustment.component.html'),
-	styles: [require('./timesheet.adjustment.component.css')],
+    templateUrl: './timesheet.adjustment.component.html',
+	styleUrls: ['./timesheet.adjustment.component.css'],
 	encapsulation: ViewEncapsulation.None
 })
 export class TimesheetAdjustmentComponent {
@@ -114,15 +114,15 @@ export class TimesheetAdjustmentComponent {
 
     public addAdjust() {
 		// TODO Guard on what condition?
-		var newAdj = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
+		var newAdjust = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
 
 		// Automatically assign CarerContract if only one for this timesheet
-		if (this.timesheet.contracts.length == 1) newAdj.contractCode = this.timesheet.contracts[0].contractCode;
+		if (this.timesheet.contracts.length == 1) newAdjust.contractCode = this.timesheet.contracts[0].contractCode;
 
 		// Automatically Approve if user adding has authority to do so
-		if (this.user.canAuthoriseAdjustments) this.approve(newAdj);
+		if (this.user.canAuthoriseAdjustments) this.approve(newAdjust, false).then(res => newAdjust = res);
 
-		this.timesheet.adjustments.push(newAdj);
+		this.timesheet.adjustments.push(newAdjust);
 	}
 
 	public prevDay(form: NgForm) {
@@ -133,9 +133,9 @@ export class TimesheetAdjustmentComponent {
 		if (this.isValid(form)) this.dayOffset++;
 	}
 
-    public approve(adjust: Adjustment) {
+    public approve(adjust: Adjustment, sendNow: boolean): Promise<Adjustment> {
         if (this.user.canAuthoriseAdjustments) {
-            this.payPro.approveAdjustment(adjust);
+            return this.payPro.approveAdjustment(adjust, sendNow);
         } else {
             alert("You are not authorised to approve timesheet adjustments");
         }

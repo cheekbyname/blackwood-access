@@ -1,56 +1,97 @@
-var isDevBuild = process.argv.indexOf('--env.prod') < 0;
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var extractCSS = new ExtractTextPlugin('vendor.css');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const merge = require('webpack-merge');
+const treeShakableModules = [
+    '@angular/animations',
+    '@angular/common',
+    '@angular/compiler',
+    '@angular/core',
+    '@angular/forms',
+    '@angular/http',
+    '@angular/platform-browser',
+    '@angular/platform-browser-dynamic',
+    '@angular/router',
+    'zone.js',
+];
+const nonTreeShakableModules = [
+    'bootstrap',
+    'bootstrap/dist/css/bootstrap.css',
+    'es6-promise',
+    'es6-shim',
+    'event-source-polyfill',
+    'font-awesome/css/font-awesome.css',
+    'jquery',
+    'primeng/resources/primeng.min.css',
+    'primeng/resources/themes/omega/theme.css'
+];
+const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
-module.exports = {
-    resolve: {
-        extensions: [ '', '.js' ]
-    },
-    module: {
-        loaders: [
-            { test: /\.(png|woff|woff2|eot|ttf|svg|gif)(\?|$)/, loader: 'url-loader?limit=100000' },
-            { test: /\.css(\?|$)/, loader: extractCSS.extract(['css']) }
+module.exports = (env) => {
+    const extractCSS = new ExtractTextPlugin('vendor.css');
+    const isDevBuild = !(env && env.prod);
+    const sharedConfig = {
+        stats: { modules: false },
+        resolve: { extensions: [ '.js' ] },
+        module: {
+            rules: [
+                { test: /\.(png|gif|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+            ]
+        },
+        output: {
+            publicPath: 'dist/',
+            filename: '[name].js',
+            library: '[name]_[hash]'
+        },
+        plugins: [
+            new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
+            new webpack.ContextReplacementPlugin(/\@angular\b.*\b(bundles|linker)/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/11580
+            new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)@angular/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/14898
+            new webpack.IgnorePlugin(/^vertx$/) // Workaround for https://github.com/stefanpenner/es6-promise/issues/100
         ]
-    },
-    entry: {
-        vendor: [
-            '@angular/common',
-            '@angular/compiler',
-            '@angular/core',
-            '@angular/http',
-            '@angular/platform-browser',
-            '@angular/platform-browser-dynamic',
-            '@angular/router',
-            '@angular/platform-server',
-            'angular2-universal',
-            'angular2-universal-polyfills',
-            'bootstrap',
-            'bootstrap/dist/css/bootstrap.css',
-            'es6-shim',
-            'es6-promise',
-            'jquery',
-            'zone.js',
-            'font-awesome/css/font-awesome.css',
-            'primeng/resources/primeng.min.css',
-            'primeng/resources/themes/omega/theme.css'
+    };
+
+    const clientBundleConfig = merge(sharedConfig, {
+        entry: {
+            // To keep development builds fast, include all vendor dependencies in the vendor bundle.
+            // But for production builds, leave the tree-shakable ones out so the AOT compiler can produce a smaller bundle.
+            vendor: isDevBuild ? allModules : nonTreeShakableModules
+        },
+        output: { path: path.join(__dirname, 'wwwroot', 'dist') },
+        module: {
+            rules: [
+                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
+            ]
+        },
+        plugins: [
+            extractCSS,
+            new webpack.DllPlugin({
+                path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
+                name: '[name]_[hash]'
+            })
+        ].concat(isDevBuild ? [] : [
+            new webpack.optimize.UglifyJsPlugin()
+        ])
+    });
+
+    const serverBundleConfig = merge(sharedConfig, {
+        target: 'node',
+        resolve: { mainFields: ['main'] },
+        entry: { vendor: allModules.concat(['aspnet-prerendering']) },
+        output: {
+            path: path.join(__dirname, 'ClientApp', 'dist'),
+            libraryTarget: 'commonjs2',
+        },
+        module: {
+            rules: [ { test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize' ] } ]
+        },
+        plugins: [
+            new webpack.DllPlugin({
+                path: path.join(__dirname, 'ClientApp', 'dist', '[name]-manifest.json'),
+                name: '[name]_[hash]'
+            })
         ]
-    },
-    output: {
-        path: path.join(__dirname, 'wwwroot', 'dist'),
-        filename: '[name].js',
-        library: '[name]_[hash]',
-    },
-    plugins: [
-        extractCSS,
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.DllPlugin({
-            path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
-            name: '[name]_[hash]'
-        })
-    ].concat(isDevBuild ? [] : [
-        new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
-    ])
-};
+    });
+
+    return [clientBundleConfig, serverBundleConfig];
+}

@@ -3,44 +3,63 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>
-                    <strong>Incident Report
+                    <strong>
+                        Incident Report
                         <span *ngIf="incident">{{incident.id}}</span>
                     </strong>
                 </h4>
             </div>
         </div>
     </div>
-    <div class="panel-body" *ngIf="incident">
-        <div class="form-group form-inline">
-            <!-- <div class="col-md-4">
-                <label class="form-label">Incident Id</label>
-                <input type="text" class="form-control" [ngModel]="incident.id" disabled="true" />
-            </div> -->
-            <div class="col-md-4">
-                <label class="form-label">Service Location</label>
-                <select class="form-control" [(ngModel)]="incident.locationId">
-                    <option *ngFor="let loc of locations" [ngValue]="loc.id">{{loc.description}}</option>
-                </select>
+    <div class="panel-body">
+        <div *ngIf="incident">
+            <div class="form-group form-inline">
+                <div class="col-md-4">
+                    <label class="form-label">Service Location</label>
+                    <select class="form-control" [(ngModel)]="incident.locationId">
+                        <option *ngFor="let loc of locations" [ngValue]="loc.id">{{loc.description}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Category</label>
+                    <select class="form-control" [ngModel]="incident.incidentCategoryId" (ngModelChange)="categoryChanged($event)">
+                        <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.description}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Type</label>
+                    <select class="form-control" [(ngModel)]="incident.incidentTypeId">
+                        <option *ngFor="let type of filteredTypes" [ngValue]="type.id">{{type.desc}}</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Category</label>
-                <select class="form-control" [(ngModel)]="incident.incidentCategoryId">
-                    <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.description}}</option>
-                </select>
+            <div class="col-md-12"><hr /></div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="form-label">What happened before, during and after the incident?</label>
+                    <textarea class="form-control" [(ngModel)]="incident.incidentDetails" rows="5"></textarea>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Type</label>
-                <select class="form-control" [(ngModel)]="incident.incidentTypeId">
-                    <option *ngFor="let type of types" [ngValue]="type.id">{{type.desc}}</option>
-                </select>
+            <div class="col-md-12"><hr /></div>
+            <div class="form-group form-inline">
+                <div class="col-md-2"><label class="form-label">Person Involved</label></div>
+                <div class="col-md-4">
+                    <select class="form-control" [(ngModel)]="incident.personInvolvedId">
+                        <option *ngFor="let peep of people" [ngValue]="peep.id">{{peep.displayName}}</option>
+                    </select>
+                </div>
+                <div class="col-md-6"><hr /></div>
+                <div class="col-md-2"><label class="form-label">Address</label></div>
+                <div class="col-md-4"><input class="form-control" type="text" [(ngModel)]="incident.personInvolved.address1" /></div>
             </div>
         </div>
-        <hr>
-        <div class="form-group">
-            <div class="col-md-12">
-                <label class="form-label">What happened before, during and after the incident?</label>
-                <textarea class="form-control" [(ngModel)]="incident.incidentDetails" rows="5"></textarea>
-            </div>
+        <div *ngIf="!errored && !incident" class="alert alert-info">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retrieving your data...</span>
+        </div>
+        <div *ngIf="errored" class="alert alert-danger">
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+            <span class="loading">An error occurred retrieving your data</span>
         </div>
     </div>
 </div>

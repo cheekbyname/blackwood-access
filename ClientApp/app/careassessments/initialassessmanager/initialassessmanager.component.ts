@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { Http } from '@angular/http';
 import { Subscription } from 'rxjs/subscription';
 
-import { CareInitialAssessment } from '../../models/careinitialassessment';
+import { CareInitialAssessment } from '../../models/CareInitialAssessment';
+
 import { InitialAssessProvider } from '../initialassess.provider';
 
 @Component({
     selector: 'initial-assess-manager',
-    template: require('./initialassessmanager.component.html'),
-    styles: [require('./initialassessmanager.component.css')]
+    templateUrl: './initialassessmanager.component.html',
+    styleUrls: ['./initialassessmanager.component.css']
 })
 export class InitialAssessManagerComponent implements OnInit {
 

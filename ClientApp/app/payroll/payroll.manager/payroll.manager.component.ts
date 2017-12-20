@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 
 import { Observable } from "rxjs/Rx";
 
-import { AccessUser } from "../../models/accessuser";
-import { Team } from '../../models/team';
+import { Team } from '../../models/Team';
+import { AccessUser } from "../../models/AccessUser";
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from "../../user.provider";
 
 @Component({
     selector: 'payroll-manager',
-    template: require('./payroll.manager.component.html'),
-    styles: [ require('./payroll.manager.component.css')]
+    templateUrl: './payroll.manager.component.html',
+    styleUrls: ['./payroll.manager.component.css']
 })
 export class PayrollManagerComponent implements OnInit {
 
@@ -72,7 +72,6 @@ export class PayrollManagerComponent implements OnInit {
         this.selectedTeam = this.teams.find(team => team.teamCode == teamCode);
     }
 
-    @Input()
     get selectedTeam() { return this._selectedTeam }
     set selectedTeam(team: Team ) {
         this._selectedTeam = team;

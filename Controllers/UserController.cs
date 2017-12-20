@@ -3,17 +3,20 @@ namespace Blackwood.Access.Controllers
     using Core.Data.Models;
     using Core.User.Service;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
 
     [Route("api/[Controller]")]
     public class UserController : ControllerBase
     {
-        private IUserService _service;
+        private readonly IUserService _service;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService service)
+        public UserController(IUserService service, ILogger<UserController> logger)
         {
             _service = service;
+            _logger = logger;
         }
         
         [HttpGet("[action]")]

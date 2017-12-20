@@ -4,13 +4,14 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import { SliderModule } from 'primeng/primeng';
 
-import { CareInitialAssessment } from '../../models/careinitialassessment'
+import { CareInitialAssessment } from '../../models/CareInitialAssessment';
+
 import { InitialAssessProvider } from '../initialassess.provider';
 
 @Component({
     selector: 'initial-assess',
-    template: require('./initialassess.component.html'),
-    styles: [require('./initialassess.component.css')]
+    templateUrl: './initialassess.component.html',
+    styleUrls: ['./initialassess.component.css']
 })
 export class InitialAssessComponent implements OnInit {
     public assess: CareInitialAssessment = new CareInitialAssessment();

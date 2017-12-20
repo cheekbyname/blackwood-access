@@ -1,15 +1,16 @@
 ﻿import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import { AccessUser } from "../../models/accessuser";
-import { Team } from "../../models/team";
+
+import { AccessUser } from "../../models/AccessUser";
+import { Team } from "../../models/Team";
 
 import { PayrollProvider } from "../../payroll/payroll.provider";
 import { UserProvider } from '../../user.provider';
 
 @Component({
     selector: 'user-admin',
-    template: require('./user.admin.component.html'),
-    styles: [require('./user.admin.component.css')]
+    templateUrl: './user.admin.component.html',
+    styleUrls: ['./user.admin.component.css']
 })
 export class UserAdminComponent implements OnInit {
 

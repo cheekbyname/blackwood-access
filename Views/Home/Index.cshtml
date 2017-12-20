@@ -1,15 +1,14 @@
 @{
-    ViewData["Title"] = "Blackwood Access";
-    ViewData["User"] = User.Identity.Name;
+    ViewData["Title"] = "Home Page";
 }
 
 <app>
     <center>
-        <img src="~/Business Solutions.png" style="max-height:100vh;max-width:100%;height:auto;align-content:center;"/>
+        <img src="~/Business Solutions.png" style="max-height:100vh;max-width:100%;height:auto;align-content:center;" />
     </center>
 </app>
 <!-- Removed prerender tag to prevent problems with primeng -->
-<!--<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>-->
+@*<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>*@
 
 <script src="~/dist/vendor.js" asp-append-version="true"></script>
 @section scripts {

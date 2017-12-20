@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
+import { Injectable, isDevMode } from "@angular/core";
 import { Http } from "@angular/http";
 import { BehaviorSubject, Observable, Subscription } from "rxjs/Rx";
 import "rxjs/add/operator/toPromise";
 
-import { AccessUser } from "../models/accessuser";
-import { Adjustment } from "../models/adjustment";
-import { Carer } from "../models/carer";
-import { CarerContract } from "../models/contract";
-import { Locale, LOC_EN } from "../models/locale";
-import { Payroll } from "../models/payroll";
-import { Summary } from "../models/summary";
-import { Team } from "../models/team";
-import { Timesheet } from "../models/timesheet";
-import { ValidationResult } from "../models/validation";
+import { AccessUser } from "../models/AccessUser";
+import { Adjustment } from "../models/Adjustment";
+import { Carer } from "../models/Carer";
+import { CarerContract } from "../models/Contract";
+import { Locale, LOC_EN } from "../models/Locale";
+import { Payroll } from "../models/Payroll";
+import { Summary } from "../models/Summary";
+import { Team } from "../models/Team";
+import { Timesheet } from "../models/Timesheet";
+import { ValidationResult } from "../models/Validation";
 
 import { UserProvider } from "../user.provider";
 
@@ -22,7 +22,7 @@ export class PayrollProvider {
     private _weekCommencing = new BehaviorSubject<Date>(new Date());
     private _periodStart = new BehaviorSubject<Date>(null);
     private _periodFinish = new BehaviorSubject<Date>(null);
-    private _selectedTeam = new BehaviorSubject<Team>(new Team());
+    private _selectedTeam = new BehaviorSubject<Team>(null);
     private _selectedCarer = new BehaviorSubject<Carer>(null);
     private _teams = new BehaviorSubject<Team[]>(null);
     private _carers = new BehaviorSubject<Carer[]>(null);
@@ -36,7 +36,7 @@ export class PayrollProvider {
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
     periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
     selectedTeam$ = this._selectedTeam.asObservable()
-        .distinctUntilChanged((a: Team, b: Team) => a.teamCode === b.teamCode);
+        .distinctUntilChanged((a: Team, b: Team) => a !== null && b !== null && a.teamCode === b.teamCode);
     selectedCarer$ = this._selectedCarer.asObservable()
         .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
     validation$ = this._validation.asObservable();
@@ -72,7 +72,7 @@ export class PayrollProvider {
                     && (a.periodStart.toLocaleDateString() === b.periodStart.toLocaleDateString());
             })
             .subscribe(x => {
-                if (x.selectedTeam.teamCode && x.periodStart) {
+                if (x.selectedTeam !== null && x.selectedTeam.teamCode && x.periodStart) {
                     // TODO Consider suspending this.weekSub until carers refreshed
                     this.getCarers(x.selectedTeam, x.periodStart);
                 }
@@ -175,7 +175,7 @@ export class PayrollProvider {
 
     getCarers(tm: Team, wc: Date) {
         var tsUrl = `/api/payroll/carersbyteam?teamCode=${tm.teamCode}&periodStart=${this.sqlDate(wc)}`;
-        console.log(tsUrl);
+        if (isDevMode()) console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             var carers = res.json() as Carer[];
             this._selectedCarer.next(null);
@@ -186,7 +186,7 @@ export class PayrollProvider {
 	getTimesheet(carer: Carer, weekCommencing: Date): void {
         if (carer != undefined && weekCommencing != undefined) {
             var tsUrl = `/api/payroll/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
-            console.log(tsUrl);
+            if (isDevMode()) console.log(tsUrl);
             this.http.get(tsUrl).subscribe(res => {
                 this._timesheet.next(res.json() as Timesheet);
             });
@@ -195,7 +195,7 @@ export class PayrollProvider {
 
     getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
         var tsUrl = `/api/payroll/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
-        console.log(tsUrl);
+        if (isDevMode()) console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             var adjusts = res.json() as Adjustment[];
             this._adjustments.next(adjusts);
@@ -205,7 +205,7 @@ export class PayrollProvider {
 	getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
 		if (periodStart != undefined && periodFinish != undefined) {
             var tsUrl = `/api/payroll/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
-            console.log(tsUrl);
+            if (isDevMode()) console.log(tsUrl);
 			this.http.get(tsUrl).subscribe(res => {
                 this._summaries.next(res.json() as Summary[]);
 			});
@@ -215,7 +215,7 @@ export class PayrollProvider {
     getPayrollExport(team: Team, periodStart: Date, periodFinish: Date) {
 		if (periodStart != undefined && periodFinish != undefined) {
             var tsUrl = `/api/payroll/getPayrollData/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
-            console.log(tsUrl);
+            if (isDevMode()) console.log(tsUrl);
 			this.http.get(tsUrl).subscribe(res => {
                 this._export.next(res.json() as Payroll[]);
 			});
@@ -224,7 +224,7 @@ export class PayrollProvider {
 
     getValidationResult(team: Team, periodStart: Date, periodFinish: Date) {
         var tsUrl = `/api/payroll/validate/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
-        console.log(tsUrl);
+        if (isDevMode()) console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             this._validation.next(res.json() as ValidationResult);
         });
@@ -237,7 +237,7 @@ export class PayrollProvider {
 	}
 
     // Convenience methods
-    public timeFromDate(dt: string): string {
+    public timeFromDate(dt: Date): string {
         var ndt = new Date(dt);
         var hr = "0" + ndt.getHours();
         var mn = "0" + ndt.getMinutes();
@@ -289,7 +289,7 @@ export class PayrollProvider {
         return dt;
     }
 
-    public rejectAdjustment(adj: Adjustment): Promise<boolean> {
+    public rejectAdjustment(adj: Adjustment): Promise<Adjustment> {
         adj.authorised = null;
         adj.authorisedBy = null;
         adj.rejected = new Date(Date.now());
@@ -297,12 +297,20 @@ export class PayrollProvider {
         return this.updateAdjustment(adj);
     }
 
-    public approveAdjustment(adj: Adjustment): Promise<boolean> {
+    public approveAdjustment(adj: Adjustment, sendNow: boolean): Promise<Adjustment> {
         adj.authorised = new Date(Date.now());
         adj.authorisedBy = this.user.accountName;
         adj.rejected = null;
         adj.rejectedBy = null;
-        return this.updateAdjustment(adj);
+        if (sendNow) {
+            if (isDevMode()) {
+                console.log("Adding new Adjustment via API");
+                console.log(adj);
+            }
+            return this.updateAdjustment(adj);
+        } else {
+            return Promise.resolve(adj);
+        }
     }
 
     public putAdjustment(adj: Adjustment): Promise<Adjustment> {
@@ -312,13 +320,13 @@ export class PayrollProvider {
         });
     }
 
-    private updateAdjustment(adj: Adjustment): Promise<boolean> {
-        return new Promise<boolean>((res, rej) => {
+    private updateAdjustment(adj: Adjustment): Promise<Adjustment> {
+        return new Promise<Adjustment>((res, rej) => {
             this.http.put('api/payroll/UpdateTimesheetAdjustment', adj).subscribe((res) => {
                 if (res.status == 200) {
-                    return Promise.resolve(true);
+                    return Promise.resolve(res.json() as Adjustment);
                 } else {
-                    return Promise.reject(false);
+                    return Promise.reject(null);
                 }
             });
         });

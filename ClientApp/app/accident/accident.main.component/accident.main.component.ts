@@ -11,8 +11,8 @@ import { IncidentSummary } from "../models/IncidentSummary";
 
 @Component({
     selector: 'admin-main',
-    template: require('./accident.main.component.html'),
-    styles: [require('./accident.main.component.css')]
+    templateUrl: './accident.main.component.html',
+    styleUrls: ['./accident.main.component.css']
 })
 export class AccidentMainComponent {
     constructor(private userPro: UserProvider, private accPro: AccidentProvider, private loc: Location,

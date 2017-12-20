@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 
-import { CarerBooking } from '../../models/booking';
-import { CarerContract } from '../../models/contract';
+import { CarerBooking } from '../../models/Booking';
+import { CarerContract } from '../../models/Contract';
 
 import { PayrollProvider } from '../payroll.provider';
 
 @Component({
     selector: 'booking-detail',
-    template: require('./booking.detail.component.html'),
-    styles: [require('./booking.detail.component.css')],
+    templateUrl: './booking.detail.component.html',
+    styleUrls: ['./booking.detail.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 export class BookingDetailComponent {

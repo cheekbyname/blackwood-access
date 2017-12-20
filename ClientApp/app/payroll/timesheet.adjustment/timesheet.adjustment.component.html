@@ -67,7 +67,7 @@
                         </select>
                     </td>
                     <td>
-                        <button type="button" class="btn action-button" (click)="approve(adjust)" title="Approve this Adjustment"
+                        <button type="button" class="btn action-button" (click)="approve(adjust, true)" title="Approve this Adjustment"
                             [ngClass]="{'adjust-selected': adjust.authorised != null}">
                             <span class="glyphicon glyphicon-ok"></span>
                         </button>

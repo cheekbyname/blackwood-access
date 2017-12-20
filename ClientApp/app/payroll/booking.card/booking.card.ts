@@ -1,16 +1,16 @@
 import { Component, Input } from '@angular/core';
 
-import { CarerBooking } from '../../models/booking';
+import { CarerBooking } from '../../models/Booking';
 
 @Component({
     selector: 'booking-card',
-    template: require('./booking.card.html')
+    templateUrl: './booking.card.html'
 })
 export class BookingCardComponent {
     @Input()
     booking: CarerBooking;
 
-    displayTime(dt: string): string {
+    displayTime(dt: Date): string {
         var ndt = new Date(dt);
         var hr = "0" + ndt.getHours();
         var mn = "0" + ndt.getMinutes();
