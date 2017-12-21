@@ -1,0 +1,11 @@
+.form-group {
+    margin-bottom: 4px;
+}
+
+input, select {
+    max-width: 100%;
+}
+
+.max-wid {
+    width: 100%;
+}

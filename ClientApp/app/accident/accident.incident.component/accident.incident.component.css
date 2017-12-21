@@ -21,3 +21,6 @@ span.loading {
     margin-left: 8px;
 }
 
+select {
+    width: 100%;
+}
