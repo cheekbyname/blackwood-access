@@ -34,7 +34,7 @@
                         <td><i class="fa fa-times-circle fa-2x" title="Click to remove this mapping" (click)="removeMap(code)"></i></td>
                         <td>{{typeDesc(code)}}</td>
                         <td>
-                            <select class="form-control" [(ngModel)]="code.type" formControlName="type{{codeName(code)}}">
+                            <select class="form-control" formControlName="type{{codeName(code)}}">
                                 <option value="0">Booking</option>
                                 <option value="1">Availability</option>
                             </select>

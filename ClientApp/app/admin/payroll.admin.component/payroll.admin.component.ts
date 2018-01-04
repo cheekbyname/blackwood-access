@@ -24,7 +24,6 @@ export class PayrollAdminComponent {
                 this.addControlsForCode(code);
             });
             this.savedForm = this.form.getRawValue();   // Stash form state for reset
-            console.log(this.savedForm);
         });
         this.payPro.codeTypes$.subscribe(ct => this.types = ct);
     }
@@ -67,6 +66,7 @@ export class PayrollAdminComponent {
 
     mapCode(type: PayrollCodeType) {
         this.conSrv.confirm({
+            header: 'Confirm Payroll Code Mapping',
             message: 'Are you sure you want to map a Payroll Code to the "' + type.description + '" Booking Type?',
             accept: () => {
                 let newMap = new PayrollCodeMap(type.type, type.code);
@@ -77,6 +77,7 @@ export class PayrollAdminComponent {
 
     removeMap(code: PayrollCodeMap) {
         this.conSrv.confirm({
+            header: 'Confirm Mapping Removal',
             message: 'Are you sure you want to remove the mapping for "' + this.typeDesc(code) + '"?',
             accept: () => {
                 this.codeMap.splice(this.codeMap.indexOf(code), 1);
