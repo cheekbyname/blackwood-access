@@ -1,0 +1,95 @@
+h4, label, select, td, th, span.badge {
+	font-family: 'Century Gothic';
+	font-weight: normal;
+}
+
+.panel {
+	border: 1px solid;
+	border-color: slategray;
+	background-color: rgba(255,255,255,0.5);
+	margin-top: 24px;
+}
+
+.panel-default>.panel-heading {
+	border-bottom: 1px solid silver;
+	border-color: slategray;
+	background-color: rgba(191, 215, 48, 0.5);
+}
+
+.panel-body {
+	height:89vh;
+	overflow-y:scroll;
+}
+
+table tbody tr:hover {
+	background-color: rgba(255, 105, 180, 0.5);
+	cursor: pointer;
+}
+
+.btn-default, .btn-primary {
+	background-color: #bfd730;
+	color: black;
+	border-color: black;
+	font-family: 'Century Gothic';
+}
+
+.btn-primary:enabled:hover {
+	cursor: pointer;
+	color: black;
+	background-color: hotpink;
+}
+
+.btn-primary[disabled="true"]:hover {
+	cursor: not-allowed;
+	color: black;
+	background-color: #bfd730;
+}
+
+span.badge {
+	background-color: rgba(191, 215, 48, 0.5);
+	color: black;
+	font-size: 11pt;
+	margin: 0px 6px 6px 0px;
+	padding: 8px;
+	border: 1px solid black;
+}
+
+span.badge:hover {
+	background-color: rgba(255, 105, 180, 0.5);
+	cursor: pointer;
+}
+
+i {
+	color: red;
+}
+
+/* ConfirmDialog stylings */
+.ui-confirmdialog .ui-dialog-content .fa {
+    color: darkorange;
+	font-size: 24pt;
+}
+
+.ui-dialog-content.ui-widget-content {
+	display: flex;
+}
+
+button.ui-button.ui-widget, button.ui-button.ui-widget:focus {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+button.ui-button span.ui-button-text {
+	font-weight: normal;
+	font-family: 'Century Gothic';
+}
+
+button.ui-button.ui-widget:hover {
+	background-color: hotpink!important;
+	cursor: pointer;
+}
+
+span.ui-confirmdialog-message {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}

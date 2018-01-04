@@ -1,0 +1,59 @@
+<form [formGroup]="form">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Payroll Code Map</h4>
+                </div>
+                <div class="col-md-6">
+                    <div class="admin-buttons pull-right">
+                        <button class="btn btn-primary" [disabled]="form.pristine" (click)="undoChanges(thisForm)">Undo</button>
+                        <button class="btn btn-primary" [disabled]="form.pristine" (click)="saveChanges(thisForm)">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <h4>Mapped Booking Types</h4><hr/>
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr class="row">
+                        <th></th>
+                        <th>Element Name</th>
+                        <th>Code Type</th>
+                        <!-- <th>Booking Type Code</th> -->
+                        <th>Payroll Code</th>
+                        <th>Pay Hours?</th>
+                        <th>Pay Instance?</th>
+                        <th>Shift Code?</th>
+                        <th>Pay Gaps?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row" *ngFor="let code of codeMap">
+                        <td><i class="fa fa-times-circle fa-2x" title="Click to remove this mapping" (click)="removeMap(code)"></i></td>
+                        <td>{{typeDesc(code)}}</td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="code.type" formControlName="type{{codeName(code)}}">
+                                <option value="0">Booking</option>
+                                <option value="1">Availability</option>
+                            </select>
+                        </td>
+                        <!-- <td>{{code.typeCode}}</td> -->
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="code.code" formControlName="code{{codeName(code)}}"/>
+                        </td>
+                        <td><p-checkbox [(ngModel)]="code.payHours" binary="true" formControlName="payHours{{codeName(code)}}"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="code.payInstance" binary="true" formControlName="payInstance{{codeName(code)}}"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="code.shiftCode" binary="true" formControlName="shiftCode{{codeName(code)}}"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="code.payGaps" binary="true" formControlName="payGaps{{codeName(code)}}"></p-checkbox></td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>Unmapped Booking Types</h4><hr/>
+            <span class="badge badge-primary" *ngFor="let type of unmappedTypes()" (click)="mapCode(type)">{{type.description}}</span>
+        </div>
+    </div>
+</form>
+
+<p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>

@@ -9,6 +9,8 @@ import { Carer } from "../models/Carer";
 import { CarerContract } from "../models/Contract";
 import { Locale, LOC_EN } from "../models/Locale";
 import { Payroll } from "../models/Payroll";
+import { PayrollCodeMap } from "../models/PayrollCodeMap";
+import { PayrollCodeType } from "../models/PayrollCodeType";
 import { Summary } from "../models/Summary";
 import { Team } from "../models/Team";
 import { Timesheet } from "../models/Timesheet";
@@ -31,6 +33,8 @@ export class PayrollProvider {
     private _summaries = new BehaviorSubject<Summary[]>(null);
     private _validation = new BehaviorSubject<ValidationResult>(null);
     private _export = new BehaviorSubject<Payroll[]>(undefined);
+    private _codeMap = new BehaviorSubject<PayrollCodeMap[]>(undefined);
+    private _codeTypes = new BehaviorSubject<PayrollCodeType[]>(undefined);
 
     weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
@@ -41,6 +45,8 @@ export class PayrollProvider {
         .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
     validation$ = this._validation.asObservable();
     export$ = this._export.asObservable();
+    codeMap$ = this._codeMap.asObservable();
+    codeTypes$ = this._codeTypes.asObservable();
 
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
@@ -108,6 +114,8 @@ export class PayrollProvider {
         this.userPro.userInfo$.subscribe(x => this.user = x);
 
         this.getTeams();
+        this.getCodeMap();
+        this.getCodeTypes();
     }
 
     handlePeriod(x) {
@@ -227,6 +235,20 @@ export class PayrollProvider {
         if (isDevMode()) console.log(tsUrl);
         this.http.get(tsUrl).subscribe(res => {
             this._validation.next(res.json() as ValidationResult);
+        });
+    }
+
+    getCodeMap() {
+        var url = '/api/payroll/codeMap';
+        this.http.get(url).subscribe(res => {
+            this._codeMap.next(res.json() as PayrollCodeMap[]);
+        });
+    }
+
+    getCodeTypes() {
+        var url = 'api/payroll/codeTypes';
+        this.http.get(url).subscribe(res => {
+            this._codeTypes.next(res.json() as PayrollCodeType[]);
         });
     }
 

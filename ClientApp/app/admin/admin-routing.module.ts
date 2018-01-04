@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from "./admin-guard.service";
 
 import { AdminComponent } from './admin.component'
+import { PayrollAdminComponent } from "./payroll.admin.component/payroll.admin.component";
 import { UserAdminComponent } from "./user.admin.component/user.admin.component";
 
 const adminRoutes: Routes = [
@@ -17,6 +18,17 @@ const adminRoutes: Routes = [
                 component: UserAdminComponent
             }
         ]
+    },
+    {
+        path: 'admin/payroll',
+        component: PayrollAdminComponent,
+        canActivate: [AdminGuard],
+        // children: [
+        //     {
+        //         path: '',
+        //         component: PayrollAdminComponent
+        //     }
+        // ]
     }
 ];
 

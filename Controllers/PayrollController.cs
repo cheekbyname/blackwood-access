@@ -69,7 +69,8 @@ namespace Blackwood.Access.Controllers
         public WorkPattern WorkPatterns(int carer) => _dataService.WorkPattern(carer);
 
 		[HttpGet("[action]")]
-		public IEnumerable<PayrollCodeMap> CodeMap() => _dataService.GetPayrollCodeMap().ToList();
+		public IEnumerable<PayrollCodeMap> CodeMap()
+			=> _dataService.GetPayrollCodeMap().Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList();
 
 		[HttpGet("[action]")]
 		public IEnumerable<PayrollCodeType> CodeTypes() => _dataService.GetPayrollCodeTypes().ToList();
