@@ -42,10 +42,10 @@ export class PayrollAdminComponent {
 
     codeMapFormGroup(map: PayrollCodeMap): FormGroup {
         return this.fb.group({
-            type: [{ value: map.type, disabled: true}],
+            type: [{ value: map.type, disabled: true }],
             typeCode: map.typeCode,
             code: map.code || '',
-            payHours: map.payHours || true,
+            payHours: map.payHours || false,
             payInstance: map.payInstance || false,
             shiftCode: map.shiftCode || false,
             payGaps: [{ value: map.payGaps || (map.type == 1), disabled: map.type == 0 }]
@@ -63,10 +63,12 @@ export class PayrollAdminComponent {
     }
 
     unmappedTypes(): PayrollCodeType[] {
-        let types = this.maps.getRawValue().map(map => { return {
-            type: map.type,
-            typeCode: map.typeCode
-        }});
+        let types = this.maps.getRawValue().map(map => {
+            return {
+                type: map.type,
+                typeCode: map.typeCode
+            }
+        });
         return this.types.filter(ty => !(types.some(map => map.type == ty.type && map.typeCode == ty.code)));
     }
 
