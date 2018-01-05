@@ -63,8 +63,11 @@ export class PayrollAdminComponent {
     }
 
     unmappedTypes(): PayrollCodeType[] {
-        // TODO Re-target this to this.maps in order to correctly track unmapped booking types
-        return this.types.filter(ty => !(this.codeMap.some(cm => cm.type == ty.type && cm.typeCode == ty.code)));
+        let types = this.maps.getRawValue().map(map => { return {
+            type: map.type,
+            typeCode: map.typeCode
+        }});
+        return this.types.filter(ty => !(types.some(map => map.type == ty.type && map.typeCode == ty.code)));
     }
 
     addMap(type: PayrollCodeType) {
