@@ -7,8 +7,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="admin-buttons pull-right">
-                        <button class="btn btn-primary" [disabled]="form.pristine" (click)="undoChanges(thisForm)">Undo</button>
-                        <button class="btn btn-primary" [disabled]="form.pristine" (click)="saveChanges(thisForm)">Save</button>
+                        <button class="btn btn-primary" [disabled]="form.pristine" (click)="undoChanges()">
+                            <i class="fa fa-undo"></i> <span>Undo</span>
+                        </button>
+                        <button class="btn btn-primary" [disabled]="form.pristine" (click)="saveChanges()">
+                            <i class="fa fa-floppy-o"></i><span>Save</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -31,7 +35,7 @@
                 </thead>
                 <tbody formArrayName="maps">
                     <tr class="row" *ngFor="let code of maps.controls; let i = index" [formGroupName]="i">
-                        <td><i class="fa fa-times-circle fa-2x" title="Click to remove this mapping" (click)="removeMap(i, code.getRawValue())"></i></td>
+                        <td><i class="fa fa-times-circle fa-2x delete" title="Click to remove this mapping" (click)="removeMap(i, code.getRawValue())"></i></td>
                         <td>{{typeDesc(code.getRawValue())}}</td>
                         <td>
                             <select class="form-control" formControlName="type">

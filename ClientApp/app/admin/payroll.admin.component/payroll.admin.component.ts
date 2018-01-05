@@ -57,9 +57,13 @@ export class PayrollAdminComponent {
         return type == undefined ? "Unknown" : type.description;
     }
 
-    undoChanges(form: NgForm) {
+    undoChanges() {
         this.setCodeMapGroups(this.codeMap);
         this.form.markAsPristine();
+    }
+
+    saveChanges() {
+        // TODO
     }
 
     unmappedTypes(): PayrollCodeType[] {
@@ -81,7 +85,7 @@ export class PayrollAdminComponent {
                 this.maps.push(this.codeMapFormGroup(newMap));
                 this.maps.at(this.maps.length - 1).markAsDirty();
             }
-        })
+        });
     }
 
     removeMap(idx: number, code: PayrollCodeMap) {
@@ -92,6 +96,6 @@ export class PayrollAdminComponent {
                 this.maps.removeAt(idx);
                 this.form.markAsDirty();
             }
-        })
+        });
     }
 }

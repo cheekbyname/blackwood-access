@@ -59,8 +59,12 @@ span.badge:hover {
 	cursor: pointer;
 }
 
-i {
+i.delete {
 	color: red;
+}
+
+button > i {
+	margin-right: 8px;
 }
 
 /* ConfirmDialog stylings */
