@@ -15,42 +15,42 @@ import { PayrollProvider } from "../../payroll/payroll.provider";
     encapsulation: ViewEncapsulation.None
 })
 export class PayrollAdminComponent {
-    constructor(private payPro: PayrollProvider, private conSrv: ConfirmationService, private formBuilder: FormBuilder) {
+    constructor(private pp: PayrollProvider, private cs: ConfirmationService, private fb: FormBuilder) {
 
-        this.payPro.codeMap$.subscribe(map => {
-            this.form = this.formBuilder.group({});     // Initialise empty Form
-            this.codeMap = map;
-            this.codeMap.forEach(code => {
-                this.addControlsForCode(code);
-            });
+        this.pp.codeMap$.subscribe(maps => {
+            this.codeMap = maps;
+            this.form = this.fb.group({ maps: this.fb.array([]) });
+            this.setCodeMapGroups(maps);
             this.savedForm = this.form.getRawValue();   // Stash form state for reset
         });
-        this.payPro.codeTypes$.subscribe(ct => this.types = ct);
+
+        this.pp.codeTypes$.subscribe(ct => this.types = ct);
     }
 
     codeMap: PayrollCodeMap[];
     types: PayrollCodeType[];
     form: FormGroup;
     savedForm: any;
-    savedMap: PayrollCodeMap[];
 
-    addControlsForCode(code: PayrollCodeMap) {
-        let codeName = this.codeName(code);
-        this.addControl('type', codeName, code.type, true);
-        this.addControl('code', codeName, code.code);
-        this.addControl('payHours', codeName, code.payHours);
-        this.addControl('payInstance', codeName, code.payInstance);
-        this.addControl('shiftCode', codeName, code.shiftCode);
-        this.addControl('payGaps', codeName, code.payGaps, code.type == 0);
+    get maps(): FormArray {
+        return this.form.get('maps') as FormArray;
     }
 
-    addControl(name: string, codeName: string, value: any, disable: boolean = false) {
-        this.form.addControl(name + codeName, new FormControl({ value: value, disabled: disable }));
+    setCodeMapGroups(maps: PayrollCodeMap[]) {
+        this.form.setControl('maps', this.fb.array(maps.map(map => this.codeMapFormGroup(map))));
     }
 
-    codeName(code: PayrollCodeMap): string {
-        return '_' + code.type + '_' + code.typeCode;
-    }
+    codeMapFormGroup(map: PayrollCodeMap): FormGroup {
+        return this.fb.group({
+            type: [{ value: map.type, disabled: true}],
+            typeCode: map.typeCode,
+            code: map.code || '',
+            payHours: map.payHours || true,
+            payInstance: map.payInstance || false,
+            shiftCode: map.shiftCode || false,
+            payGaps: [{ value: map.payGaps || (map.type == 1), disabled: map.type == 0 }]
+        });
+    };
 
     typeDesc(code: PayrollCodeMap): string {
         var type = this.types.find(ty => ty.type == code.type && ty.code == code.typeCode);
@@ -58,36 +58,33 @@ export class PayrollAdminComponent {
     }
 
     undoChanges(form: NgForm) {
-        this.form.reset(this.savedForm);
-        this.payPro.getCodeMap();
+        this.setCodeMapGroups(this.codeMap);
+        this.form.markAsPristine();
     }
 
     unmappedTypes(): PayrollCodeType[] {
+        // TODO Re-target this to this.maps in order to correctly track unmapped booking types
         return this.types.filter(ty => !(this.codeMap.some(cm => cm.type == ty.type && cm.typeCode == ty.code)));
     }
 
-    mapCode(type: PayrollCodeType) {
-        this.conSrv.confirm({
+    addMap(type: PayrollCodeType) {
+        this.cs.confirm({
             header: 'Confirm Payroll Code Mapping',
             message: 'Are you sure you want to map a Payroll Code to the "' + type.description + '" Booking Type?',
             accept: () => {
                 let newMap = new PayrollCodeMap(type.type, type.code);
-                this.addControlsForCode(newMap);
-                this.codeMap.push(newMap);
-                this.form.markAsDirty();
+                this.maps.push(this.codeMapFormGroup(newMap));
+                this.maps.at(this.maps.length - 1).markAsDirty();
             }
         })
     }
 
-    removeMap(code: PayrollCodeMap) {
-        this.conSrv.confirm({
+    removeMap(idx: number, code: PayrollCodeMap) {
+        this.cs.confirm({
             header: 'Confirm Mapping Removal',
             message: 'Are you sure you want to remove the mapping for "' + this.typeDesc(code) + '"?',
             accept: () => {
-                this.codeMap.splice(this.codeMap.indexOf(code), 1);
-                let codeName = this.codeName(code);
-                let controls = this.form.controls;
-                // TODO Remove FormControls
+                this.maps.removeAt(idx);
                 this.form.markAsDirty();
             }
         })

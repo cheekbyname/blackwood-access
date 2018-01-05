@@ -12,5 +12,10 @@
     constructor(type, code) {
         this.type = type;
         this.typeCode = code;
+        this.code = '';
+        this.payHours = true;
+        this.payInstance = false;
+        this.shiftCode = false;
+        this.payGaps = false;
     }
 }

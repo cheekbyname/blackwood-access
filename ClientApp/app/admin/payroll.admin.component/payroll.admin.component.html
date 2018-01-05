@@ -29,29 +29,29 @@
                         <th>Pay Gaps?</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="row" *ngFor="let code of codeMap">
-                        <td><i class="fa fa-times-circle fa-2x" title="Click to remove this mapping" (click)="removeMap(code)"></i></td>
-                        <td>{{typeDesc(code)}}</td>
+                <tbody formArrayName="maps">
+                    <tr class="row" *ngFor="let code of maps.controls; let i = index" [formGroupName]="i">
+                        <td><i class="fa fa-times-circle fa-2x" title="Click to remove this mapping" (click)="removeMap(i, code.getRawValue())"></i></td>
+                        <td>{{typeDesc(code.getRawValue())}}</td>
                         <td>
-                            <select class="form-control" formControlName="type{{codeName(code)}}">
+                            <select class="form-control" formControlName="type">
                                 <option value="0">Booking</option>
                                 <option value="1">Availability</option>
                             </select>
                         </td>
                         <!-- <td>{{code.typeCode}}</td> -->
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="code.code" formControlName="code{{codeName(code)}}"/>
+                            <input type="text" class="form-control" formControlName="code"/>
                         </td>
-                        <td><p-checkbox [(ngModel)]="code.payHours" binary="true" formControlName="payHours{{codeName(code)}}"></p-checkbox></td>
-                        <td><p-checkbox [(ngModel)]="code.payInstance" binary="true" formControlName="payInstance{{codeName(code)}}"></p-checkbox></td>
-                        <td><p-checkbox [(ngModel)]="code.shiftCode" binary="true" formControlName="shiftCode{{codeName(code)}}"></p-checkbox></td>
-                        <td><p-checkbox [(ngModel)]="code.payGaps" binary="true" formControlName="payGaps{{codeName(code)}}"></p-checkbox></td>
+                        <td><p-checkbox binary="true" formControlName="payHours"></p-checkbox></td>
+                        <td><p-checkbox binary="true" formControlName="payInstance"></p-checkbox></td>
+                        <td><p-checkbox binary="true" formControlName="shiftCode"></p-checkbox></td>
+                        <td><p-checkbox binary="true" formControlName="payGaps"></p-checkbox></td>
                     </tr>
                 </tbody>
             </table>
             <h4>Unmapped Booking Types</h4><hr/>
-            <span class="badge badge-primary" *ngFor="let type of unmappedTypes()" (click)="mapCode(type)">{{type.description}}</span>
+            <span class="badge badge-primary" *ngFor="let type of unmappedTypes()" (click)="addMap(type)">{{type.description}}</span>
         </div>
     </div>
 </form>
