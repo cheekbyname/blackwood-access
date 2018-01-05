@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from "@angular/core";
-import { NgForm, FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { NgForm, FormBuilder, FormGroup, FormControl, FormArray } from "@angular/forms";
 
 import { ConfirmDialogModule, ConfirmationService } from "primeng/primeng";
 
@@ -32,6 +32,7 @@ export class PayrollAdminComponent {
     types: PayrollCodeType[];
     form: FormGroup;
     savedForm: any;
+    savedMap: PayrollCodeMap[];
 
     addControlsForCode(code: PayrollCodeMap) {
         let codeName = this.codeName(code);
@@ -58,6 +59,7 @@ export class PayrollAdminComponent {
 
     undoChanges(form: NgForm) {
         this.form.reset(this.savedForm);
+        this.payPro.getCodeMap();
     }
 
     unmappedTypes(): PayrollCodeType[] {
@@ -70,7 +72,9 @@ export class PayrollAdminComponent {
             message: 'Are you sure you want to map a Payroll Code to the "' + type.description + '" Booking Type?',
             accept: () => {
                 let newMap = new PayrollCodeMap(type.type, type.code);
+                this.addControlsForCode(newMap);
                 this.codeMap.push(newMap);
+                this.form.markAsDirty();
             }
         })
     }
@@ -81,6 +85,10 @@ export class PayrollAdminComponent {
             message: 'Are you sure you want to remove the mapping for "' + this.typeDesc(code) + '"?',
             accept: () => {
                 this.codeMap.splice(this.codeMap.indexOf(code), 1);
+                let codeName = this.codeName(code);
+                let controls = this.form.controls;
+                // TODO Remove FormControls
+                this.form.markAsDirty();
             }
         })
     }
