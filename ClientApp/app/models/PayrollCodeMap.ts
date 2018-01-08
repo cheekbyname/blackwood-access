@@ -8,6 +8,7 @@
     public payInstance: boolean;
     public shiftCode: boolean;
     public payGaps: boolean;
+    public active: boolean;
 
     constructor(type, code) {
         this.type = type;
@@ -17,5 +18,6 @@
         this.payInstance = false;
         this.shiftCode = false;
         this.payGaps = false;
+        this.active = true;
     }
 }

@@ -72,6 +72,10 @@ namespace Blackwood.Access.Controllers
 		public IEnumerable<PayrollCodeMap> CodeMap()
 			=> _dataService.GetPayrollCodeMap().Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList();
 
+        [HttpPut("[action]")]
+        public void CodeMap([FromBody] PayrollCodeMap map) => _dataService.PutPayrollCodeMap(map);
+
+
 		[HttpGet("[action]")]
 		public IEnumerable<PayrollCodeType> CodeTypes() => _dataService.GetPayrollCodeTypes().ToList();
 	}

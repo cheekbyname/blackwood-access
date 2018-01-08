@@ -54,14 +54,14 @@ export class PayrollProvider {
     timesheet$ = this._timesheet.asObservable();
     summaries$ = this._summaries.asObservable();
 
-    weekObserver$: Observable<{"weekCommencing": Date, "carer": Carer}>;
+    weekObserver$: Observable<{ "weekCommencing": Date, "carer": Carer }>;
     weekSub: Subscription;
     periodObserver$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
     periodSub: Subscription;
 
     public locale: Locale = LOC_EN;
-    public absenceCodes: number [] = [108, 109];
-    public unpaidCodes: number [] = [123, 110, 98];
+    public absenceCodes: number[] = [108, 109];
+    public unpaidCodes: number[] = [123, 110, 98];
 
     private user: AccessUser;
 
@@ -86,7 +86,7 @@ export class PayrollProvider {
 
         this.weekObserver$ = Observable
             .combineLatest(this.weekCommencing$, this.selectedCarer$, (wc, carer) => {
-                return { "weekCommencing": wc, "carer": carer}
+                return { "weekCommencing": wc, "carer": carer }
             })
             .distinctUntilChanged((a, b) => {
                 if (a.carer === null || b.carer === null || a.weekCommencing === null || b.weekCommencing === null)
@@ -124,7 +124,7 @@ export class PayrollProvider {
             this._adjustments.next(null);
             this._validation.next(null);
             this._export.next(undefined);
-            
+
             this.getSummaries(x.team, x.start, x.finish);
             this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
             this.getValidationResult(x.team, x.start, x.finish);
@@ -159,19 +159,19 @@ export class PayrollProvider {
         this._periodFinish.next(dt);
     }
 
-	setPeriod(dt: Date) {
+    setPeriod(dt: Date) {
         // Get first and last of month from a selected date
         // TODO Refactor this to take Dundee's pathological timetable into account
-		var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
-		var finish = new Date(dt.getFullYear(), dt.getMonth()+1, 0);
+        var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
+        var finish = new Date(dt.getFullYear(), dt.getMonth() + 1, 0);
 
         this.periodSub.unsubscribe();
 
-		this.setPeriodFinish(finish);
-		this.setPeriodStart(start);
+        this.setPeriodFinish(finish);
+        this.setPeriodStart(start);
 
         this.periodSub = this.periodObserver$.subscribe(x => this.handlePeriod(x));
-	}
+    }
 
     getTeams() {
         var teams: Team[];
@@ -191,7 +191,7 @@ export class PayrollProvider {
         });
     }
 
-	getTimesheet(carer: Carer, weekCommencing: Date): void {
+    getTimesheet(carer: Carer, weekCommencing: Date): void {
         if (carer != undefined && weekCommencing != undefined) {
             var tsUrl = `/api/payroll/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
             if (isDevMode()) console.log(tsUrl);
@@ -199,7 +199,7 @@ export class PayrollProvider {
                 this._timesheet.next(res.json() as Timesheet);
             });
         }
-	}
+    }
 
     getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
         var tsUrl = `/api/payroll/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
@@ -210,24 +210,24 @@ export class PayrollProvider {
         })
     }
 
-	getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
-		if (periodStart != undefined && periodFinish != undefined) {
+    getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
+        if (periodStart != undefined && periodFinish != undefined) {
             var tsUrl = `/api/payroll/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
             if (isDevMode()) console.log(tsUrl);
-			this.http.get(tsUrl).subscribe(res => {
+            this.http.get(tsUrl).subscribe(res => {
                 this._summaries.next(res.json() as Summary[]);
-			});
-		}
-	}
+            });
+        }
+    }
 
     getPayrollExport(team: Team, periodStart: Date, periodFinish: Date) {
-		if (periodStart != undefined && periodFinish != undefined) {
+        if (periodStart != undefined && periodFinish != undefined) {
             var tsUrl = `/api/payroll/getPayrollData/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
             if (isDevMode()) console.log(tsUrl);
-			this.http.get(tsUrl).subscribe(res => {
+            this.http.get(tsUrl).subscribe(res => {
                 this._export.next(res.json() as Payroll[]);
-			});
-		}
+            });
+        }
     }
 
     getValidationResult(team: Team, periodStart: Date, periodFinish: Date) {
@@ -245,6 +245,11 @@ export class PayrollProvider {
         });
     }
 
+    putCodeMap(map: PayrollCodeMap) {
+        var url = '/api/payroll/codeMap';
+        this.http.put(url, map).toPromise().catch(err => console.log(err))
+    }
+
     getCodeTypes() {
         var url = 'api/payroll/codeTypes';
         this.http.get(url).subscribe(res => {
@@ -252,11 +257,11 @@ export class PayrollProvider {
         });
     }
 
-	public sqlDate(date: Date): string {
+    public sqlDate(date: Date): string {
         var month = date.getMonth() + 1;
         var day = date.getDate();
         return date.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + date.getDate();
-	}
+    }
 
     // Convenience methods
     public timeFromDate(dt: Date): string {
@@ -266,38 +271,38 @@ export class PayrollProvider {
         return hr.substr(hr.length - 2) + ":" + mn.substr(mn.length - 2);
     }
 
-	public displayTime(mins: number): string {
-		if (mins < 0) {
-			return Math.ceil(mins/60) + "h " + (mins % 60) + "m";
-		}
-		return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
-	}
+    public displayTime(mins: number): string {
+        if (mins < 0) {
+            return Math.ceil(mins / 60) + "h " + (mins % 60) + "m";
+        }
+        return Math.floor(mins / 60) + "h " + (mins % 60) + "m";
+    }
 
-	public displayDate(date: Date): string {
-		return new Date(date).toLocaleDateString();
-	}
+    public displayDate(date: Date): string {
+        return new Date(date).toLocaleDateString();
+    }
 
-	public teamForContract(contractCode: number, cons: CarerContract[]): string {
-		var contract = cons.find(con => con.contractCode === contractCode);
-		return contract ? contract.teamDesc : "";
-	}
+    public teamForContract(contractCode: number, cons: CarerContract[]): string {
+        var contract = cons.find(con => con.contractCode === contractCode);
+        return contract ? contract.teamDesc : "";
+    }
 
-	public dateOrd(wc: Date, offset: number): string {
-		var dt = new Date(wc);
-		dt.setDate(dt.getDate() + offset);
-		var dy = dt.getDate().toString();
-		if ((dy.length > 1) && (dy.substr(0, 1) == '1')) return dy + 'th';
-		switch (dy.substr(dy.length - 1)) {
-			case "1":
-				return dy + "st";
-			case "2":
-				return dy + "nd";
-			case "3":
-				return dy + "rd";
-			default:
-				return dy + "th";
-		}
-	}
+    public dateOrd(wc: Date, offset: number): string {
+        var dt = new Date(wc);
+        dt.setDate(dt.getDate() + offset);
+        var dy = dt.getDate().toString();
+        if ((dy.length > 1) && (dy.substr(0, 1) == '1')) return dy + 'th';
+        switch (dy.substr(dy.length - 1)) {
+            case "1":
+                return dy + "st";
+            case "2":
+                return dy + "nd";
+            case "3":
+                return dy + "rd";
+            default:
+                return dy + "th";
+        }
+    }
 
     public monthOf(wc: Date, offset: number): string {
         var dt = new Date(wc);

@@ -42,6 +42,7 @@ export class PayrollAdminComponent {
 
     codeMapFormGroup(map: PayrollCodeMap): FormGroup {
         return this.fb.group({
+            id: map.id || 0,
             type: [{ value: map.type, disabled: true }],
             typeCode: map.typeCode,
             code: map.code || '',
@@ -63,7 +64,12 @@ export class PayrollAdminComponent {
     }
 
     saveChanges() {
-        // TODO
+        let changes = this.maps.controls.filter(con => !con.pristine).map(con => con.value);
+        changes.forEach(ch => {
+            this.pp.putCodeMap(ch as PayrollCodeMap);
+            // TODO Return result and flag as pristine if successfull, alert if not
+        });
+        this.form.markAsPristine();
     }
 
     unmappedTypes(): PayrollCodeType[] {
