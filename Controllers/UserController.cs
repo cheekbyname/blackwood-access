@@ -5,7 +5,7 @@ namespace Blackwood.Access.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System;
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     [Route("api/[Controller]")]
     public class UserController : ControllerBase
@@ -20,23 +20,23 @@ namespace Blackwood.Access.Controllers
         }
         
         [HttpGet("[action]")]
-        public AccessUser GetUserInfo()
+        public async Task<AccessUser> GetUserInfo()
         {
             try
             {
-                return _service.GetUserInfo(HttpContext.User);
+                return await _service.GetUserInfo(HttpContext.User);
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
-                return _service.GetInvalidUser();
+                return await _service.GetInvalidUser();
             }
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<AccessUser> GetAllUsers()
+        public async Task<JsonResult> GetAllUsers()
         {
-            return _service.GetAllUsers();
+            return new JsonResult(await _service.GetAllUsers());
         }
 
         [HttpPut("[action]")]

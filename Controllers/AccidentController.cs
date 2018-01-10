@@ -24,7 +24,7 @@ namespace Blackwood.Access.Controllers
         [HttpGet("[action]/{term?}")]
         public IEnumerable<IncidentSummary> Summaries(string term)
         {
-            return _accidentService.GetIncidentSummaries(_userService.GetUserInfo(HttpContext.User), term);
+            return _accidentService.GetIncidentSummaries(_userService.GetUserInfo(HttpContext.User).Result, term);
         }
 
         [HttpGet("[action]/{id}")]

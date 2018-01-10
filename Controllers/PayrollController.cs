@@ -73,7 +73,8 @@ namespace Blackwood.Access.Controllers
 			=> _dataService.GetPayrollCodeMap().Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList();
 
         [HttpPut("[action]")]
-        public void CodeMap([FromBody] PayrollCodeMap map) => _dataService.PutPayrollCodeMap(map);
+        public void CodeMap([FromBody] PayrollCodeMap map)
+            => _dataService.PutPayrollCodeMap(map);
 
 
 		[HttpGet("[action]")]
