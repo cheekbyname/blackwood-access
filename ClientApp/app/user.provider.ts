@@ -3,7 +3,7 @@ import { Http } from "@angular/http";
 
 import { AccessUser } from "./models/AccessUser";
 
-import { Observable, Subject } from "rxjs/Rx";
+import { Subject } from "rxjs/Rx";
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()

@@ -23,7 +23,7 @@
                 </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'initial-assess-manager'}}]">
-                        <span class="glyphicon glyphicon-list-alt"></span>Initial Assessments
+                        <span class="glyphicon glyphicon-list-alt"></span>Care Initial Assessments
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
@@ -31,11 +31,11 @@
                         <span class="glyphicon glyphicon-user"></span>Administration
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
+                <!-- <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
                         <span class="glyphicon glyphicon-plus-sign"></span>Accidents &amp; Incidents
                     </a>
-                </li>
+                </li> -->
             </ul>
             <div *ngIf="showCalendar" class="calendar-div" align="center">
                 <p-calendar class="datepicker" [inline]="true" [locale]="loc" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"

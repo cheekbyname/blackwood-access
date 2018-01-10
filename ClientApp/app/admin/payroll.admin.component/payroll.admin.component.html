@@ -61,3 +61,10 @@
 </form>
 
 <p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>
+
+<p-dialog header="Error Saving Data" [(visible)]="dialogVisible" [width]="300" [modal]="true">
+    {{errorMessage}}
+    <p-footer>
+        <button class="btn btn-default" (click)="hideDialog()">Ok</button>
+    </p-footer>
+</p-dialog>

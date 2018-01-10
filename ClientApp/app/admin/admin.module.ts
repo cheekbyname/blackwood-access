@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { CheckboxModule, ConfirmDialogModule, ConfirmationService } from "primeng/primeng";
+import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
 
 import { AdminComponent } from "./admin.component";
 import { AdminGuard } from "./admin-guard.service";
@@ -13,7 +13,7 @@ import { UserAdminComponent } from "./user.admin.component/user.admin.component"
 import { UserProvider } from "../user.provider";
 
 @NgModule({
-    imports: [CommonModule, FormsModule, AdminRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule],
+    imports: [CommonModule, FormsModule, AdminRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule],
     declarations: [AdminComponent, PayrollAdminComponent, UserAdminComponent],
     providers: [ConfirmationService, UserProvider, AdminGuard]
 })
