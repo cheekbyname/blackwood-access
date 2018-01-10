@@ -31,6 +31,9 @@ export class PayrollSummaryComponent implements OnInit {
 		this.payPro.periodFinish$.subscribe(finish => this.periodFinish = finish);
 		this.payPro.summaries$.subscribe(sums => this.summaries = sums);
 		this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
+		this.payPro.errorMessage$.subscribe(err => {
+			if(err != undefined) this.errored = true;
+		});
 	}
 
 	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) {
@@ -43,6 +46,7 @@ export class PayrollSummaryComponent implements OnInit {
 	periodStart: Date;
 	periodFinish: Date;
 	weekCommencing: Date;	// For navigation
+	errored: boolean = false;
 
 	public showSummary: Boolean = true;
 
@@ -50,7 +54,6 @@ export class PayrollSummaryComponent implements OnInit {
 	get team() { return this._team }
 	set team(team: Team) {
 		this._team = team;
-//		this.getSummaries();
 		this.showSummary = true;
 	}
 

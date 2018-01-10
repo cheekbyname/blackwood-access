@@ -35,6 +35,7 @@ export class PayrollProvider {
     private _export = new BehaviorSubject<Payroll[]>(undefined);
     private _codeMap = new BehaviorSubject<PayrollCodeMap[]>(undefined);
     private _codeTypes = new BehaviorSubject<PayrollCodeType[]>(undefined);
+    private _errorMessage = new BehaviorSubject<string>(undefined);
 
     weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
@@ -47,6 +48,7 @@ export class PayrollProvider {
     export$ = this._export.asObservable();
     codeMap$ = this._codeMap.asObservable();
     codeTypes$ = this._codeTypes.asObservable();
+    errorMessage$ = this._errorMessage.asObservable();
 
     teams$ = this._teams.asObservable();
     carers$ = this._carers.asObservable();
@@ -210,13 +212,16 @@ export class PayrollProvider {
         })
     }
 
-    getSummaries(team: Team, periodStart: Date, periodFinish: Date): void {
+    getSummaries(team: Team, periodStart: Date, periodFinish: Date) {
         if (periodStart != undefined && periodFinish != undefined) {
             var tsUrl = `/api/payroll/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
             if (isDevMode()) console.log(tsUrl);
-            this.http.get(tsUrl).subscribe(res => {
-                this._summaries.next(res.json() as Summary[]);
-            });
+            this.http.get(tsUrl)
+                .subscribe(res => {
+                    let sums = res.json() as Summary[];
+                    this._summaries.next(sums);
+                    return sums;
+                }, err => this._errorMessage.next(err.statusText));
         }
     }
 
@@ -247,7 +252,7 @@ export class PayrollProvider {
 
     putCodeMap(map: PayrollCodeMap) {
         var url = '/api/payroll/codeMap';
-        this.http.put(url, map).toPromise().catch(err => console.log(err))
+        return this.http.put(url, map);
     }
 
     getCodeTypes() {
