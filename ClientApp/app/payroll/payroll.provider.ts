@@ -1,4 +1,4 @@
-import { Injectable, isDevMode } from "@angular/core";
+import { Injectable, isDevMode, OnDestroy } from "@angular/core";
 import { Http } from "@angular/http";
 import { BehaviorSubject, Observable, Subscription } from "rxjs/Rx";
 import "rxjs/add/operator/toPromise";
@@ -19,7 +19,7 @@ import { ValidationResult } from "../models/Validation";
 import { UserProvider } from "../user.provider";
 
 @Injectable()
-export class PayrollProvider {
+export class PayrollProvider implements OnDestroy {
 
     private _weekCommencing = new BehaviorSubject<Date>(new Date());
     private _periodStart = new BehaviorSubject<Date>(null);
@@ -56,10 +56,9 @@ export class PayrollProvider {
     timesheet$ = this._timesheet.asObservable();
     summaries$ = this._summaries.asObservable();
 
-    weekObserver$: Observable<{ "weekCommencing": Date, "carer": Carer }>;
-    weekSub: Subscription;
-    periodObserver$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
-    periodSub: Subscription;
+    week$: Observable<{ "weekCommencing": Date, "carer": Carer }>;
+    period$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
+    subs: Subscription[] = [];
 
     public locale: Locale = LOC_EN;
     public absenceCodes: number[] = [108, 109];
@@ -73,9 +72,8 @@ export class PayrollProvider {
             .combineLatest(this.periodStart$, this.selectedTeam$, (wc: Date, tm: Team) => {
                 return { "periodStart": wc, "selectedTeam": tm };
             })
+            .filter(x => x.selectedTeam !== null && x.periodStart !== null)
             .distinctUntilChanged((a, b) => {
-                if (a.selectedTeam === null || b.selectedTeam === null || a.periodStart === null || b.periodStart === null)
-                    return false;
                 return (a.selectedTeam.teamCode === b.selectedTeam.teamCode)
                     && (a.periodStart.toLocaleDateString() === b.periodStart.toLocaleDateString());
             })
@@ -86,32 +84,42 @@ export class PayrollProvider {
                 }
             });
 
-        this.weekObserver$ = Observable
+        this.week$ = Observable
             .combineLatest(this.weekCommencing$, this.selectedCarer$, (wc, carer) => {
                 return { "weekCommencing": wc, "carer": carer }
             })
+            .filter(x => x.carer !== null && x.weekCommencing !== null)
             .distinctUntilChanged((a, b) => {
-                if (a.carer === null || b.carer === null || a.weekCommencing === null || b.weekCommencing === null)
-                    return false;
                 return (a.carer.carerCode === b.carer.carerCode)
                     && (a.weekCommencing.toLocaleDateString() === b.weekCommencing.toLocaleDateString());
             });
-        this.weekSub = this.weekObserver$
-            .subscribe(x => this.handleWeek(x));
 
-        this.periodObserver$ = Observable
+        this.subs.push(this.week$
+            .switchMap(x => {
+                this._timesheet.next(null);
+                return this.getTimesheet(x.carer, x.weekCommencing);
+            })
+            .catch(e => {
+                this._timesheet.error(e);
+                return Observable.throw(e);
+            })
+            .subscribe(r => this._timesheet.next(r)));
+
+        this.period$ = Observable
             .combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$, (team, start, finish) => {
                 return { "team": team, "start": start, "finish": finish }
             })
+            .filter(x => x.team !== null && x.start !== null && x.finish !== null)
             .distinctUntilChanged((a, b) => {
-                if (a.team === null || b.team === null || a.start === null || b.start === null || a.finish === null || b.finish === null)
-                    return false;
                 return (a.team.teamCode === b.team.teamCode)
                     && (a.start.toLocaleDateString() === b.start.toLocaleDateString())
                     && (a.finish.toLocaleDateString() === b.finish.toLocaleDateString());
             });
-        this.periodSub = this.periodObserver$
-            .subscribe(x => this.handlePeriod(x));
+
+        this.subscribeTo(this.period$, this._summaries, this.getSummaries);
+        this.subscribeTo(this.period$, this._adjustments, this.getTimesheetAdjustmentsByTeam);
+        this.subscribeTo(this.period$, this._validation, this.getValidationResult);
+        this.subscribeTo(this.period$, this._export, this.getPayrollExport);
 
         this.userPro.userInfo$.subscribe(x => this.user = x);
 
@@ -120,25 +128,21 @@ export class PayrollProvider {
         this.getCodeTypes();
     }
 
-    handlePeriod(x) {
-        if (x.start != null && x.finish != null && x.finish > x.start && x.team.teamCode) {
-            this._summaries.next(null);
-            this._adjustments.next(null);
-            this._validation.next(null);
-            this._export.next(undefined);
-
-            this.getSummaries(x.team, x.start, x.finish);
-            this.getTimesheetAdjustmentsByTeam(x.team, x.start, x.finish);
-            this.getValidationResult(x.team, x.start, x.finish);
-            this.getPayrollExport(x.team, x.start, x.finish);
-        }
+    ngOnDestroy() {
+        this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    handleWeek(x) {
-        if (x.weekCommencing != null && x.carer != null) {
-            this._timesheet.next(null);
-            this.getTimesheet(x.carer, x.weekCommencing);
-        }
+    subscribeTo(source: Observable<any>, subject: BehaviorSubject<any>, request: Function) {
+        this.subs.push(source
+            .switchMap(x => {
+                subject.next(null);
+                return request.call(this, x);
+            })
+        .catch(e => {
+            subject.error(e);
+            return Observable.throw(e);
+        })
+        .subscribe(r => subject.next(r)));
     }
 
     selectWeekCommencing(dt: Date) {
@@ -167,12 +171,8 @@ export class PayrollProvider {
         var start = new Date(dt.getFullYear(), dt.getMonth(), 1);
         var finish = new Date(dt.getFullYear(), dt.getMonth() + 1, 0);
 
-        this.periodSub.unsubscribe();
-
         this.setPeriodFinish(finish);
         this.setPeriodStart(start);
-
-        this.periodSub = this.periodObserver$.subscribe(x => this.handlePeriod(x));
     }
 
     getTeams() {
@@ -193,54 +193,44 @@ export class PayrollProvider {
         });
     }
 
-    getTimesheet(carer: Carer, weekCommencing: Date): void {
-        if (carer != undefined && weekCommencing != undefined) {
+    getTimesheet(carer: Carer, weekCommencing: Date): Observable<Timesheet> {
             var tsUrl = `/api/payroll/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
             if (isDevMode()) console.log(tsUrl);
-            this.http.get(tsUrl).subscribe(res => {
-                this._timesheet.next(res.json() as Timesheet);
-            });
-        }
+            return this.http.get(tsUrl)
+                .map(res => res.json() as Timesheet)
+                .catch(err => Observable.throw(err));
     }
 
-    getTimesheetAdjustmentsByTeam(team: Team, periodStart: Date, periodEnd: Date) {
-        var tsUrl = `/api/payroll/GetTimesheetAdjustmentsByTeam?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodEnd)}`;
+    getTimesheetAdjustmentsByTeam(x: { team: Team, start: Date, finish: Date }): Observable<Adjustment[]> {
+        var tsUrl = `/api/payroll/GetTimesheetAdjustmentsByTeam?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodEnd=${this.sqlDate(x.finish)}`;
         if (isDevMode()) console.log(tsUrl);
-        this.http.get(tsUrl).subscribe(res => {
-            var adjusts = res.json() as Adjustment[];
-            this._adjustments.next(adjusts);
-        })
+        return this.http.get(tsUrl)
+            .map(res => res.json() as Adjustment[])
+            .catch(err => Observable.throw(err));
     }
 
-    getSummaries(team: Team, periodStart: Date, periodFinish: Date) {
-        if (periodStart != undefined && periodFinish != undefined) {
-            var tsUrl = `/api/payroll/summaries/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodEnd=${this.sqlDate(periodFinish)}`;
-            if (isDevMode()) console.log(tsUrl);
-            this.http.get(tsUrl)
-                .subscribe(res => {
-                    let sums = res.json() as Summary[];
-                    this._summaries.next(sums);
-                    return sums;
-                }, err => this._errorMessage.next(err.statusText));
-        }
-    }
-
-    getPayrollExport(team: Team, periodStart: Date, periodFinish: Date) {
-        if (periodStart != undefined && periodFinish != undefined) {
-            var tsUrl = `/api/payroll/getPayrollData/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
-            if (isDevMode()) console.log(tsUrl);
-            this.http.get(tsUrl).subscribe(res => {
-                this._export.next(res.json() as Payroll[]);
-            });
-        }
-    }
-
-    getValidationResult(team: Team, periodStart: Date, periodFinish: Date) {
-        var tsUrl = `/api/payroll/validate/?teamCode=${team.teamCode}&periodStart=${this.sqlDate(periodStart)}&periodFinish=${this.sqlDate(periodFinish)}`;
+    getSummaries(x: { team: Team, start: Date, finish: Date }): Observable<Summary[]> {
+        var tsUrl = `/api/payroll/summaries?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodEnd=${this.sqlDate(x.finish)}`;
         if (isDevMode()) console.log(tsUrl);
-        this.http.get(tsUrl).subscribe(res => {
-            this._validation.next(res.json() as ValidationResult);
-        });
+        return this.http.get(tsUrl)
+            .map(res => res.json() as Summary[])
+            .catch(err => Observable.throw(err));
+    }
+
+    getPayrollExport(x: { team: Team, start: Date, finish: Date }): Observable<Payroll[]> {
+        var tsUrl = `/api/payroll/getPayrollData?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodFinish=${this.sqlDate(x.finish)}`;
+        if (isDevMode()) console.log(tsUrl);
+        return this.http.get(tsUrl)
+            .map(res => res.json() as Payroll[])
+            .catch(err => Observable.throw(err));
+    }
+
+    getValidationResult(x: { team: Team, start: Date, finish: Date }): Observable<ValidationResult> {
+        var tsUrl = `/api/payroll/validate?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodFinish=${this.sqlDate(x.finish)}`;
+        if (isDevMode()) console.log(tsUrl);
+        return this.http.get(tsUrl)
+            .map(res => res.json() as ValidationResult)
+            .catch(err => Observable.throw(err));
     }
 
     getCodeMap() {
