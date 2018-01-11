@@ -1,6 +1,8 @@
 import { Component, ViewEncapsulation, ViewChild } from "@angular/core";
 import { Router, Route } from "@angular/router";
 
+import { Observable } from "rxjs/Rx";
+
 import { DataTableModule, SharedModule } from "primeng/primeng";
 
 import { Payroll } from "../../models/Payroll";
@@ -18,16 +20,20 @@ export class PayrollExportComponent {
 
     export: Payroll[];
     team: Team;
-    // periodStart: Date;
-    // periodFinish: Date;
     fileName: string;
+    error: any = undefined;
 
     constructor(public payPro: PayrollProvider, private router: Router) {
-        this.payPro.export$.subscribe(exp => this.export = exp);
-        this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
-        // this.payPro.periodStart$.subscribe(ps => this.periodStart = ps);
-        // this.payPro.periodFinish$.subscribe(pf => this.periodFinish = pf);
-        this.payPro.periodObserver$.subscribe(p => {
+        this.payPro.export$
+            .catch(err => {
+                this.error = err;
+                return Observable.of<Payroll[]>([]);
+            })
+            .subscribe(exp => this.export = exp);
+
+            this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
+
+        this.payPro.period$.subscribe(p => {
             if (p.team && p.start !== null) this.fileName = `payroll-${p.team.teamCode}-${this.payPro.sqlDate(p.start)}`;
         });
     }

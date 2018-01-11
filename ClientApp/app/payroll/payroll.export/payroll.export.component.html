@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <p-dataTable #dt [value]="export" [exportFilename]="fileName" [hidden]="!export">
+        <p-dataTable #dt [value]="export" [exportFilename]="fileName" [hidden]="!export || error">
             <p-column field="staffMember" header="StaffMember"></p-column>
             <p-column field="dateFormatted" header="Date"></p-column>
             <p-column field="sequence" header="Sequence"></p-column>
@@ -34,9 +34,13 @@
             <p-column field="code" header="Code"></p-column>
             <p-column field="hours" header="Hours"></p-column>
         </p-dataTable>
-        <div *ngIf="!export" class="alert alert-info">
+        <div *ngIf="!export && !error" class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your data...</span>
+        </div>
+        <div *ngIf="error" class="alert alert-danger">
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+            <span class="loading">An error occurred retrieving your data: {{error.status}}: {{error.statusText}}</span>
         </div>
     </div>
 </div>
