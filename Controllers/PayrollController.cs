@@ -2,6 +2,7 @@ namespace Blackwood.Access.Controllers
 {
     using Core.Data.Models;
     using Core.Payroll.Service.Services;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System;
@@ -12,62 +13,66 @@ namespace Blackwood.Access.Controllers
     using System.Threading.Tasks;
 
     [Route("api/[Controller]")]
-	public class PayrollController : ControllerBase
-	{
-		private readonly IPayrollService _service;
+    public class PayrollController : ControllerBase
+    {
+        private readonly IPayrollService _service;
         private readonly IPayrollDataService _dataService;
-		private readonly IPayrollValidationService _validation;
+        private readonly IPayrollValidationService _validation;
         private readonly ILogger<PayrollController> _logger;
 
-		public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
+        public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
             ILogger<PayrollController> logger)
-		{
-			_service = service;
+        {
+            _service = service;
             _dataService = dataService;
-			_validation = validation;
+            _validation = validation;
             _logger = logger;
-		}
+        }
 
-		[HttpGet("[action]")]
-		public IEnumerable<Team> Teams() => _dataService.GetTeams();
+        [HttpGet("[action]")]
+        public IEnumerable<Team> Teams() => _dataService.GetTeams();
 
-		[HttpGet("[action]")]
-		public IEnumerable<Carer> CarersByTeam(int TeamCode, DateTime periodStart) => _dataService.GetCarersByTeam(TeamCode, periodStart);
+        [HttpGet("[action]")]
+        public IEnumerable<Carer> CarersByTeam(int TeamCode, DateTime periodStart) => _dataService.GetCarersByTeam(TeamCode, periodStart);
 
-		[HttpGet("[action]")]
-		public Timesheet Timesheet(int carerCode, DateTime weekCommencing) => _service.GetTimesheet(carerCode, weekCommencing);
+        [HttpGet("[action]")]
+        public Timesheet Timesheet(int carerCode, DateTime weekCommencing) => _service.GetTimesheet(carerCode, weekCommencing);
 
         [HttpGet("[action]")]
         public async Task<IEnumerable<Summary>> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
-            => await Task.Run(() => {
+            => await Task.Run(() =>
+            {
                 // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
                 token.ThrowIfCancellationRequested();
                 return _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd);
             }, token);
 
-		[HttpPut("[action]")]
-		public Adjustment AddTimesheetAdjustment([FromBody] Adjustment adj)
-		    => _service.PutTimesheetAdjustment(adj, HttpContext.User);
+        [HttpPut("[action]")]
+        public Adjustment AddTimesheetAdjustment([FromBody] Adjustment adj)
+            => _service.PutTimesheetAdjustment(adj, HttpContext.User);
 
-		[HttpDelete("[action]")]
-		public void RemoveTimesheetAdjustment(int id)
-		    => _dataService.RemoveTimesheetAdjustment(id);
+        [HttpDelete("[action]")]
+        public void RemoveTimesheetAdjustment(int id)
+            => _dataService.RemoveTimesheetAdjustment(id);
 
-		[HttpPut("[action]")]
-		public void UpdateTimesheetAdjustment([FromBody] Adjustment adj)
-		    => _service.PutTimesheetAdjustment(adj, HttpContext.User);	// Don't need to return the ID for updates
-
-		[HttpGet("[action]")]
-		public IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
-		    => _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
+        [HttpPut("[action]")]
+        public void UpdateTimesheetAdjustment([FromBody] Adjustment adj)
+            => _service.PutTimesheetAdjustment(adj, HttpContext.User);  // Don't need to return the ID for updates
 
         [HttpGet("[action]")]
-        public IEnumerable<Payroll> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodFinish)
-            =>_service.GetPayrollData(teamCode, periodStart, periodFinish);
+        public IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
+            => _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
 
         [HttpGet("[action]")]
-		public ValidationResult Validate(int teamCode, DateTime periodStart, DateTime periodFinish)
-		    => _validation.Validate(teamCode, periodStart, periodFinish);
+        public async Task<IActionResult> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodFinish)
+            => await Task.Run(() =>
+            {
+                return Ok(_service.GetPayrollData(teamCode, periodStart, periodFinish));
+            });
+
+        [HttpGet("[action]")]
+        public ValidationResult Validate(int teamCode, DateTime periodStart, DateTime periodFinish)
+            => _validation.Validate(teamCode, periodStart, periodFinish);
 
         [HttpGet("[action]")]
         public Carer GetCarerByCode(int carerCode) => _dataService.GetCarerByCode(carerCode);
@@ -75,16 +80,16 @@ namespace Blackwood.Access.Controllers
         [HttpGet("[action]")]
         public WorkPattern WorkPatterns(int carer) => _dataService.WorkPattern(carer);
 
-		[HttpGet("[action]")]
-		public IEnumerable<PayrollCodeMap> CodeMap()
-			=> _dataService.GetPayrollCodeMap().Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList();
+        [HttpGet("[action]")]
+        public IEnumerable<PayrollCodeMap> CodeMap()
+            => _dataService.GetPayrollCodeMap().Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList();
 
         [HttpPut("[action]")]
         public void CodeMap([FromBody] PayrollCodeMap map)
             => _dataService.PutPayrollCodeMap(map);
 
 
-		[HttpGet("[action]")]
-		public IEnumerable<PayrollCodeType> CodeTypes() => _dataService.GetPayrollCodeTypes().ToList();
-	}
+        [HttpGet("[action]")]
+        public IEnumerable<PayrollCodeType> CodeTypes() => _dataService.GetPayrollCodeTypes().ToList();
+    }
 }

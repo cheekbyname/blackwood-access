@@ -20,16 +20,16 @@ namespace Blackwood.Access.Controllers
         }
         
         [HttpGet("[action]")]
-        public async Task<AccessUser> GetUserInfo()
+        public async Task<IActionResult> GetUserInfo()
         {
             try
             {
-                return await _service.GetUserInfo(HttpContext.User);
+                return Ok(await _service.GetUserInfo(HttpContext.User));
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
-                return await _service.GetInvalidUser();
+                return Ok(await _service.GetInvalidUser());
             }
         }
 
