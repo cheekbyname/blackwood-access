@@ -6,7 +6,10 @@ namespace Blackwood.Access.Controllers
     using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     [Route("api/[Controller]")]
 	public class PayrollController : ControllerBase
@@ -34,9 +37,13 @@ namespace Blackwood.Access.Controllers
 		[HttpGet("[action]")]
 		public Timesheet Timesheet(int carerCode, DateTime weekCommencing) => _service.GetTimesheet(carerCode, weekCommencing);
 
-		[HttpGet("[action]")]
-		public IEnumerable<Summary> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd)
-            => _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd);
+        [HttpGet("[action]")]
+        public async Task<IEnumerable<Summary>> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
+            => await Task.Run(() => {
+                // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
+                token.ThrowIfCancellationRequested();
+                return _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd);
+            }, token);
 
 		[HttpPut("[action]")]
 		public Adjustment AddTimesheetAdjustment([FromBody] Adjustment adj)
