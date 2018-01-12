@@ -7,7 +7,6 @@ namespace Blackwood.Access.Controllers
     using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -30,26 +29,27 @@ namespace Blackwood.Access.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Team> Teams() => _dataService.GetTeams();
+        public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());
 
         [HttpGet("[action]")]
-        public IEnumerable<Carer> CarersByTeam(int TeamCode, DateTime periodStart) => _dataService.GetCarersByTeam(TeamCode, periodStart);
+        public async Task<IActionResult> CarersByTeam(int TeamCode, DateTime periodStart)
+            => Ok(await _dataService.GetCarersByTeam(TeamCode, periodStart));
 
         [HttpGet("[action]")]
-        public Timesheet Timesheet(int carerCode, DateTime weekCommencing) => _service.GetTimesheet(carerCode, weekCommencing);
+        public async Task<IActionResult> Timesheet(int carerCode, DateTime weekCommencing)
+            => Ok(await _service.GetTimesheet(carerCode, weekCommencing));
 
         [HttpGet("[action]")]
-        public async Task<IEnumerable<Summary>> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
-            => await Task.Run(() =>
-            {
-                // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
-                token.ThrowIfCancellationRequested();
-                return _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd);
-            }, token);
+        public async Task<IActionResult> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
+        {
+            // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
+            token.ThrowIfCancellationRequested();
+            return Ok(await _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd));
+        }
 
         [HttpPut("[action]")]
-        public Adjustment AddTimesheetAdjustment([FromBody] Adjustment adj)
-            => _service.PutTimesheetAdjustment(adj, HttpContext.User);
+        public IActionResult AddTimesheetAdjustment([FromBody] Adjustment adj)
+            => Ok(_service.PutTimesheetAdjustment(adj, HttpContext.User));
 
         [HttpDelete("[action]")]
         public void RemoveTimesheetAdjustment(int id)
@@ -60,29 +60,26 @@ namespace Blackwood.Access.Controllers
             => _service.PutTimesheetAdjustment(adj, HttpContext.User);  // Don't need to return the ID for updates
 
         [HttpGet("[action]")]
-        public IEnumerable<Adjustment> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
-            => _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd);
+        public async Task<IActionResult> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
+            => Ok(await _dataService.GetTimesheetAdjustmentsByTeam(teamCode, periodStart, periodEnd));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodFinish)
-            => await Task.Run(() =>
-            {
-                return Ok(_service.GetPayrollData(teamCode, periodStart, periodFinish));
-            });
+            => Ok(await _service.GetPayrollData(teamCode, periodStart, periodFinish));
 
         [HttpGet("[action]")]
-        public ValidationResult Validate(int teamCode, DateTime periodStart, DateTime periodFinish)
-            => _validation.Validate(teamCode, periodStart, periodFinish);
+        public async Task<IActionResult> Validate(int teamCode, DateTime periodStart, DateTime periodFinish)
+            => Ok(await _validation.Validate(teamCode, periodStart, periodFinish));
 
         [HttpGet("[action]")]
-        public Carer GetCarerByCode(int carerCode) => _dataService.GetCarerByCode(carerCode);
+        public async Task<IActionResult> GetCarerByCode(int carerCode) => Ok(await _dataService.GetCarerByCode(carerCode));
 
         [HttpGet("[action]")]
-        public WorkPattern WorkPatterns(int carer) => _dataService.WorkPattern(carer);
+        public async Task<IActionResult> WorkPatterns(int carer) => Ok(await _dataService.WorkPattern(carer));
 
         [HttpGet("[action]")]
-        public IEnumerable<PayrollCodeMap> CodeMap()
-            => _dataService.GetPayrollCodeMap().Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList();
+        public async Task<IActionResult> CodeMap()
+            => Ok((await _dataService.GetPayrollCodeMap()).Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList());
 
         [HttpPut("[action]")]
         public void CodeMap([FromBody] PayrollCodeMap map)
@@ -90,6 +87,6 @@ namespace Blackwood.Access.Controllers
 
 
         [HttpGet("[action]")]
-        public IEnumerable<PayrollCodeType> CodeTypes() => _dataService.GetPayrollCodeTypes().ToList();
+        public async Task<IActionResult> CodeTypes() => Ok(await _dataService.GetPayrollCodeTypes());
     }
 }

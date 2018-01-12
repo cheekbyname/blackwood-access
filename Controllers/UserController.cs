@@ -34,9 +34,9 @@ namespace Blackwood.Access.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<JsonResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            return new JsonResult(await _service.GetAllUsers());
+            return Ok(await _service.GetAllUsers());
         }
 
         [HttpPut("[action]")]

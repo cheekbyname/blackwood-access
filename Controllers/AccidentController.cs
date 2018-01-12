@@ -1,11 +1,10 @@
 namespace Blackwood.Access.Controllers
 {
     using Core.Accident.Service;
-    using Core.Data.Models;
     using Core.User.Service;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     public class AccidentController : ControllerBase
@@ -22,57 +21,55 @@ namespace Blackwood.Access.Controllers
         }
 
         [HttpGet("[action]/{term?}")]
-        public IEnumerable<IncidentSummary> Summaries(string term)
-        {
-            return _accidentService.GetIncidentSummaries(_userService.GetUserInfo(HttpContext.User).Result, term);
-        }
+        public async Task<IActionResult> Summaries(string term)
+            => Ok(await _accidentService.GetIncidentSummaries(await _userService.GetUserInfo(HttpContext.User), term));
 
         [HttpGet("[action]/{id}")]
-        public Incident Incident(int id) { return _accidentService.GetIncident(id); }
+        public async Task<IActionResult> Incident(int id) => Ok(await _accidentService.GetIncident(id));
 
         [HttpGet("[action]")]
-        public IEnumerable<Person> People() { return _accidentService.GetPeople(); }
+        public async Task<IActionResult> People() => Ok(await _accidentService.GetPeople());
 
         [HttpGet("[action]/{id}")]
-        public Person People(int id) { return _accidentService.GetPerson(id); }
+        public async Task<IActionResult> People(int id) => Ok(await _accidentService.GetPerson(id));
 
         [HttpGet("[action]")]
-        public IEnumerable<AccidentUser> AirUsers() { return _accidentService.GetUsers(); }
+        public async Task<IActionResult> AirUsers() => Ok(await _accidentService.GetUsers());
 
         [HttpGet("[action]/{id}")]
-        public AccidentUser AirUser(int id) { return _accidentService.GetUser(id); }
+        public async Task<IActionResult> AirUser(int id) => Ok(await _accidentService.GetUser(id));
 
         [HttpGet("[action]")]
-        public IEnumerable<Category> Categories() { return _accidentService.GetCategories(); }
+        public async Task<IActionResult> Categories() => Ok(await _accidentService.GetCategories());
 
         [HttpGet("[action]/{id}")]
-        public Category Category(int id) { return _accidentService.GetCategory(id); }
+        public async Task<IActionResult> Category(int id) => Ok(await _accidentService.GetCategory(id));
 
         [HttpGet("[action]")]
-        public IEnumerable<Cause> Causes() { return _accidentService.GetCauses(); }
+        public async Task<IActionResult> Causes() => Ok(await _accidentService.GetCauses());
 
         [HttpGet("[action]")]
-        public IEnumerable<Gender> Genders() { return _accidentService.GetGenders(); }
+        public async Task<IActionResult> Genders() => Ok(await _accidentService.GetGenders());
 
         [HttpGet("[action]")]
-        public IEnumerable<InjuryLocation> Injuries() { return _accidentService.GetInjuryLocations(); }
+        public async Task<IActionResult> Injuries() => Ok(await _accidentService.GetInjuryLocations());
 
         [HttpGet("[action]")]
-        public IEnumerable<Involvement> Involvements() { return _accidentService.GetInvolvements(); }
+        public async Task<IActionResult> Involvements() => Ok(await _accidentService.GetInvolvements());
 
         [HttpGet("[action]")]
-        public IEnumerable<Location> Locations() { return _accidentService.GetLocations(); }
+        public async Task<IActionResult> Locations() => Ok(await _accidentService.GetLocations());
 
         [HttpGet("[action]")]
-        public IEnumerable<Region> Regions() { return _accidentService.GetRegions(); }
+        public async Task<IActionResult> Regions() => Ok(await _accidentService.GetRegions());
 
         [HttpGet("[action]")]
-        public IEnumerable<Role> Roles() { return _accidentService.GetRoles(); }
+        public async Task<IActionResult> Roles() => Ok(await _accidentService.GetRoles());
 
         [HttpGet("[action]")]
-        public IEnumerable<Type> Types() { return _accidentService.GetTypes(); }
+        public async Task<IActionResult> Types() => Ok(await _accidentService.GetTypes());
 
         [HttpGet("[action]")]
-        public IEnumerable<YesNoMaybe> Options() { return _accidentService.GetOptions(); }
+        public async Task<IActionResult> Options() => Ok(await _accidentService.GetOptions());
     }
 }
