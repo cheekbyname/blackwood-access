@@ -2,6 +2,8 @@ import { Component, EventEmitter, Output, ViewEncapsulation, OnInit } from '@ang
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Observable } from "rxjs/Rx";
+
 import { Team } from '../../models/Team';
 import { Summary } from '../../models/Summary';
 import { Locale, LOC_EN} from '../../models/Locale';
@@ -29,11 +31,16 @@ export class PayrollSummaryComponent implements OnInit {
 		});
 		this.payPro.periodStart$.subscribe(start => this.periodStart = start);
 		this.payPro.periodFinish$.subscribe(finish => this.periodFinish = finish);
-		this.payPro.summaries$.subscribe(sums => this.summaries = sums);
+		this.payPro.summaries$
+			.catch(err => {
+				this.error = err;
+				return Observable.of<Summary[]>([]);
+			})
+			.subscribe(sums => this.summaries = sums);
 		this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
-		this.payPro.errorMessage$.subscribe(err => {
-			if(err != undefined) this.errored = true;
-		});
+		// this.payPro.errorMessage$.subscribe(err => {
+		// 	if(err != undefined) this.errored = true;
+		// });
 	}
 
 	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) {
@@ -46,7 +53,7 @@ export class PayrollSummaryComponent implements OnInit {
 	periodStart: Date;
 	periodFinish: Date;
 	weekCommencing: Date;	// For navigation
-	errored: boolean = false;
+	error: any = undefined;
 
 	public showSummary: Boolean = true;
 

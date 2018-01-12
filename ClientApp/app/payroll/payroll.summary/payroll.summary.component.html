@@ -26,7 +26,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="panel-body" *ngIf="showSummary && summaries">
+	<div class="panel-body" *ngIf="showSummary && !error && summaries">
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
 				<thead>
@@ -64,16 +64,16 @@
 			</table>
 		</div>
 	</div>
-	<div class="panel-body" *ngIf="showSummary && !summaries && !errored">
+	<div class="panel-body" *ngIf="showSummary && !summaries && !error">
 		<div class="alert alert-info">
 			<i class="fa fa-cog fa-spin fa-2x"></i>
 			<span class="loading">Please wait, retrieving your data...</span>
 		</div>
 	</div>
-	<div class="panel-body" *ngIf="showSummary && !summaries && errored">
+	<div class="panel-body" *ngIf="showSummary && error">
 		<div class="alert alert-danger">
 			<i class="fa fa-exclamation-circle fa-2x"></i>
-			<span class="loading">An error occurred retrieving your data</span>
+			<span class="loading">An error occurred retrieving your data [{{error.status}} {{error.statusText}}]</span>
 		</div>
 	</div>
 </div>

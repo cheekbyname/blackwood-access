@@ -40,7 +40,7 @@
         </div>
         <div *ngIf="error" class="alert alert-danger">
             <i class="fa fa-exclamation-circle fa-2x"></i>
-            <span class="loading">An error occurred retrieving your data: {{error.status}}: {{error.statusText}}</span>
+            <span class="loading">An error occurred retrieving your data [{{error.status}} {{error.statusText}}]</span>
         </div>
     </div>
 </div>

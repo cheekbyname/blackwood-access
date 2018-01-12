@@ -94,16 +94,7 @@ export class PayrollProvider implements OnDestroy {
                     && (a.weekCommencing.toLocaleDateString() === b.weekCommencing.toLocaleDateString());
             });
 
-        this.subs.push(this.week$
-            .switchMap(x => {
-                this._timesheet.next(null);
-                return this.getTimesheet(x.carer, x.weekCommencing);
-            })
-            .catch(e => {
-                this._timesheet.error(e);
-                return Observable.throw(e);
-            })
-            .subscribe(r => this._timesheet.next(r)));
+        this.subscribeTo(this.week$, this._timesheet, this.getTimesheet);
 
         this.period$ = Observable
             .combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$, (team, start, finish) => {
@@ -138,11 +129,11 @@ export class PayrollProvider implements OnDestroy {
                 subject.next(null);
                 return request.call(this, x);
             })
-        .catch(e => {
-            subject.error(e);
-            return Observable.throw(e);
-        })
-        .subscribe(r => subject.next(r)));
+            .catch(e => {
+                subject.error(e);
+                return Observable.throw(e);
+            })
+            .subscribe(r => subject.next(r)));
     }
 
     selectWeekCommencing(dt: Date) {
@@ -193,12 +184,12 @@ export class PayrollProvider implements OnDestroy {
         });
     }
 
-    getTimesheet(carer: Carer, weekCommencing: Date): Observable<Timesheet> {
-            var tsUrl = `/api/payroll/timesheet?carerCode=${carer.carerCode}&weekCommencing=${this.sqlDate(weekCommencing)}`;
-            if (isDevMode()) console.log(tsUrl);
-            return this.http.get(tsUrl)
-                .map(res => res.json() as Timesheet)
-                .catch(err => Observable.throw(err));
+    getTimesheet(x: { carer: Carer, weekCommencing: Date }): Observable<Timesheet> {
+        var tsUrl = `/api/payroll/timesheet?carerCode=${x.carer.carerCode}&weekCommencing=${this.sqlDate(x.weekCommencing)}`;
+        if (isDevMode()) console.log(tsUrl);
+        return this.http.get(tsUrl)
+            .map(res => res.json() as Timesheet)
+            .catch(err => Observable.throw(err));
     }
 
     getTimesheetAdjustmentsByTeam(x: { team: Team, start: Date, finish: Date }): Observable<Adjustment[]> {
