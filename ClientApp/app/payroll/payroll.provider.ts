@@ -88,7 +88,7 @@ export class PayrollProvider implements OnDestroy {
             .combineLatest(this.weekCommencing$, this.selectedCarer$, (wc, carer) => {
                 return { "weekCommencing": wc, "carer": carer }
             })
-            .filter(x => x.carer !== null && x.weekCommencing !== null)
+            .filter(x => x.carer !== null && x.carer !== undefined && x.weekCommencing !== null)
             .distinctUntilChanged((a, b) => {
                 return (a.carer.carerCode === b.carer.carerCode)
                     && (a.weekCommencing.toLocaleDateString() === b.weekCommencing.toLocaleDateString());
@@ -123,17 +123,17 @@ export class PayrollProvider implements OnDestroy {
         this.subs.forEach(sub => sub.unsubscribe());
     }
 
-    subscribeTo(source: Observable<any>, subject: BehaviorSubject<any>, request: Function) {
-        this.subs.push(source
+    subscribeTo(obs: Observable<any>, sub: BehaviorSubject<any>, req: Function) {
+        this.subs.push(obs
             .switchMap(x => {
-                subject.next(null);
-                return request.call(this, x);
+                sub.next(null);
+                return req.call(this, x);
             })
             .catch(e => {
-                subject.error(e);
+                sub.error(e);
                 return Observable.throw(e);
             })
-            .subscribe(r => subject.next(r)));
+            .subscribe(r => sub.next(r)));
     }
 
     selectWeekCommencing(dt: Date) {
