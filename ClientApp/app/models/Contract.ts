@@ -1,5 +1,6 @@
 export class CarerContract {
 	public payrollNumber: string;
+	public carerCode: number;
 	public contractCode: number;
 	public cycleStart: Date;
 	public cycleLength: number;

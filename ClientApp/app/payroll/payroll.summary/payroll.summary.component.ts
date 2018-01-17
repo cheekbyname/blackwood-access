@@ -126,6 +126,7 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
     public additionalHours(sum: Summary): number {
-        return sum.actualMins - sum.monthlyContractMins < 0 ? 0 : sum.actualMins - sum.monthlyContractMins;
+		let sumMins = sum.actualMins - sum.unpaidMins - sum.monthlyContractMins;
+        return sumMins < 0 ? 0 : sumMins;
     }
 }

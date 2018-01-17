@@ -46,7 +46,7 @@ export class PayrollProvider implements OnDestroy {
         .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
     validation$ = this._validation.asObservable();
     export$ = this._export.asObservable();
-    codeMap$ = this._codeMap.asObservable();
+    codeMap$ = this._codeMap.asObservable().filter(map => map !== undefined);
     codeTypes$ = this._codeTypes.asObservable();
     errorMessage$ = this._errorMessage.asObservable();
 

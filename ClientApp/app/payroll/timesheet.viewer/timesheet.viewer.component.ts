@@ -200,7 +200,7 @@ export class TimesheetViewerComponent implements OnInit {
     public totalActualHoursForDay(offset: number): number {
         let shiftTime = this.timesheet.shifts
 			.filter(sh => sh.day == offset)
-            .map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0);
+            .map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
         let leaveSickTime = this.timesheet.bookings
             .filter(bk => this.offsetFor(this.weekCommencing, bk.thisStart) == offset && this.payPro.absenceCodes.some(ac => ac == bk.bookingType))
             .map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
@@ -217,7 +217,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public actualHoursForContract(contractCode: number): number {
 		return this.timesheet.shifts.filter(sh => sh.contractCode === contractCode)
-			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0 );
+			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0 );
 	}
 
 	public additionalHoursForContract(contractCode: number): number {

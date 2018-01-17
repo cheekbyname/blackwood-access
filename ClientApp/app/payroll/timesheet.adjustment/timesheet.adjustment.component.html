@@ -35,9 +35,9 @@
                 </tr>
                 <tr class="row">
                     <td colspan="3"><strong>Shift Totals</strong></td>
-                    <td>{{payPro.displayTime(totalUnpaidHoursForDay(dayOffset) + totalActualHoursForDay(dayOffset))}}</td>
-                    <td>{{payPro.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
                     <td>{{payPro.displayTime(totalActualHoursForDay(dayOffset))}}</td>
+                    <td>{{payPro.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
+                    <td>{{payPro.displayTime(totalActualHoursForDay(dayOffset) - totalUnpaidHoursForDay(dayOffset))}}</td>
                 </tr>
             </tbody>
         </table>
