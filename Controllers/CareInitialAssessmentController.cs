@@ -1,10 +1,9 @@
 ﻿namespace Blackwood.Access.Controllers
 {
-    using Core.Data.Models;
     using Core.Payroll.Service.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     [Route("api/[Controller]")]
     public class CareInitialAssessmentController : ControllerBase
@@ -19,14 +18,9 @@
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<CareInitialAssessment> CareInitialAssessments()
-        {
-            return _service.GetAllAssessments();
-        }
+        public async Task<IActionResult> CareInitialAssessments() => Ok(await _service.GetAllAssessments());
 
         [HttpGet("[action]")]
-        public CareInitialAssessment CareInitialAssessment(int id) {
-            return _service.GetAssessment(id);
-        }
+        public async Task<IActionResult> CareInitialAssessment(int id) => Ok(await _service.GetAssessment(id));
     }
 }

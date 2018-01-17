@@ -34,15 +34,9 @@ namespace Blackwood.Access.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            return Ok(await _service.GetAllUsers());
-        }
+        public async Task<IActionResult> GetAllUsers() => Ok(await _service.GetAllUsers());
 
         [HttpPut("[action]")]
-        public void PutUser([FromBody] AccessUser user)
-        {
-            _service.PutUser(user);
-        }
+        public void PutUser([FromBody] AccessUser user) => _service.PutUser(user);
     }
 }
