@@ -18,7 +18,7 @@ export class NavMenuComponent implements OnInit {
 
     constructor(public payPro: PayrollProvider, private router: Router) {
         router.events.subscribe((ev) => {
-            this.showCalendar = this.router.url.includes("payroll");
+            this.showCalendar = this.router.url.includes("payroll") && !this.router.url.includes("admin");
             if (ev.toString().includes("notfound")) {
                 this.router.navigate([{ outlets: [{'summary': [null]}, {'detail': [null]}]}]);
             }

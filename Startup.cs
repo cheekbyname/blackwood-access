@@ -1,10 +1,12 @@
 namespace Blackwood.Access
 {
-    using Blackwood.Active.Messaging.Service;
-    using Blackwood.Core.Accident.Service;
-    using Blackwood.Core.Data.Models;
-    using Blackwood.Core.Payroll.Service.Services;
-    using Blackwood.Core.User.Service;
+    using Active.Messaging.Service;
+    using Core.Accident.Service;
+    using Core.Data.Models;
+    using Core.Data.Models.Reporting;
+    using Core.Payroll.Service.Services;
+    using Core.User.Service;
+    using Reporting.Reporting.Service;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -14,6 +16,7 @@ namespace Blackwood.Access
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Microsoft.Extensions.Logging;
 
     public class Startup
     {
@@ -46,6 +49,13 @@ namespace Blackwood.Access
                 });
             });
 
+            services.AddDbContext<ReportingContext>(options => {
+                options.UseSqlServer(dbConIntegration);
+                options.ConfigureWarnings(warnings => {
+                    warnings.Ignore(RelationalEventId.QueryClientEvaluationWarning);
+                });
+            });
+
             string dbConAccident = Configuration.GetConnectionString("Accident");
 
             services.AddDbContext<AccidentContext>(options =>
@@ -68,6 +78,10 @@ namespace Blackwood.Access
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
+            // Logger Factory for potentially non-controller-invoked services
+            services.AddSingleton(new LoggerFactory().AddConsole().AddDebug());
+            services.AddLogging();
+
             // Add Application services
             services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
             services.AddTransient<IPayrollDataService, PayrollDataService>();
@@ -77,6 +91,8 @@ namespace Blackwood.Access
             services.AddTransient<IPushService, PushService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAccidentService, AccidentService>();
+            services.AddTransient<IReportingService, ReportingService>();
+            services.AddTransient<IReportingDataService, ReportingDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

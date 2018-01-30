@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Access", "Access.csproj", "{6C3B873D-9F34-4905-AFA3-6071A9ECD2B7}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Service", "P:\Visual Studio\Projects\Blackwood.Core\User.Service\User.Service.csproj", "{F79107A6-8A48-482B-B43F-CA4971A255AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payroll.Service", "P:\Visual Studio\Projects\Blackwood.Core\Payroll.Service\Payroll.Service.csproj", "{62410AA7-8019-4969-9DD1-F7A60C4E68EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting.Service", "P:\Visual Studio\Projects\Blackwood.Reporting\Reporting.Service\Reporting.Service.csproj", "{2D4B422F-0584-4C82-A350-18F776054C08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Report.Utils", "P:\Visual Studio\Projects\Blackwood.Reporting\Report.Utils\Report.Utils.csproj", "{5534DE7A-6772-429B-826D-CC0C53472767}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Email.Services", "P:\Visual Studio\Projects\Blackwood.Core\Email.Services\Email.Services.csproj", "{71C0A39F-5F63-48B8-9988-0774F0DE610E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,11 +51,63 @@ Global
 		{62410AA7-8019-4969-9DD1-F7A60C4E68EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62410AA7-8019-4969-9DD1-F7A60C4E68EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62410AA7-8019-4969-9DD1-F7A60C4E68EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D4B422F-0584-4C82-A350-18F776054C08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D4B422F-0584-4C82-A350-18F776054C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D4B422F-0584-4C82-A350-18F776054C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D4B422F-0584-4C82-A350-18F776054C08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5534DE7A-6772-429B-826D-CC0C53472767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5534DE7A-6772-429B-826D-CC0C53472767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5534DE7A-6772-429B-826D-CC0C53472767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5534DE7A-6772-429B-826D-CC0C53472767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71C0A39F-5F63-48B8-9988-0774F0DE610E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71C0A39F-5F63-48B8-9988-0774F0DE610E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71C0A39F-5F63-48B8-9988-0774F0DE610E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71C0A39F-5F63-48B8-9988-0774F0DE610E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC09F9AC-DE55-4FF3-B814-A99E13EB6493}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://blackwoodgrp.visualstudio.com/
+		SccProjectUniqueName0 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Active\\Messaging.Service\\Messaging.Service.csproj
+		SccProjectName0 = $/Active/Blackwood.Active/Messaging.Service
+		SccAuxPath0 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath0 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Active\\Messaging.Service
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName1 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\Data.Models\\Data.Models.csproj
+		SccProjectName1 = $/Active/Blackwood.Core/Data.Models
+		SccAuxPath1 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath1 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\Data.Models
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName2 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\User.Service\\User.Service.csproj
+		SccProjectName2 = $/Active/Blackwood.Core/User.Service
+		SccAuxPath2 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath2 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\User.Service
+		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName3 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\Payroll.Service\\Payroll.Service.csproj
+		SccProjectName3 = $/Active/Blackwood.Core/Payroll.Service
+		SccAuxPath3 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath3 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\Payroll.Service
+		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName4 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Reporting\\Reporting.Service\\Reporting.Service.csproj
+		SccProjectName4 = $/Blackwood.Reporting/Reporting.Service
+		SccAuxPath4 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath4 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Reporting\\Reporting.Service
+		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName5 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Reporting\\Report.Utils\\Report.Utils.csproj
+		SccProjectName5 = $/Blackwood.Reporting/Report.Utils
+		SccAuxPath5 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath5 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Reporting\\Report.Utils
+		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName6 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\Email.Services\\Email.Services.csproj
+		SccProjectName6 = $/Active/Blackwood.Core/Email.Services
+		SccAuxPath6 = https://blackwoodgrp.visualstudio.com
+		SccLocalPath6 = P:\\Visual\u0020Studio\\Projects\\Blackwood.Core\\Email.Services
+		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 EndGlobal

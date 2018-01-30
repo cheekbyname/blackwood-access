@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,8 +28,11 @@
     <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Active\Messaging.Service\Messaging.Service.csproj" />
     <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Accident.Service\Accident.Service.csproj" />
     <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Data.Models\Data.Models.csproj" />
+    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Email.Services\Email.Services.csproj" />
     <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Payroll.Service\Payroll.Service.csproj" />
     <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\User.Service\User.Service.csproj" />
+    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Reporting\Report.Utils\Report.Utils.csproj" />
+    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Reporting\Reporting.Service\Reporting.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
