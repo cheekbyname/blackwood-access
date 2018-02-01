@@ -21,6 +21,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AccidentModule } from "./accident/accident.module";
 import { AdminModule } from "./admin/admin.module";
 import { PayrollModule } from "./payroll/payroll.module";
+import { ReportingModule } from "./reporting/reporting.module";
 
 import { InitialAssessManagerComponent } from './careassessments/initialassessmanager/initialassessmanager.component';
 import { InitialAssessComponent } from './careassessments/initialassess/initialassess.component';
@@ -39,7 +40,7 @@ import { UserProvider } from "./user.provider";
         /* PrimeNg Component Modules */
         CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule, InputSwitchModule,
         /* Application Feature Modules */
-        AccidentModule, AdminModule, PayrollModule,
+        AccidentModule, AdminModule, PayrollModule, ReportingModule,
         /* Application Router */
         AppRouterModule
     ],

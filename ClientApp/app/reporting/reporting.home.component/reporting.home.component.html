@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Reporting</h4>
+    </div>
+    <div class="panel-body">
+        <object [data]="reportUrl | safeUrl" type="application/pdf">
+            <p>There is no report only Zuul</p>
+        </object>
+        <!-- <embed [src]="reportPdfUrl | safeUrl" type="application/pdf" /> -->
+        <!-- <embed src="https://localhost:44345/api/reporting/report?reportId=1&periodStart=2018-01-01&periodEnd=2018-01-07&teamCode=132"/> -->
+    </div>
+</div>
