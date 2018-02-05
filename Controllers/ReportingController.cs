@@ -49,7 +49,13 @@ namespace Blackwood.Access.Controllers
         {
             ICollection<Report> reports = await _dataService.GetAllReports();
             Report report = reports.FirstOrDefault(rep => rep.Id == reportId);
-            MemoryStream ms = _reportService.GenerateReport(report, periodStart, periodEnd, teamCode);
+            Dictionary<ReportFilters, object> parms = new Dictionary<ReportFilters, object>()
+            {
+                { ReportFilters.PeriodStart, periodStart },
+                { ReportFilters.PeriodEnd, periodEnd }
+            };
+            if (teamCode != 0) parms.Add(ReportFilters.TeamCode, teamCode);
+            MemoryStream ms = await _reportService.GenerateReport(report, parms);
             FileContentResult fc = new FileContentResult(ms.ToArray(), "application/pdf");
             return Ok(fc);
         }
