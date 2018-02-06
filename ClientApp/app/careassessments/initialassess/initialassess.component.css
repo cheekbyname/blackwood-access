@@ -3,6 +3,18 @@ h4, label, select, input, td, textarea, p {
     font-weight: normal;
 }
 
+h3 {
+    font-family: 'Century Gothic';
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+h3 small {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+    font-weight: normal;
+}
+
 td {
     font-size: 11pt;
 }
@@ -11,7 +23,7 @@ p {
     padding: 10px;
 }
 
-strong, textarea, p, th, span {
+textarea, p, th, span {
     font-family: 'Century Gothic';
     font-size: 11pt;
 }

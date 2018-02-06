@@ -11,11 +11,6 @@ p {
     padding: 10px;
 }
 
-strong {
-    font-family: 'Century Gothic';
-    font-size: 11pt;
-}
-
 label, select, input, .input-group {
     font-size: 11pt;
     margin-right: 10px;

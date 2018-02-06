@@ -9,12 +9,13 @@ import { ReportingHomeComponent } from "./reporting.home.component/reporting.hom
 import { ReportingScheduleComponent } from "./reporting.schedule.component/reporting.schedule.component";
 
 import { ReportingRoutingModule } from "./reporting-routing.module";
+import { ReportingProvider } from "./reporting.provider";
 
 import { UserProvider } from "../user.provider";
 
 @NgModule({
     imports: [CommonModule, FormsModule, ReportingRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule],
     declarations: [ReportingComponent, ReportingHomeComponent, ReportingScheduleComponent],
-    providers: [ConfirmationService, UserProvider]
+    providers: [ConfirmationService, UserProvider, ReportingProvider]
 })
 export class ReportingModule { }

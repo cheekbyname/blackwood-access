@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading clearfix">
-        <h4 class="pull-left">Care Initial Assessment</h4>
+        <h4 class="pull-left"><strong>Care Initial Assessment</strong></h4>
         <div class="btn-group pull-right">
             <button class="btn btn-default" [ngClass]="{'selected': section=='assessment'}" (click)="selectSection('assessment')">Assessment</button>
             <button class="btn btn-default" [ngClass]="{'selected': section=='checklist'}" (click)="selectSection('checklist')">Checklist</button>
@@ -389,7 +389,7 @@
                 </div>
                 <hr/>
 
-                <h4>Transfers <small>Including to/from bed, wheelchair, commode, toilet, etc.</small></h4>
+                <h3>Transfers <small>Including to/from bed, wheelchair, commode, toilet, etc.</small></h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="transferSpec">Specify</label>
@@ -421,7 +421,7 @@
                 </div>
                 <hr/>
 
-                <h4>Toileting</h4>
+                <h3>Toileting</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="toiletSpec">Specify</label>
@@ -453,7 +453,7 @@
                 </div>
                 <hr/>
 
-                <h4>Move On/Off Bedpan</h4>
+                <h3>Move On/Off Bedpan</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="bedpanSpec">Specify</label>
@@ -490,7 +490,7 @@
                 </div>
                 <hr/>
 
-                <h4>Move Up/Down Bed</h4>
+                <h3>Move Up/Down Bed</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="bedMoveSpec">Specify</label>
@@ -527,7 +527,7 @@
                 </div>
                 <hr/>
 
-                <h4>Transfer To/From Bed</h4>
+                <h3>Transfer To/From Bed</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="bedTransferSpec">Specify</label>
@@ -564,7 +564,7 @@
                 </div>
                 <hr/>
 
-                <h4>Sit Up Over Side of Bed</h4>
+                <h3>Sit Up Over Side of Bed</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="bedsideSpec">Specify</label>
@@ -594,7 +594,7 @@
                 </div>
                 <hr/>
 
-                <h4>Into Bath or Shower</h4>
+                <h3>Into Bath or Shower</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="bathShowerWhich">Which Bath or Shower</label>
@@ -641,7 +641,7 @@
                 </div>
                 <hr/>
 
-                <h4>Walking</h4>
+                <h3>Walking</h3>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="walkingSpec">Specify</label>
@@ -687,7 +687,7 @@
 
             <div *ngIf="section=='tile'" class="panel-section" id="tile">
                 <ng-template let-group ngFor [ngForOf]="assess.tileGroups">
-                    <h4>{{group.title}}</h4>
+                    <h3>{{group.title}}</h3>
                     <p style="background-color:silver;">{{group.desc}}</p>
                     <table class="table table-striped">
                         <tbody>

@@ -1,0 +1,43 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    <strong>Scheduled Reports</strong>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div *ngIf="!mySchedules" class="alert alert-info">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retrieving your data...</span>
+        </div>
+        <div *ngIf="mySchedules">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th>Name</th>
+                            <th>Frequency</th>
+                            <th>Scope</th>
+                            <th>Next Run</th>
+                            <th>Period From</th>
+                            <th>Period To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row" *ngFor="let sched of mySchedules">
+                            <td>{{sched.report.name}}</td>
+                            <td>{{frequencies.get(sched.frequency)}}</td>
+                            <td>{{sched.scopeDescription}}</td>
+                            <td>{{sched.nextRun}}</td>
+                            <td>{{sched.runPeriod.item1}}</td>
+                            <td>{{sched.runPeriod.item2}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
