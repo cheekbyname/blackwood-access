@@ -2,11 +2,15 @@
     <div class="panel-heading">
         <h4>Reporting</h4>
     </div>
-    <div class="panel-body">
-        <object [data]="reportUrl | safeUrl" type="application/pdf">
+    <div class="panel-body" *ngIf="reportPdfUrl">
+        <object [attr.data]="reportPdfUrl" type="application/pdf">
             <p>There is no report only Zuul</p>
         </object>
-        <!-- <embed [src]="reportPdfUrl | safeUrl" type="application/pdf" /> -->
-        <!-- <embed src="https://localhost:44345/api/reporting/report?reportId=1&periodStart=2018-01-01&periodEnd=2018-01-07&teamCode=132"/> -->
     </div>
+	<div class="panel-body" *ngIf="!reportPdfUrl">
+		<div class="alert alert-info">
+			<i class="fa fa-cog fa-spin fa-2x"></i>
+			<span class="loading">Please wait, retrieving your report...</span>
+		</div>
+	</div>
 </div>

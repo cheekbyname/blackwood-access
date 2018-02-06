@@ -44,8 +44,6 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Report(int reportId, DateTime periodStart, DateTime periodEnd, int teamCode = 0)
-        //=> Ok(new FileContentResult(_reportService.GenerateReport(_dataService.GetAllReports().Result
-        //    .FirstOrDefault(rep => rep.Id == reportId), periodStart, periodEnd, teamCode).ToArray(), "application/pdf"));
         {
             ICollection<Report> reports = await _dataService.GetAllReports();
             Report report = reports.FirstOrDefault(rep => rep.Id == reportId);

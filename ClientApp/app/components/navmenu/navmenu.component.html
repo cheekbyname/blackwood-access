@@ -26,17 +26,17 @@
                         <span class="glyphicon glyphicon-list-alt"></span>Care Initial Assessments
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin'}}]">
                         <span class="glyphicon glyphicon-user"></span>Administration
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.accountName == 'AlexC'" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
                         <span class="glyphicon glyphicon-plus-sign"></span>Accidents &amp; Incidents
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports'}}]">
                         <span class="glyphicon glyphicon-book"></span>Reports
                     </a>

@@ -9,4 +9,5 @@ export class AccessUser {
     public canAuthoriseAdjustments: boolean;
     public canRejectAdjustments: boolean;
     public isAssessmentUser: boolean;
+    public isReportingUser: boolean;
 }

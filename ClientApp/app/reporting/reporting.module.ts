@@ -8,15 +8,13 @@ import { ReportingComponent } from "./reporting.component";
 import { ReportingHomeComponent } from "./reporting.home.component/reporting.home.component";
 import { ReportingScheduleComponent } from "./reporting.schedule.component/reporting.schedule.component";
 
-import { SafeUrlPipe } from "./reporting.home.component/reporting.home.component";
-
 import { ReportingRoutingModule } from "./reporting-routing.module";
 
 import { UserProvider } from "../user.provider";
 
 @NgModule({
     imports: [CommonModule, FormsModule, ReportingRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule],
-    declarations: [ReportingComponent, ReportingHomeComponent, ReportingScheduleComponent, SafeUrlPipe],
+    declarations: [ReportingComponent, ReportingHomeComponent, ReportingScheduleComponent],
     providers: [ConfirmationService, UserProvider]
 })
 export class ReportingModule { }
