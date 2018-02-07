@@ -32,10 +32,10 @@
                     </a>
                 </li>
                 <!-- Nested Admin menus, to be gated on route and indented -->
-                <li  *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/user'}}]" class="sub-menu">User Admin</a>
                 </li>
-                <li  *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/payroll'}}]" class="sub-menu">Payroll Admin</a>
                 </li>
                 <!-- End of -->
@@ -46,9 +46,17 @@
                 </li>
                 <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports'}}]">
-                        <span class="glyphicon glyphicon-book"></span>Reports
+                        <span class="glyphicon glyphicon-book"></span>Reporting
                     </a>
                 </li>
+                <!-- Nested Reporting menus, to be gated on route and indented -->
+                <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports/home'}}]">Reports</a>
+                </li>
+                <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports/scheduled'}}]">Schedules</a>
+                </li>
+                <!-- End of -->
             </ul>
             <div *ngIf="showCalendar" class="calendar-div" align="center">
                 <p-calendar class="datepicker" [inline]="true" [locale]="loc" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"

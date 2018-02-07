@@ -11,7 +11,7 @@ const reportingRoutes: Routes = [
         component: ReportingComponent,
         children: [
             {
-                path: '',
+                path: 'home',
                 component: ReportingHomeComponent
             },
             {

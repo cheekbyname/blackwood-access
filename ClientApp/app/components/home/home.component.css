@@ -24,7 +24,7 @@ span.loading {
 }
 
 .big-icon {
-    font-size: 60pt;
+    font-size: 48pt;
     clear: right;
     display: block;
     text-align: center;
@@ -33,6 +33,7 @@ span.loading {
 .icon-text {
     text-align: center;
     font-weight: bold;
+    text-overflow: ellipsis;
 }
 
 .menu-icon-row a {
