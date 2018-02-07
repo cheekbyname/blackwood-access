@@ -72,6 +72,11 @@ a.link-active a:focus {
     }
 }
 
+.navbar li a:hover {
+    background-color: hotpink;
+    color: black;
+}
+
 div.calendar-div {
     margin-top: 1em;
 }

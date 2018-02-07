@@ -12,6 +12,8 @@ if (module.hot) {
         const oldRootElem = document.querySelector('app');
         const newRootElem = document.createElement('app');
         oldRootElem!.parentNode!.insertBefore(newRootElem, oldRootElem);
+        // This line added to prevent duplicated root elements, see https://github.com/aspnet/JavaScriptServices/issues/1231
+        oldRootElem!.remove();
         modulePromise.then(appModule => appModule.destroy());
     });
 } else {

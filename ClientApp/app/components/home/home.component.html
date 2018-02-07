@@ -1,14 +1,49 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4><strong>Home</strong></h4>
+        <h4>
+            <strong>Home</strong>
+        </h4>
     </div>
     <div class="panel-body">
         <div *ngIf="!user" class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retreiving your user information...</span>
         </div>
-        <div *ngIf="user">
+        <div *ngIf="user" class="alert alert-success">
+            <i class="fa fa-user fa-2x"></i>
             <span class="loading">Hello, {{user.accountName}}!</span>
+        </div>
+        <div class="row menu-icon-row">
+            <div *ngIf="user && user.isPayrollUser" class="col-md-2">
+                <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'payroll'}}]">
+                    <span class="big-icon glyphicon glyphicon-calendar"></span>
+                    <h4 class="icon-text">Payroll</h4>
+                </a>
+            </div>
+            <div *ngIf="user" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'initial-assess-manager'}}]">
+                    <span class="big-icon glyphicon glyphicon-list-alt"></span>
+                    <h4 class="icon-text">Care Initial Assessments</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.isAdmin" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin'}}]">
+                    <span class="big-icon glyphicon glyphicon-user"></span>
+                    <h4 class="icon-text">Administration</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.accountName == 'AlexC'" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
+                    <span class="big-icon glyphicon glyphicon-plus-sign"></span>
+                    <h4 class="icon-text">Accidents &amp; Incidents</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.isReportingUser" class="col-md-2">
+                <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports'}}]">
+                    <span class="big-icon glyphicon glyphicon-book"></span>
+                    <h4 class="icon-text">Reports</h4>
+                </a>
+            </div>
         </div>
     </div>
 </div>

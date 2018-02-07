@@ -21,7 +21,7 @@
                         <span class="glyphicon glyphicon-calendar"></span>Payroll
                     </a>
                 </li>
-                <li [routerLinkActive]="['link-active']">
+                <li *ngIf="user" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'initial-assess-manager'}}]">
                         <span class="glyphicon glyphicon-list-alt"></span>Care Initial Assessments
                     </a>
@@ -31,6 +31,14 @@
                         <span class="glyphicon glyphicon-user"></span>Administration
                     </a>
                 </li>
+                <!-- Nested Admin menus, to be gated on route and indented -->
+                <li  *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/user'}}]" class="sub-menu">User Admin</a>
+                </li>
+                <li  *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/payroll'}}]" class="sub-menu">Payroll Admin</a>
+                </li>
+                <!-- End of -->
                 <li *ngIf="user && user.accountName == 'AlexC'" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
                         <span class="glyphicon glyphicon-plus-sign"></span>Accidents &amp; Incidents

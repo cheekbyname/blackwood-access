@@ -14,21 +14,14 @@ const adminRoutes: Routes = [
         canActivate: [AdminGuard],
         children: [
             {
-                path: '',
+                path: 'user',
                 component: UserAdminComponent
+            },
+            {
+                path: 'payroll',
+                component: PayrollAdminComponent,
             }
         ]
-    },
-    {
-        path: 'admin/payroll',
-        component: PayrollAdminComponent,
-        canActivate: [AdminGuard],
-        // children: [
-        //     {
-        //         path: '',
-        //         component: PayrollAdminComponent
-        //     }
-        // ]
     }
 ];
 
