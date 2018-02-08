@@ -1,8 +1,22 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-md-6">
-                <h4><strong>Reporting</strong></h4>
+            <div class="col-md-3">
+                <h4>
+                    <strong>Reporting</strong>
+                </h4>
+            </div>
+            <div *ngIf="reports" class="col-md-9 form-inline">
+                <label for="reportSelect">Select Report</label>
+                <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport" required>
+                    <option *ngFor="let rep of reports" [ngValue]="report">{{rep.name}}</option>
+                </select>
+                <label class="control-label" for="selectedStart">From</label>
+                <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy"
+                    (onSelect)="periodStartSelected($event)" inputStyleClass="form-control"></p-calendar>
+                <label class="control-label" for="selectedEnd">To</label>
+                <p-calendar [(ngModel)]="selectedEnd" id="selectedEnd" [locale]="loc" dateFormat="dd/mm/yy"
+                    (onSelect)="periodEndSelected($event)" inputStyleClass="form-control"></p-calendar>
             </div>
         </div>
     </div>

@@ -36,3 +36,7 @@ span.loading {
 .alert {
     margin: 16px;
 }
+
+.form-inline {
+    text-align: right;
+}

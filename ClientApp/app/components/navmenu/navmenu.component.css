@@ -79,6 +79,6 @@ a.link-active a:focus {
 
 div.calendar-div {
     position: absolute;
-    bottom: 8px;
-    left: 8px;
+    bottom: 16px;
+    left: 16px;
 }

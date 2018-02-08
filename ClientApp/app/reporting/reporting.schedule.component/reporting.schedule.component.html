@@ -27,13 +27,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="row" *ngFor="let sched of mySchedules">
+                        <tr class="row" *ngFor="let sched of mySchedules" (click)="viewScheduledReport(sched)">
                             <td>{{sched.report.name}}</td>
                             <td>{{frequencies.get(sched.frequency)}}</td>
                             <td>{{sched.scopeDescription}}</td>
-                            <td>{{sched.nextRun}}</td>
-                            <td>{{sched.runPeriod.item1}}</td>
-                            <td>{{sched.runPeriod.item2}}</td>
+                            <td>{{formatDate(sched.runTime)}}</td>
+                            <td>{{formatDate(sched.runPeriod.item1)}}</td>
+                            <td>{{formatDate(sched.runPeriod.item2)}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
+import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule, CalendarModule } from "primeng/primeng";
 
 import { ReportingComponent } from "./reporting.component";
 import { ReportingHomeComponent } from "./reporting.home.component/reporting.home.component";
@@ -14,7 +14,8 @@ import { ReportingProvider } from "./reporting.provider";
 import { UserProvider } from "../user.provider";
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReportingRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule],
+    imports: [CommonModule, FormsModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule, CalendarModule,
+        ReportingRoutingModule],
     declarations: [ReportingComponent, ReportingHomeComponent, ReportingScheduleComponent],
     providers: [ConfirmationService, UserProvider, ReportingProvider]
 })
