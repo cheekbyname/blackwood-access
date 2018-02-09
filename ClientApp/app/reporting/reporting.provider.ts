@@ -11,7 +11,11 @@ export class ReportingProvider {
     constructor(private http: Http) {
         this.getUserSchedules();
         this.getAllReports();
+
+        this.reports$.filter(reps => reps !== null && reps !== undefined).subscribe(reps => this.reports = reps);
     }
+
+    private reports: Report[];
 
     private _reports = new BehaviorSubject<Report[]>(null);
     private _allSchedules = new BehaviorSubject<Schedule[]>(null);
@@ -36,7 +40,7 @@ export class ReportingProvider {
     }
 
     public selectReport(rep: Report) {
-        this._selectedReport.next(rep);
+        this._selectedReport.next(this.reports.find(r => r.id === rep.id));
     }
 
     public selectPeriodStart(dt: Date) {

@@ -2,7 +2,7 @@ import { Component, Pipe, PipeTransform } from "@angular/core";
 import { Http, ResponseContentType } from "@angular/http";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
-import { Direction, DirectionNames, Frequency, FrequencyNames, Scope, ScopeNames } from "../../models/reporting/Enums"; 
+import { Direction, DirectionNames, Frequency, FrequencyNames, Scope, ScopeNames } from "../../models/reporting/Enums";
 import { Locale, LOC_EN } from "../../models/Locale";
 import { Report } from "../../models/reporting/Report";
 import { ReportingProvider } from "../reporting.provider";
@@ -19,13 +19,16 @@ export class ReportingHomeComponent {
             .subscribe(res => {
                 let objUrl = URL.createObjectURL(new Blob([res.blob()], { type: "application/pdf" }));
                 this.reportPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objUrl);
-                console.log(objUrl);
             });
 
         repPro.reports$.filter(reps => reps !== null).subscribe(reps => this.reports = reps);
-        repPro.selectedReport$.filter(rep => this.reports !== undefined)
-            .filter(rep => rep !== undefined)
-            .subscribe(rep => this.selectedReport = this.reports.find(r => r.id == rep.id));
+        repPro.selectedReport$
+            .filter(rep => this.reports !== undefined && this.reports !== null)
+            .filter(rep => rep !== undefined && rep !== null)
+            .subscribe(rep => {
+                var selRep = this.reports.find(r => r.id === rep.id);
+                this.selectedReport = selRep;
+            });
         repPro.periodStart$.subscribe(dt => this.selectedStart = dt);
         repPro.periodEnd$.subscribe(dt => this.selectedEnd = dt);
     }

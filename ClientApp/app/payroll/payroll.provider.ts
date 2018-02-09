@@ -75,7 +75,7 @@ export class PayrollProvider implements OnDestroy {
             .filter(x => x.selectedTeam !== null && x.periodStart !== null)
             .distinctUntilChanged((a, b) => {
                 return (a.selectedTeam.teamCode === b.selectedTeam.teamCode)
-                    && (a.periodStart.toLocaleDateString() === b.periodStart.toLocaleDateString());
+                    && (a.periodStart.toLocaleDateString("en-GB") === b.periodStart.toLocaleDateString("en-GB"));
             })
             .subscribe(x => {
                 if (x.selectedTeam !== null && x.selectedTeam.teamCode && x.periodStart) {
@@ -91,7 +91,7 @@ export class PayrollProvider implements OnDestroy {
             .filter(x => x.carer !== null && x.carer !== undefined && x.weekCommencing !== null)
             .distinctUntilChanged((a, b) => {
                 return (a.carer.carerCode === b.carer.carerCode)
-                    && (a.weekCommencing.toLocaleDateString() === b.weekCommencing.toLocaleDateString());
+                    && (a.weekCommencing.toLocaleDateString("en-GB") === b.weekCommencing.toLocaleDateString("en-GB"));
             });
 
         this.subscribeTo(this.week$, this._timesheet, this.getTimesheet);
@@ -103,8 +103,8 @@ export class PayrollProvider implements OnDestroy {
             .filter(x => x.team !== null && x.start !== null && x.finish !== null)
             .distinctUntilChanged((a, b) => {
                 return (a.team.teamCode === b.team.teamCode)
-                    && (a.start.toLocaleDateString() === b.start.toLocaleDateString())
-                    && (a.finish.toLocaleDateString() === b.finish.toLocaleDateString());
+                    && (a.start.toLocaleDateString("en-GB") === b.start.toLocaleDateString("en-GB"))
+                    && (a.finish.toLocaleDateString("en-GB") === b.finish.toLocaleDateString("en-GB"));
             });
 
         this.subscribeTo(this.period$, this._summaries, this.getSummaries);
@@ -265,7 +265,7 @@ export class PayrollProvider implements OnDestroy {
     }
 
     public displayDate(date: Date): string {
-        return new Date(date).toLocaleDateString();
+        return new Date(date).toLocaleDateString("en-GB");
     }
 
     public teamForContract(contractCode: number, cons: CarerContract[]): string {

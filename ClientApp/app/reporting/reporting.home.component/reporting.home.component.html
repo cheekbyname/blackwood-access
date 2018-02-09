@@ -9,7 +9,7 @@
             <div *ngIf="reports" class="col-md-9 form-inline">
                 <label for="reportSelect">Select Report</label>
                 <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport" required>
-                    <option *ngFor="let rep of reports" [ngValue]="report">{{rep.name}}</option>
+                    <option *ngFor="let rep of reports" [ngValue]="rep">{{rep.name}}</option>
                 </select>
                 <label class="control-label" for="selectedStart">From</label>
                 <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy"

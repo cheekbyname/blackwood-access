@@ -56,10 +56,10 @@ export class AccidentMainComponent {
     }
 
     public displayDate(dt: Date) {
-        return new Date(dt).toLocaleDateString();
+        return new Date(dt).toLocaleDateString("en-GB");
     }
 
     public displayTime(dt: Date) {
-        return new Date(dt).toLocaleTimeString();
+        return new Date(dt).toLocaleTimeString("en-GB");
     }
 }

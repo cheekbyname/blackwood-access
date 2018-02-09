@@ -14,7 +14,6 @@ export class ReportingScheduleComponent {
     constructor(private repPro: ReportingProvider, private router: Router) {
         this.repPro.userSchedules$.subscribe(scheds => {
             this.mySchedules = scheds;
-            console.log(scheds);
         });
     }
 
