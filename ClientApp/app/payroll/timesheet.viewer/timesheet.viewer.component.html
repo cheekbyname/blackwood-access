@@ -1,23 +1,31 @@
 <div class="panel panel-default" *ngIf="timesheet">
 	<div class="panel-heading">
 		<div class="row">
-			<div class="col-md-9 form-group form-inline">
-				<span>Timesheet</span>
-				<p-calendar [locale]="loc" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing"
-					(onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
+			<div class="col-md-8 form-group form-inline">
+				<span>
+					<strong>Timesheet</strong>
+				</span>
+				<p-calendar [locale]="loc" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing" (onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
 				<select class="form-control" [(ngModel)]="carer" (ngModelChange)="payPro.selectCarer($event)">
 					<option *ngFor="let car of carers" [ngValue]="car">{{car.forename}} {{car.surname}}</option>
 				</select>
 				<span>{{isContracted ? "[Contracted]" : "[Relief]"}}</span>
 			</div>
-			<div class="col-md-3">
-				<a class="btn btn-primary btn-default pull-right" (click)="clearDetail()"><span class="glyphicon glyphicon-remove"></span>Close</a>
+			<div class="col-md-2" title="Show hidden booking types such as Travel Time">
+				<label>
+					<p-checkbox [(ngModel)]="showCodes" binary="true" id="showCheck" (onChange)="showCodesChanged()"></p-checkbox>
+					<span>Show hidden bookings</span>
+				</label>
+			</div>
+			<div class="col-md-2">
+				<a class="btn btn-primary btn-default pull-right" (click)="clearDetail()">
+					<span class="glyphicon glyphicon-remove"></span>Close</a>
 			</div>
 		</div>
 	</div>
 	<div class="panel-body">
 		<!-- Team/Contract Summary -->
-		<div class = "table-responsive">
+		<div class="table-responsive">
 			<table class="table table-striped" *ngIf="timesheet.contracts !== null">
 				<thead class="thead-default">
 					<tr class="row">
@@ -25,7 +33,7 @@
 						<th class="col-md-3">Team</th>
 						<th class="col-md-1">Cycle Week</th>
 						<th class="col-md-1">Contracted Hours</th>
-                        <th class="col-md-1">Avg Days per Week</th>
+						<th class="col-md-1">Avg Days per Week</th>
 						<th class="col-md-1">Available Hours</th>
 						<th class="col-md-1">Booking Hours</th>
 						<th class="col-md-1">Actual Hours</th>
@@ -37,9 +45,10 @@
 					<tr class="row" *ngFor="let contract of timesheet.contracts">
 						<td>{{contract.payrollNumber}}</td>
 						<td>{{contract.teamDesc}}</td>
-						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td> <!-- "Future" cycles still an issue here -->
+						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
+						<!-- "Future" cycles still an issue here -->
 						<td>{{payPro.displayTime(contract.contractMins)}}</td>
-                        <td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
+						<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
 						<td>{{payPro.displayTime(availHoursForContract(contract.contractCode))}}</td>
 						<td>{{payPro.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
 						<td>{{payPro.displayTime(actualHoursForContract(contract.contractCode))}}</td>
@@ -54,16 +63,13 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th *ngFor="let day of loc.dayOrder; let i = index" (click)="openAdjustments(i)"
-							[title]="'Click here to adjust hours for ' + day + ' ' + payPro.dateOrd(weekCommencing, i) + ' ' + payPro.monthOf(weekCommencing, i)">
-							<span>{{day}} {{payPro.dateOrd(weekCommencing, i)}}</span><br/>
+						<th *ngFor="let day of loc.dayOrder; let i = index" (click)="openAdjustments(i)" [title]="'Click here to adjust hours for ' + day + ' ' + payPro.dateOrd(weekCommencing, i) + ' ' + payPro.monthOf(weekCommencing, i)">
+							<span>{{day}} {{payPro.dateOrd(weekCommencing, i)}}</span>
+							<br/>
 							<span>{{payPro.displayTime(totalActualHoursForDay(i))}}</span>
-							<span *ngIf="hasAdjustOffsetAction(i)" title="There are adjustments for this day that require attention"
-								class="glyphicon glyphicon-exclamation-sign adjust-crit pull-right"></span>
-							<span *ngIf="hasAdjustOffset(i)" title="There are adjustments for this day"
-								class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
-							<span *ngIf="hasInvalidShift(i)" title="There is one or more invalid shifts on this day. Click for more information."
-								class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
+							<span *ngIf="hasAdjustOffsetAction(i)" title="There are adjustments for this day that require attention" class="glyphicon glyphicon-exclamation-sign adjust-crit pull-right"></span>
+							<span *ngIf="hasAdjustOffset(i)" title="There are adjustments for this day" class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
+							<span *ngIf="hasInvalidShift(i)" title="There is one or more invalid shifts on this day. Click for more information." class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
 						</th>
 					</tr>
 				</thead>
@@ -77,8 +83,7 @@
 			</table>
 		</div>
 
-		<timesheet-adjustment [(timesheet)]="timesheet" [(adjustVisible)]="adjustVisible" [dayOffset]="dayOffset"
-			[weekCommencing]="weekCommencing"></timesheet-adjustment>
+		<timesheet-adjustment [(timesheet)]="timesheet" [(adjustVisible)]="adjustVisible" [dayOffset]="dayOffset" [weekCommencing]="weekCommencing"></timesheet-adjustment>
 
 		<booking-detail [booking]="selectedBooking" [(bookingVisible)]="bookingVisible" [contracts]="timesheet.contracts"></booking-detail>
 

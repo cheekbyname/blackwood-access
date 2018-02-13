@@ -30,9 +30,26 @@ type BookingGrid = Array<Array<CarerBooking>>;
 })
 export class TimesheetViewerComponent implements OnInit {
 
+	public readonly loc: Locale = LOC_EN;
+
+	carer: Carer;
+	weekCommencing: Date;
+	timesheet: Timesheet;
+	bookings: BookingGrid;
+	isContracted: boolean;
+	carers: Carer[];
+	hideableCodes: number[];
+	team: Team;		// This required purely for navigation -_-
+
+	adjustVisible: boolean = false;
+	dayOffset: number;
+	bookingVisible: boolean = false;
+	selectedBooking: CarerBooking = new CarerBooking();
+	showCodes: boolean = false;
+
 	constructor(private http: Http, private payPro: PayrollProvider, private router: Router,
 		private route: ActivatedRoute) {
-
+		this.hideableCodes = payPro.hideableCodes;
 	}
 
 	ngOnInit(): void {
@@ -79,34 +96,18 @@ export class TimesheetViewerComponent implements OnInit {
 		});
 	}
 
-	public loc: Locale = LOC_EN;
-
-	carer: Carer;
-	weekCommencing: Date;
-	timesheet: Timesheet;
-	bookings: BookingGrid;
-	isContracted: boolean;
-	carers: Carer[];
-	team: Team;		// This required purely for navigation -_-
-
-	adjustVisible: boolean = false;
-	dayOffset: number;
-
-	bookingVisible: boolean = false;
-	selectedBooking: CarerBooking = new CarerBooking();
-
 	navigateTo() {
 		if (this.carer !== undefined && this.carer !== null && this.team !== undefined && this.router.url.includes('timesheet')) {
 			this.router.navigate(['/payroll', this.team.teamCode,
 				{
 					outlets: {
-					detail: ['timesheet', {
-						carer: this.carer.carerCode,
-						week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.weekCommencing))
-					}],
-					summary: ['summary', this.team.teamCode]
-				}
-			}]);
+						detail: ['timesheet', {
+							carer: this.carer.carerCode,
+							week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.weekCommencing))
+						}],
+						summary: ['summary', this.team.teamCode]
+					}
+				}]);
 		}
 	}
 
@@ -122,28 +123,31 @@ export class TimesheetViewerComponent implements OnInit {
 	processTimesheet(ts: Timesheet): void {
 		this.bookings = this.emptyBook();
 		this.timesheet = ts;
-		ts.bookings.forEach(bk => this.stuffBook(bk));
+		ts.bookings.forEach(bk => {
+			if (this.showCodes || (!this.showCodes && !this.hideableCodes.some(hc => hc === bk.bookingType)))
+				this.stuffBook(bk);
+		});
 		this.transBook();
 		this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });
 	}
 
 	emptyBook() {
-		return [[],[],[],[],[],[],[]];
+		return [[], [], [], [], [], [], []];
 	};
 
 	stuffBook(bk: CarerBooking): void {
 		// Because we want whole days and valueOf returns milliseconds
-        //var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
-  //      var offset = Math.round((new Date(bk.thisStart).getTime() - new Date(this.weekCommencing).getTime()) / (1000 * 60 * 60 * 24));
+		//var offset = Math.floor((new Date(bk.thisStart).valueOf() - new Date(this.weekCommencing).valueOf()) / (1000 * 60 * 60 * 24));
+		//      var offset = Math.round((new Date(bk.thisStart).getTime() - new Date(this.weekCommencing).getTime()) / (1000 * 60 * 60 * 24));
 		//offset = offset < 0 ? 0 : offset;
-        this.bookings[this.offsetFor(this.weekCommencing, bk.thisStart)].push(bk);
+		this.bookings[this.offsetFor(this.weekCommencing, bk.thisStart)].push(bk);
 	}
 
 	// Transpose Bookings array
 	transBook(): void {
 		var bks = this.bookings;
 		var len = Math.max(...bks.map(ar => { return ar.length }));					// Get max width of matrix
-		if (len-bks.length > 0) bks = bks.concat(Array(len-bks.length).fill([]));	// Pad to square
+		if (len - bks.length > 0) bks = bks.concat(Array(len - bks.length).fill([]));	// Pad to square
 		bks = bks.map((x, y) => bks.map(x => x[y]));								// Transpose array
 		//bks = this.chronOrder(bks);												// Shift down to make some chronological sense
 		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 	// Strip blank rows
@@ -154,15 +158,17 @@ export class TimesheetViewerComponent implements OnInit {
 	chronOrder(bookings: BookingGrid): BookingGrid {
 		var row = 0;
 		while (row < bookings.length - 1) {
-			var min = bookings[row].map(booking => { if (booking === undefined) {
-					return 9 } else { return booking.shift }
-				}).reduce((cur, min) => { return min < cur ? min : cur; }, 9);
+			var min = bookings[row].map(booking => {
+				if (booking === undefined) {
+					return 9
+				} else { return booking.shift }
+			}).reduce((cur, min) => { return min < cur ? min : cur; }, 9);
 			bookings[row].forEach((booking) => {
 				if (booking !== undefined && booking.shift > min) {
 					var col = bookings[row].indexOf(booking);
 					if (bookings[bookings.length - 1][col] !== undefined) { bookings.push(Array(7)) };
-					for (var i = bookings.length - 1; i > row ; i--) {
-						bookings[i][col] = bookings[i-1][col];
+					for (var i = bookings.length - 1; i > row; i--) {
+						bookings[i][col] = bookings[i - 1][col];
 					}
 					bookings[row][col] = undefined;
 				}
@@ -180,7 +186,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public availHoursForContract(contractCode: number): number {
 		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
 			.filter(av => av.contractCode === contractCode)
-			.map(av => {return av.thisMins}).reduce((acc, cur) => { return acc + cur }, 0);
+			.map(av => { return av.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public bookedHoursForContract(contractCode: number): number {
@@ -193,31 +199,31 @@ export class TimesheetViewerComponent implements OnInit {
 	public actualHoursForDay(offset: number): number {
 		let shiftTime = this.timesheet.shifts
 			.filter(sh => sh.day === offset)
-            .map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
-        return shiftTime;
+			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0) + this.minsAdjustOffset(offset);
+		return shiftTime;
 	}
 
-    public totalActualHoursForDay(offset: number): number {
-        let shiftTime = this.timesheet.shifts
+	public totalActualHoursForDay(offset: number): number {
+		let shiftTime = this.timesheet.shifts
 			.filter(sh => sh.day == offset)
-            .map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
-        let leaveSickTime = this.timesheet.bookings
-            .filter(bk => this.offsetFor(this.weekCommencing, bk.thisStart) == offset && this.payPro.absenceCodes.some(ac => ac == bk.bookingType))
-            .map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
-        return shiftTime + leaveSickTime;
+			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
+		let leaveSickTime = this.timesheet.bookings
+			.filter(bk => this.offsetFor(this.weekCommencing, bk.thisStart) == offset && this.payPro.absenceCodes.some(ac => ac == bk.bookingType))
+			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
+		return shiftTime + leaveSickTime;
 	}
 
-    public offsetFor(dt1: Date, dt2: Date): number {
-        let start = new Date(dt1);
-        start.setHours(0);
-        let finish = new Date(dt2);
-        let offset = Math.floor((finish.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-        return offset < 0 ? 0 : offset;
-    }
+	public offsetFor(dt1: Date, dt2: Date): number {
+		let start = new Date(dt1);
+		start.setHours(0);
+		let finish = new Date(dt2);
+		let offset = Math.floor((finish.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+		return offset < 0 ? 0 : offset;
+	}
 
 	public actualHoursForContract(contractCode: number): number {
 		return this.timesheet.shifts.filter(sh => sh.contractCode === contractCode)
-			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0 );
+			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public additionalHoursForContract(contractCode: number): number {
@@ -235,7 +241,7 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookColor(bk: CarerBooking): string {
 		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
-        if (bk.bookingCode === 133) return 'palegreen';
+		if (bk.bookingType === 133) return 'bisque';
 		if (this.payPro.absenceCodes.concat(this.payPro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
 		//return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
 		return shiftColors[bk.shift - 1];
@@ -271,7 +277,10 @@ export class TimesheetViewerComponent implements OnInit {
 	public clearDetail() {
 		//this.router.navigate([{ outlets: { 'detail': null }}]);
 		this.router.navigate(['/payroll', this.team.teamCode,
-			{ outlets: { detail: null, summary: ['summary', this.team.teamCode] }}]);
+			{ outlets: { detail: null, summary: ['summary', this.team.teamCode] } }]);
+	}
 
+	public showCodesChanged() {
+		this.processTimesheet(this.timesheet);
 	}
 }
