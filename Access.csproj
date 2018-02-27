@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.WebForms" Version="140.1000.523" />
+    <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="140.1000.523" />
+    <PackageReference Include="Microsoft.SqlServer.Types" Version="14.0.314.76" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,22 +29,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Active\Messaging.Service\Messaging.Service.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Accident.Service\Accident.Service.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Data.Models\Data.Models.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Email.Services\Email.Services.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\Payroll.Service\Payroll.Service.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Core\User.Service\User.Service.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Reporting\Report.Utils\Report.Utils.csproj" />
-    <ProjectReference Include="P:\Visual Studio\Projects\Blackwood.Reporting\Reporting.Service\Reporting.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\accident\accident-provider.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ClientApp\app\admin\payroll.admin.component\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Active\Messaging.Service\Messaging.Service.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Accident.Service\Accident.Service.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Data.Models\Data.Models.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Email.Services\Email.Services.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Payroll.Service\Payroll.Service.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\User.Service\User.Service.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Reporting\Report.Utils\Report.Utils.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Reporting\Reporting.Service\Reporting.Service.csproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

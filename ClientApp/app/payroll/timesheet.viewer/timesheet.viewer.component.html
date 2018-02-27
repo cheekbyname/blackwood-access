@@ -5,13 +5,19 @@
 				<span>
 					<strong>Timesheet</strong>
 				</span>
+                <button class="btn btn-primary week-nav" (click)="weekBack()">
+                    <i class="fa fa-angle-left"></i>
+                </button>
 				<p-calendar [locale]="loc" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing" (onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
+                <button class="btn btn-primary week-nav" (click)="weekForward()">
+                    <i class="fa fa-angle-right"></i>
+                </button>
 				<select class="form-control" [(ngModel)]="carer" (ngModelChange)="payPro.selectCarer($event)">
 					<option *ngFor="let car of carers" [ngValue]="car">{{car.forename}} {{car.surname}}</option>
 				</select>
 				<span>{{isContracted ? "[Contracted]" : "[Relief]"}}</span>
 			</div>
-			<div class="col-md-2" title="Show hidden booking types such as Travel Time">
+			<div class="hide-codes col-md-2 form-group form-inline" title="Show hidden booking types such as Travel Time">
 				<label>
 					<p-checkbox [(ngModel)]="showCodes" binary="true" id="showCheck" (onChange)="showCodesChanged()"></p-checkbox>
 					<span>Show hidden bookings</span>

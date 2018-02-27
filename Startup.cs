@@ -6,17 +6,19 @@ namespace Blackwood.Access
     using Core.Data.Models.Reporting;
     using Core.Payroll.Service.Services;
     using Core.User.Service;
-    using Reporting.Reporting.Service;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Rewrite;
     using Microsoft.AspNetCore.SpaServices.Webpack;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Diagnostics;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using Microsoft.Extensions.Logging;
+    using Reporting.Reporting.Service;
 
     public class Startup
     {
@@ -72,6 +74,11 @@ namespace Blackwood.Access
                 options.AutomaticAuthentication = true;
             });
 
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
+
             // Add framework services.
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -112,6 +119,9 @@ namespace Blackwood.Access
             }
 
             app.UseStaticFiles();
+
+            var options = new RewriteOptions().AddRedirectToHttps();
+            app.UseRewriter(options);
 
             app.UseMvc(routes =>
             {

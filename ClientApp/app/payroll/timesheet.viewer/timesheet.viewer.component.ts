@@ -283,4 +283,18 @@ export class TimesheetViewerComponent implements OnInit {
 	public showCodesChanged() {
 		this.processTimesheet(this.timesheet);
 	}
+
+	public weekBack() {
+		this.payPro.selectWeekCommencing(this.adjustDate(this.weekCommencing, -7));
+	}
+
+	public weekForward() {
+		this.payPro.selectWeekCommencing(this.adjustDate(this.weekCommencing, 7));
+	}
+
+	public adjustDate(adjDate: Date, offset: number): Date {
+		let dt: Date = new Date(adjDate);
+		dt.setDate(dt.getDate() + offset);
+		return dt;
+	}
 }

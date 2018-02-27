@@ -53,15 +53,20 @@ p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select, .form-in
 }
 
 .form-inline span {
-    font-size: 14pt;
+    font-size: 12pt;
 }
 
 p-spinner, p-calendar {
     height: 34px!important;
 }
 
-.panel-heading p-calendar {
+.panel-heading:nth-child(2) {
     margin-left: 8px;
+}
+
+.week-nav {
+    background-color: transparent;
+    border-color: darkgray;
 }
 
 span.adjust-crit {
@@ -116,4 +121,13 @@ span.ui-dialog-title, span.header-text {
 .action-button:hover {
     cursor: pointer;
     background-color: hotpink;
+}
+
+.hide-codes:hover, .hide-codes span:hover {
+    cursor: pointer;
+}
+
+.hide-codes > label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
