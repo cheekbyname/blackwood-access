@@ -8,6 +8,7 @@ namespace Blackwood.Access
     using Core.User.Service;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Rewrite;
     using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -90,16 +91,16 @@ namespace Blackwood.Access
             services.AddLogging();
 
             // Add Application services
-            services.AddTransient<ICareInitialAssessmentService, CareInitialAssessmentService>();
-            services.AddTransient<IPayrollDataService, PayrollDataService>();
-            services.AddTransient<IPayrollService, PayrollService>();
-            services.AddTransient<IPayrollShiftService, PayrollShiftService>();
-            services.AddTransient<IPayrollValidationService, PayrollValidationService>();
-            services.AddTransient<IPushService, PushService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAccidentService, AccidentService>();
-            services.AddTransient<IReportingService, ReportingService>();
-            services.AddTransient<IReportingDataService, ReportingDataService>();
+            services.AddScoped<ICareInitialAssessmentService, CareInitialAssessmentService>();
+            services.AddScoped<IPayrollDataService, PayrollDataService>();
+            services.AddScoped<IPayrollService, PayrollService>();
+            services.AddScoped<IPayrollShiftService, PayrollShiftService>();
+            services.AddScoped<IPayrollValidationService, PayrollValidationService>();
+            services.AddScoped<IPushService, PushService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccidentService, AccidentService>();
+            services.AddScoped<IReportingService, ReportingService>();
+            services.AddScoped<IReportingDataService, ReportingDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,7 +121,8 @@ namespace Blackwood.Access
 
             app.UseStaticFiles();
 
-            var options = new RewriteOptions().AddRedirectToHttps();
+            //var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 44313);    // Dev
+            var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 443);    // Live
             app.UseRewriter(options);
 
             app.UseMvc(routes =>

@@ -36,7 +36,7 @@ export class PayrollSummaryComponent implements OnInit {
 				this.error = err;
 				return Observable.of<Summary[]>([]);
 			})
-			.subscribe(sums => this.summaries = sums);
+            .subscribe(sums => this.summaries = sums);
 		this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
 		// this.payPro.errorMessage$.subscribe(err => {
 		// 	if(err != undefined) this.errored = true;
