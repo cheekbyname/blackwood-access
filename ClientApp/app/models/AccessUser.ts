@@ -1,3 +1,5 @@
+import { AccessUserTeam } from "./AccessUserTeam";
+
 export class AccessUser {
     public id: number;
     public domainUsername: string;
@@ -10,4 +12,8 @@ export class AccessUser {
     public canRejectAdjustments: boolean;
     public isAssessmentUser: boolean;
     public isReportingUser: boolean;
+
+    public emailAddress: string;
+
+    public authorizedTeams: AccessUserTeam[];
 }

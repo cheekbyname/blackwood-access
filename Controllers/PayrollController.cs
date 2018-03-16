@@ -31,6 +31,9 @@ namespace Blackwood.Access.Controllers
         public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> TeamsForUser() => Ok(await _dataService.GetTeamsForUser(HttpContext.User));
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> CarersByTeam(int TeamCode, DateTime periodStart)
             => Ok(await _dataService.GetCarersByTeam(TeamCode, periodStart));
 
