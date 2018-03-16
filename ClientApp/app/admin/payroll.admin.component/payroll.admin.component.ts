@@ -3,8 +3,8 @@ import { NgForm, FormBuilder, FormGroup, FormControl, FormArray, AbstractControl
 
 import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
 
-import { PayrollCodeMap } from "../../models/PayrollCodeMap";
-import { PayrollCodeType } from "../../models/PayrollCodeType";
+import { PayrollCodeMap } from "../../models/payroll/PayrollCodeMap";
+import { PayrollCodeType } from "../../models/payroll/PayrollCodeType";
 
 import { PayrollProvider } from "../../payroll/payroll.provider";
 

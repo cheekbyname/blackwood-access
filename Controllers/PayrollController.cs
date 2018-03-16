@@ -64,7 +64,7 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPayrollData(int teamCode, DateTime periodStart, DateTime periodFinish)
-            => Ok(await _service.GetPayrollData(teamCode, periodStart, periodFinish));
+            => Ok(await _service.GetPayrollExport(teamCode, periodStart, periodFinish));
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Validate(int teamCode, DateTime periodStart, DateTime periodFinish)

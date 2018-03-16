@@ -5,12 +5,12 @@ import { NgForm } from '@angular/forms';
 import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
 
 import { AccessUser } from "../../models/AccessUser";
-import { Adjustment } from '../../models/Adjustment';
+import { Adjustment } from '../../models/payroll/Adjustment';
 import { Locale, LOC_EN } from '../../models/Locale';
-import { BreakDefinition } from "../../models/BreakDefinition";
-import { BreakPolicy } from "../../models/BreakPolicy";
-import { Timesheet } from '../../models/Timesheet';
-import { Shift } from "../../models/Shift";
+import { BreakDefinition } from "../../models/payroll/BreakDefinition";
+import { BreakPolicy } from "../../models/payroll/BreakPolicy";
+import { Timesheet } from '../../models/payroll/Timesheet';
+import { Shift } from "../../models/payroll/Shift";
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';

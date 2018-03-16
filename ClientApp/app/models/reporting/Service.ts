@@ -1,4 +1,4 @@
-import { ReportingRegion } from "./ReportingRegion";
+import { Region } from "./Region";
 import { Schedule } from "./Schedule";
 
 export class Service {
@@ -6,6 +6,6 @@ export class Service {
     public name: string;
     public regionId: number;
 
-    public region: ReportingRegion;
+    public region: Region;
     public schedules: Schedule[];
 }

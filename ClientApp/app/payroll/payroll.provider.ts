@@ -4,17 +4,17 @@ import { BehaviorSubject, Observable, Subscription } from "rxjs/Rx";
 import "rxjs/add/operator/toPromise";
 
 import { AccessUser } from "../models/AccessUser";
-import { Adjustment } from "../models/Adjustment";
-import { Carer } from "../models/Carer";
-import { CarerContract } from "../models/Contract";
+import { Adjustment } from "../models/payroll/Adjustment";
+import { Carer } from "../models/payroll/Carer";
+import { CarerContract } from "../models/payroll/Contract";
 import { Locale, LOC_EN } from "../models/Locale";
-import { Payroll } from "../models/Payroll";
-import { PayrollCodeMap } from "../models/PayrollCodeMap";
-import { PayrollCodeType } from "../models/PayrollCodeType";
-import { Summary } from "../models/Summary";
-import { Team } from "../models/Team";
-import { Timesheet } from "../models/Timesheet";
-import { ValidationResult } from "../models/Validation";
+import { Export } from "../models/payroll/Export";
+import { PayrollCodeMap } from "../models/payroll/PayrollCodeMap";
+import { PayrollCodeType } from "../models/payroll/PayrollCodeType";
+import { Summary } from "../models/payroll/Summary";
+import { Team } from "../models/payroll/Team";
+import { Timesheet } from "../models/payroll/Timesheet";
+import { ValidationResult } from "../models/payroll/Validation";
 
 import { UserProvider } from "../user.provider";
 
@@ -32,7 +32,7 @@ export class PayrollProvider implements OnDestroy {
     private _timesheet = new BehaviorSubject<Timesheet>(null);
     private _summaries = new BehaviorSubject<Summary[]>(null);
     private _validation = new BehaviorSubject<ValidationResult>(null);
-    private _export = new BehaviorSubject<Payroll[]>(undefined);
+    private _export = new BehaviorSubject<Export[]>(undefined);
     private _codeMap = new BehaviorSubject<PayrollCodeMap[]>(undefined);
     private _codeTypes = new BehaviorSubject<PayrollCodeType[]>(undefined);
     private _errorMessage = new BehaviorSubject<string>(undefined);
@@ -209,11 +209,11 @@ export class PayrollProvider implements OnDestroy {
             .catch(err => Observable.throw(err));
     }
 
-    getPayrollExport(x: { team: Team, start: Date, finish: Date }): Observable<Payroll[]> {
+    getPayrollExport(x: { team: Team, start: Date, finish: Date }): Observable<Export[]> {
         var tsUrl = `/api/payroll/getPayrollData?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodFinish=${this.sqlDate(x.finish)}`;
         if (isDevMode()) console.log(tsUrl);
         return this.http.get(tsUrl)
-            .map(res => res.json() as Payroll[])
+            .map(res => res.json() as Export[])
             .catch(err => Observable.throw(err));
     }
 

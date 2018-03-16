@@ -4,8 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from "rxjs/Rx";
 
-import { Team } from '../../models/Team';
-import { Summary } from '../../models/Summary';
+import { Team } from '../../models/payroll/Team';
+import { Summary } from '../../models/payroll/Summary';
 import { Locale, LOC_EN} from '../../models/Locale';
 
 import { PayrollProvider } from '../payroll.provider';
@@ -95,6 +95,10 @@ export class PayrollSummaryComponent implements OnInit {
 	toggleSummary(): void {
 		this.showSummary = !this.showSummary;
 	}
+
+    approveSummary(): void {
+        // TODO
+    }
 
 	selectCarer(sum: Summary): void {
 		this.showSummary = false;

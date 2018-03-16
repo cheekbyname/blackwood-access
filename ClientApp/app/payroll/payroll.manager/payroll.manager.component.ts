@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 
 import { Observable } from "rxjs/Rx";
 
-import { Team } from '../../models/Team';
+import { Team } from '../../models/payroll/Team';
 import { AccessUser } from "../../models/AccessUser";
 
 import { PayrollProvider } from '../payroll.provider';

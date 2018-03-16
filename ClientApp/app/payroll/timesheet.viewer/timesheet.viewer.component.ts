@@ -11,13 +11,13 @@ import { BookingDetailComponent } from '../booking.detail/booking.detail.compone
 import { TimesheetAdjustmentComponent } from '../timesheet.adjustment/timesheet.adjustment.component';
 
 import { Locale, LOC_EN } from '../../models/Locale';
-import { Timesheet } from '../../models/Timesheet';
-import { CarerBooking } from '../../models/Booking';
-import { Carer } from '../../models/Carer';
-import { Availability } from '../../models/Availability';
-import { Shift } from '../../models/Shift';
-import { Adjustment, AdjustmentOffsetFilter } from '../../models/Adjustment';
-import { Team } from '../../models/Team';
+import { Timesheet } from '../../models/payroll/Timesheet';
+import { CarerBooking } from '../../models/payroll/Booking';
+import { Carer } from '../../models/payroll/Carer';
+import { Availability } from '../../models/payroll/Availability';
+import { Shift } from '../../models/payroll/Shift';
+import { Adjustment, AdjustmentOffsetFilter } from '../../models/payroll/Adjustment';
+import { Team } from '../../models/payroll/Team';
 
 import { PayrollProvider } from '../payroll.provider';
 

@@ -1,7 +1,7 @@
 import { Schedule } from "./Schedule";
 import { Service } from "./Service";
 
-export class ReportingRegion {
+export class Region {
     public id: number;
     public name: string;
 

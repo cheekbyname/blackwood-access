@@ -2,28 +2,41 @@
 	<div class="panel-heading">
 		<div class="row">
 			<!--<h4>{{team.teamDesc}} : {{displayMonth()}}</h4>-->
-			<h4 class="col-md-3"><strong>Payroll Summary</strong></h4>
-			<div class="col-md-9 form-inline date-controls">
+			<h4 class="col-md-2 section-heading">
+                <strong>
+                    <span class="glyphicon glyphicon-align-justify"></span>
+                    <span>Payroll Summary</span>
+                </strong>
+            </h4>
+			<div class="col-md-6 form-inline date-controls">
 				<label class="control-label" for="periodStart">From</label>
 				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodStartSelected($event)"></p-calendar>
 				<!-- Add [showIcon]="true" -->
 				<label class="control-label" for="periodFinish">To</label>
 				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodFinishSelected($event)"></p-calendar>
 				<!-- Add [showIcon]="true" -->
-				<a class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
-					<span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
-					<span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
-					<span>{{showSummary ? "Hide" : "Show"}}</span>
-				</a>
-				<a class="btn btn-primary" (click)="showExport()">
-					<span class="glyphicon glyphicon-export"></span>
-					<span>Export</span>
-				</a>
-				<a class="btn btn-primary" (click)="showReview()">
-					<span class="glyphicon glyphicon-thumbs-up"></span>
-					<span>Review</span>
-				</a>
 			</div>
+            <div class="col-md-4">
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
+                        <span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
+                        <span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
+                        <span>{{showSummary ? "Hide" : "Show"}}</span>
+                    </a>
+                    <a class="btn btn-primary" (click)="showExport()">
+                        <span class="glyphicon glyphicon-export"></span>
+                        <span>Export</span>
+                    </a>
+                    <a class="btn btn-primary" (click)="showReview()">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        <span>Review</span>
+                    </a>
+                    <a class="btn btn-primary" (click)="approveSummary()">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>Approve</span>
+                    </a>
+                </div>
+            </div>
 		</div>
 	</div>
 	<div class="panel-body" *ngIf="showSummary && !error && summaries">

@@ -1,4 +1,4 @@
-export class Payroll {
+export class Export {
     public id: number;
     public staffMember: string;
     public date: Date;

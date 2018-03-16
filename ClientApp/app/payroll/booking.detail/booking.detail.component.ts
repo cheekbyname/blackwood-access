@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 
-import { CarerBooking } from '../../models/Booking';
-import { CarerContract } from '../../models/Contract';
+import { CarerBooking } from '../../models/payroll/Booking';
+import { CarerContract } from '../../models/payroll/Contract';
 
 import { PayrollProvider } from '../payroll.provider';
 

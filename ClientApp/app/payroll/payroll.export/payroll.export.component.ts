@@ -5,8 +5,8 @@ import { Observable } from "rxjs/Rx";
 
 import { DataTableModule, SharedModule } from "primeng/primeng";
 
-import { Payroll } from "../../models/Payroll";
-import { Team } from "../../models/Team";
+import { Export } from "../../models/payroll/Export";
+import { Team } from "../../models/payroll/Team";
 
 import { PayrollProvider } from "../payroll.provider";
 
@@ -18,7 +18,7 @@ import { PayrollProvider } from "../payroll.provider";
 export class PayrollExportComponent {
     @ViewChild('dt') dt;
 
-    export: Payroll[];
+    export: Export[];
     team: Team;
     fileName: string;
     error: any = undefined;
@@ -27,7 +27,7 @@ export class PayrollExportComponent {
         this.payPro.export$
             .catch(err => {
                 this.error = err;
-                return Observable.of<Payroll[]>([]);
+                return Observable.of<Export[]>([]);
             })
             .subscribe(exp => this.export = exp);
 

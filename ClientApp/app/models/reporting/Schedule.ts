@@ -1,8 +1,8 @@
 import { Scope, Frequency, Direction } from "./Enums";
 import { Report } from "./Report";
-import { ReportingRegion } from "./ReportingRegion";
+import { Region } from "./Region";
 import { Service } from "./Service";
-import { Team } from "../Team";
+import { Team } from "../payroll/Team";
 import { ScheduleFilter } from "./ScheduleFilter";
 import { Subscription } from "./Subscription";
 
@@ -19,7 +19,7 @@ export class Schedule {
     public teamId: number;
 
     public report: Report;
-    public region: ReportingRegion;
+    public region: Region;
     public service: Service;
     public team: Team;
 

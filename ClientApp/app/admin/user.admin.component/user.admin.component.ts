@@ -2,7 +2,7 @@
 import { NgForm } from "@angular/forms";
 
 import { AccessUser } from "../../models/AccessUser";
-import { Team } from "../../models/Team";
+import { Team } from "../../models/payroll/Team";
 
 import { PayrollProvider } from "../../payroll/payroll.provider";
 import { UserProvider } from '../../user.provider';

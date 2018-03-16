@@ -1,6 +1,6 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
-import { Guid } from './Utilities';
+import { Guid } from '../Utilities';
 
 export class Adjustment {
     public id: number;

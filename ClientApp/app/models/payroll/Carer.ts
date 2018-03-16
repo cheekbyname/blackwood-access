@@ -1,4 +1,4 @@
-import { Guid } from "./Utilities";
+import { Guid } from "../Utilities";
 
 export class Carer {
 	public personnelNumber: string;

@@ -3,12 +3,12 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 import { Observable } from "rxjs/Rx";
 
-import { Adjustment } from "../../models/Adjustment";
-import { Carer } from "../../models/Carer";
-import { Shift } from "../../models/Shift";
-import { Team } from "../../models/Team";
-import { Timesheet } from "../../models/Timesheet";
-import { ValidationResult } from "../../models/Validation";
+import { Adjustment } from "../../models/payroll/Adjustment";
+import { Carer } from "../../models/payroll/Carer";
+import { Shift } from "../../models/payroll/Shift";
+import { Team } from "../../models/payroll/Team";
+import { Timesheet } from "../../models/payroll/Timesheet";
+import { ValidationResult } from "../../models/payroll/Validation";
 
 import { PayrollProvider } from "../payroll.provider";
 import { TimesheetAdjustmentComponent } from "../timesheet.adjustment/timesheet.adjustment.component";

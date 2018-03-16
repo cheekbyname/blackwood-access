@@ -1,6 +1,7 @@
 li .glyphicon {
+    top: 4px;
     margin-right: 10px;
-    font-size: 14pt;
+    font-size: 16pt;
 }
 
 /* Highlighting rules for nav menu items */

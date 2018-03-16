@@ -18,7 +18,7 @@
             <ul class='nav navbar-nav'>
                 <li *ngIf="user && user.isPayrollUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'payroll'}}]">
-                        <span class="glyphicon glyphicon-calendar"></span>Payroll
+                        <span class="glyphicon glyphicon-gbp"></span>Payroll
                     </a>
                 </li>
                 <li *ngIf="user" [routerLinkActive]="['link-active']">
