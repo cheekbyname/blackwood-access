@@ -1,6 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4>
+        <h4 class="section-heading">
+            <span class="glyphicon glyphicon-home"></span>
             <strong>Home</strong>
         </h4>
     </div>
@@ -28,7 +29,7 @@
             </div>
             <div *ngIf="user && user.isAdmin" class="col-md-2">
                 <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin'}}]">
-                    <span class="big-icon glyphicon glyphicon-user"></span>
+                    <span class="big-icon glyphicon glyphicon-tags"></span>
                     <h4 class="icon-text">Administration</h4>
                 </a>
             </div>

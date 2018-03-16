@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="section-heading">
+                <span class="glyphicon glyphicon-book"></span>
+                <strong>Reporting</strong>
+            </h4>
+        </div>
+        <div class="panel-body">
+            <div *ngIf="!user" class="alert alert-info">
+                <i class="fa fa-cog fa-spin fa-2x"></i>
+                <span class="loading">Please wait, retreiving your user information...</span>
+            </div>
+            <div *ngIf="user" class="alert alert-success">
+                <i class="fa fa-user fa-2x"></i>
+                <span class="loading">Hello, {{user.accountName}}!</span>
+            </div>
+            <div class="row menu-icon-row">
+                <div *ngIf="user && user.isReportingUser" class="col-md-2">
+                    <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'reports/home'}}]">
+                        <span class="big-icon glyphicon glyphicon-file"></span>
+                        <h4 class="icon-text">Reports</h4>
+                    </a>
+                </div>
+                <div *ngIf="user && user.isReportingUser" class="col-md-2">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'reports/scheduled'}}]">
+                        <span class="big-icon glyphicon glyphicon-calendar"></span>
+                        <h4 class="icon-text">Schedules</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>

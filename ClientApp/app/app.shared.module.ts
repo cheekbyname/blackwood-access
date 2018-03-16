@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -44,7 +44,7 @@ import { UserProvider } from "./user.provider";
         /* Application Router */
         AppRouterModule
     ],
-    providers: [InitialAssessProvider, UserProvider, ConfirmationService]
+    providers: [InitialAssessProvider, ConfirmationService, UserProvider]
 })
 export class AppModuleShared {
 }

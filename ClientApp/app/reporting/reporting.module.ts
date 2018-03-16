@@ -6,6 +6,7 @@ import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule,
 
 import { ReportingComponent } from "./reporting.component";
 import { ReportingHomeComponent } from "./reporting.home.component/reporting.home.component";
+import { ReportingLandingComponent } from "./reporting.landing.component/reporting.landing.component";
 import { ReportingScheduleComponent } from "./reporting.schedule.component/reporting.schedule.component";
 
 import { ReportingRoutingModule } from "./reporting-routing.module";
@@ -16,7 +17,7 @@ import { UserProvider } from "../user.provider";
 @NgModule({
     imports: [CommonModule, FormsModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule, CalendarModule,
         ReportingRoutingModule],
-    declarations: [ReportingComponent, ReportingHomeComponent, ReportingScheduleComponent],
+    declarations: [ReportingComponent, ReportingHomeComponent, ReportingLandingComponent, ReportingScheduleComponent],
     providers: [ConfirmationService, UserProvider, ReportingProvider]
 })
 export class ReportingModule { }

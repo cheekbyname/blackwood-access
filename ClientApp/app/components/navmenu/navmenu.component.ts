@@ -17,11 +17,16 @@ export class NavMenuComponent implements OnInit {
     loc: any = LOC_EN;
     selectedDate: Date;
     showCalendar: boolean = false;
+    showAdmin: boolean = false;
+    showReports: boolean = false;
     user: AccessUser;
 
     constructor(public payPro: PayrollProvider, private router: Router, private userPro: UserProvider) {
         router.events.subscribe((ev) => {
             this.showCalendar = this.router.url.includes("payroll") && !this.router.url.includes("admin");
+            this.showAdmin = this.router.url.includes("admin");
+            this.showReports = this.router.url.includes("reports");
+
             if (ev.toString().includes("notfound")) {
                 this.router.navigate([{ outlets: [{'summary': [null]}, {'detail': [null]}]}]);
             }

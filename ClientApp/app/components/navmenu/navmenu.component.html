@@ -18,45 +18,58 @@
             <ul class='nav navbar-nav'>
                 <li *ngIf="user && user.isPayrollUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'payroll'}}]">
-                        <span class="glyphicon glyphicon-gbp"></span>Payroll
+                        <span class="glyphicon glyphicon-gbp"></span>
+                        <span>Payroll</span>
                     </a>
                 </li>
                 <li *ngIf="user" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'initial-assess-manager'}}]">
-                        <span class="glyphicon glyphicon-list-alt"></span>Care Initial Assessments
+                        <span class="glyphicon glyphicon-list-alt"></span>
+                        <span>Care Initial Assessments</span>
                     </a>
                 </li>
                 <li *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin'}}]">
-                        <span class="glyphicon glyphicon-user"></span>Administration
+                        <span class="glyphicon glyphicon-tags"></span>
+                        <span>Administration</span>
                     </a>
                 </li>
-                <!-- Nested Admin menus, to be gated on route and indented -->
-                <li *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/user'}}]" class="sub-menu">User Admin</a>
+                <li *ngIf="user && user.isAdmin && showAdmin" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/user'}}]" class="sub-menu">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span>User Admin</span>
+                    </a>
                 </li>
-                <li *ngIf="user && user.isAdmin" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/payroll'}}]" class="sub-menu">Payroll Admin</a>
+                <li *ngIf="user && user.isAdmin && showAdmin" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/payroll'}}]" class="sub-menu">
+                        <span class="glyphicon glyphicon-gbp"></span>
+                        <span>Payroll Admin</span>
+                    </a>
                 </li>
-                <!-- End of -->
                 <li *ngIf="user && user.accountName == 'AlexC'" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
-                        <span class="glyphicon glyphicon-plus-sign"></span>Accidents &amp; Incidents
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span>Accidents &amp; Incidents</span>
                     </a>
                 </li>
                 <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports'}}]">
-                        <span class="glyphicon glyphicon-book"></span>Reporting
+                        <span class="glyphicon glyphicon-book"></span>
+                        <span>Reporting</span>
                     </a>
                 </li>
-                <!-- Nested Reporting menus, to be gated on route and indented -->
-                <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports/home'}}]">Reports</a>
+                <li *ngIf="user && user.isReportingUser && showReports" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports/home'}}]">
+                        <span class="glyphicon glyphicon-file"></span>
+                        <span>Reports</span>
+                    </a>
                 </li>
-                <li *ngIf="user && user.isReportingUser" [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports/scheduled'}}]">Schedules</a>
+                <li *ngIf="user && user.isReportingUser && showReports" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: { summary:null, detail:null, primary: 'reports/scheduled'}}]">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span>Schedules</span>
+                    </a>
                 </li>
-                <!-- End of -->
             </ul>
             <div *ngIf="showCalendar" class="calendar-div" align="center">
                 <p-calendar class="datepicker" [inline]="true" [locale]="loc" (onSelect)="dateSelected($event)" [(ngModel)]="selectedDate"

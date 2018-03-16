@@ -83,3 +83,7 @@ div.calendar-div {
     bottom: 16px;
     left: 16px;
 }
+
+.navbar li.submenu {
+    padding-left: 32px;
+}
