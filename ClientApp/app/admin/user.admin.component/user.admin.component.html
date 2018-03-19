@@ -2,8 +2,13 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-md-6">
-                    <h4><strong>User Administration</strong></h4>
+                <div class="col-md-6 section-heading">
+                    <h4>
+                        <strong>
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span>User Administration</span>
+                        </strong>
+                    </h4>
                 </div>
                 <div class="col-md-6">
                     <div class="admin-buttons pull-right">
@@ -17,33 +22,24 @@
             <table class="table table-responsive table-striped">
                 <thead>
                     <tr class="row">
-                        <th class="col-md-3">Username</th>
-                        <th class="col-md-1">Is Active</th>
-                        <th class="col-md-1">Is Admin</th>
-                        <th class="col-md-1">Is Payroll User</th>
-                        <th class="col-md-3">Default Team</th>
-                        <th class="col-md-1">Can Authorise Payroll Adjustments</th>
-                        <th class="col-md-1">Can Reject Payroll Adjustments</th>
-                        <th class="col-md-1">Is Assessment User</th>
+                        <th class="col-md-6">Username</th>
+                        <th class="col-md-1">Active</th>
+                        <th class="col-md-1">Payroll</th>
+                        <th class="col-md-1">Assessments</th>
+                        <th class="col-md-1">Admin</th>
+                        <th class="col-md-1">Accident</th>
+                        <th class="col-md-1">Reporting</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="row" *ngFor="let user of allUsers">
-                        <td>{{user.accountName}}</td>
+                        <td (click)="selectUser(user)">{{user.accountName}}</td>
                         <td><p-checkbox [(ngModel)]="user.isActive" binary="true" [name]="'isActive_' + user.id"></p-checkbox></td>
-                        <td><p-checkbox [(ngModel)]="user.isAdmin" binary="true" [name]="'isAdmin_' + user.id"></p-checkbox></td>
                         <td><p-checkbox [(ngModel)]="user.isPayrollUser" binary="true" [name]="'isPayrollUser_' + user.id"></p-checkbox></td>
-                        <td>
-                            <select class="form-control" id="teamSelect" [(ngModel)]="user.defaultTeamCode"
-                                    [name]="'defaultTeamCode_' + user.id" [disabled]="!user.isPayrollUser">
-                                <option *ngFor="let team of allTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
-                            </select>
-                        </td>
-                        <td><p-checkbox [(ngModel)]="user.canAuthoriseAdjustments" binary="true" [name]="'canAuthoriseAdjustments_' + user.id"
-                                         [disabled]="!user.isPayrollUser"></p-checkbox></td>
-                        <td><p-checkbox [(ngModel)]="user.canRejectAdjustments" binary="true" [name]="'canRejectAdjustments_' + user.id"
-                                         [disabled]="!user.isPayrollUser"></p-checkbox></td>
                         <td><p-checkbox [(ngModel)]="user.isAssessmentUser" binary="true" [name]="'isAssessmentUser_' + user.id"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="user.isAdmin" binary="true" [name]="'isAdmin_' + user.id"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="user.isAccidentUser" binary="true" [name]="'isAccidentUser_' + user.id"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="user.isReportingUser" binary="true" [name]="'isReportingUser_' + user.id"></p-checkbox></td>
                     </tr>
                 </tbody>
             </table>

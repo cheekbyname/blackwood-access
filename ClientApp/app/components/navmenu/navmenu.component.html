@@ -22,7 +22,7 @@
                         <span>Payroll</span>
                     </a>
                 </li>
-                <li *ngIf="user" [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isAssessmentUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'initial-assess-manager'}}]">
                         <span class="glyphicon glyphicon-list-alt"></span>
                         <span>Care Initial Assessments</span>
@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li *ngIf="user && user.isAdmin && showAdmin" [routerLinkActive]="['link-active']" class="submenu">
-                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/user'}}]" class="sub-menu">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/users'}}]" class="sub-menu">
                         <span class="glyphicon glyphicon-user"></span>
                         <span>User Admin</span>
                     </a>
@@ -46,7 +46,7 @@
                         <span>Payroll Admin</span>
                     </a>
                 </li>
-                <li *ngIf="user && user.accountName == 'AlexC'" [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isAccidentUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
                         <span class="glyphicon glyphicon-plus-sign"></span>
                         <span>Accidents &amp; Incidents</span>

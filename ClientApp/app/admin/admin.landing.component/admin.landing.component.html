@@ -16,7 +16,7 @@
         </div>
         <div class="row menu-icon-row">
             <div *ngIf="user && user.isAdmin" class="col-md-2">
-                <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'admin/user'}}]">
+                <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'admin/users'}}]">
                     <span class="big-icon glyphicon glyphicon-user"></span>
                     <h4 class="icon-text">User Admin</h4>
                 </a>

@@ -12,6 +12,7 @@ export class AccessUser {
     public canRejectAdjustments: boolean;
     public isAssessmentUser: boolean;
     public isReportingUser: boolean;
+    public isAccidentUser: boolean;
 
     public emailAddress: string;
 

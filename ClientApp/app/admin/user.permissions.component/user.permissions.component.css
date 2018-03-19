@@ -1,4 +1,4 @@
-h4, label, select, td, th {
+h4, label, select, td, th, .proper-font {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -10,7 +10,7 @@ h4, label, select, td, th {
     margin-top: 24px;
 }
 
-.panel-heading {
+.panel div.panel-heading {
     border-bottom: 1px solid silver;
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);
@@ -40,11 +40,15 @@ table tbody tr:hover {
     background-color: #bfd730;
 }
 
-/*.admin-buttons:first-child {
-    margin-right:16px;
-}*/
-
 .section-heading .glyphicon {
     top: 4px;
     font-size: 16pt;
+}
+
+.well .form-label span {
+    margin-right: 8px;
+}
+
+.well .form-label:hover {
+    cursor: pointer;
 }

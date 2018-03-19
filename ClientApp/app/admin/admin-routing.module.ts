@@ -7,25 +7,15 @@ import { AdminComponent } from './admin.component'
 import { AdminLandingComponent } from "./admin.landing.component/admin.landing.component";
 import { PayrollAdminComponent } from "./payroll.admin.component/payroll.admin.component";
 import { UserAdminComponent } from "./user.admin.component/user.admin.component";
+import { UserPermissionsComponent } from "./user.permissions.component/user.permissions.component";
 
 const adminRoutes: Routes = [
     {
-        path: 'admin',
-        component: AdminComponent,
-        canActivate: [AdminGuard],
-        children: [
-            {
-                path: '',
-                component: AdminLandingComponent
-            },
-            {
-                path: 'user',
-                component: UserAdminComponent
-            },
-            {
-                path: 'payroll',
-                component: PayrollAdminComponent,
-            }
+        path: 'admin', component: AdminComponent, canActivate: [AdminGuard], children: [
+            { path: '', component: AdminLandingComponent },
+            { path: 'users', component: UserAdminComponent },
+            { path: 'users/:user', component: UserPermissionsComponent },
+            { path: 'payroll', component: PayrollAdminComponent }
         ]
     }
 ];
@@ -34,4 +24,4 @@ const adminRoutes: Routes = [
     imports: [RouterModule.forChild(adminRoutes)],
     exports: [RouterModule]
 })
-export class AdminRoutingModule {}
+export class AdminRoutingModule { }

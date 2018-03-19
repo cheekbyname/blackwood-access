@@ -14,11 +14,13 @@ import { UserAdminComponent } from "./user.admin.component/user.admin.component"
 
 import { UserProvider } from "../user.provider";
 import { AppModuleShared } from "../app.shared.module";
+import { UserPermissionsComponent } from "./user.permissions.component/user.permissions.component";
 
 @NgModule({
     imports: [CommonModule, FormsModule, AdminRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule,
         DialogModule],
-    declarations: [AdminComponent, AdminLandingComponent, PayrollAdminComponent, UserAdminComponent, ReportingAdminComponent],
+    declarations: [AdminComponent, AdminLandingComponent, PayrollAdminComponent, UserAdminComponent, ReportingAdminComponent,
+        UserPermissionsComponent],
     providers: [ConfirmationService, AdminGuard, UserProvider]
 })
 export class AdminModule { }

@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 
 import { AccessUser } from "../../models/AccessUser";
@@ -18,7 +19,7 @@ export class UserAdminComponent implements OnInit {
     prevUsers: AccessUser[];
     allTeams: Team[];
 
-    constructor(private userPro: UserProvider, private payPro: PayrollProvider) { }
+    constructor(private userPro: UserProvider, private payPro: PayrollProvider, private router: Router) { }
 
     ngOnInit() {
         this.payPro.teams$.subscribe(teams => this.allTeams = teams);
@@ -36,6 +37,7 @@ export class UserAdminComponent implements OnInit {
     undoChanges(form: NgForm) {
         // Reload Users from API
         this.userPro.GetAllUsers();
+        form.reset();
     }
 
     saveChanges(form: NgForm) {
@@ -45,5 +47,9 @@ export class UserAdminComponent implements OnInit {
                 this.userPro.PutUser(u);
             }
         });
+    }
+
+    selectUser(user: AccessUser) {
+        this.router.navigate(['admin/users', user.id]);
     }
 }
