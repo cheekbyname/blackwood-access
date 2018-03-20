@@ -48,6 +48,8 @@ export class UserPermissionsComponent implements OnInit {
         this.selectedUser.authorizedTeams.forEach(at => {
             at.team = this.allTeams.find(all => all.teamCode == at.teamCode);
         });
+        this.selectedUser.authorizedTeams = this.selectedUser.authorizedTeams
+            .sort((a, b) => { return ( a.team.teamDesc < b.team.teamDesc ? 0 : 1)});
         this.authTeams = this.selectedUser.authorizedTeams.map(at => at.team);
         if (!this.selectedUser.authorizedTeams.map(at => at.teamCode).some(tc => tc == this.selectedUser.defaultTeamCode)) {
             this.selectedUser.defaultTeamCode = 0;
