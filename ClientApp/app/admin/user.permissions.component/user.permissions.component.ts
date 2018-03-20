@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm } from "@angular/forms";
 
@@ -14,18 +14,17 @@ import { UserProvider } from "../../user.provider";
     styleUrls: ['user.permissions.component.css']
 })
 export class UserPermissionsComponent implements OnInit {
-    currentUser: AccessUser;
     selectedUser: AccessUser;
     prevUser: AccessUser;
     allUsers: AccessUser[];
     allTeams: Team[];
+    authTeams: Team[];
 
     constructor(private userPro: UserProvider, private router: Router, private route: ActivatedRoute, payPro: PayrollProvider) {
         userPro.GetAllUsers();
         payPro.getTeams();
 
         payPro.teams$.subscribe(tm => this.allTeams = tm);
-        userPro.userInfo$.subscribe(us => this.currentUser = us);
     }
 
     ngOnInit() {
@@ -34,7 +33,8 @@ export class UserPermissionsComponent implements OnInit {
                 this.userPro.allUsers$.subscribe(us => {
                     this.allUsers = us;
                     this.selectedUser = us.find(u => u.id == p["user"]);
-                    this.prevUser = this.selectedUser;
+                    this.prevUser = Object.assign({}, this.selectedUser);
+                    this.updateAuthTeams();
                 });
             }
         });
@@ -42,6 +42,16 @@ export class UserPermissionsComponent implements OnInit {
 
     isDirty(form: NgForm): boolean {
         return form.dirty;
+    }
+
+    updateAuthTeams() {
+        this.selectedUser.authorizedTeams.forEach(at => {
+            at.team = this.allTeams.find(all => all.teamCode == at.teamCode);
+        });
+        this.authTeams = this.selectedUser.authorizedTeams.map(at => at.team);
+        if (!this.selectedUser.authorizedTeams.map(at => at.teamCode).some(tc => tc == this.selectedUser.defaultTeamCode)) {
+            this.selectedUser.defaultTeamCode = 0;
+        }
     }
 
     undoChanges(form: NgForm) {

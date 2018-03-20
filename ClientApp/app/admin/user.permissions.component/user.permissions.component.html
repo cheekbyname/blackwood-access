@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <select class="form-control" id="teamSelect" [(ngModel)]="selectedUser.defaultTeamCode" name="defaultTeamCode">
-                                        <option *ngFor="let team of allTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
+                                        <option *ngFor="let team of authTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -96,7 +96,11 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let auth of selectedUser.authorizedTeams" class="row">
-                                        <td>{{auth.team.teamDesc}}</td>
+                                        <td>
+                                            <select class="form-control" [(ngModel)]="auth.teamCode" (change)="updateAuthTeams()" [id]="'authTeamCode_' + auth.id" [name]="'authTeamCode_' + auth.id">
+                                                <option *ngFor="let team of allTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
+                                            </select>
+                                        </td>
                                         <td>
                                             <p-checkbox [(ngModel)]="auth.canView" binary="true" [name]="'canView_' + auth.id"></p-checkbox>
                                         </td>
