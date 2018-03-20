@@ -8,6 +8,7 @@ import { Team } from "../../models/payroll/Team";
 
 import { PayrollProvider } from "../../payroll/payroll.provider";
 import { UserProvider } from "../../user.provider";
+import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: 'user-permissions',
@@ -16,7 +17,7 @@ import { UserProvider } from "../../user.provider";
 })
 export class UserPermissionsComponent implements OnInit {
     selectedUser: AccessUser;
-    prevUser: AccessUser;
+    prevUser: string;
     allUsers: AccessUser[];
     allTeams: Team[];
     authTeams: Team[];
@@ -34,7 +35,7 @@ export class UserPermissionsComponent implements OnInit {
                 this.userPro.allUsers$.subscribe(us => {
                     this.allUsers = us;
                     this.selectedUser = us.find(u => u.id == p["user"]);
-                    this.prevUser = Object.assign({}, this.selectedUser);
+                    this.prevUser = JSON.stringify(this.selectedUser);
                     this.updateAuthTeams();
                 });
             }
@@ -54,7 +55,7 @@ export class UserPermissionsComponent implements OnInit {
             at.team = this.allTeams.find(all => all.teamCode == at.teamCode) || new Team();
         });
         this.selectedUser.authorizedTeams = this.selectedUser.authorizedTeams
-            .sort((a, b) => { return ( a.team.teamDesc < b.team.teamDesc ? 0 : 1)});
+            .sort((a, b) => { return (a.team.teamDesc < b.team.teamDesc ? 0 : 1) });
         this.authTeams = this.selectedUser.authorizedTeams.filter(at => at.teamCode !== 0)
             .map(at => this.allTeams.find(aa => aa.teamCode == at.teamCode));
         if (!this.selectedUser.authorizedTeams.map(at => at.teamCode).some(tc => tc == this.selectedUser.defaultTeamCode)) {
@@ -79,8 +80,14 @@ export class UserPermissionsComponent implements OnInit {
     }
 
     saveChanges(form: NgForm) {
-        if (JSON.stringify(this.selectedUser) !== JSON.stringify(this.prevUser)) {
-            this.userPro.PutUser(this.selectedUser);
+        // TODO Remove any Authorised Teams added but not selected
+        if (JSON.stringify(this.selectedUser) !== this.prevUser) {
+            this.userPro.PutUser(this.selectedUser)
+                .catch(err => {
+                    return Observable.throw(err);
+                }).subscribe(r => {
+                    this.selectedUser = r;
+                });
         }
     }
 }

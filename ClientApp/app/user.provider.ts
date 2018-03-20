@@ -4,6 +4,7 @@ import { Http } from "@angular/http";
 import { AccessUser } from "./models/AccessUser";
 
 import { Subject } from "rxjs/Rx";
+import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -33,12 +34,7 @@ export class UserProvider {
         });
     }
 
-    public PutUser(user: AccessUser) {
-        this.http.put('/api/user/PutUser', user).subscribe(res => {
-            if (res.status !== 200) {
-                // TODO Handle in some meaningful way
-                console.log(res);
-            }
-        });
+    public PutUser(user: AccessUser): Observable<AccessUser> {
+        return this.http.put('/api/user/PutUser', user).switchMap(res => Observable.of(res.json() as AccessUser));
     }
 }

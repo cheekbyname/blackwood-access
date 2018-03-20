@@ -11,5 +11,6 @@ export class AccessUserTeam {
     constructor(userId: number) {
         this.accessUserId = userId;
         this.teamCode = 0;
+        this.canView = true;
     }
 }
