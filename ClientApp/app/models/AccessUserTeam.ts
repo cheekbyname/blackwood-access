@@ -6,6 +6,9 @@ export class AccessUserTeam {
     public teamCode: number;
     public canView: boolean;
     public canAuthorizeExports: boolean;
+    public canAuthorizeAdjustments: boolean;
+    public canRejectAdjustments: boolean;
+
     public team: Team;
 
     constructor(userId: number) {

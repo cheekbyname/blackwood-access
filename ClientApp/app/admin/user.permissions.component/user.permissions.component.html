@@ -83,15 +83,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="well">
                             <span class="proper-font">Authorised Teams</span>
                             <table class="table table-striped">
                                 <thead>
                                     <tr class="row">
-                                        <th class="col-md-6">Team</th>
-                                        <th class="col-md-3">Can View</th>
-                                        <th class="col-md-3">Can Authorise Exports</th>
+                                        <th class="col-md-4">Team</th>
+                                        <th class="col-md-2">Can View</th>
+                                        <th class="col-md-2">Can Authorise Exports</th>
+                                        <th class="col-md-2">Can Authorise Adjustments</th>
+                                        <th class="col-md-2">Can Reject Adjustments</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -107,6 +111,8 @@
                                         <td>
                                             <p-checkbox [(ngModel)]="auth.canAuthorizeExports" binary="true" [name]="'canAuthorizeExports_' + auth.teamCode"></p-checkbox>
                                         </td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
