@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm } from "@angular/forms";
 
 import { AccessUser } from "../../models/AccessUser";
+import { AccessUserTeam } from "../../models/AccessUserTeam";
 import { Team } from "../../models/payroll/Team";
 
 import { PayrollProvider } from "../../payroll/payroll.provider";
@@ -40,20 +41,36 @@ export class UserPermissionsComponent implements OnInit {
         });
     }
 
+    codeOfTeam(index, item) {
+        return item.teamCode;
+    }
+
     isDirty(form: NgForm): boolean {
         return form.dirty;
     }
 
     updateAuthTeams() {
         this.selectedUser.authorizedTeams.forEach(at => {
-            at.team = this.allTeams.find(all => all.teamCode == at.teamCode);
+            at.team = this.allTeams.find(all => all.teamCode == at.teamCode) || new Team();
         });
         this.selectedUser.authorizedTeams = this.selectedUser.authorizedTeams
             .sort((a, b) => { return ( a.team.teamDesc < b.team.teamDesc ? 0 : 1)});
-        this.authTeams = this.selectedUser.authorizedTeams.map(at => at.team);
+        this.authTeams = this.selectedUser.authorizedTeams.filter(at => at.teamCode !== 0)
+            .map(at => this.allTeams.find(aa => aa.teamCode == at.teamCode));
         if (!this.selectedUser.authorizedTeams.map(at => at.teamCode).some(tc => tc == this.selectedUser.defaultTeamCode)) {
             this.selectedUser.defaultTeamCode = 0;
         }
+    }
+
+    authable(auth: AccessUserTeam): Team[] {
+        var authable = this.authTeams.filter(at => at.teamCode !== auth.teamCode).map(at => at.teamCode);
+        return this.allTeams.filter(at => !authable.some(au => au == at.teamCode));
+    }
+
+    addTeam() {
+        var newTeam = new AccessUserTeam(this.selectedUser.id);
+        this.selectedUser.authorizedTeams.push(newTeam);
+        this.updateAuthTeams();
     }
 
     undoChanges(form: NgForm) {

@@ -28,7 +28,7 @@ table tbody tr:hover {
     font-family: 'Century Gothic';
 }
 
-.btn-primary:enabled:hover {
+.btn-primary:enabled:hover, .btn-primary:hover {
     cursor: pointer;
     color: black;
     background-color: hotpink;

@@ -95,21 +95,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let auth of selectedUser.authorizedTeams" class="row">
+                                    <tr *ngFor="let auth of selectedUser.authorizedTeams; trackBy: codeOfTeam" class="row">
                                         <td>
-                                            <select class="form-control" [(ngModel)]="auth.teamCode" (change)="updateAuthTeams()" [id]="'authTeamCode_' + auth.id" [name]="'authTeamCode_' + auth.id">
-                                                <option *ngFor="let team of allTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
+                                            <select class="form-control" [(ngModel)]="auth.teamCode" (change)="updateAuthTeams()" [name]="'authTeamCode_' + auth.teamCode">
+                                                <option *ngFor="let team of authable(auth)" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
                                             </select>
                                         </td>
                                         <td>
-                                            <p-checkbox [(ngModel)]="auth.canView" binary="true" [name]="'canView_' + auth.id"></p-checkbox>
+                                            <p-checkbox [(ngModel)]="auth.canView" binary="true" [name]="'canView_' + auth.teamCode"></p-checkbox>
                                         </td>
                                         <td>
-                                            <p-checkbox [(ngModel)]="auth.canAuthorizeExports" binary="true" [name]="'canAuthorizeExports_' + auth.id"></p-checkbox>
+                                            <p-checkbox [(ngModel)]="auth.canAuthorizeExports" binary="true" [name]="'canAuthorizeExports_' + auth.teamCode"></p-checkbox>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <a class="btn btn-primary" (click)="addTeam()">Add Team</a>
                         </div>
                     </div>
                 </div>
