@@ -52,3 +52,24 @@ table tbody tr:hover {
 .well .form-label:hover {
     cursor: pointer;
 }
+
+.select-group {
+    float: left;
+    margin-right: 8px;
+    padding: 6px 6px 0px 6px;
+    background-color: white;
+    border-color: #ccc;
+}
+
+.select-group:hover {
+    background-color: hotpink;
+}
+
+.select-group span {
+    font-size: 16pt;
+    color: red;
+}
+
+.form-control.auth-select {
+    width: calc(100% - 48px);
+}

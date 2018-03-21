@@ -74,6 +74,12 @@ export class UserPermissionsComponent implements OnInit {
         this.updateAuthTeams();
     }
 
+    removeTeam(auth: AccessUserTeam) {
+        var teamAt = this.selectedUser.authorizedTeams.indexOf(auth);
+        this.selectedUser.authorizedTeams.splice(teamAt, 1);
+        this.updateAuthTeams();
+    }
+
     undoChanges(form: NgForm) {
         // Reload Users from API
         this.userPro.GetAllUsers();

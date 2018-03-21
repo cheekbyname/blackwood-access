@@ -38,12 +38,24 @@
                     </thead>
                     <tbody>
                         <tr class="row">
-                            <td><p-checkbox [(ngModel)]="selectedUser.isActive" binary="true" name="isActive"></p-checkbox></td>
-                            <td><p-checkbox [(ngModel)]="selectedUser.isPayrollUser" binary="true" name="isPayrollUser"></p-checkbox></td>
-                            <td><p-checkbox [(ngModel)]="selectedUser.isAssessmentUser" binary="true" name="isAssessmentUser"></p-checkbox></td>
-                            <td><p-checkbox [(ngModel)]="selectedUser.isAdmin" binary="true" name="isAdmin"></p-checkbox></td>
-                            <td><p-checkbox [(ngModel)]="selectedUser.isAccidentUser" binary="true" name="isAccidentUser"></p-checkbox></td>
-                            <td><p-checkbox [(ngModel)]="selectedUser.isReportingUser" binary="true" name="isReportingUser"></p-checkbox></td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isActive" binary="true" name="isActive"></p-checkbox>
+                            </td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isPayrollUser" binary="true" name="isPayrollUser"></p-checkbox>
+                            </td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isAssessmentUser" binary="true" name="isAssessmentUser"></p-checkbox>
+                            </td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isAdmin" binary="true" name="isAdmin"></p-checkbox>
+                            </td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isAccidentUser" binary="true" name="isAccidentUser"></p-checkbox>
+                            </td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isReportingUser" binary="true" name="isReportingUser"></p-checkbox>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -52,29 +64,24 @@
             <div *ngIf="selectedUser.isPayrollUser">
                 <h4>Payroll Configuration</h4>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="well">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <span class="proper-font">Default Team</span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <select class="form-control" id="teamSelect" [(ngModel)]="selectedUser.defaultTeamCode" name="defaultTeamCode">
                                         <option *ngFor="let team of authTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <hr/>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label class="form-label">
                                         <span>Can Authorise Payroll Adjustments</span>
                                         <p-checkbox [(ngModel)]="selectedUser.canAuthoriseAdjustments" binary="true" name="canAuthoriseAdjustments"></p-checkbox>
                                     </label>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <label class="form-label">
                                         <span>Can Reject Payroll Adjustments</span>
                                         <p-checkbox [(ngModel)]="selectedUser.canRejectAdjustments" binary="true" name="canRejectAdjustments"></p-checkbox>
@@ -101,7 +108,10 @@
                                 <tbody>
                                     <tr *ngFor="let auth of selectedUser.authorizedTeams; trackBy: codeOfTeam" class="row">
                                         <td>
-                                            <select class="form-control" [(ngModel)]="auth.teamCode" (change)="updateAuthTeams()" [name]="'authTeamCode_' + auth.teamCode">
+                                            <button class="btn select-group" (click)="removeTeam(auth)" title="Click here to remove this Team Authorisation">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                            <select class="form-control auth-select" [(ngModel)]="auth.teamCode" (change)="updateAuthTeams()" [name]="'authTeamCode_' + auth.teamCode">
                                                 <option *ngFor="let team of authable(auth)" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
                                             </select>
                                         </td>
