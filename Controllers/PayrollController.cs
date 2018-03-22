@@ -93,6 +93,13 @@ namespace Blackwood.Access.Controllers
 
         [HttpPut("[action]")]
         public async Task<IActionResult> ApproveSummary([FromBody] TeamPeriod period)
-            => Ok(await _service.ApproveTeamPeriod(period, HttpContext.User));
+        {
+            var result = await _service.ApproveTeamPeriod(period, HttpContext.User);
+
+            if (result.ValidationMessages[401] != null) return Unauthorized();
+            if (result.ValidationMessages[400] != null) return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

@@ -19,6 +19,7 @@ export class TeamPeriod {
     public adjustments: Adjustment[];
     public validationResults: ValidationResult[];
     public authorizations: Authorization[];
+    public validationMessages: {}[];
 
     constructor(teamCode: number, periodStart: string, periodEnd: string) {
         this.teamCode = teamCode;
