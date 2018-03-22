@@ -19,7 +19,7 @@ export class Shift {
 })
 @Injectable()
 export class ShiftOffsetFilter implements PipeTransform {
-    transform(shifts: Shift[], offset:number): Shift[] {
+    public transform(shifts: Shift[], offset:number): Shift[] {
         return shifts.filter(shift => shift.day == offset);
     }
 }
