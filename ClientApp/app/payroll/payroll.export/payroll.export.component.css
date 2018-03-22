@@ -43,3 +43,12 @@ span.loading {
     margin-left: 8px;
 }
 
+.section-heading {
+    margin-top: 4px;
+}
+
+.section-heading .glyphicon {
+    top: 4px;
+    margin-right: 4px;
+    font-size: 16pt;
+}

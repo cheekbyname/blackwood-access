@@ -40,11 +40,12 @@ table tbody tr:hover {
     background-color: #bfd730;
 }
 
-/*.admin-buttons:first-child {
-    margin-right:16px;
-}*/
+.section-heading {
+    margin-top: 4px;
+}
 
 .section-heading .glyphicon {
     top: 4px;
+    margin-right: 4px;
     font-size: 16pt;
 }
