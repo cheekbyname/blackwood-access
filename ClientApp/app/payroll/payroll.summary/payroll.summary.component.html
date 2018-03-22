@@ -17,24 +17,24 @@
 				<!-- Add [showIcon]="true" -->
 			</div>
             <div class="col-md-4">
-                <div class="btn-group btn-group-justified">
-                    <a class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
+                <div class="btn-group">
+                    <button class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
                         <span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
                         <span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
                         <span>{{showSummary ? "Hide" : "Show"}}</span>
-                    </a>
-                    <a class="btn btn-primary" (click)="showExport()">
+					</button>
+                    <button class="btn btn-primary" (click)="showExport()">
                         <span class="glyphicon glyphicon-export"></span>
                         <span>Export</span>
-                    </a>
-                    <a class="btn btn-primary" (click)="showReview()">
+					</button>
+                    <button class="btn btn-primary" (click)="showReview()">
                         <span class="glyphicon glyphicon-eye-open"></span>
                         <span>Review</span>
-                    </a>
-                    <a class="btn btn-primary" (click)="approveSummary()">
+					</button>
+                    <button class="btn btn-primary" (click)="approveSummary()" [disabled]="!isAuthorized()" [title]="authText()">
                         <span class="glyphicon glyphicon-thumbs-up"></span>
                         <span>Approve</span>
-                    </a>
+					</button>
                 </div>
             </div>
 		</div>

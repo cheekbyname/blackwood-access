@@ -90,5 +90,9 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> CodeTypes() => Ok(await _dataService.GetPayrollCodeTypes());
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> ApproveSummary([FromBody] TeamPeriod period)
+            => Ok(await _service.ApproveTeamPeriod(period, HttpContext.User));
     }
 }

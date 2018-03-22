@@ -24,7 +24,6 @@ export class UserPermissionsComponent implements OnInit {
 
     constructor(private userPro: UserProvider, private router: Router, private route: ActivatedRoute, payPro: PayrollProvider) {
         userPro.GetAllUsers();
-        payPro.getTeams();
 
         payPro.teams$.subscribe(tm => this.allTeams = tm);
     }

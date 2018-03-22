@@ -22,9 +22,8 @@ export class PayrollManagerComponent implements OnInit {
     
     _selectedTeam: Team;
 
-    constructor(public payPro: PayrollProvider, private router: Router, private route: ActivatedRoute, private userPro: UserProvider) {
-
-    }
+    constructor(public payPro: PayrollProvider, private router: Router, private route: ActivatedRoute,
+        private userPro: UserProvider) { }
 
     ngOnInit() {
         Observable
@@ -47,25 +46,6 @@ export class PayrollManagerComponent implements OnInit {
             });
 
         this.userPro.GetUserInfo();
-        this.payPro.getTeams();
-        // Init Team list in TimesheetService TODO Check why this is necessary
-        //this.payPro.getTeams();
-
-        // this.userPro.userInfo$.subscribe(u => this.user = u);
-
-        // this.payPro.teams$.subscribe(teams => {
-        //     if (teams != null) {
-        //         this.teams = teams;
-        //         this.route.params.subscribe(params => {
-        //             if (params['teamCode'] != undefined ) {
-        //                 this.selectedTeam = teams.find(team => team.teamCode == params['teamCode']);
-        //             } else
-        //             if (this.user != undefined) {
-        //                 this.selectedTeam = teams.find(team => team.teamCode == this.user.defaultTeamCode);
-        //             }
-        //         });
-        //     }
-        // })
     }
 
     setTeam(teamCode: number): void {

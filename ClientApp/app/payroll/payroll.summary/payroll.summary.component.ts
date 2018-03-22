@@ -4,11 +4,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from "rxjs/Rx";
 
-import { Team } from '../../models/payroll/Team';
-import { Summary } from '../../models/payroll/Summary';
+import { AccessUser } from '../../models/AccessUser';
 import { Locale, LOC_EN} from '../../models/Locale';
+import { Summary } from '../../models/payroll/Summary';
+import { Team } from '../../models/payroll/Team';
 
 import { PayrollProvider } from '../payroll.provider';
+import { UserProvider } from '../../user.provider';
 
 @Component({
 	selector: 'team-summary',
@@ -43,8 +45,11 @@ export class PayrollSummaryComponent implements OnInit {
 		// });
 	}
 
-	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) {
+	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute,
+		private userPro: UserProvider) {
 		this.payPro.setPeriod(new Date(Date.now()));
+		this.userPro.GetUserInfo();
+		this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
 	}
 
 	loc: Locale = LOC_EN;
@@ -54,6 +59,7 @@ export class PayrollSummaryComponent implements OnInit {
 	periodFinish: Date;
 	weekCommencing: Date;	// For navigation
 	error: any = undefined;
+	currentUser: AccessUser;
 
 	public showSummary: Boolean = true;
 
@@ -94,6 +100,14 @@ export class PayrollSummaryComponent implements OnInit {
 
 	toggleSummary(): void {
 		this.showSummary = !this.showSummary;
+	}
+
+	isAuthorized(): boolean {
+		return this.currentUser && this.currentUser.authorizedTeams.map(at => at.teamCode).some(tc => tc == this.team.teamCode);
+	}
+
+	authText(): string {
+		return this.isAuthorized() ? "Approve this summary for Payroll Export" : "You are not authorised to authorise this authorisation";
 	}
 
     approveSummary(): void {
