@@ -103,7 +103,8 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
 	isAuthorized(): boolean {
-		return this.currentUser && this.currentUser.authorizedTeams.map(at => at.teamCode).some(tc => tc == this.team.teamCode);
+		return this.currentUser && this.currentUser.authorizedTeams.filter(at => at.canAuthorizeExports)
+			.map(at => at.teamCode).some(tc => tc == this.team.teamCode);
 	}
 
 	authText(): string {
