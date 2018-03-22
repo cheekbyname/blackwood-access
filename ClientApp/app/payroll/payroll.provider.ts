@@ -7,12 +7,13 @@ import { AccessUser } from "../models/AccessUser";
 import { Adjustment } from "../models/payroll/Adjustment";
 import { Carer } from "../models/payroll/Carer";
 import { CarerContract } from "../models/payroll/Contract";
-import { Locale, LOC_EN } from "../models/Locale";
 import { Export } from "../models/payroll/Export";
+import { Locale, LOC_EN } from "../models/Locale";
 import { PayrollCodeMap } from "../models/payroll/PayrollCodeMap";
 import { PayrollCodeType } from "../models/payroll/PayrollCodeType";
 import { Summary } from "../models/payroll/Summary";
 import { Team } from "../models/payroll/Team";
+import { TeamPeriod } from "../models/payroll/TeamPeriod";
 import { Timesheet } from "../models/payroll/Timesheet";
 import { ValidationResult } from "../models/payroll/Validation";
 
@@ -343,6 +344,13 @@ export class PayrollProvider implements OnDestroy {
                     return Promise.reject(null);
                 }
             });
+        });
+    }
+
+    public putApproval(teamCode: number, periodStart: Date, periodEnd: Date) {
+        var period = new TeamPeriod(teamCode, this.sqlDate(periodStart), this.sqlDate(periodEnd));
+        this.http.put('api/payroll/approvesummary', period).subscribe(res => {
+            console.log(res);
         });
     }
 }
