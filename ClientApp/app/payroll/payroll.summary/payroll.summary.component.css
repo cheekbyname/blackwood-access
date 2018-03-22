@@ -36,6 +36,17 @@ table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
 }
 
+table {
+    width: 100%;
+}
+
+td {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 p-calendar > span.ui-calendar > input {
     height: 34px;
     width: 120px;

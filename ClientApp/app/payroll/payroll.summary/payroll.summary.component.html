@@ -2,18 +2,20 @@
 	<div class="panel-heading">
 		<div class="row">
 			<!--<h4>{{team.teamDesc}} : {{displayMonth()}}</h4>-->
-			<h4 class="col-md-2 section-heading">
+			<h4 class="col-md-4 section-heading">
                 <strong>
                     <span class="glyphicon glyphicon-align-justify"></span>
                     <span>Payroll Summary</span>
                 </strong>
             </h4>
-			<div class="col-md-6 form-inline date-controls">
+			<div class="col-md-4 form-inline date-controls">
 				<label class="control-label" for="periodStart">From</label>
-				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodStartSelected($event)"></p-calendar>
+				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy"
+					(onSelect)="periodStartSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
 				<!-- Add [showIcon]="true" -->
 				<label class="control-label" for="periodFinish">To</label>
-				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodFinishSelected($event)"></p-calendar>
+				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy"
+				(onSelect)="periodFinishSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
 				<!-- Add [showIcon]="true" -->
 			</div>
             <div class="col-md-4">
@@ -59,7 +61,7 @@
 				</thead>
 				<tbody>
 					<tr class="row" *ngFor="let sum of summaries" (click)="selectCarer(sum)" [ngClass]="{'add-hours-highlight' : additionalHours(sum) > 0}">
-						<td>
+						<td title="{{sum.forename}} {{sum.surname}}">
 							<span *ngIf="sum.monthlyContractMins == 0" class="contract-status glyphicon glyphicon-registration-mark" title="Relief"></span>
 							<span *ngIf="sum.monthlyContractMins != 0" class="contract-status glyphicon glyphicon-copyright-mark" title="Contracted"></span>
 							{{sum.forename}} {{sum.surname}}
