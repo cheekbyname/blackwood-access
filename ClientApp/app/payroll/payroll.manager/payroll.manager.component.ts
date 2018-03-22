@@ -32,8 +32,9 @@ export class PayrollManagerComponent implements OnInit {
             })
             .subscribe(x => {
                 if (x.teams !== undefined && x.teams !== null && x.user !== undefined) {
-                    this.teams = x.teams;
                     this.user = x.user;
+                    var visibleTeams = x.user.authorizedTeams.filter(t => t.canView).map(t => t.teamCode);
+                    this.teams = x.teams.filter(t => visibleTeams.some(v => v === t.teamCode));
                     this.route.params.subscribe(p => {
                         if (p['teamCode'] !== undefined) {
                             this.setTeam(p['teamCode']);
