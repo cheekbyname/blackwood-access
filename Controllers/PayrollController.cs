@@ -77,9 +77,6 @@ namespace Blackwood.Access.Controllers
         public async Task<IActionResult> GetCarerByCode(int carerCode) => Ok(await _dataService.GetCarerByCode(carerCode));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> WorkPatterns(int carer) => Ok(await _dataService.WorkPattern(carer));
-
-        [HttpGet("[action]")]
         public async Task<IActionResult> CodeMap()
             => Ok((await _dataService.GetPayrollCodeMap()).Where(t => t.Active).OrderByDescending(t => t.Type).ThenBy(t => t.TypeCode).ToList());
 
