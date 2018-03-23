@@ -93,8 +93,8 @@ namespace Blackwood.Access.Controllers
         {
             var result = await _service.ApproveTeamPeriod(period, HttpContext.User);
 
-            if (result.ValidationMessages[401] != null) return Unauthorized();
-            if (result.ValidationMessages[400] != null) return BadRequest(result);
+            if (result.ValidationMessages.ContainsKey(401)) return Unauthorized();
+            if (result.ValidationMessages.ContainsKey(400)) return BadRequest(result);
 
             return Ok(result);
         }
