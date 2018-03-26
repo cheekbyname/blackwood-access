@@ -103,11 +103,13 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
 	isAuthorized(): boolean {
+		// TODO Add condition to prevent approval while data is still loading
 		return new Date() >= this.periodFinish && this.currentUser && this.currentUser.authorizedTeams
 			.filter(at => at.canAuthorizeExports).map(at => at.teamCode).some(tc => tc == this.team.teamCode);
 	}
 
 	authText(): string {
+		// TODO Add message indicating that approval requires data to be loaded
 		return new Date() < this.periodFinish ? "This payroll period is not yet finished!" :
 			this.isAuthorized() ? "Approve this summary for Payroll Export" : "You are not authorised to authorise this authorisation";
 	}

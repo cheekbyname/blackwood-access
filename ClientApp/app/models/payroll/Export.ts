@@ -1,5 +1,7 @@
 export class Export {
     public id: number;
+    public authorizationId: number;
+    public teamPeriodId: number;
     public staffMember: string;
     public date: Date;
     public dateFormatted: string;
