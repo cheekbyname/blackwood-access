@@ -49,6 +49,14 @@ namespace Blackwood.Access.Controllers
             return Ok(await _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd));
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Summary(short teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
+        {
+            // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
+            token.ThrowIfCancellationRequested();
+            return Ok(await _service.GetSummary(teamCode, periodStart, periodEnd));
+        }
+
         [HttpPut("[action]")]
         public IActionResult AddTimesheetAdjustment([FromBody] Adjustment adj)
             => Ok(_service.PutTimesheetAdjustment(adj, HttpContext.User));
