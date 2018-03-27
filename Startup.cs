@@ -96,6 +96,7 @@ namespace Blackwood.Access
             services.AddScoped<IPayrollService, PayrollService>();
             services.AddScoped<IPayrollShiftService, PayrollShiftService>();
             services.AddScoped<IPayrollValidationService, PayrollValidationService>();
+            services.AddScoped<IPayrollShiftValidationService, PayrollShiftValidationService>();
             services.AddScoped<IPushService, PushService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccidentService, AccidentService>();
