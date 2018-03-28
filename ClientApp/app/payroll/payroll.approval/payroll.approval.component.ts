@@ -20,13 +20,11 @@ export class PayrollApprovalComponent {
 
     constructor (private payPro: PayrollProvider, private userPro: UserProvider, private router: Router) {
 		this.userPro.GetUserInfo();
-        this.userPro.userInfo$.subscribe(ui => {
-            this.currentUser = ui;
-            console.log(ui);
-        });
+        this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
         this.payPro.teamPeriod$.subscribe(tp => {
             this.summary = tp;
-            console.log(tp);
+            if (this.summary !== null) this.summary.authorizations
+                .sort((a, b) => new Date(a.whenAuthorized) < new Date(b.whenAuthorized) ? 1: 0);
         });
     }
     
@@ -52,4 +50,8 @@ export class PayrollApprovalComponent {
 			{ outlets: { detail: null, summary: ['summary', this.summary.teamCode] }}]);
 	}
 
+    public displayDateAndTime(when: string): string {
+        var dt: Date = new Date(when);
+        return `${dt.toLocaleDateString('en-gb')} ${dt.toLocaleTimeString()}`;
+    }
 }

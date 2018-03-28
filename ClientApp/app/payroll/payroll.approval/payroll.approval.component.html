@@ -26,6 +26,26 @@
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
-        <pre>{{summary | json}}</pre>
+        <div *ngIf="summary">
+            <div *ngIf="summary.authorizations.length > 0">
+                <h4>Previous Authorisations</h4>
+                <table class="table table-responsive table-striped">
+                    <thead>
+                        <tr>
+                            <th><span>Authorised By</span></th>
+                            <th><span>When Authorised</span></th>
+                            <th><span>Additional Hours</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let auth of summary.authorizations">
+                            <td><span>{{auth.authorizingUser.accountName}}</span></td>
+                            <td><span>{{displayDateAndTime(auth.whenAuthorized)}}</span></td>
+                            <td><span>{{auth.authorisedAdditionalHours}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,4 +1,5 @@
 import { AccessUser } from "../AccessUser";
+import { Export } from "./Export";
 import { TeamPeriod } from "./TeamPeriod";
 
 export class Authorization {
@@ -9,4 +10,7 @@ export class Authorization {
 
     public teamPeriod: TeamPeriod;
     public authorizingUser: AccessUser;
+    public exports: Export[];
+
+    public authorisedAdditionalHours: number;
 }
