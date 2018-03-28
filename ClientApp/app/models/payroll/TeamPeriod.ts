@@ -9,8 +9,9 @@ import { ValidationResult } from "./Validation";
 export class TeamPeriod {
     public id: number;
     public teamCode: number;
-    public periodStart: string;
-    public periodEnd: string;
+    public periodStart: any;
+    public periodEnd: any;
+    public whenExported: Date;
 
     public team: Team;
     public carers: Carer[];
@@ -20,6 +21,9 @@ export class TeamPeriod {
     public validationResults: ValidationResult[];
     public authorizations: Authorization[];
     public validationMessages: {}[];
+
+    public isAuthorized: boolean;
+    public isExported: boolean;
 
     constructor(teamCode: number, periodStart: string, periodEnd: string) {
         this.teamCode = teamCode;

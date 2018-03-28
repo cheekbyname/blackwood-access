@@ -22,40 +22,41 @@ import { UserProvider } from "../user.provider";
 @Injectable()
 export class PayrollProvider implements OnDestroy {
 
-    private _weekCommencing = new BehaviorSubject<Date>(new Date());
-    private _periodStart = new BehaviorSubject<Date>(null);
-    private _periodFinish = new BehaviorSubject<Date>(null);
-    private _selectedTeam = new BehaviorSubject<Team>(null);
-    private _selectedCarer = new BehaviorSubject<Carer>(null);
-    private _teams = new BehaviorSubject<Team[]>(null);
-    private _carers = new BehaviorSubject<Carer[]>(null);
     private _adjustments = new BehaviorSubject<Adjustment[]>(null);
-    private _timesheet = new BehaviorSubject<Timesheet>(null);
-    private _summaries = new BehaviorSubject<Summary[]>(null);
-    private _validation = new BehaviorSubject<ValidationResult>(null);
-    private _export = new BehaviorSubject<Export[]>(undefined);
+    private _carers = new BehaviorSubject<Carer[]>(null);
     private _codeMap = new BehaviorSubject<PayrollCodeMap[]>(undefined);
     private _codeTypes = new BehaviorSubject<PayrollCodeType[]>(undefined);
     private _errorMessage = new BehaviorSubject<string>(undefined);
+    private _export = new BehaviorSubject<Export[]>(undefined);
+    private _periodFinish = new BehaviorSubject<Date>(null);
+    private _periodStart = new BehaviorSubject<Date>(null);
+    private _selectedCarer = new BehaviorSubject<Carer>(null);
+    private _selectedTeam = new BehaviorSubject<Team>(null);
+    private _summaries = new BehaviorSubject<Summary[]>(null);
+    private _teamPeriod = new BehaviorSubject<TeamPeriod>(null);
+    private _teams = new BehaviorSubject<Team[]>(null);
+    private _timesheet = new BehaviorSubject<Timesheet>(null);
+    private _validation = new BehaviorSubject<ValidationResult>(null);
+    private _weekCommencing = new BehaviorSubject<Date>(new Date());
 
-    weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
-    periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
-    periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
-    selectedTeam$ = this._selectedTeam.asObservable()
-        .distinctUntilChanged((a: Team, b: Team) => a !== null && b !== null && a.teamCode === b.teamCode);
-    selectedCarer$ = this._selectedCarer.asObservable()
-        .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
-    validation$ = this._validation.asObservable();
-    export$ = this._export.asObservable();
+    adjustments$ = this._adjustments.asObservable();
+    carers$ = this._carers.asObservable();
     codeMap$ = this._codeMap.asObservable().filter(map => map !== undefined);
     codeTypes$ = this._codeTypes.asObservable();
     errorMessage$ = this._errorMessage.asObservable();
-
-    teams$ = this._teams.asObservable();
-    carers$ = this._carers.asObservable();
-    adjustments$ = this._adjustments.asObservable();
-    timesheet$ = this._timesheet.asObservable();
+    export$ = this._export.asObservable();
+    periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
+    periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
+    selectedCarer$ = this._selectedCarer.asObservable()
+        .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
+    selectedTeam$ = this._selectedTeam.asObservable()
+        .distinctUntilChanged((a: Team, b: Team) => a !== null && b !== null && a.teamCode === b.teamCode);
     summaries$ = this._summaries.asObservable();
+    teamPeriod$ = this._teamPeriod.asObservable();
+    teams$ = this._teams.asObservable();
+    timesheet$ = this._timesheet.asObservable();
+    validation$ = this._validation.asObservable();
+    weekCommencing$ = this._weekCommencing.asObservable().distinctUntilChanged();
 
     week$: Observable<{ "weekCommencing": Date, "carer": Carer }>;
     period$: Observable<{ "team": Team, "start": Date, "finish": Date }>;
@@ -113,6 +114,7 @@ export class PayrollProvider implements OnDestroy {
         this.subscribeTo(this.period$, this._adjustments, this.getTimesheetAdjustmentsByTeam);
         this.subscribeTo(this.period$, this._validation, this.getValidationResult);
         this.subscribeTo(this.period$, this._export, this.getPayrollExport);
+        this.subscribeTo(this.period$, this._teamPeriod, this.getTeamPeriod);
 
         this.userPro.userInfo$.subscribe(x => this.user = x);
 
@@ -223,6 +225,14 @@ export class PayrollProvider implements OnDestroy {
         if (isDevMode()) console.log(tsUrl);
         return this.http.get(tsUrl)
             .map(res => res.json() as ValidationResult)
+            .catch(err => Observable.throw(err));
+    }
+
+    getTeamPeriod(x: {team: Team, start: Date, finish: Date}): Observable<TeamPeriod> {
+        var tsUrl = `/api/payroll/summary?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodEnd=${this.sqlDate(x.finish)}`;
+        if (isDevMode()) console.log(tsUrl);
+        return this.http.get(tsUrl)
+            .map(res => res.json() as TeamPeriod)
             .catch(err => Observable.throw(err));
     }
 
@@ -347,8 +357,8 @@ export class PayrollProvider implements OnDestroy {
         });
     }
 
-    public putApproval(teamCode: number, periodStart: Date, periodEnd: Date) {
-        var period = new TeamPeriod(teamCode, this.sqlDate(periodStart), this.sqlDate(periodEnd));
+    public putApproval(teamCode: number, periodStart: any, periodEnd: any) {
+        var period = new TeamPeriod(teamCode, periodStart, periodEnd);
         this.http.put('api/payroll/approvesummary', period).subscribe(res => {
             console.log(res);
         });

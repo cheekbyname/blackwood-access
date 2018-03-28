@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PayrollGuard } from "./payroll-guard.service";
 
+import { PayrollApprovalComponent } from './payroll.approval/payroll.approval.component';
 import { PayrollComponent } from "./payroll.component";
 import { PayrollExportComponent } from "./payroll.export/payroll.export.component";
 import { PayrollManagerComponent } from './payroll.manager/payroll.manager.component';
@@ -19,7 +20,8 @@ const timesheetRoutes: Routes = [
 		{ path: 'timesheet/:carer', component: TimesheetViewerComponent, outlet: 'detail' },
 		{ path: 'timesheet', component: TimesheetViewerComponent, outlet: 'detail' },
 		{ path: 'review/:teamCode', component: PayrollReviewComponent, outlet: 'detail'},
-		{ path: 'export/:teamCode', component: PayrollExportComponent, outlet: 'detail'}
+		{ path: 'export/:teamCode', component: PayrollExportComponent, outlet: 'detail'},
+		{ path: 'approve', component: PayrollApprovalComponent, outlet: 'detail'}
 	] },
 	{ path: 'payroll', component: PayrollComponent, canActivate: [PayrollGuard], children: [
 		{ path: '', component: PayrollManagerComponent }

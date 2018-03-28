@@ -1,0 +1,31 @@
+<div class="panel">
+    <div class="panel-heading">
+        <div class="row">
+            <h4 class="col-md-6 section-heading">
+                <strong>
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                    <span>Payroll Approval</span>
+                </strong>
+            </h4>
+            <div class="col-md-6">
+                <div class="btn-group pull-right">
+                    <button class="btn btn-primary" (click)="approveSummary()" [disabled]="!isAuthorized()" [title]="authText()">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>Approve</span>
+                    </button>
+                    <button class="btn btn-primary" (click)="clearDetail()">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span>Close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div *ngIf="!summary" class="alert alert-info">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retrieving your data...</span>
+        </div>
+        <pre>{{summary | json}}</pre>
+    </div>
+</div>

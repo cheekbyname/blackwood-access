@@ -1,0 +1,54 @@
+h4, label, input, td > span, th > span {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+label, input {
+    font-size: 11pt;
+}
+
+.form-inline div:last-child {
+    margin-left: 8px;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+    height: 58px;
+}
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+}
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+    margin-left: 8px;
+}
+
+.section-heading {
+    margin-top: 4px;
+}
+
+.section-heading .glyphicon {
+    top: 4px;
+    margin-right: 4px;
+    font-size: 16pt;
+}

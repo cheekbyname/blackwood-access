@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from "rxjs/Rx";
 
 import { AccessUser } from '../../models/AccessUser';
-import { Locale, LOC_EN} from '../../models/Locale';
+import { Locale, LOC_EN } from '../../models/Locale';
 import { Summary } from '../../models/payroll/Summary';
 import { Team } from '../../models/payroll/Team';
 
@@ -15,7 +15,7 @@ import { UserProvider } from '../../user.provider';
 @Component({
 	selector: 'team-summary',
 	templateUrl: './payroll.summary.component.html',
-    styleUrls: ['./payroll.summary.component.css']
+	styleUrls: ['./payroll.summary.component.css']
 })
 export class PayrollSummaryComponent implements OnInit {
 
@@ -38,7 +38,7 @@ export class PayrollSummaryComponent implements OnInit {
 				this.error = err;
 				return Observable.of<Summary[]>([]);
 			})
-            .subscribe(sums => this.summaries = sums);
+			.subscribe(sums => this.summaries = sums);
 		this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
 		// this.payPro.errorMessage$.subscribe(err => {
 		// 	if(err != undefined) this.errored = true;
@@ -102,53 +102,44 @@ export class PayrollSummaryComponent implements OnInit {
 		this.showSummary = !this.showSummary;
 	}
 
-	isAuthorized(): boolean {
-		// TODO Add condition to prevent approval while data is still loading
-		return new Date() >= this.periodFinish && this.currentUser && this.currentUser.authorizedTeams
-			.filter(at => at.canAuthorizeExports).map(at => at.teamCode).some(tc => tc == this.team.teamCode);
-	}
-
-	authText(): string {
-		// TODO Add message indicating that approval requires data to be loaded
-		return new Date() < this.periodFinish ? "This payroll period is not yet finished!" :
-			this.isAuthorized() ? "Approve this summary for Payroll Export" : "You are not authorised to authorise this authorisation";
-	}
-
-    approveSummary(): void {
-        this.payPro.putApproval(this.team.teamCode, this.periodStart, this.periodFinish);
-    }
-
 	selectCarer(sum: Summary): void {
 		this.showSummary = false;
 
 		var navDate = this.weekCommencing >= this.periodStart && this.weekCommencing <= this.periodFinish
 			? this.weekCommencing : this.payPro.getWeekCommencingFromDate(this.periodFinish);
 
-			this.router.navigate(['/payroll', this.team.teamCode,
-			{ outlets: {
-				detail: ['timesheet', {
-					carer: sum.carerCode,
-					week: this.payPro.sqlDate(navDate)
-				}],
-				summary: ['summary', this.team.teamCode]
-			}
-		}]);
+		this.router.navigate(['/payroll', this.team.teamCode,
+			{
+				outlets: {
+					detail: ['timesheet', {
+						carer: sum.carerCode,
+						week: this.payPro.sqlDate(navDate)
+					}],
+					summary: ['summary', this.team.teamCode]
+				}
+			}]);
 	}
 
 	showReview() {
 		this.showSummary = false;
 		this.router.navigate(['/payroll', this.team.teamCode,
-			{ outlets: { detail: ['review', this.team.teamCode], summary: ['summary', this.team.teamCode] }}]);
-    }
+			{ outlets: { detail: ['review', this.team.teamCode], summary: ['summary', this.team.teamCode] } }]);
+	}
 
 	showExport() {
 		this.showSummary = false;
 		this.router.navigate(['/payroll', this.team.teamCode,
-			{ outlets: { detail: ['export', this.team.teamCode], summary: ['summary', this.team.teamCode] }}]);
+			{ outlets: { detail: ['export', this.team.teamCode], summary: ['summary', this.team.teamCode] } }]);
 	}
 
-    public additionalHours(sum: Summary): number {
+	showApproval() {
+		this.showSummary = false;
+		this.router.navigate(['/payroll', this.team.teamCode,
+			{ outlets: { detail: ['approve'], summary: ['summary', this.team.teamCode] } }]);
+	}
+
+	public additionalHours(sum: Summary): number {
 		let sumMins = sum.actualMins - sum.unpaidMins - sum.monthlyContractMins;
-        return sumMins < 0 ? 0 : sumMins;
-    }
+		return sumMins < 0 ? 0 : sumMins;
+	}
 }
