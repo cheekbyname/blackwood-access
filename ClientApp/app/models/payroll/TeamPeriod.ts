@@ -18,7 +18,7 @@ export class TeamPeriod {
     public summaries: Summary[];
     public exports: Export[];
     public adjustments: Adjustment[];
-    public validationResults: ValidationResult[];
+    public validationResult: ValidationResult;
     public authorizations: Authorization[];
     public validationMessages: {}[];
 

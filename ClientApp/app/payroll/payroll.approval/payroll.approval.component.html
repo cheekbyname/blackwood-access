@@ -27,6 +27,16 @@
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
         <div *ngIf="summary">
+            <div *ngIf="hasOutstandingRevisions()" class="alert alert-danger">
+                <i class="fa fa-exclamation-triangle fa-2x"></i>
+                <span class="loading">Payroll period for this Team cannot be approved until the following issues are resolved</span>
+                <hr/>
+                <table class="table">
+                    <tr *ngFor="let item of summary.validationResult.carerDataValidationItems">
+                        <td><span>{{item.carer.forename}} {{item.carer.surname}} has {{item.revision}}</span></td>
+                    </tr>
+                </table>
+            </div>
             <div *ngIf="summary.authorizations.length > 0">
                 <h4>Previous Authorisations</h4>
                 <table class="table table-responsive table-striped">
@@ -38,11 +48,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let auth of summary.authorizations">
-                            <td><span>{{auth.authorizingUser.accountName}}</span></td>
-                            <td><span>{{displayDateAndTime(auth.whenAuthorized)}}</span></td>
-                            <td><span>{{auth.authorisedAdditionalHours}}</span></td>
-                        </tr>
+                        <ng-container *ngFor="let auth of summary.authorizations; index as i">
+                            <tr (click)="toggleExportView(i)">
+                                <td><span>{{auth.authorizingUser.accountName}}</span></td>
+                                <td><span>{{displayDateAndTime(auth.whenAuthorized)}}</span></td>
+                                <td><span>{{auth.authorisedAdditionalHours}}</span></td>
+                            </tr>
+                            <tr *ngIf="viewAuth[i]" (click)="toggleExportView(i)">
+                                <td colspan="3">
+                                    <table class="table table-responsive table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th><span>StaffMember</span></th>
+                                                <th><span>Date</span></th>
+                                                <th><span>Sequence</span></th>
+                                                <th><span>NEPay</span></th>
+                                                <th><span>StartDate</span></th>
+                                                <th><span>Position</span></th>
+                                                <th><span>ContractNo</span></th>
+                                                <th><span>Code</span></th>
+                                                <th><span>Hours</span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let exp of auth.exports">
+                                                <td><span>{{exp.staffMember}}</span></td>
+                                                <td><span>{{exp.dateFormatted}}</span></td>
+                                                <td><span>{{exp.sequence}}</span></td>
+                                                <td><span>{{exp.nePay}}</span></td>
+                                                <td><span>{{exp.startDateFormatted}}</span></td>
+                                                <td><span>{{exp.position}}</span></td>
+                                                <td><span>{{exp.contractNo}}</span></td>
+                                                <td><span>{{exp.code}}</span></td>
+                                                <td><span>{{exp.hours}}</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
             </div>

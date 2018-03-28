@@ -8,6 +8,7 @@ export class Export {
     public sequence: number;
     public nePay: string;
     public startDate: Date;
+    public startDateFormatted: string;
     public position: string;
     public contractNo: string;
     public code: string;
