@@ -1,3 +1,5 @@
+import { Carer } from "./Carer";
+
 export class Export {
     public id: number;
     public authorizationId: number;
@@ -13,4 +15,6 @@ export class Export {
     public contractNo: string;
     public code: string;
     public hours: number;
+
+    public carer: Carer;
 }

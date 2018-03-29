@@ -28,6 +28,10 @@ table tbody tr {
     cursor: pointer;
 }
 
+table tbody tr.no-action {
+    cursor: default;
+}
+
 table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
 }

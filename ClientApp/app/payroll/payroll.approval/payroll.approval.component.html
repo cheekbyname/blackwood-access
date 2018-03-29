@@ -9,7 +9,11 @@
             </h4>
             <div class="col-md-6">
                 <div class="btn-group pull-right">
-                    <button class="btn btn-primary" (click)="approveSummary()" [disabled]="!isAuthorized()" [title]="authText()">
+                    <!-- <button class="btn btn-primary" (click)="approveSummary()">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>OVERRIDE</span>
+                    </button> -->
+                    <button class="btn btn-primary" (click)="approveSummary()" [disabled]="!isAuthable()" [title]="authText()">
                         <span class="glyphicon glyphicon-thumbs-up"></span>
                         <span>Approve</span>
                     </button>
@@ -22,19 +26,25 @@
         </div>
     </div>
     <div class="panel-body">
-        <div *ngIf="!summary" class="alert alert-info">
+        <div *ngIf="!summaryLoaded()" class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
-        <div *ngIf="summary">
-            <div *ngIf="hasOutstandingRevisions()" class="alert alert-danger">
+        <div *ngIf="summaryLoaded()">
+            <div *ngIf="!periodFinished()" class="alert alert-danger">
+                <i class="fa fa-exclamation-triangle fa-2x"></i>
+                <span class="loading">Payroll period for this Team cannot be approved until it finishes on {{displayDate(summary.periodEnd)}}</span>
+            </div>
+            <div *ngIf="!noRevisions()" class="alert alert-danger">
                 <i class="fa fa-exclamation-triangle fa-2x"></i>
                 <span class="loading">Payroll period for this Team cannot be approved until the following issues are resolved</span>
                 <hr/>
                 <table class="table">
-                    <tr *ngFor="let item of summary.validationResult.carerDataValidationItems">
-                        <td><span>{{item.carer.forename}} {{item.carer.surname}} has {{item.revision}}</span></td>
-                    </tr>
+                    <tbody>
+                        <tr *ngFor="let item of invalidOnExport()" class="no-action">
+                            <td><span>{{item.carer.forename}} {{item.carer.surname}} has {{item.revision}}</span></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div *ngIf="summary.authorizations.length > 0">
@@ -71,7 +81,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let exp of auth.exports">
+                                            <tr *ngFor="let exp of auth.exports" class="no-action">
                                                 <td><span>{{exp.staffMember}}</span></td>
                                                 <td><span>{{exp.dateFormatted}}</span></td>
                                                 <td><span>{{exp.sequence}}</span></td>

@@ -103,17 +103,17 @@ export class PayrollProvider implements OnDestroy {
             .combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$, (team, start, finish) => {
                 return { "team": team, "start": start, "finish": finish }
             })
-            .filter(x => x.team !== null && x.start !== null && x.finish !== null)
+            .filter(x => x.team !== null && x.start !== null && x.finish !== null && x.finish > x.start)
             .distinctUntilChanged((a, b) => {
                 return (a.team.teamCode === b.team.teamCode)
                     && (a.start.toLocaleDateString("en-GB") === b.start.toLocaleDateString("en-GB"))
                     && (a.finish.toLocaleDateString("en-GB") === b.finish.toLocaleDateString("en-GB"));
             });
 
-        this.subscribeTo(this.period$, this._summaries, this.getSummaries);
-        this.subscribeTo(this.period$, this._adjustments, this.getTimesheetAdjustmentsByTeam);
-        this.subscribeTo(this.period$, this._validation, this.getValidationResult);
-        this.subscribeTo(this.period$, this._export, this.getPayrollExport);
+        // this.subscribeTo(this.period$, this._summaries, this.getSummaries);
+        // this.subscribeTo(this.period$, this._adjustments, this.getTimesheetAdjustmentsByTeam);
+        // this.subscribeTo(this.period$, this._validation, this.getValidationResult);
+        // this.subscribeTo(this.period$, this._export, this.getPayrollExport);
         this.subscribeTo(this.period$, this._teamPeriod, this.getTeamPeriod);
 
         this.userPro.userInfo$.subscribe(x => this.user = x);
@@ -232,7 +232,14 @@ export class PayrollProvider implements OnDestroy {
         var tsUrl = `/api/payroll/summary?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodEnd=${this.sqlDate(x.finish)}`;
         if (isDevMode()) console.log(tsUrl);
         return this.http.get(tsUrl)
-            .map(res => res.json() as TeamPeriod)
+            .map(res => {
+                var tp = res.json() as TeamPeriod;
+                this._summaries.next(tp.summaries);
+                this._adjustments.next(tp.adjustments);
+                this._validation.next(tp.validationResult);
+                this._export.next(tp.currentExports);
+                return tp;
+            })
             .catch(err => Observable.throw(err));
     }
 
@@ -357,10 +364,10 @@ export class PayrollProvider implements OnDestroy {
         });
     }
 
-    public putApproval(teamCode: number, periodStart: any, periodEnd: any) {
-        var period = new TeamPeriod(teamCode, periodStart, periodEnd);
+    public putApproval(period: TeamPeriod) {
         this.http.put('api/payroll/approvesummary', period).subscribe(res => {
-            console.log(res);
+            var tp = res.json() as TeamPeriod;
+            this._teamPeriod.next(tp);
         });
     }
 }

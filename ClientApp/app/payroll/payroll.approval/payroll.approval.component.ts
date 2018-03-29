@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 
 import { AccessUser } from "../../models/AccessUser";
 import { Authorization } from "../../models/payroll/Authorization";
+import { CarerValidationItem } from "../../models/payroll/Validation";
 import { Router } from "@angular/router";
 import { Team } from "../../models/payroll/Team";
 import { TeamPeriod } from "../../models/payroll/TeamPeriod";
@@ -33,32 +34,45 @@ export class PayrollApprovalComponent {
         });
     }
     
-	isAuthorized(): boolean {
-        // TODO Add condition to prevent approval while data is still loading
-        // TODO Refactor into an array of conditions [{text: "", condition: fn() => {}}]
-		return this.summary && !this.hasOutstandingRevisions && new Date() >= new Date(this.summary.periodEnd) && this.currentUser && this.currentUser.authorizedTeams
-			.filter(at => at.canAuthorizeExports).map(at => at.teamCode).some(tc => tc == this.summary.teamCode);
+	isAuthable(): boolean {
+        return this.validConditions.reduce((a, b) => a && b.fn.call(this), true);
     }
     
-    hasOutstandingRevisions(): boolean {
-        return this.summary.validationResult.carerDataValidationItems.length > 0;
-    }
-
 	authText(): string {
-		// TODO Add message indicating that approval requires data to be loaded
-		return this.summary ? new Date() < new Date(this.summary.periodEnd) ? "This payroll period is not yet finished!" :
-            this.isAuthorized() ? "Approve this summary for Payroll Export" : "You are not authorised to authorise this authorisation"
-            : "Data is still loading, please wait";
+        var authText = null;
+        this.validConditions.forEach(cn => {
+            if (!authText && !cn.fn.call(this)) authText = cn.failText;
+        });
+		return authText || "Approve this summary for Payroll Export";
 	}
 
-    approveSummary(): void {
-        this.payPro.putApproval(this.summary.teamCode, this.summary.periodStart, this.summary.periodEnd);
+    // Validation Conditions
+    validConditions: {fn: Function, failText: string }[] = [
+        { fn: this.summaryLoaded, failText: "Data is still loading, please wait" },
+        { fn: this.periodFinished, failText: "This payroll period is not yet finished" },
+        { fn: this.userCanAuth, failText: "You are not authorised to authorise this authorisation" },
+        { fn: this.noRevisions, failText: "There are issues still to be resolved" }
+    ];
+
+    summaryLoaded(): boolean { return !(this.summary === null || this.summary === undefined); }
+    periodFinished(): boolean { return this.summary && new Date() >= new Date(this.summary.periodEnd); }
+    userCanAuth(): boolean { return this.summary &&  this.currentUser && this.currentUser.authorizedTeams
+        .filter(at => at.canAuthorizeExports).map(at => at.teamCode).some(tc => tc == this.summary.teamCode); }
+    noRevisions(): boolean { return this.summary && this.summary.currentAuth && this.invalidOnExport().length === 0; };
+
+    public invalidOnExport(): CarerValidationItem[] {
+        var pers = this.summary.currentExports.map(a => a.carer);
+        return this.summary.validationResult.carerDataValidationItems.filter(a => pers.some(p => a.carer.carerCode === p.carerCode));
     }
 
     toggleExportView(idx: number) {
         var tog = !this.viewAuth[idx];
         this.viewAuth.fill(false);
         this.viewAuth[idx] = tog;
+    }
+
+    approveSummary(): void {
+        this.payPro.putApproval(this.summary);
     }
 
     public clearDetail() {
@@ -69,5 +83,10 @@ export class PayrollApprovalComponent {
     public displayDateAndTime(when: string): string {
         var dt: Date = new Date(when);
         return `${dt.toLocaleDateString('en-gb')} ${dt.toLocaleTimeString()}`;
+    }
+
+    public displayDate(when: string): string {
+        var dt: Date = new Date(when);
+        return `${dt.toLocaleDateString('en-gb')}`;
     }
 }

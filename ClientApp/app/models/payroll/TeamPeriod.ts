@@ -21,9 +21,12 @@ export class TeamPeriod {
     public validationResult: ValidationResult;
     public authorizations: Authorization[];
     public validationMessages: {}[];
+    public currentExports: Export[];
 
     public isAuthorized: boolean;
     public isExported: boolean;
+
+    currentAuth: Authorization;
 
     constructor(teamCode: number, periodStart: string, periodEnd: string) {
         this.teamCode = teamCode;
