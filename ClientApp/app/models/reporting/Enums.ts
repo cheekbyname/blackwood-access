@@ -29,25 +29,25 @@ export enum ReportFilters {
     RegionCode
 }
 
-export const FrequencyNames: Map<Frequency, string> = new Map([
-    [Frequency.Unknown, "UNKNOWN"],
-    [Frequency.Immediate, "Immediate"],
-    [Frequency.Hourly, "Hourly"],
-    [Frequency.Daily, "Daily"],
-    [Frequency.Weekly, "Weekly"],
-    [Frequency.Monthly, "Monthly"],
-    [Frequency.Quarterly, "Quarterly"]
-]);
+export const FrequencyNames: { key: Frequency, value: string }[] = [
+    { key: Frequency.Unknown, value: "UNKNOWN" },
+    { key: Frequency.Immediate, value: "Immediate" },
+    { key: Frequency.Hourly, value: "Hourly" },
+    { key: Frequency.Daily, value: "Daily" },
+    { key: Frequency.Weekly, value: "Weekly" },
+    { key: Frequency.Monthly, value: "Monthly" },
+    { key: Frequency.Quarterly, value: "Quarterly" }
+];
 
-export const DirectionNames: Map<Direction, string> = new Map([
-    [Direction.Unknown, "UNKNOWN"],
-    [Direction.Backwards, "Backwards"],
-    [Direction.Forwards, "Forwards"]
-]);
+export const DirectionNames: { key: Direction, value: string }[] = [
+    { key: Direction.Unknown,  value: "UNKNOWN" },
+    { key: Direction.Backwards, value: "Backwards" },
+    { key: Direction.Forwards, value: "Forwards" }
+];
 
-export const ScopeNames: Map<Scope, string> = new Map([
-    [Scope.Unknown, "UNKNOWN"],
-    [Scope.Region, "Region"],
-    [Scope.Service, "Service"],
-    [Scope.Team, "Team"]
-]);
+export const ScopeNames: { key: Scope, value: string }[] = [
+    { key: Scope.Unknown, value: "UNKNOWN" },
+    { key: Scope.Region, value: "Region" },
+    { key: Scope.Service, value: "Service" },
+    { key: Scope.Team, value: "Team" }
+];

@@ -11,24 +11,28 @@
             </div>
             <div *ngIf="reports" class="col-md-9 form-inline">
                 <label for="reportSelect">Select Report</label>
-                <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport" required>
+                <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport" (ngModelChange)="reportSelected($event)" required>
                     <option *ngFor="let rep of reports" [ngValue]="rep">{{rep.name}}</option>
+                </select>
+                <label for="scopeSelect">Scope</label>
+                <select class="form-control" id="scopeSelect" [(ngModel)]="selectedScope" (ngModelChange)="scopeSelected($event)">
+                    <option *ngFor="let scope of scopes" [ngValue]="scope">{{scope.value}}</option>
                 </select>
                 <label class="control-label" for="selectedStart">From</label>
                 <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy"
-                    (onSelect)="periodStartSelected($event)" inputStyleClass="form-control"></p-calendar>
+                    (onSelect)="periodStartSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px'}"></p-calendar>
                 <label class="control-label" for="selectedEnd">To</label>
                 <p-calendar [(ngModel)]="selectedEnd" id="selectedEnd" [locale]="loc" dateFormat="dd/mm/yy"
-                    (onSelect)="periodEndSelected($event)" inputStyleClass="form-control"></p-calendar>
+                    (onSelect)="periodEndSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px'}"></p-calendar>
             </div>
         </div>
     </div>
-    <div class="panel-body" *ngIf="reportPdfUrl">
-        <object [data]="reportPdfUrl" type="application/pdf">
+    <div class="panel-body" *ngIf="pdf">
+        <object [data]="pdf" type="application/pdf">
             <p>There is no report only Zuul</p>
         </object>
     </div>
-    <div class="panel-body" *ngIf="!reportPdfUrl">
+    <div class="panel-body" *ngIf="!pdf">
         <div class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your report...</span>

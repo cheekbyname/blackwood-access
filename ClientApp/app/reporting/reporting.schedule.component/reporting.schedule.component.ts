@@ -23,9 +23,7 @@ export class ReportingScheduleComponent {
     public formatDate = (dt) => new Date(dt).toLocaleDateString("en-GB");
 
     public viewScheduledReport(sched: Schedule) {
-        this.repPro.selectReport(sched.report);
-        this.repPro.selectPeriodStart(new Date(sched.runPeriod.item1));
-        this.repPro.selectPeriodEnd(new Date(sched.runPeriod.item2));
+        this.repPro.selectSchedule(sched);
         this.router.navigate(['/reports/home',
             { outlets: { detail: null, summary: null }}]);
 

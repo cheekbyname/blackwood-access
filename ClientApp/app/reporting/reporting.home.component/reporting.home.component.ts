@@ -1,11 +1,12 @@
 import { Component, Pipe, PipeTransform } from "@angular/core";
-import { Http, ResponseContentType } from "@angular/http";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
 import { Direction, DirectionNames, Frequency, FrequencyNames, Scope, ScopeNames } from "../../models/reporting/Enums";
 import { Locale, LOC_EN } from "../../models/Locale";
 import { Report } from "../../models/reporting/Report";
 import { ReportingProvider } from "../reporting.provider";
+import { Team } from "../../models/payroll/Team";
+import { Schedule } from "../../models/reporting/Schedule";
 
 @Component({
     selector: 'reporting-home',
@@ -13,13 +14,7 @@ import { ReportingProvider } from "../reporting.provider";
     styleUrls: ['reporting.home.component.css']
 })
 export class ReportingHomeComponent {
-    constructor(private http: Http, private sanitizer: DomSanitizer, private repPro: ReportingProvider) {
-        // TODO Remove this dev thing
-        http.get(this.reportUrl, { responseType: ResponseContentType.ArrayBuffer })
-            .subscribe(res => {
-                let objUrl = URL.createObjectURL(new Blob([res.blob()], { type: "application/pdf" }));
-                this.reportPdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objUrl);
-            });
+    constructor(private repPro: ReportingProvider) {
 
         repPro.reports$.filter(reps => reps !== null).subscribe(reps => this.reports = reps);
         repPro.selectedReport$
@@ -31,31 +26,42 @@ export class ReportingHomeComponent {
             });
         repPro.periodStart$.subscribe(dt => this.selectedStart = dt);
         repPro.periodEnd$.subscribe(dt => this.selectedEnd = dt);
+        repPro.selectedSchedule$.subscribe(sch => this.selectedSchedule = sch);
+        repPro.selectedScope$.subscribe(sc => this.selectedScope = sc);
+        repPro.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
     }
 
     loc: Locale = LOC_EN;
-
-    reportUrl: string = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?reportId=1&periodStart=2018-01-01&periodEnd=2018-01-07&teamCode=132";
-    reportPdfUrl: any = null;
+    pdf: SafeResourceUrl = null;
 
     reports: Report[];
     directions = DirectionNames;
     frequencies = FrequencyNames;
     scopes = ScopeNames;
 
+    selectedSchedule: Schedule;
     selectedReport: Report;
     selectedScope: Scope;
     selectedStart: Date;
     selectedEnd: Date;
+    selectedTeam: Team;
 
     selectedDirection: Direction;
     selectedFrequency: Frequency;
 
     periodStartSelected(ev: any) {
-
+        this.repPro.selectPeriodStart(new Date(ev));
     }
 
     periodEndSelected(ev: any) {
+        this.repPro.selectPeriodEnd(new Date(ev));
+    }
 
+    reportSelected(ev: any) {
+        this.repPro.selectReport(ev);
+    }
+
+    scopeSelected(ev: any) {
+        this.repPro.selectScope(ev);
     }
 }
