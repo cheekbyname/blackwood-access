@@ -43,6 +43,15 @@ namespace Blackwood.Access.Controllers
         public IActionResult Scopes() => Ok(_dataService.GetScopeNames().Select(so => new Lookup((int)so.Key, so.Value)));
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Services() => Ok(await _dataService.GetServices());
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Regions() => Ok(await _dataService.GetRegions());
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> Report(int reportId, DateTime periodStart, DateTime periodEnd, int teamCode = 0)
         {
             ICollection<Report> reports = await _dataService.GetAllReports();

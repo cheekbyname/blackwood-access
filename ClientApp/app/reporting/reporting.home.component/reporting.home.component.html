@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h4 class="section-heading">
                     <strong>
                         <span class="glyphicon glyphicon-file"></span>
@@ -9,8 +9,10 @@
                     </strong>
                 </h4>
             </div>
-            <div *ngIf="reports" class="col-md-9 form-inline">
-                <label for="reportSelect">Select Report</label>
+        <!-- </div>
+        <div class="row"> -->
+            <div *ngIf="reports" class="col-md-10 form-inline">
+                <label for="reportSelect">Report</label>
                 <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport" (ngModelChange)="reportSelected($event)" required>
                     <option *ngFor="let rep of reports" [ngValue]="rep">{{rep.name}}</option>
                 </select>
@@ -18,12 +20,21 @@
                 <select class="form-control" id="scopeSelect" [(ngModel)]="selectedScope" (ngModelChange)="scopeSelected($event)">
                     <option *ngFor="let scope of scopes" [ngValue]="scope">{{scope.value}}</option>
                 </select>
+                <select *ngIf="selectedScope && selectedScope.key == 1" class="form-control" [(ngModel)]="selectedTeam" (ngModelChange)="teamSelected($event)">
+                    <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
+                </select>
+                <select *ngIf="selectedScope && selectedScope.key == 2" class="form-control" [(ngModel)]="selectedService" (ngModelChange)="serviceSelected($event)">
+                    <option *ngFor="let service of services" [ngValue]="service">{{service.name}}</option>
+                </select>
+                <select *ngIf="selectedScope && selectedScope.key == 3" class="form-control" [(ngModel)]="selectedRegion" (ngModelChange)="regionSelected($event)">
+                    <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
+                </select>
                 <label class="control-label" for="selectedStart">From</label>
                 <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy"
-                    (onSelect)="periodStartSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px'}"></p-calendar>
+                    (onSelect)="periodStartSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
                 <label class="control-label" for="selectedEnd">To</label>
                 <p-calendar [(ngModel)]="selectedEnd" id="selectedEnd" [locale]="loc" dateFormat="dd/mm/yy"
-                    (onSelect)="periodEndSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px'}"></p-calendar>
+                    (onSelect)="periodEndSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
             </div>
         </div>
     </div>

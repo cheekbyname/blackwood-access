@@ -4,12 +4,12 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 import { BehaviorSubject, Observable } from "rxjs/Rx";
 
+import { Region } from "../models/reporting/Region";
 import { Report } from "../models/reporting/Report";
 import { Schedule } from "../models/reporting/Schedule";
 import { Scope } from "../models/reporting/Enums";
 import { Service } from "../models/reporting/Service";
 import { Team } from "../models/payroll/Team";
-import { Region } from "../models/reporting/Region";
 
 import { Utils } from "../Utils";
 
@@ -18,6 +18,9 @@ export class ReportingProvider {
     constructor(private http: Http, private sanitizer: DomSanitizer) {
         this.getUserSchedules();
         this.getAllReports();
+        this.getAllRegions();
+        this.getAllServices();
+        this.getAllTeams();
 
         this.reports$.filter(reps => reps !== null && reps !== undefined).subscribe(reps => this.reports = reps);
     }
@@ -27,6 +30,9 @@ export class ReportingProvider {
     private _reports = new BehaviorSubject<Report[]>(null);
     private _allSchedules = new BehaviorSubject<Schedule[]>(null);
     private _userSchedules = new BehaviorSubject<Schedule[]>(null);
+    private _allRegions = new BehaviorSubject<Region[]>(null);
+    private _allTeams = new BehaviorSubject<Team[]>(null);
+    private _allServices = new BehaviorSubject<Service[]>(null);
 
     private _periodStart = new BehaviorSubject<Date>(null);
     private _periodEnd = new BehaviorSubject<Date>(null);
@@ -42,6 +48,9 @@ export class ReportingProvider {
     
     public reports$ = this._reports.asObservable();
     public allSchedules$ = this._allSchedules.asObservable();
+    public allRegions$ = this._allRegions.asObservable();
+    public allServices$ = this._allServices.asObservable();
+    public allTeams$ = this._allTeams.asObservable();
     public userSchedules$ = this._userSchedules.asObservable();
     public periodStart$ = this._periodStart.asObservable();
     public periodEnd$ = this._periodEnd.asObservable();
@@ -74,25 +83,35 @@ export class ReportingProvider {
         this.http.get('/api/reporting/allReports').subscribe(res => this._reports.next(res.json() as Report[]));
     }
 
+    public getAllRegions() {
+        this.http.get('/api/reporting/regions').subscribe(res => this._allRegions.next(res.json() as Region[]));
+    }
+
+    public getAllServices() {
+        this.http.get('/api/reporting/services').subscribe(res => this._allServices.next(res.json() as Service[]));
+    }
+
+    public getAllTeams() {
+        this.http.get('/api/reporting/teams').subscribe(res => this._allTeams.next(res.json() as Team[]));
+    }
+
     public getUserSchedules() {
         this.http.get('/api/reporting/schedulesForUser').subscribe(res => this._userSchedules.next(res.json() as Schedule[]));
     }
 
-    public selectReport(rep: Report) {
-        this._selectedReport.next(this.reports.find(r => r.id === rep.id));
-    }
+    public selectReport(rep: Report) { this._selectedReport.next(this.reports.find(r => r.id === rep.id)) }
 
-    public selectPeriodStart(dt: Date) {
-        this._periodStart.next(dt);
-    }
+    public selectPeriodStart(dt: Date) { this._periodStart.next(dt) }
 
-    public selectPeriodEnd(dt: Date) {
-        this._periodEnd.next(dt);
-    }
+    public selectPeriodEnd(dt: Date) { this._periodEnd.next(dt) }
 
-    public selectScope(sc: Scope) {
-        this._selectedScope.next(sc);
-    }
+    public selectScope(sc: Scope) { this._selectedScope.next(sc) }
+
+    public selectRegion(r: Region) { this._selectedRegion.next(r) }
+
+    public selectService(s: Service) { this._selectedService.next(s) }
+
+    public selectTeam(t: Team) { this._selectedTeam.next(t) }
 
     public selectSchedule(sched: Schedule) {
         this._selectedSchedule.next(sched);
