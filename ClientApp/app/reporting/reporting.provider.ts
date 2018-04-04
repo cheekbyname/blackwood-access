@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from "rxjs/Rx";
 import { Region } from "../models/reporting/Region";
 import { Report } from "../models/reporting/Report";
 import { Schedule } from "../models/reporting/Schedule";
-import { Scope } from "../models/reporting/Enums";
+import { Scope, ScopeNames } from "../models/reporting/Enums";
 import { Service } from "../models/reporting/Service";
 import { Team } from "../models/payroll/Team";
 
@@ -77,6 +77,7 @@ export class ReportingProvider {
             return { "report": r, "scope": s, "period": p }
         })
         .filter(x => x.report !== null && x.scope !== null && x.period !== null)
+        .distinctUntilChanged((x, y) => { return this.getReportUrl(x) == this.getReportUrl(y) })
         .subscribe(x => this.getReport(x));
 
     public getAllReports() {
@@ -122,13 +123,13 @@ export class ReportingProvider {
 
         switch(sched.scope) {
             case Scope.Team:
-                this._selectedTeam.next(sched.team);
+                this._selectedTeam.next(this._allTeams.value.find(t => t.teamCode == sched.team.teamCode));
                 break;
             case Scope.Service:
-                this._selectedService.next(sched.service);
+                this._selectedService.next(this._allServices.value.find(s => s.id == sched.service.id));
                 break;
             case Scope.Region:
-                this._selectedRegion.next(sched.region);
+                this._selectedRegion.next(this._allRegions.value.find(r => r.id == sched.region.id));
                 break;
             default:
                 break;
@@ -139,19 +140,24 @@ export class ReportingProvider {
 
         this._reportPdfUrl.next(null);
 
-        var baseUrl = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?";
-        var repUrl = `${baseUrl}reportId=${x.report.id}&periodStart=${Utils.SqlDate(x.period.start)}&periodEnd=${Utils.SqlDate(x.period.end)}`;
+        if (isDevMode()) console.log(this.getReportUrl(x));
 
-        if (x.scope.team !== null) repUrl += `&teamCode=${x.scope.team.teamCode}`;
-        if (x.scope.service !== null) repUrl += `&serviceId=${x.scope.service.id}`;
-        if (x.scope.region !== null) repUrl += `&regionId=${x.scope.region.id}`;
-
-        if (isDevMode()) console.log(repUrl);
-
-        this.http.get(repUrl, { responseType: ResponseContentType.ArrayBuffer })
+        this.http.get(this.getReportUrl(x), { responseType: ResponseContentType.ArrayBuffer })
             .subscribe(res => {
                 let objUrl = URL.createObjectURL(new Blob([res.blob()], { type: "application/pdf" }));
                 this._reportPdfUrl.next(this.sanitizer.bypassSecurityTrustResourceUrl(objUrl));
             });
+    }
+
+    getReportUrl(x: {"report": Report, "scope": {"team": Team, "service": Service, "region": Region}, "period": { "start": Date, "end": Date}}): string {
+        var baseUrl = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?";
+        var repUrl = `${baseUrl}reportId=${x.report.id}&periodStart=${Utils.SqlDate(x.period.start)}&periodEnd=${Utils.SqlDate(x.period.end)}`;
+
+        // TODO These should be mutually exclusive
+        if (x.scope.team !== null) repUrl += `&teamCode=${x.scope.team.teamCode}`;
+        if (x.scope.service !== null) repUrl += `&serviceId=${x.scope.service.id}`;
+        if (x.scope.region !== null) repUrl += `&regionId=${x.scope.region.id}`;
+
+        return repUrl;
     }
 }

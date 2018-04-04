@@ -16,6 +16,7 @@ import { Team } from "../../models/payroll/Team";
     styleUrls: ['reporting.home.component.css']
 })
 export class ReportingHomeComponent {
+
     constructor(private repPro: ReportingProvider) {
 
         repPro.reports$.filter(reps => reps !== null).subscribe(reps => this.reports = reps);
@@ -30,6 +31,9 @@ export class ReportingHomeComponent {
         repPro.periodEnd$.subscribe(dt => this.selectedEnd = dt);
         repPro.selectedSchedule$.subscribe(sch => this.selectedSchedule = sch);
         repPro.selectedScope$.subscribe(sc => this.selectedScope = sc);
+        repPro.selectedTeam$.subscribe(t => this.selectedTeam = t);
+        repPro.selectedService$.subscribe(s => this.selectedService = s);
+        repPro.selectedRegion$.subscribe(r => this.selectedRegion = r);
         repPro.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
         repPro.allTeams$.subscribe(t => this.teams = t);
         repPro.allServices$.subscribe(s => this.services = s);

@@ -18,15 +18,15 @@
                 </select>
                 <label for="scopeSelect">Scope</label>
                 <select class="form-control" id="scopeSelect" [(ngModel)]="selectedScope" (ngModelChange)="scopeSelected($event)">
-                    <option *ngFor="let scope of scopes" [ngValue]="scope">{{scope.value}}</option>
+                    <option *ngFor="let scope of scopes" [ngValue]="scope.key">{{scope.value}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope.key == 1" class="form-control" [(ngModel)]="selectedTeam" (ngModelChange)="teamSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 1" class="form-control" [(ngModel)]="selectedTeam" (ngModelChange)="teamSelected($event)">
                     <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope.key == 2" class="form-control" [(ngModel)]="selectedService" (ngModelChange)="serviceSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 2" class="form-control" [(ngModel)]="selectedService" (ngModelChange)="serviceSelected($event)">
                     <option *ngFor="let service of services" [ngValue]="service">{{service.name}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope.key == 3" class="form-control" [(ngModel)]="selectedRegion" (ngModelChange)="regionSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 3" class="form-control" [(ngModel)]="selectedRegion" (ngModelChange)="regionSelected($event)">
                     <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
                 </select>
                 <label class="control-label" for="selectedStart">From</label>
