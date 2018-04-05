@@ -16,7 +16,7 @@
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
-        <div *ngIf="mySchedules">
+        <div *ngIf="mySchedules sched-container">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -27,17 +27,32 @@
                             <th>Next Run</th>
                             <th>Period From</th>
                             <th>Period To</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="row" *ngFor="let sched of mySchedules" (click)="viewScheduledReport(sched)">
-                            <td>{{sched.report.name}}</td>
-                            <td>{{frequencies[sched.frequency].value}}</td>
-                            <td>{{sched.scopeDescription}}</td>
-                            <td>{{formatDate(sched.runTime)}}</td>
-                            <td>{{formatDate(sched.runPeriod.item1)}}</td>
-                            <td>{{formatDate(sched.runPeriod.item2)}}</td>
-                        </tr>
+                            <tr class="row" *ngFor="let sched of mySchedules; index as i">
+                                <td>{{sched.report.name}}</td>
+                                <td>{{frequencies[sched.frequency].value}}</td>
+                                <td>{{sched.scopeDescription}}</td>
+                                <td>{{Utils.FormatDate(sched.runTime)}}</td>
+                                <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
+                                <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
+                                <td>
+                                    <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                        <span>View</span>
+                                    </button>
+                                    <button class="btn btn-primary" (click)="toggleSchedView(i)">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button class="btn btn-primary" disabled="true">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        <span>Delete</span>
+                                    </button>
+                                </td>
+                            </tr>
                     </tbody>
                 </table>
             </div>

@@ -51,7 +51,7 @@ export class ReportingProvider {
     public allRegions$ = this._allRegions.asObservable();
     public allServices$ = this._allServices.asObservable();
     public allTeams$ = this._allTeams.asObservable();
-    public userSchedules$ = this._userSchedules.asObservable();
+    public userSchedules$ = this._userSchedules.asObservable().filter(s => s !== null);
     public periodStart$ = this._periodStart.asObservable();
     public periodEnd$ = this._periodEnd.asObservable();
     public selectedReport$ = this._selectedReport.asObservable();

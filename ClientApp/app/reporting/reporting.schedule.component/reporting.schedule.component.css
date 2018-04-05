@@ -22,17 +22,35 @@ h4, label, select, td, th {
     padding: 16px;
 }
 
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+    cursor: pointer;
+}
+
+.btn-primary:hover:disabled {
+    cursor: not-allowed;
+}
+
 table {
     font-size: 11pt;
 }
 
-table tbody tr {
+/* table tbody tr {
     cursor: pointer;
 }
 
 table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
-}
+} */
 
 span.loading {
     font-family: 'Century Gothic';
@@ -48,4 +66,8 @@ span.loading {
     top: 4px;
     margin-right: 4px;
     font-size: 16pt;
+}
+
+.sched-container {
+    height: 100%;
 }

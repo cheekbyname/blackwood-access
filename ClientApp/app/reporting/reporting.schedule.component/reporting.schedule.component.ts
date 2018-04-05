@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { Frequency, FrequencyNames } from "../../models/reporting/Enums";
 import { ReportingProvider } from "../reporting.provider";
 import { Schedule } from "../../models/reporting/Schedule";
+import { Utils } from '../../Utils'
 
 @Component({
     selector: 'reporting-schedules',
@@ -17,15 +18,13 @@ export class ReportingScheduleComponent {
         });
     }
 
-    mySchedules: Schedule[] = undefined;
     frequencies = FrequencyNames;
-
-    public formatDate = (dt) => new Date(dt).toLocaleDateString("en-GB");
+    mySchedules: Schedule[] = undefined;
+    Utils = Utils;
 
     public viewScheduledReport(sched: Schedule) {
         this.repPro.selectSchedule(sched);
         this.router.navigate(['/reports/home',
             { outlets: { detail: null, summary: null }}]);
-
     }
 }

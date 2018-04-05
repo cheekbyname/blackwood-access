@@ -5,4 +5,8 @@ export module Utils {
         var day = date.getDate();
         return date.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + (day < 10 ? "0" : "") + date.getDate();
     }
+
+    export function FormatDate(dt) {
+        return new Date(dt).toLocaleDateString("en-GB");
+    }
 }
