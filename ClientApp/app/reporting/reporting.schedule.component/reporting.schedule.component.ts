@@ -18,13 +18,24 @@ export class ReportingScheduleComponent {
         });
     }
 
+    editVisible: boolean = false;
     frequencies = FrequencyNames;
     mySchedules: Schedule[] = undefined;
+    selectedSched: Schedule;
     Utils = Utils;
 
     public viewScheduledReport(sched: Schedule) {
         this.repPro.selectSchedule(sched);
         this.router.navigate(['/reports/home',
             { outlets: { detail: null, summary: null }}]);
+    }
+
+    public editSched(sched: Schedule) {
+        this.selectedSched = sched;
+        this.editVisible = true;
+    }
+
+    public onClose() {
+        this.editVisible = false;
     }
 }

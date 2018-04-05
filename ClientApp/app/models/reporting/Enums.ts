@@ -47,7 +47,7 @@ export const DirectionNames: { key: Direction, value: string }[] = [
 
 export const ScopeNames: { key: Scope, value: string }[] = [
     { key: Scope.Unknown, value: "UNKNOWN" },
-    { key: Scope.Region, value: "Region" },
+    { key: Scope.Team, value: "Team" },
     { key: Scope.Service, value: "Service" },
-    { key: Scope.Team, value: "Team" }
+    { key: Scope.Region, value: "Region" }
 ];
