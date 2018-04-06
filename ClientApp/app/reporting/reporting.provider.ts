@@ -160,4 +160,11 @@ export class ReportingProvider {
 
         return repUrl;
     }
+
+    putSchedule(sched: Schedule) {
+        this.http.put('/api/reporting/schedule', sched).subscribe(res => {
+            console.log(res.json() as Schedule);
+            this.getUserSchedules();
+        });
+    }
 }

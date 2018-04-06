@@ -10,7 +10,7 @@
                 </h4>
             </div>
             <div class="col-md-6">
-                <button class="btn btn-primary pull-right">
+                <button class="btn btn-primary pull-right" (click)="addSchedule()" [disabled]="!mySchedules">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span>Add New</span>
                 </button>
@@ -38,7 +38,7 @@
                     </thead>
                     <tbody>
                             <tr class="row" *ngFor="let sched of mySchedules; index as i">
-                                <td>{{sched.report.name}}</td>
+                                <td>{{sched.report ? sched.report.name : ""}}</td>
                                 <td>{{frequencies[sched.frequency].value}}</td>
                                 <td>{{sched.scopeDescription}}</td>
                                 <td>{{Utils.FormatDate(sched.runTime)}}</td>

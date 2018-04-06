@@ -67,6 +67,9 @@ namespace Blackwood.Access.Controllers
             return Ok(fc);
         }
 
+        [HttpPut("[action]")]
+        public async Task<IActionResult> Schedule([FromBody] Schedule sched) => Ok(await _dataService.PutSchedule(sched));
+
         // Private stubby for transposing dictionaries to Enumerables with named properties
         private class Lookup
         {

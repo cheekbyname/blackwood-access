@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { Frequency, FrequencyNames } from "../../models/reporting/Enums";
+import { Report } from "../../models/reporting/Report";
 import { ReportingProvider } from "../reporting.provider";
 import { Schedule } from "../../models/reporting/Schedule";
 import { Utils } from '../../Utils'
@@ -16,12 +17,14 @@ export class ReportingScheduleComponent {
         this.repPro.userSchedules$.subscribe(scheds => {
             this.mySchedules = scheds;
         });
+        this.repPro.reports$.subscribe(r => this.reports = r);
     }
 
     editVisible: boolean = false;
     frequencies = FrequencyNames;
     mySchedules: Schedule[] = undefined;
     selectedSched: Schedule;
+    reports: Report[];
     Utils = Utils;
 
     public viewScheduledReport(sched: Schedule) {
@@ -37,5 +40,11 @@ export class ReportingScheduleComponent {
 
     public onClose() {
         this.editVisible = false;
+    }
+
+    public addSchedule() {
+        var sched = new Schedule();
+        this.mySchedules.push(sched);
+        this.editSched(sched);
     }
 }

@@ -36,6 +36,7 @@ export class ScheduleEditorComponent implements OnInit {
             selectedDirection: [this.sched.direction, Validators.required],
             selectedRunTime: [this.sched.runTime, Validators.required]
         });
+        this.saved = this.form.value;
     }
 
     @Input('selectedSched')
@@ -59,6 +60,7 @@ export class ScheduleEditorComponent implements OnInit {
     private _sched: Schedule;
 
     form: FormGroup;
+    saved: any;
 
     loc: Locale = LOC_EN;
     frequencies = FrequencyNames;
@@ -71,12 +73,13 @@ export class ScheduleEditorComponent implements OnInit {
     teams: Team[];
 
     public dismiss() {
+        this.form.reset(this.saved);
         this.editVisible = false;
         this.onClose.emit();
     }
 
     public saveSchedule() {
-
+        this.repPro.putSchedule(this.sched);
     }
 
     public reportSelected() {

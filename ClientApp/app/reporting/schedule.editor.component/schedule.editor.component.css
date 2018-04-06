@@ -6,12 +6,13 @@ h4, select, span, .btn.btn-primary {
     background-color: rgba(191, 215, 48, 0.5);
 }
 
-.btn.btn-primary, buttton.ui-calendar-button {
-    background-color: rgba(191, 215, 48, 1.0);
+.btn.btn-primary, p-calendar button {
+    background-color: rgba(191, 215, 48, 1.0)!important;
     color: black;
     font-size: 11pt;
     border-color: black;
 }
+
 .btn.btn-primary:hover {
     background-color: hotpink;
 }

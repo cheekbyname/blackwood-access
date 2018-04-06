@@ -29,9 +29,21 @@ export class Schedule {
     public runPeriod: { item1: Date, item2: Date }
 
     constructor() {
-        this.runTime = new Date(this.runTime);
-        this.runPeriod.item1 = new Date(this.runPeriod.item1);
-        this.runPeriod.item2 = new Date(this.runPeriod.item2);
+        if (this.runTime === undefined) {
+            this.runTime = new Date();
+        } else {
+            this.runTime = new Date(this.runTime);
+        }
+        this.scope = 0;
+        this.frequency = 0;
+        this.period = 0;
+        this.direction = 0;
+        if (this.runPeriod === undefined) {
+            this.runPeriod = { item1: new Date(), item2: new Date() };
+        } else {
+            this.runPeriod.item1 = new Date(this.runPeriod.item1);
+            this.runPeriod.item2 = new Date(this.runPeriod.item2);
+        }
     }
 
     // public get NextRun(): Date {
