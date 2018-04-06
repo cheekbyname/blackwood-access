@@ -1,4 +1,5 @@
-import { Component, Input, EventEmitter, Output } from "@angular/core";
+import { Component, Input, EventEmitter, Output, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
 import { Locale, LOC_EN } from "../../models/Locale";
 import { Region } from "../../models/reporting/Region";
@@ -15,16 +16,29 @@ import { ReportingProvider } from "../reporting.provider";
     templateUrl: 'schedule.editor.component.html',
     styleUrls: ['schedule.editor.component.css']
 })
-export class ScheduleEditorComponent {
+export class ScheduleEditorComponent implements OnInit {
 
-    constructor(private repPro: ReportingProvider) {
+    constructor(private repPro: ReportingProvider, private fb: FormBuilder) {
         this.repPro.allServices$.subscribe(s => this.services = s);
         this.repPro.allTeams$.subscribe(t => this.teams = t);
         this.repPro.allRegions$.subscribe(r => this.regions = r);
         this.repPro.reports$.subscribe(r => this.reports = r);
     }
 
-    @Input()
+    ngOnInit() {
+        this.form = this.fb.group({
+            selectedReport: [this.sched.report, Validators.required],
+            selectedFreq: [this.sched.frequency, Validators.required],
+            selectedScope: [this.sched.scope, Validators.required],
+            selectedTeam: [this.sched.team],
+            selectedService: [this.sched.service],
+            selectedRegion: [this.sched.region],
+            selectedDirection: [this.sched.direction, Validators.required],
+            selectedRunTime: [this.sched.runTime, Validators.required]
+        });
+    }
+
+    @Input('selectedSched')
     set sched(sched: Schedule) {
         if (sched !== undefined) {
             sched.runTime = new Date(sched.runTime);
@@ -44,6 +58,8 @@ export class ScheduleEditorComponent {
 
     private _sched: Schedule;
 
+    form: FormGroup;
+
     loc: Locale = LOC_EN;
     frequencies = FrequencyNames;
     scopes = ScopeNames;
@@ -57,5 +73,33 @@ export class ScheduleEditorComponent {
     public dismiss() {
         this.editVisible = false;
         this.onClose.emit();
+    }
+
+    public saveSchedule() {
+
+    }
+
+    public reportSelected() {
+
+    }
+
+    public scopeSelected() {
+
+    }
+
+    public directionSelected() {
+
+    }
+
+    public teamSelected() {
+
+    }
+
+    public serviceSelected() {
+
+    }
+
+    public regionSelected() {
+        
     }
 }

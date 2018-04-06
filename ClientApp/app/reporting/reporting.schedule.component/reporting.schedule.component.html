@@ -66,4 +66,4 @@
     </div>
 </div>
 
-<schedule-editor [(sched)]="selectedSched" [(editVisible)]="editVisible" (onClose)="onClose($event)"></schedule-editor>
+<schedule-editor *ngIf="selectedSched" [selectedSched]="selectedSched" [editVisible]="editVisible" (onClose)="onClose()"></schedule-editor>

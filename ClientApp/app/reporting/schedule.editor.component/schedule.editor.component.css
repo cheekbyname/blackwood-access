@@ -15,3 +15,7 @@ h4, select, span, .btn.btn-primary {
 .btn.btn-primary:hover {
     background-color: hotpink;
 }
+
+.header-buttons:first-child() {
+    margin-right: 8px;
+}
