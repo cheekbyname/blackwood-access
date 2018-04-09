@@ -1,6 +1,8 @@
 import { Component, Input, EventEmitter, Output, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
+import { Observable } from "rxjs/Observable";
+
 import { Locale, LOC_EN } from "../../models/Locale";
 import { Region } from "../../models/reporting/Region";
 import { Report } from "../../models/reporting/Report";
@@ -61,6 +63,7 @@ export class ScheduleEditorComponent implements OnInit {
 
     form: FormGroup;
     saved: any;
+    proc: boolean = false;
 
     loc: Locale = LOC_EN;
     frequencies = FrequencyNames;
@@ -79,7 +82,16 @@ export class ScheduleEditorComponent implements OnInit {
     }
 
     public saveSchedule() {
-        this.repPro.putSchedule(this.sched);
+        this.proc = true;
+        this.repPro.putSchedule(this.sched)
+            .catch(e => {
+                console.log(e);
+                return Observable.throw(e);
+            })
+            .subscribe(r => {
+                this.proc = false;
+                this.dismiss();
+            });
     }
 
     public reportSelected() {

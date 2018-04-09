@@ -23,6 +23,7 @@
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
         <div *ngIf="mySchedules sched-container">
+            <h4>Your Subscriptions</h4>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -56,6 +57,45 @@
                                     <button class="btn btn-primary" disabled="true">
                                         <span class="glyphicon glyphicon-remove"></span>
                                         <span>Delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="otherSchedules">
+            <h4>Available Subscriptions</h4>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th>Name</th>
+                            <th>Frequency</th>
+                            <th>Scope</th>
+                            <th>Next Run</th>
+                            <th>Period From</th>
+                            <th>Period To</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr class="row" *ngFor="let sched of otherSchedules; index as i">
+                                <td>{{sched.report ? sched.report.name : ""}}</td>
+                                <td>{{frequencies[sched.frequency].value}}</td>
+                                <td>{{sched.scopeDescription}}</td>
+                                <td>{{Utils.FormatDate(sched.runTime)}}</td>
+                                <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
+                                <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
+                                <td>
+                                    <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                        <span>View</span>
+                                    </button>
+                                    <button class="btn btn-primary" (click)="subscribe(sched)" [disabled]="proc">
+                                        <span class="glyphicon glyphicon-save-file"></span>
+                                        <span>Subscribe</span>
                                     </button>
                                 </td>
                             </tr>

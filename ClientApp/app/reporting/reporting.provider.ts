@@ -9,6 +9,7 @@ import { Report } from "../models/reporting/Report";
 import { Schedule } from "../models/reporting/Schedule";
 import { Scope, ScopeNames } from "../models/reporting/Enums";
 import { Service } from "../models/reporting/Service";
+import { Subscription } from "../models/reporting/Subscription";
 import { Team } from "../models/payroll/Team";
 
 import { Utils } from "../Utils";
@@ -20,6 +21,7 @@ export class ReportingProvider {
         this.getAllReports();
         this.getAllRegions();
         this.getAllServices();
+        this.getAllSchedules();
         this.getAllTeams();
 
         this.reports$.filter(reps => reps !== null && reps !== undefined).subscribe(reps => this.reports = reps);
@@ -96,6 +98,10 @@ export class ReportingProvider {
         this.http.get('/api/reporting/teams').subscribe(res => this._allTeams.next(res.json() as Team[]));
     }
 
+    public getAllSchedules() {
+        this.http.get('api/reporting/allschedules').subscribe(res => this._allSchedules.next(res.json() as Schedule[]));
+    }
+
     public getUserSchedules() {
         this.http.get('/api/reporting/schedulesForUser').subscribe(res => this._userSchedules.next(res.json() as Schedule[]));
     }
@@ -162,9 +168,17 @@ export class ReportingProvider {
     }
 
     putSchedule(sched: Schedule) {
-        this.http.put('/api/reporting/schedule', sched).subscribe(res => {
-            console.log(res.json() as Schedule);
+        return this.http.put('/api/reporting/schedule', sched).map(res => {
             this.getUserSchedules();
+            return res.json() as Schedule;
+        });
+    }
+
+    subscribeToSchedule(sched: Schedule) {
+        return this.http.put('api/reporting/subscribe', sched).map(res => {
+            this.getUserSchedules();
+            this.getAllSchedules();
+            return res.json() as Subscription;
         });
     }
 }

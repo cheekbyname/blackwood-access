@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="saveSchedule()">
+<form [formGroup]="form">
     <p-dialog [(visible)]="editVisible" modal="modal" [responsive]="false" [width]="1200" [height]="240" [closable]="false" [closeOnEscape]="false">
 
         <p-header>
@@ -8,7 +8,7 @@
                 </h4>
                 <div class="col-md-6">
                     <div class="header-buttons pull-right">
-                        <button class="btn btn-primary" type="submit" (click)="saveSchedule()" [disabled]="!form.dirty">
+                        <button class="btn btn-primary" (click)="saveSchedule()" [disabled]="!form.dirty || proc">
                             <div class="glyphicon glyphicon-floppy-save"></div>
                             <span>Save</span>
                         </button>

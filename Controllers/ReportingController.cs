@@ -68,7 +68,7 @@ namespace Blackwood.Access.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> Schedule([FromBody] Schedule sched) => Ok(await _dataService.PutSchedule(sched));
+        public async Task<IActionResult> Schedule([FromBody] Schedule sched) => Ok(await _dataService.PutSchedule(sched, HttpContext.User));
 
         // Private stubby for transposing dictionaries to Enumerables with named properties
         private class Lookup
@@ -82,5 +82,9 @@ namespace Blackwood.Access.Controllers
             public int Id { get; set; }
             public string Description { get; set; }
         }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> Subscribe([FromBody] Schedule sched)
+            => Ok(await _dataService.Subscribe(sched, HttpContext.User));
     }
 }
