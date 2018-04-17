@@ -60,6 +60,15 @@ namespace Blackwood.Access
                 });
             });
 
+            services.AddDbContext<CareContext>(options =>
+            {
+                options.UseSqlServer(dbConIntegration);
+                options.ConfigureWarnings(warnings =>
+                {
+                    warnings.Ignore(RelationalEventId.QueryClientEvaluationWarning);
+                });
+            });
+
             string dbConAccident = Configuration.GetConnectionString("Accident");
 
             services.AddDbContext<AccidentContext>(options =>

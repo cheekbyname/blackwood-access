@@ -1,0 +1,41 @@
+h4, label, select, td, th {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+    margin-top: 24px;
+}
+
+.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+table tbody tr:hover {
+    background-color: rgba(255, 105, 180, 0.5);
+    cursor: pointer;
+}
+
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-primary:enabled:hover {
+    cursor: pointer;
+    color: black;
+    background-color: hotpink;
+}
+
+.btn-primary[disabled="true"]:hover {
+    cursor: not-allowed;
+    color: black;
+    background-color: #bfd730;
+}
