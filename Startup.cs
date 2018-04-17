@@ -1,6 +1,7 @@
 namespace Blackwood.Access
 {
     using Active.Messaging.Service;
+    using Core.Care.Services;
     using Core.Accident.Service;
     using Core.Data.Models;
     using Core.Data.Models.Reporting;

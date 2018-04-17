@@ -39,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Active\Messaging.Service\Messaging.Service.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Accident.Service\Accident.Service.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Care.Services\Care.Services.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Data.Models\Data.Models.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Email.Services\Email.Services.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Payroll.Service\Payroll.Service.csproj" />

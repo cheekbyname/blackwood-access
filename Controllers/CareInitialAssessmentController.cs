@@ -1,6 +1,6 @@
 ﻿namespace Blackwood.Access.Controllers
 {
-    using Core.Payroll.Service.Services;
+    using Core.Care.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using System.Threading.Tasks;
