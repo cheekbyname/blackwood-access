@@ -10,14 +10,15 @@ import { BookingCardComponent } from '../booking.card/booking.card';
 import { BookingDetailComponent } from '../booking.detail/booking.detail.component';
 import { TimesheetAdjustmentComponent } from '../timesheet.adjustment/timesheet.adjustment.component';
 
-import { Locale, LOC_EN } from '../../models/Locale';
-import { Timesheet } from '../../models/payroll/Timesheet';
-import { CarerBooking } from '../../models/payroll/Booking';
-import { Carer } from '../../models/payroll/Carer';
-import { Availability } from '../../models/payroll/Availability';
-import { Shift } from '../../models/payroll/Shift';
 import { Adjustment, AdjustmentOffsetFilter } from '../../models/payroll/Adjustment';
+import { Availability } from '../../models/payroll/Availability';
+import { BookingTypeAnalysis, AnalysisCategory } from '../../models/payroll/BookingTypeAnalysis';
+import { Carer } from '../../models/payroll/Carer';
+import { CarerBooking } from '../../models/payroll/Booking';
+import { Locale, LOC_EN } from '../../models/Locale';
+import { Shift } from '../../models/payroll/Shift';
 import { Team } from '../../models/payroll/Team';
+import { Timesheet } from '../../models/payroll/Timesheet';
 
 import { PayrollProvider } from '../payroll.provider';
 
@@ -32,6 +33,7 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public readonly loc: Locale = LOC_EN;
 
+	analysis: BookingTypeAnalysis[];
 	carer: Carer;
 	weekCommencing: Date;
 	timesheet: Timesheet;
@@ -47,51 +49,46 @@ export class TimesheetViewerComponent implements OnInit {
 	selectedBooking: CarerBooking = new CarerBooking();
 	showCodes: boolean = false;
 
-	constructor(private http: Http, private payPro: PayrollProvider, private router: Router,
+	constructor(private http: Http, private pp: PayrollProvider, private router: Router,
 		private route: ActivatedRoute) {
-		this.hideableCodes = payPro.hideableCodes;
+		this.hideableCodes = pp.hideableCodes;
 	}
 
 	ngOnInit(): void {
 		this.bookings = this.emptyBook();
 		this.route.params.subscribe((p) => {
-			// if (p['carer'] !== undefined && this.carers !== undefined) {
-			// 	var carer = this.carers.find(ca => ca.carerCode == p['carer']);
-			// 	this.payPro.selectCarer(carer);
-			// }
 			if (p['week'] != undefined) {
-				this.payPro.selectWeekCommencing(new Date(p['week']));
+				this.pp.selectWeekCommencing(new Date(p['week']));
 			}
 		});
 
 		Observable
-			.combineLatest(this.route.params, this.payPro.carers$, (params, carers) => {
-				return { "params": params, "carers": carers }
+			.combineLatest(this.route.params, this.pp.carers$, this.pp.analysis$, (params, carers, anals) => {
+				return { params: params, carers: carers, anals: anals }
 			})
+			.filter(p => p.params['carer'] !== null && p.carers !== null &&  p.anals !== null)
 			.distinctUntilChanged((a, b) => {
-				if (a.params['carer'] == null || b.params['carer'] == null) return false;
 				return a.params['carer'] == b.params['carer'] && a.carers == b.carers;
 			})
 			.subscribe(x => {
-				if (x.params['carer'] && x.carers) {
-					this.payPro.selectCarer(x.carers.find(ca => ca.carerCode == x.params['carer']));
-				}
+				this.pp.selectCarer(x.carers.find(ca => ca.carerCode == x.params['carer']));
 			});
 
-		this.payPro.selectedCarer$.subscribe(ca => {
+		this.pp.selectedCarer$.subscribe(ca => {
 			this.carer = ca;
 			this.navigateTo();
 		});
 
-		this.payPro.weekCommencing$.subscribe((wc) => {
+		this.pp.weekCommencing$.subscribe((wc) => {
 			this.weekCommencing = wc;
 			this.navigateTo();
 		});
 
-		this.payPro.carers$.subscribe(carers => this.carers = carers);
-		this.payPro.selectedTeam$.subscribe(tm => this.team = tm);
+		this.pp.carers$.subscribe(carers => this.carers = carers);
+		this.pp.selectedTeam$.subscribe(tm => this.team = tm);
+		this.pp.analysis$.subscribe(a => this.analysis = a);
 
-		this.payPro.timesheet$.subscribe((ts) => {
+		this.pp.timesheet$.subscribe((ts) => {
 			if (ts != null) this.processTimesheet(ts);
 		});
 	}
@@ -103,7 +100,7 @@ export class TimesheetViewerComponent implements OnInit {
 					outlets: {
 						detail: ['timesheet', {
 							carer: this.carer.carerCode,
-							week: this.payPro.sqlDate(this.payPro.getWeekCommencingFromDate(this.weekCommencing))
+							week: this.pp.sqlDate(this.pp.getWeekCommencingFromDate(this.weekCommencing))
 						}],
 						summary: ['summary', this.team.teamCode]
 					}
@@ -117,7 +114,7 @@ export class TimesheetViewerComponent implements OnInit {
 	// }
 
 	selectWeekCommencing(ev: Event) {
-		this.payPro.selectWeekCommencing(this.weekCommencing);
+		this.pp.selectWeekCommencing(this.weekCommencing);
 	}
 
 	processTimesheet(ts: Timesheet): void {
@@ -153,46 +150,17 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 	// Strip blank rows
 	}
 
-	// Display BookingGrid in rough chronological order by sliding Bookings down if they start after another on the same row finishes
-	// Not currently used because it "looks wrong"
-	chronOrder(bookings: BookingGrid): BookingGrid {
-		var row = 0;
-		while (row < bookings.length - 1) {
-			var min = bookings[row].map(booking => {
-				if (booking === undefined) {
-					return 9
-				} else { return booking.shift }
-			}).reduce((cur, min) => { return min < cur ? min : cur; }, 9);
-			bookings[row].forEach((booking) => {
-				if (booking !== undefined && booking.shift > min) {
-					var col = bookings[row].indexOf(booking);
-					if (bookings[bookings.length - 1][col] !== undefined) { bookings.push(Array(7)) };
-					for (var i = bookings.length - 1; i > row; i--) {
-						bookings[i][col] = bookings[i - 1][col];
-					}
-					bookings[row][col] = undefined;
-				}
-			});
-			row++;
-		}
-		return bookings;
-	}
-
-	// Not currently used
-	public combinedAvailability(): Availability[] {
-		return (this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)).sort(av => { return av.thisStart.valueOf() });
-	}
-
 	public availHoursForContract(contractCode: number): number {
 		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
 			.filter(av => av.contractCode === contractCode)
 			.map(av => { return av.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
+	// Replace with Contact time?
 	public bookedHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
 			.filter(bk => bk.contractCode === contractCode)
-			.filter(bk => !(this.payPro.absenceCodes.concat(this.payPro.unpaidCodes)).some(uc => uc === bk.bookingType))
+			.filter(bk => !(this.pp.absenceCodes.concat(this.pp.unpaidCodes)).some(uc => uc === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
@@ -208,7 +176,7 @@ export class TimesheetViewerComponent implements OnInit {
 			.filter(sh => sh.day == offset)
 			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
 		let leaveSickTime = this.timesheet.bookings
-			.filter(bk => this.offsetFor(this.weekCommencing, bk.thisStart) == offset && this.payPro.absenceCodes.some(ac => ac == bk.bookingType))
+			.filter(bk => this.offsetFor(this.weekCommencing, bk.thisStart) == offset && this.pp.absenceCodes.some(ac => ac == bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 		return shiftTime + leaveSickTime;
 	}
@@ -234,16 +202,18 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public leaveSickHoursForContract(contractCode: number): number {
 		return this.timesheet.bookings
-			.filter(bk => bk.contractCode === contractCode && (this.payPro.absenceCodes).some(ac => ac === bk.bookingType))
+			.filter(bk => bk.contractCode === contractCode && (this.pp.absenceCodes).some(ac => ac === bk.bookingType))
 			.map(bk => { return bk.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public bookColor(bk: CarerBooking): string {
-		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		if (bk === undefined) return '';
-		if (bk.bookingType === 133) return 'bisque';
-		if (this.payPro.absenceCodes.concat(this.payPro.unpaidCodes).some(ac => ac === bk.bookingType)) return 'lightgoldenrodyellow';
-		//return new Date(bk.thisStart).getHours()<15 ? shiftColors[0] : shiftColors[1];
+
+		var cats = this.analysis.filter(a => a.bookingTypeCode == bk.bookingType).map(a => a.analysisCategory);
+		if (cats.some(c => c == AnalysisCategory.TravelTime)) return 'bisque';
+		if (cats.some(c => c == AnalysisCategory.NonContactTime)) return 'lightgoldenrodyellow';
+
+		var shiftColors = ['lavender', 'lightblue', 'salmon'];
 		return shiftColors[bk.shift - 1];
 	}
 
@@ -285,11 +255,11 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public weekBack() {
-		this.payPro.selectWeekCommencing(this.adjustDate(this.weekCommencing, -7));
+		this.pp.selectWeekCommencing(this.adjustDate(this.weekCommencing, -7));
 	}
 
 	public weekForward() {
-		this.payPro.selectWeekCommencing(this.adjustDate(this.weekCommencing, 7));
+		this.pp.selectWeekCommencing(this.adjustDate(this.weekCommencing, 7));
 	}
 
 	public adjustDate(adjDate: Date, offset: number): Date {

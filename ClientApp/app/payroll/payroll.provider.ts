@@ -5,6 +5,7 @@ import "rxjs/add/operator/toPromise";
 
 import { AccessUser } from "../models/AccessUser";
 import { Adjustment } from "../models/payroll/Adjustment";
+import { BookingTypeAnalysis } from "../models/payroll/BookingTypeAnalysis";
 import { Carer } from "../models/payroll/Carer";
 import { CarerContract } from "../models/payroll/Contract";
 import { Export } from "../models/payroll/Export";
@@ -23,6 +24,7 @@ import { UserProvider } from "../user.provider";
 export class PayrollProvider implements OnDestroy {
 
     private _adjustments = new BehaviorSubject<Adjustment[]>(null);
+    private _analysis = new BehaviorSubject<BookingTypeAnalysis[]>(null);
     private _carers = new BehaviorSubject<Carer[]>(null);
     private _codeMap = new BehaviorSubject<PayrollCodeMap[]>(undefined);
     private _codeTypes = new BehaviorSubject<PayrollCodeType[]>(undefined);
@@ -40,6 +42,7 @@ export class PayrollProvider implements OnDestroy {
     private _weekCommencing = new BehaviorSubject<Date>(new Date());
 
     adjustments$ = this._adjustments.asObservable();
+    analysis$ = this._analysis.asObservable();
     carers$ = this._carers.asObservable();
     codeMap$ = this._codeMap.asObservable().filter(map => map !== undefined);
     codeTypes$ = this._codeTypes.asObservable();
@@ -110,10 +113,6 @@ export class PayrollProvider implements OnDestroy {
                     && (a.finish.toLocaleDateString("en-GB") === b.finish.toLocaleDateString("en-GB"));
             });
 
-        // this.subscribeTo(this.period$, this._summaries, this.getSummaries);
-        // this.subscribeTo(this.period$, this._adjustments, this.getTimesheetAdjustmentsByTeam);
-        // this.subscribeTo(this.period$, this._validation, this.getValidationResult);
-        // this.subscribeTo(this.period$, this._export, this.getPayrollExport);
         this.subscribeTo(this.period$, this._teamPeriod, this.getTeamPeriod);
 
         this.userPro.userInfo$.subscribe(x => this.user = x);
@@ -121,6 +120,7 @@ export class PayrollProvider implements OnDestroy {
         this.getTeams();
         this.getCodeMap();
         this.getCodeTypes();
+        this.getBookingTypeAnalyses();
     }
 
     ngOnDestroy() {
@@ -259,6 +259,13 @@ export class PayrollProvider implements OnDestroy {
         var url = 'api/payroll/codeTypes';
         this.http.get(url).subscribe(res => {
             this._codeTypes.next(res.json() as PayrollCodeType[]);
+        });
+    }
+
+    getBookingTypeAnalyses() {
+        var url = 'api/payroll/bookingTypeAnalyses';
+        this.http.get(url).subscribe(res => {
+            this._analysis.next(res.json() as BookingTypeAnalysis[]);
         });
     }
 

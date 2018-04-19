@@ -9,6 +9,8 @@ namespace Blackwood.Access.Controllers
     using System.Collections.Generic;
     using Blackwood.Core.Data.Models.Reporting;
     using System.IO;
+    using Microsoft.Net.Http.Headers;
+    using System.Net.Mime;
 
     [Route("api/[Controller]")]
     public class ReportingController : ControllerBase
@@ -50,22 +52,6 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Regions() => Ok(await _dataService.GetRegions());
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Report(int reportId, DateTime periodStart, DateTime periodEnd, int teamCode = 0)
-        {
-            ICollection<Report> reports = await _dataService.GetAllReports();
-            Report report = reports.FirstOrDefault(rep => rep.Id == reportId);
-            Dictionary<ReportFilters, object> parms = new Dictionary<ReportFilters, object>()
-            {
-                { ReportFilters.PeriodStart, periodStart },
-                { ReportFilters.PeriodEnd, periodEnd }
-            };
-            if (teamCode != 0) parms.Add(ReportFilters.TeamCode, teamCode);
-            MemoryStream ms = await _reportService.GenerateReport(report, parms);
-            FileContentResult fc = new FileContentResult(ms.ToArray(), "application/pdf");
-            return Ok(fc);
-        }
 
         [HttpPut("[action]")]
         public async Task<IActionResult> Schedule([FromBody] Schedule sched) => Ok(await _dataService.PutSchedule(sched, HttpContext.User));

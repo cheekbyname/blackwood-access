@@ -16,4 +16,16 @@ export class Summary {
 	public totalMins: number;
     public availMins: number;
     public unpaidMins: number;
+
+    // Analysis Values
+    public annualLeave: number;
+    public maternityOtherLeave: number;
+    public sicknessAbsence: number;
+    public travelTime: number;
+    public shadowing: number;
+    public supervision: number;
+    public teamMeetings: number;
+    public training: number;
+    public contact: number;
+    public nonContact: number;
 }

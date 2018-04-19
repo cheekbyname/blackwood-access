@@ -106,5 +106,8 @@ namespace Blackwood.Access.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> BookingTypeAnalyses() => Ok(await _dataService.GetBookingTypeAnalyses());
     }
 }

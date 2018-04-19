@@ -68,10 +68,10 @@
 						</td>
 						<td>{{sum.personnelNumber}}</td>
 						<td>{{displayTime((sum.monthlyContractMins-sum.actualMins < 0) ? 0 : sum.monthlyContractMins-sum.actualMins)}}</td>
-						<td>{{displayTime(sum.superTrainMins)}}</td>
-						<td>{{displayTime(sum.leaveSickMins)}}</td>
+						<td>{{displayTime(sum.supervision + sum.training)}}</td>
+						<td>{{displayTime(sum.annualLeave + sum.maternityOtherLeave + sum.sicknessAbsence)}}</td>
 						<td>{{displayTime(sum.monthlyContractMins)}}</td>
-						<td>{{displayTime(sum.contactTimeMins)}}</td>
+						<td>{{displayTime(sum.contact)}}</td>
 						<td>{{displayTime(sum.actualMins)}}</td>
 						<td>{{displayTime(additionalHours(sum))}}</td>
 						<td>{{displayTime(sum.unpaidMins)}}</td>
