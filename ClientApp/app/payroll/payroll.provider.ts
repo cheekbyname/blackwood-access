@@ -66,7 +66,7 @@ export class PayrollProvider implements OnDestroy {
     subs: Subscription[] = [];
 
     public readonly locale: Locale = LOC_EN;
-    public readonly absenceCodes: number[] = [108, 109];
+    public readonly absenceCodes: number[] = [108, 109, 128];
     public readonly unpaidCodes: number[] = [123, 110, 98];
     public readonly hideableCodes: number[] = [133];    // Travel Time
 
