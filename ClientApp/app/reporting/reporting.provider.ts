@@ -13,6 +13,7 @@ import { Subscription } from "../models/reporting/Subscription";
 import { Team } from "../models/payroll/Team";
 
 import { Utils } from "../Utils";
+import { LocalAuthority } from "../models/reporting/LocalAuthority";
 
 @Injectable()
 export class ReportingProvider {
@@ -21,8 +22,9 @@ export class ReportingProvider {
         this.getAllReports();
         this.getAllRegions();
         this.getAllServices();
-        this.getAllSchedules();
+        this.getAllLocalAuthorities();
         this.getAllTeams();
+        this.getAllSchedules();
 
         this.reports$.filter(reps => reps !== null && reps !== undefined).subscribe(reps => this.reports = reps);
     }
@@ -35,6 +37,7 @@ export class ReportingProvider {
     private _allRegions = new BehaviorSubject<Region[]>(null);
     private _allTeams = new BehaviorSubject<Team[]>(null);
     private _allServices = new BehaviorSubject<Service[]>(null);
+    private _allLocalAuthorities = new BehaviorSubject<LocalAuthority[]>(null);
 
     private _periodStart = new BehaviorSubject<Date>(null);
     private _periodEnd = new BehaviorSubject<Date>(null);
@@ -45,6 +48,7 @@ export class ReportingProvider {
     private _selectedTeam = new BehaviorSubject<Team>(null);
     private _selectedService = new BehaviorSubject<Service>(null);
     private _selectedRegion = new BehaviorSubject<Region>(null);
+    private _selectedLocalAuthority = new BehaviorSubject<LocalAuthority>(null);
 
     private _reportPdfUrl = new BehaviorSubject<SafeResourceUrl>(null);
     
@@ -53,6 +57,7 @@ export class ReportingProvider {
     public allRegions$ = this._allRegions.asObservable();
     public allServices$ = this._allServices.asObservable();
     public allTeams$ = this._allTeams.asObservable();
+    public allLocalAuthorities$ = this._allLocalAuthorities.asObservable();
     public userSchedules$ = this._userSchedules.asObservable().filter(s => s !== null);
     public periodStart$ = this._periodStart.asObservable();
     public periodEnd$ = this._periodEnd.asObservable();
@@ -62,11 +67,13 @@ export class ReportingProvider {
     public selectedTeam$ = this._selectedTeam.asObservable();
     public selectedService$ = this._selectedService.asObservable();
     public selectedRegion$ = this._selectedRegion.asObservable();
+    public selectedLocalAuthority$ = this._selectedLocalAuthority.asObservable();
 
     public reportPdfUrl$ = this._reportPdfUrl.asObservable();
 
-    public reportScope$ = Observable.combineLatest(this.selectedTeam$, this.selectedService$, this.selectedRegion$, (t, s, r) => {
-            return { "team": t, "service": s, "region": r }
+    public reportScope$ = Observable.combineLatest(this.selectedTeam$, this.selectedService$, this.selectedRegion$,
+        this.selectedLocalAuthority$, (t, s, r, l) => {
+            return { "team": t, "service": s, "region": r, "locAuth": l }
         })
         .filter(x => x.team !== null || x.service !== null || x.region !== null);
 
@@ -94,6 +101,10 @@ export class ReportingProvider {
         this.http.get('/api/reporting/services').subscribe(res => this._allServices.next(res.json() as Service[]));
     }
 
+    public getAllLocalAuthorities() {
+        this.http.get('/api/reporting/localauthorities').subscribe(res => this._allLocalAuthorities.next(res.json() as LocalAuthority[]));
+    }
+
     public getAllTeams() {
         this.http.get('/api/reporting/teams').subscribe(res => this._allTeams.next(res.json() as Team[]));
     }
@@ -118,6 +129,8 @@ export class ReportingProvider {
 
     public selectService(s: Service) { this._selectedService.next(s) }
 
+    public selectedLocalAuthority(l: LocalAuthority) { this._selectedLocalAuthority.next(l) }
+
     public selectTeam(t: Team) { this._selectedTeam.next(t) }
 
     public selectSchedule(sched: Schedule) {
@@ -131,6 +144,9 @@ export class ReportingProvider {
             case Scope.Team:
                 this._selectedTeam.next(this._allTeams.value.find(t => t.teamCode == sched.team.teamCode));
                 break;
+            case Scope.LocAuth:
+                this._selectedLocalAuthority.next(this._allLocalAuthorities.value.find(l => l.ref == sched.localAuthority.ref));
+                break;
             case Scope.Service:
                 this._selectedService.next(this._allServices.value.find(s => s.id == sched.service.id));
                 break;
@@ -142,7 +158,8 @@ export class ReportingProvider {
         }
     }
 
-    getReport(x: {"report": Report, "scope": {"team": Team, "service": Service, "region": Region}, "period": { "start": Date, "end": Date}}) {
+    getReport(x: {"report": Report, "scope": {"team": Team, "locAuth": LocalAuthority, "service": Service, "region": Region},
+        "period": { "start": Date, "end": Date}}) {
 
         this._reportPdfUrl.next(null);
 
@@ -155,7 +172,9 @@ export class ReportingProvider {
             });
     }
 
-    getReportUrl(x: {"report": Report, "scope": {"team": Team, "service": Service, "region": Region}, "period": { "start": Date, "end": Date}}): string {
+    getReportUrl(x: {"report": Report, "scope": {"team": Team, "locAuth": LocalAuthority, "service": Service, "region": Region},
+        "period": { "start": Date, "end": Date}}): string {
+
         var baseUrl = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?";
         var repUrl = `${baseUrl}reportId=${x.report.id}&periodStart=${Utils.SqlDate(x.period.start)}&periodEnd=${Utils.SqlDate(x.period.end)}`;
 
@@ -163,6 +182,7 @@ export class ReportingProvider {
         if (x.scope.team !== null) repUrl += `&teamCode=${x.scope.team.teamCode}`;
         if (x.scope.service !== null) repUrl += `&serviceId=${x.scope.service.id}`;
         if (x.scope.region !== null) repUrl += `&regionId=${x.scope.region.id}`;
+        if (x.scope.locAuth !== null) repUrl += `&locAuthRef=${x.scope.locAuth.ref}`;
 
         return repUrl;
     }

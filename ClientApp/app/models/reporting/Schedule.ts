@@ -5,6 +5,7 @@ import { Service } from "./Service";
 import { Team } from "../payroll/Team";
 import { ScheduleFilter } from "./ScheduleFilter";
 import { Subscription } from "./Subscription";
+import { LocalAuthority } from "./LocalAuthority";
 
 export class Schedule {
     public id: number;
@@ -16,11 +17,13 @@ export class Schedule {
     public runTime: Date;
     public regionId: number;
     public serviceId: number;
+    public locAuthRef: string;
     public teamId: number;
 
     public report: Report;
     public region: Region;
     public service: Service;
+    public localAuthority: LocalAuthority;
     public team: Team;
 
     public subscriptions: Subscription[];

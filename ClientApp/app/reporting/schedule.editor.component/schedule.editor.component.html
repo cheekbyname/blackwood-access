@@ -83,6 +83,11 @@
                                 <span>{{region.name}}</span>
                             </option>
                         </select>
+                        <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority" formControlName="selectedLocalAuthority" (ngModelChange)="localAuthoritySelected($event)">
+                            <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">
+                                <span>{{locAuth.name}}</span>
+                            </option>
+                        </select>
                     </td>
                     <td>
                         <select class="form-control" [(ngModel)]="sched.direction" formControlName="selectedDirection" (ngModelChange)="directionSelected($event)">

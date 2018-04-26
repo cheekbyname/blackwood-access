@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 
 import { Observable } from "rxjs/Observable";
 
+import { LocalAuthority } from "../../models/reporting/LocalAuthority";
 import { Locale, LOC_EN } from "../../models/Locale";
 import { Region } from "../../models/reporting/Region";
 import { Report } from "../../models/reporting/Report";
@@ -20,11 +21,12 @@ import { ReportingProvider } from "../reporting.provider";
 })
 export class ScheduleEditorComponent implements OnInit {
 
-    constructor(private repPro: ReportingProvider, private fb: FormBuilder) {
-        this.repPro.allServices$.subscribe(s => this.services = s);
-        this.repPro.allTeams$.subscribe(t => this.teams = t);
-        this.repPro.allRegions$.subscribe(r => this.regions = r);
-        this.repPro.reports$.subscribe(r => this.reports = r);
+    constructor(private rp: ReportingProvider, private fb: FormBuilder) {
+        this.rp.allServices$.subscribe(s => this.services = s);
+        this.rp.allTeams$.subscribe(t => this.teams = t);
+        this.rp.allRegions$.subscribe(r => this.regions = r);
+        this.rp.reports$.subscribe(r => this.reports = r);
+        this.rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
     }
 
     ngOnInit() {
@@ -33,6 +35,7 @@ export class ScheduleEditorComponent implements OnInit {
             selectedFreq: [this.sched.frequency, Validators.required],
             selectedScope: [this.sched.scope, Validators.required],
             selectedTeam: [this.sched.team],
+            selectedLocalAuthority: [this.sched.localAuthority],
             selectedService: [this.sched.service],
             selectedRegion: [this.sched.region],
             selectedDirection: [this.sched.direction, Validators.required],
@@ -43,12 +46,13 @@ export class ScheduleEditorComponent implements OnInit {
 
     @Input('selectedSched')
     set sched(sched: Schedule) {
-        if (sched !== undefined) {
+        if (sched !== undefined && this.dataLoaded()) {
             sched.runTime = new Date(sched.runTime);
-            if (sched.reportId !== null && this.reports !== null) sched.report = this.reports.find(r => r.id === sched.reportId);
-            if (sched.teamId !== null && this.teams !== null) sched.team = this.teams.find(t => t.teamCode === sched.teamId);
-            if (sched.serviceId !== null && this.services !== null) sched.service = this.services.find(s => s.id === sched.serviceId);
-            if (sched.regionId !== null && this.regions !== null) sched.region = this.regions.find(r => r.id === sched.regionId);
+            if (sched.reportId !== null) sched.report = this.reports.find(r => r.id === sched.reportId);
+            if (sched.teamId !== null) sched.team = this.teams.find(t => t.teamCode === sched.teamId);
+            if (sched.serviceId !== null) sched.service = this.services.find(s => s.id === sched.serviceId);
+            if (sched.regionId !== null) sched.region = this.regions.find(r => r.id === sched.regionId);
+            if (sched.localAuthority !== null) sched.localAuthority = this.localAuthorities.find(l => l.ref == sched.locAuthRef);
         }
         this._sched = sched;
     };
@@ -74,6 +78,12 @@ export class ScheduleEditorComponent implements OnInit {
     reports: Report[];
     services: Service[];
     teams: Team[];
+    localAuthorities: LocalAuthority[];
+
+    public dataLoaded(): boolean {
+        return this.reports !== null && this.teams !== null && this.localAuthorities !== null && this.services !== null
+            && this.regions !== null;
+    }
 
     public dismiss() {
         this.form.reset(this.saved);
@@ -83,7 +93,7 @@ export class ScheduleEditorComponent implements OnInit {
 
     public saveSchedule() {
         this.proc = true;
-        this.repPro.putSchedule(this.sched)
+        this.rp.putSchedule(this.sched)
             .catch(e => {
                 console.log(e);
                 return Observable.throw(e);
@@ -111,6 +121,10 @@ export class ScheduleEditorComponent implements OnInit {
     }
 
     public serviceSelected() {
+
+    }
+
+    public localAuthoritySelected() {
 
     }
 

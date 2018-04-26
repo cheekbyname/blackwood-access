@@ -18,7 +18,8 @@ export enum Scope {
     Unknown,
     Team,
     Service,
-    Region
+    Region,
+    LocAuth
 }
 
 export enum ReportFilters {
@@ -49,5 +50,6 @@ export const ScopeNames: { key: Scope, value: string }[] = [
     { key: Scope.Unknown, value: "" },
     { key: Scope.Team, value: "Team" },
     { key: Scope.Service, value: "Service" },
-    { key: Scope.Region, value: "Region" }
+    { key: Scope.Region, value: "Region" },
+    { key: Scope.LocAuth, value: "Local Authority" }
 ];
