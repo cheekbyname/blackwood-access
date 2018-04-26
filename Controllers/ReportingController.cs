@@ -5,12 +5,7 @@ namespace Blackwood.Access.Controllers
     using Blackwood.Reporting.Reporting.Service;
     using System.Threading.Tasks;
     using System.Linq;
-    using System;
-    using System.Collections.Generic;
     using Blackwood.Core.Data.Models.Reporting;
-    using System.IO;
-    using Microsoft.Net.Http.Headers;
-    using System.Net.Mime;
 
     [Route("api/[Controller]")]
     public class ReportingController : ControllerBase
@@ -46,6 +41,9 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> LocalAuthorities() => Ok(await _dataService.GetLocalAuthorities());
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Services() => Ok(await _dataService.GetServices());

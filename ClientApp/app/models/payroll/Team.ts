@@ -1,4 +1,5 @@
 import { Service } from "../reporting/Service";
+import { LocalAuthority } from "../reporting/LocalAuthority";
 
 export class Team {
 	public id: number;
@@ -9,6 +10,11 @@ export class Team {
 	public primaryContact: string;
 	public costCentre: string;
 	public breakPolicy: number;
+	public locAuthRef: string;
+
+	public localAuthority: LocalAuthority;
+
+	// Deprecated, to be removed in due course
 	public serviceId: number;
 	public service: Service;
 }
