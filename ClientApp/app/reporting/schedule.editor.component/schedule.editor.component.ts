@@ -32,12 +32,13 @@ export class ScheduleEditorComponent implements OnInit {
     ngOnInit() {
         this.form = this.fb.group({
             selectedReport: [this.sched.report, Validators.required],
-            selectedFreq: [this.sched.frequency, Validators.required],
             selectedScope: [this.sched.scope, Validators.required],
             selectedTeam: [this.sched.team],
             selectedLocalAuthority: [this.sched.localAuthority],
             selectedService: [this.sched.service],
             selectedRegion: [this.sched.region],
+            selectedFreq: [this.sched.frequency, Validators.required],
+            selectedPeriod: [this.sched.period, Validators.required],
             selectedDirection: [this.sched.direction, Validators.required],
             selectedRunTime: [this.sched.runTime, Validators.required]
         });
@@ -71,6 +72,7 @@ export class ScheduleEditorComponent implements OnInit {
 
     loc: Locale = LOC_EN;
     frequencies = FrequencyNames;
+    periods = FrequencyNames;
     scopes = ScopeNames;
     directions = DirectionNames;
 
@@ -104,31 +106,21 @@ export class ScheduleEditorComponent implements OnInit {
             });
     }
 
-    public reportSelected() {
+    public reportSelected(ev) { }
 
-    }
+    public scopeSelected(ev) { }
 
-    public scopeSelected() {
+    public directionSelected(ev) { }
 
-    }
+    public teamSelected(ev) { }
 
-    public directionSelected() {
+    public serviceSelected(ev) { }
 
-    }
+    public localAuthoritySelected(ev) { }
 
-    public teamSelected() {
+    public regionSelected(ev) { }
 
-    }
+    public freqSelected(ev) {  }
 
-    public serviceSelected() {
-
-    }
-
-    public localAuthoritySelected() {
-
-    }
-
-    public regionSelected() {
-        
-    }
+    public periodSelected(ev) { console.log(this.sched.period) }
 }
