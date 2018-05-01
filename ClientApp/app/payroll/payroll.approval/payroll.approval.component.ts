@@ -9,6 +9,7 @@ import { TeamPeriod } from "../../models/payroll/TeamPeriod";
 
 import { PayrollProvider } from "../payroll.provider";
 import { UserProvider } from "../../user.provider";
+import { Utils } from "../../Utils";
 
 @Component({
     selector: 'payroll-approval',
@@ -20,6 +21,7 @@ export class PayrollApprovalComponent {
     currentUser: AccessUser;
     summary: TeamPeriod;
     viewAuth: boolean[] = [];
+    Utils = Utils;
 
     constructor (private payPro: PayrollProvider, private userPro: UserProvider, private router: Router) {
 		this.userPro.GetUserInfo();
@@ -88,5 +90,27 @@ export class PayrollApprovalComponent {
     public displayDate(when: string): string {
         var dt: Date = new Date(when);
         return `${dt.toLocaleDateString('en-gb')}`;
+    }
+
+    public currentHours(): number {
+        return this.summary.summaries.map(sum => this.additionalHours(sum)).reduce((cur, acc) => { return cur + acc } , 0);
+    }
+
+    private additionalHours(sum): number {
+		var calcHours = sum.actualMins - sum.unpaidMins - sum.monthlyContractMins;
+		return calcHours < 0 ? 0 : calcHours;
+    }
+    
+    private authNotice() {
+        var cAuth = this.summary.currentAuth;
+        var dtAuth = new Date(cAuth.whenAuthorized);
+        var dtExpo = new Date(this.summary.whenExported);
+
+        var exportPhrase = this.summary.whenExported == null ? `and is waiting to be exported`
+            : `and was exported on ${dtExpo.toLocaleDateString()} at ${dtExpo.toLocaleTimeString()}`;
+
+        return `This payroll period was approved by ${cAuth.authorizingUser.accountName} on `
+        + `${dtAuth.toLocaleDateString()} at ${dtAuth.toLocaleTimeString()} `
+        + exportPhrase;
     }
 }

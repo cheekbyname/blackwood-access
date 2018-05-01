@@ -27,5 +27,6 @@ export class Summary {
     public teamMeetings: number;
     public training: number;
     public contact: number;
-    public nonContact: number;
+	public nonContact: number;
+
 }
