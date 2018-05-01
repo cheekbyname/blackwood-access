@@ -47,6 +47,10 @@
                     </tbody>
                 </table>
             </div>
+            <div *ngIf="noRevisions()" class="alert alert-success">
+                <i class="fa fa-thumbs-up fa-2x"></i>
+                <span class="loading">Click "Approve" if you are happy with the number of additional hours shown on the payroll summary</span>
+            </div>
             <div *ngIf="summary.authorizations.length > 0">
                 <h4>Previous Authorisations</h4>
                 <table class="table table-responsive table-striped">

@@ -11,6 +11,7 @@ import { Team } from '../../models/payroll/Team';
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
+import { Utils } from '../../Utils';
 
 @Component({
 	selector: 'team-summary',
@@ -22,32 +23,32 @@ export class PayrollSummaryComponent implements OnInit {
 	ngOnInit() {
 		this.route.params.subscribe((p) => {
 			if (p['teamCode'] != undefined) {
-				this.payPro.teams$.subscribe((teams) => {
+				this.pp.teams$.subscribe((teams) => {
 					if (teams != null) {
 						var team = teams.find(t => t.teamCode == p['teamCode']);
 						this.team = team;
-						this.payPro.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
+						this.pp.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
 					}
 				});
 			}
 		});
-		this.payPro.periodStart$.subscribe(start => this.periodStart = start);
-		this.payPro.periodFinish$.subscribe(finish => this.periodFinish = finish);
-		this.payPro.summaries$
+		this.pp.periodStart$.subscribe(start => this.periodStart = start);
+		this.pp.periodFinish$.subscribe(finish => this.periodFinish = finish);
+		this.pp.summaries$
 			.catch(err => {
 				this.error = err;
 				return Observable.of<Summary[]>([]);
 			})
 			.subscribe(sums => this.summaries = sums);
-		this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
+		this.pp.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
 		// this.payPro.errorMessage$.subscribe(err => {
 		// 	if(err != undefined) this.errored = true;
 		// });
 	}
 
-	constructor(private http: Http, private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute,
+	constructor(private http: Http, private pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
 		private userPro: UserProvider) {
-		this.payPro.setPeriod(new Date(Date.now()));
+		this.pp.setPeriod(new Date(Date.now()));
 		this.userPro.GetUserInfo();
 		this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
 	}
@@ -73,11 +74,11 @@ export class PayrollSummaryComponent implements OnInit {
 	@Output() onSelectedCarer = new EventEmitter<number>();
 
 	periodStartSelected(ev: Event) {
-		this.payPro.setPeriodStart(this.periodStart);
+		this.pp.setPeriodStart(this.periodStart);
 	}
 
 	periodFinishSelected(ev: Event) {
-		this.payPro.setPeriodFinish(this.periodFinish);
+		this.pp.setPeriodFinish(this.periodFinish);
 	}
 
 	public displayTime(mins: number): string {
@@ -106,14 +107,14 @@ export class PayrollSummaryComponent implements OnInit {
 		this.showSummary = false;
 
 		var navDate = this.weekCommencing >= this.periodStart && this.weekCommencing <= this.periodFinish
-			? this.weekCommencing : this.payPro.getWeekCommencingFromDate(this.periodFinish);
+			? this.weekCommencing : this.pp.getWeekCommencingFromDate(this.periodFinish);
 
 		this.router.navigate(['/payroll', this.team.teamCode,
 			{
 				outlets: {
 					detail: ['timesheet', {
 						carer: sum.carerCode,
-						week: this.payPro.sqlDate(navDate)
+						week: this.pp.sqlDate(navDate)
 					}],
 					summary: ['summary', this.team.teamCode]
 				}
@@ -141,5 +142,15 @@ export class PayrollSummaryComponent implements OnInit {
 	public additionalHours(sum: Summary): number {
 		let sumMins = sum.actualMins - sum.unpaidMins - sum.monthlyContractMins;
 		return sumMins < 0 ? 0 : sumMins;
+	}
+
+	public periodBack() {
+		this.summaries = undefined;
+		this.pp.setPeriod(Utils.AdjustDateByMonths(this.periodStart, -1));
+	}
+
+	public periodForward() {
+		this.summaries = undefined;
+		this.pp.setPeriod(Utils.AdjustDateByMonths(this.periodStart, 1));
 	}
 }

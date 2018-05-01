@@ -9,4 +9,16 @@ export module Utils {
     export function FormatDate(dt) {
         return new Date(dt).toLocaleDateString("en-GB");
     }
+
+    export function AdjustDateByDays(adjDate: Date, offset: number): Date {
+		let dt: Date = new Date(adjDate);
+		dt.setDate(dt.getDate() + offset);
+		return dt;
+    }
+    
+    export function AdjustDateByMonths(adjDate: Date, offset: number): Date {
+        let dt: Date = new Date(adjDate);
+        dt.setMonth(dt.getMonth() + offset);
+        return dt;
+    }
 }

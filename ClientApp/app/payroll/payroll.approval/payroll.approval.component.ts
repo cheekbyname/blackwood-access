@@ -58,7 +58,7 @@ export class PayrollApprovalComponent {
     periodFinished(): boolean { return this.summary && new Date() >= new Date(this.summary.periodEnd); }
     userCanAuth(): boolean { return this.summary &&  this.currentUser && this.currentUser.authorizedTeams
         .filter(at => at.canAuthorizeExports).map(at => at.teamCode).some(tc => tc == this.summary.teamCode); }
-    noRevisions(): boolean { return this.summary && this.summary.currentAuth && this.invalidOnExport().length === 0; };
+    noRevisions(): boolean { return this.summary && this.invalidOnExport().length === 0; };
 
     public invalidOnExport(): CarerValidationItem[] {
         var pers = this.summary.currentExports.map(a => a.carer);

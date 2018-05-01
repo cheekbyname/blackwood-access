@@ -9,6 +9,9 @@
                 </strong>
             </h4>
 			<div class="col-md-4 form-inline date-controls">
+				<button class="btn btn-primary week-nav" (click)="periodBack()">
+					<i class="fa fa-angle-left"></i>
+				</button>
 				<label class="control-label" for="periodStart">From</label>
 				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy"
 					(onSelect)="periodStartSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
@@ -17,6 +20,9 @@
 				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy"
 				(onSelect)="periodFinishSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
 				<!-- Add [showIcon]="true" -->
+				<button class="btn btn-primary week-nav" (click)="periodForward()">
+					<i class="fa fa-angle-right"></i>
+				</button>
 			</div>
             <div class="col-md-4">
                 <div class="btn-group">
