@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 import { BehaviorSubject, Observable } from "rxjs/Rx";
 
+import { LocalAuthority } from "../models/reporting/LocalAuthority";
 import { Region } from "../models/reporting/Region";
 import { Report } from "../models/reporting/Report";
 import { Schedule } from "../models/reporting/Schedule";
@@ -11,9 +12,7 @@ import { Scope, ScopeNames } from "../models/reporting/Enums";
 import { Service } from "../models/reporting/Service";
 import { Subscription } from "../models/reporting/Subscription";
 import { Team } from "../models/payroll/Team";
-
 import { Utils } from "../Utils";
-import { LocalAuthority } from "../models/reporting/LocalAuthority";
 
 @Injectable()
 export class ReportingProvider {
@@ -132,6 +131,8 @@ export class ReportingProvider {
     public selectedLocalAuthority(l: LocalAuthority) { this._selectedLocalAuthority.next(l) }
 
     public selectTeam(t: Team) { this._selectedTeam.next(t) }
+
+    public selectLocAuth(l: LocalAuthority) { this._selectedLocalAuthority.next(l) }
 
     public selectSchedule(sched: Schedule) {
         this._selectedSchedule.next(sched);

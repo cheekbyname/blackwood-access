@@ -29,6 +29,9 @@
                 <select *ngIf="selectedScope && selectedScope == 3" class="form-control" [(ngModel)]="selectedRegion" (ngModelChange)="regionSelected($event)">
                     <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
                 </select>
+                <select *ngIf="selectedScope && selectedScope == 4" class="form-control" [(ngModel)]="selectedLocAuth" (ngModelChange)="locAuthSelected($event)">
+                    <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">{{locAuth.name}}</option>
+                </select>
                 <label class="control-label" for="selectedStart">From</label>
                 <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy"
                     (onSelect)="periodStartSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
@@ -38,12 +41,18 @@
             </div>
         </div>
     </div>
-    <div class="panel-body" *ngIf="pdf">
+    <div class="panel-body" *ngIf="!filterSelectionValid()">
+        <div class="alert alert-success">
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+            <span class="loading">Please select report options from the controls above</span>
+        </div>
+    </div>
+    <div class="panel-body" *ngIf="pdf && filterSelectionValid()">
         <object [data]="pdf" type="application/pdf">
             <p>There is no report only Zuul</p>
         </object>
     </div>
-    <div class="panel-body" *ngIf="!pdf">
+    <div class="panel-body" *ngIf="filterSelectionValid() && !pdf">
         <div class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your report...</span>
