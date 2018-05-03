@@ -22,6 +22,24 @@ h4, label, select, td, th {
     padding: 0px;
 }
 
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-default:hover, .btn-primary:hover, .btn-default:focus, .btn-primary:focus {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+    cursor: pointer;
+}
+
+.btn-primary:hover:disabled {
+    cursor: not-allowed;
+}
+
 object {
     width: 100%;
     height: 100%;
@@ -36,11 +54,11 @@ span.loading {
 .alert {
     margin: 16px;
 }
-
+/* 
 .form-inline {
-    text-align: right;
+    text-align: left;
 }
-
+ */
 .section-heading {
     margin-top: 4px;
 }
@@ -49,4 +67,13 @@ span.loading {
     top: 4px;
     margin-right: 4px;
     font-size: 16pt;
+}
+
+.report-filters .list-group-item {
+    border-radius: 0px;
+    background-color: whitesmoke;
+}
+
+.report-filters.list-group {
+    margin-bottom: 0px;
 }

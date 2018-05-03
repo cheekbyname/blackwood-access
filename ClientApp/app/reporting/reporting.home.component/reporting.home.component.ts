@@ -1,5 +1,6 @@
 import { Component, Pipe, PipeTransform } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
+import { Observable } from "rxjs";
 
 import { Direction, DirectionNames, Frequency, FrequencyNames, Scope, ScopeNames } from "../../models/reporting/Enums";
 import { LocalAuthority } from "../../models/reporting/LocalAuthority";
@@ -28,23 +29,31 @@ export class ReportingHomeComponent {
                 var selRep = this.reports.find(r => r.id === rep.id);
                 this.selectedReport = selRep;
             });
-        rp.periodStart$.subscribe(dt => this.selectedStart = dt);
+        rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
+        rp.allRegions$.subscribe(r => this.regions = r);
+        rp.allServices$.subscribe(s => this.services = s);
+        rp.allTeams$.subscribe(t => this.teams = t);
         rp.periodEnd$.subscribe(dt => this.selectedEnd = dt);
+        rp.periodStart$.subscribe(dt => this.selectedStart = dt);
+        rp.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
+        rp.selectedLocalAuthority$.subscribe(l => this.selectedLocalAuthority = l);
+        rp.selectedRegion$.subscribe(r => this.selectedRegion = r);
         rp.selectedSchedule$.subscribe(sch => this.selectedSchedule = sch);
         rp.selectedScope$.subscribe(sc => this.selectedScope = sc);
-        rp.selectedTeam$.subscribe(t => this.selectedTeam = t);
         rp.selectedService$.subscribe(s => this.selectedService = s);
-        rp.selectedRegion$.subscribe(r => this.selectedRegion = r);
-        rp.selectedLocalAuthority$.subscribe(l => this.selectedLocalAuthority = l);
-        rp.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
-        rp.allTeams$.subscribe(t => this.teams = t);
-        rp.allServices$.subscribe(s => this.services = s);
-        rp.allRegions$.subscribe(r => this.regions = r);
-        rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
+        rp.selectedTeam$.subscribe(t => this.selectedTeam = t);
+
+        Observable
+            .combineLatest(rp.reports$, rp.allLocalAuthorities$, rp.allRegions$, rp.allServices$, rp.allTeams$, (rp, la, rg, sr, tm) => {
+                return { "reports": rp, "localAuthorities": la, "regions": rg, "services": sr, "teams": tm };
+            })
+            .filter(x => x.reports !== null && x.localAuthorities !== null && x.regions !== null && x.services !== null && x.teams !== null)
+            .subscribe(x => this.dataLoaded = true);
     }
 
     loc: Locale = LOC_EN;
     pdf: SafeResourceUrl = null;
+    dataLoaded: boolean = false;
 
     reports: Report[];
     teams: Team[];
@@ -84,9 +93,21 @@ export class ReportingHomeComponent {
 
     locAuthSelected(ev: any) { this.rp.selectLocAuth(ev) }
 
-    filterSelectionValid() : boolean {
+    filterSelectionValid(): boolean {
         return this.selectedReport !== null && this.selectedScope !== null && (this.selectedRegion !== null
             || this.selectedService !== null || this.selectedLocalAuthority !== null || this.selectedTeam !== null)
             && this.selectedStart !== null && this.selectedEnd !== null;
+    }
+
+    clearFilters() {
+        this.selectedReport = null;
+        this.rp.selectReport(null);
+        this.rp.selectScope(null);
+        this.rp.selectTeam(null);
+        this.rp.selectLocalAuthority(null);
+        this.rp.selectService(null);
+        this.rp.selectRegion(null);
+        this.rp.selectPeriodStart(null);
+        this.rp.selectPeriodEnd(null);
     }
 }

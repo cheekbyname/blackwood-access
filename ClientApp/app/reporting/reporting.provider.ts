@@ -74,7 +74,7 @@ export class ReportingProvider {
         this.selectedLocalAuthority$, (t, s, r, l) => {
             return { "team": t, "service": s, "region": r, "locAuth": l }
         })
-        .filter(x => x.team !== null || x.service !== null || x.region !== null);
+        .filter(x => x.team !== null || x.service !== null || x.region !== null || x.locAuth !== null);
 
     public reportPeriod$ = Observable.combineLatest(this.periodStart$, this.periodEnd$, (s, e) =>{
             return { "start": s, "end": e }
@@ -116,7 +116,10 @@ export class ReportingProvider {
         this.http.get('/api/reporting/schedulesForUser').subscribe(res => this._userSchedules.next(res.json() as Schedule[]));
     }
 
-    public selectReport(rep: Report) { this._selectedReport.next(this.reports.find(r => r.id === rep.id)) }
+    public selectReport(rep: Report) {
+        var val = rep === null ? null : this.reports.find(r => r.id === rep.id);
+        this._selectedReport.next(val);
+    }
 
     public selectPeriodStart(dt: Date) { this._periodStart.next(dt) }
 
@@ -128,7 +131,7 @@ export class ReportingProvider {
 
     public selectService(s: Service) { this._selectedService.next(s) }
 
-    public selectedLocalAuthority(l: LocalAuthority) { this._selectedLocalAuthority.next(l) }
+    public selectLocalAuthority(l: LocalAuthority) { this._selectedLocalAuthority.next(l) }
 
     public selectTeam(t: Team) { this._selectedTeam.next(t) }
 
