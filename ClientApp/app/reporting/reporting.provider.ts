@@ -165,14 +165,24 @@ export class ReportingProvider {
     getReport(x: {"report": Report, "scope": {"team": Team, "locAuth": LocalAuthority, "service": Service, "region": Region},
         "period": { "start": Date, "end": Date}}) {
 
+        // Trap any possible nulls
+        if (x.report == null || (x.scope.team == null && x.scope.locAuth == null && x.scope.service == null && x.scope.region == null)
+            || x.period.start == null || x.period.end == null) return;
+
         this._reportPdfUrl.next(null);
 
         if (isDevMode()) console.log(this.getReportUrl(x));
 
         this.http.get(this.getReportUrl(x), { responseType: ResponseContentType.ArrayBuffer })
+            .catch(err => {
+                this._reportPdfUrl.error(err);
+                return Observable.throw(err);
+            })
             .subscribe(res => {
                 let objUrl = URL.createObjectURL(new Blob([res.blob()], { type: "application/pdf" }));
-                this._reportPdfUrl.next(this.sanitizer.bypassSecurityTrustResourceUrl(objUrl));
+                let pdf = this.sanitizer.bypassSecurityTrustResourceUrl(objUrl);
+                this._reportPdfUrl.next(pdf);
+                return Observable.of(pdf);
             });
     }
 

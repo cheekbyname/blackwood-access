@@ -57,9 +57,18 @@
             <i class="fa fa-exclamation-circle fa-2x"></i>
             <span class="loading">Please select report options from the controls above</span>
         </div>
-        <div *ngIf="dataLoaded && filterSelectionValid() && !pdf" class="alert alert-info">
+        <div *ngIf="dataLoaded && filterSelectionValid() && !pdf && !reportErr" class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your report...</span>
+        </div>
+        <div *ngIf="dataLoaded && filterSelectionValid() && !pdf && reportErr" class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle fa-2x" (click)="toggleExceptionDetail()"></i>
+            <span class="loading">Error Retrieving report [{{reportErr.status}}: {{reportErr.statusText}}]</span>
+            <div *ngIf="showExceptionDetail" class="exception well">
+                <p><strong>{{reportException.ClassName}}</strong></p>
+                <p>{{reportException.Message}}</p>
+                <p>{{reportException.StackTraceString}}</p>
+            </div>
         </div>
         <!-- Report display -->
         <object *ngIf="dataLoaded && filterSelectionValid() && pdf" [data]="pdf" type="application/pdf">

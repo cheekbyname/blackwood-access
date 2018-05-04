@@ -1,6 +1,7 @@
 import { Component, Pipe, PipeTransform } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Observable } from "rxjs";
+import { TextDecoder } from "text-encoding";
 
 import { Direction, DirectionNames, Frequency, FrequencyNames, Scope, ScopeNames } from "../../models/reporting/Enums";
 import { LocalAuthority } from "../../models/reporting/LocalAuthority";
@@ -35,7 +36,13 @@ export class ReportingHomeComponent {
         rp.allTeams$.subscribe(t => this.teams = t);
         rp.periodEnd$.subscribe(dt => this.selectedEnd = dt);
         rp.periodStart$.subscribe(dt => this.selectedStart = dt);
-        rp.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
+        rp.reportPdfUrl$
+            .catch(err => {
+                this.reportException = JSON.parse(new TextDecoder('utf8').decode(new DataView(err._body)));
+                this.reportErr = err;
+                return Observable.throw(err)
+            })
+            .subscribe(pdf => this.pdf = pdf);
         rp.selectedLocalAuthority$.subscribe(l => this.selectedLocalAuthority = l);
         rp.selectedRegion$.subscribe(r => this.selectedRegion = r);
         rp.selectedSchedule$.subscribe(sch => this.selectedSchedule = sch);
@@ -54,6 +61,9 @@ export class ReportingHomeComponent {
     loc: Locale = LOC_EN;
     pdf: SafeResourceUrl = null;
     dataLoaded: boolean = false;
+    reportErr: any;
+    reportException: any;
+    showExceptionDetail: boolean = false;
 
     reports: Report[];
     teams: Team[];
@@ -62,7 +72,7 @@ export class ReportingHomeComponent {
     localAuthorities: LocalAuthority[];
     directions = DirectionNames;
     frequencies = FrequencyNames;
-    scopes = ScopeNames;
+    scopes = ScopeNames.filter(sn => sn.key !== Scope.Unknown);
 
     selectedSchedule: Schedule;
     selectedReport: Report;
@@ -109,5 +119,9 @@ export class ReportingHomeComponent {
         this.rp.selectRegion(null);
         this.rp.selectPeriodStart(null);
         this.rp.selectPeriodEnd(null);
+    }
+
+    toggleExceptionDetail() {
+        this.showExceptionDetail = !this.showExceptionDetail;
     }
 }

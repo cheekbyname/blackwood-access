@@ -77,3 +77,14 @@ span.loading {
 .report-filters.list-group {
     margin-bottom: 0px;
 }
+
+.exception {
+    margin-top: 8px;
+    font-family: 'Century Gothic';
+    font-size: 12pt;
+}
+
+.exception p {
+    font-family: 'Century Gothic';
+    font-size: 12pt;
+}

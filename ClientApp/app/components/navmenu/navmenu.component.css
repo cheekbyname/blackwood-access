@@ -29,11 +29,11 @@ a.link-active a:focus {
 @media (min-width: 768px) {
     /* On small screens, convert the nav menu to a vertical sidebar */
     .body-content {
-        width: calc(100% - 300px);
+        width: calc(100% - 275px);
     }
     .main-nav {
         height: 100%;
-        width: calc(25% - 20px);
+        width: calc(25%);
         max-width: 275px;
     }
     .navbar {

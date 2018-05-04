@@ -161,6 +161,11 @@
       "integrity": "sha1-TgzvrQnfXsSMjdQEM1EvhLFWjWE=",
       "dev": true
     },
+    "@types/text-encoding": {
+      "version": "0.0.32",
+      "resolved": "https://registry.npmjs.org/@types/text-encoding/-/text-encoding-0.0.32.tgz",
+      "integrity": "sha512-kQ79aFmYcD/DR3QKo6wXyvNrKi7PunY0KYTBUhHjHl0SXwWuLRl9Leh73YtnsSJMBi9qSiK+fxWhdJNQPbhc9A=="
+    },
     "@types/webpack-env": {
       "version": "1.13.0",
       "resolved": "https://registry.npmjs.org/@types/webpack-env/-/webpack-env-1.13.0.tgz",
@@ -6745,6 +6750,11 @@
       "resolved": "https://registry.npmjs.org/tapable/-/tapable-0.2.6.tgz",
       "integrity": "sha1-IGvo4YiGC1FEJTdebxrom/sB/Y0=",
       "dev": true
+    },
+    "text-encoding": {
+      "version": "0.6.4",
+      "resolved": "https://registry.npmjs.org/text-encoding/-/text-encoding-0.6.4.tgz",
+      "integrity": "sha1-45mpgiV6J22uQou5KEXLcb3CbRk="
     },
     "through": {
       "version": "2.3.8",
