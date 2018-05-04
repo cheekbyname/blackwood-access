@@ -36,19 +36,18 @@ export class ReportingHomeComponent {
         rp.allTeams$.subscribe(t => this.teams = t);
         rp.periodEnd$.subscribe(dt => this.selectedEnd = dt);
         rp.periodStart$.subscribe(dt => this.selectedStart = dt);
-        rp.reportPdfUrl$
-            .catch(err => {
-                this.reportException = JSON.parse(new TextDecoder('utf8').decode(new DataView(err._body)));
-                this.reportErr = err;
-                return Observable.throw(err)
-            })
-            .subscribe(pdf => this.pdf = pdf);
+        rp.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
         rp.selectedLocalAuthority$.subscribe(l => this.selectedLocalAuthority = l);
         rp.selectedRegion$.subscribe(r => this.selectedRegion = r);
         rp.selectedSchedule$.subscribe(sch => this.selectedSchedule = sch);
         rp.selectedScope$.subscribe(sc => this.selectedScope = sc);
         rp.selectedService$.subscribe(s => this.selectedService = s);
         rp.selectedTeam$.subscribe(t => this.selectedTeam = t);
+        rp.reportError$.subscribe(re => {
+            this.showExceptionDetail = false;
+            //this.reportException = JSON.parse(new TextDecoder('utf8').decode(new DataView(err._body)));
+            this.reportErr = re;
+        });
 
         Observable
             .combineLatest(rp.reports$, rp.allLocalAuthorities$, rp.allRegions$, rp.allServices$, rp.allTeams$, (rp, la, rg, sr, tm) => {
@@ -93,7 +92,10 @@ export class ReportingHomeComponent {
 
     reportSelected(ev: any) { this.rp.selectReport(ev) }
 
-    scopeSelected(ev: any) { this.rp.selectScope(ev) }
+    scopeSelected(ev: any) {
+        this.clearScopes();
+        this.rp.selectScope(ev);
+    }
 
     regionSelected(ev: any) { this.rp.selectRegion(ev) }
 
@@ -109,14 +111,18 @@ export class ReportingHomeComponent {
             && this.selectedStart !== null && this.selectedEnd !== null;
     }
 
-    clearFilters() {
-        this.selectedReport = null;
-        this.rp.selectReport(null);
-        this.rp.selectScope(null);
+    clearScopes() {
         this.rp.selectTeam(null);
         this.rp.selectLocalAuthority(null);
         this.rp.selectService(null);
         this.rp.selectRegion(null);
+    }
+
+    clearFilters() {
+        this.selectedReport = null;
+        this.rp.selectReport(null);
+        this.rp.selectScope(null);
+        this.clearScopes();
         this.rp.selectPeriodStart(null);
         this.rp.selectPeriodEnd(null);
     }

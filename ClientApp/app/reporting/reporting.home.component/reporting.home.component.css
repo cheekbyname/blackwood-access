@@ -88,3 +88,7 @@ span.loading {
     font-family: 'Century Gothic';
     font-size: 12pt;
 }
+
+.alert-danger i {
+    cursor: help;
+}

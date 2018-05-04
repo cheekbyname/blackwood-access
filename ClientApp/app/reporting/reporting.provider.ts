@@ -26,11 +26,13 @@ export class ReportingProvider {
         this.getAllSchedules();
 
         this.reports$.filter(reps => reps !== null && reps !== undefined).subscribe(reps => this.reports = reps);
+        this.reportOptions$.subscribe(x => this.getReport(x));
     }
 
     private reports: Report[];
 
     private _reports = new BehaviorSubject<Report[]>(null);
+    private _reportError = new BehaviorSubject<any>(null);
     private _allSchedules = new BehaviorSubject<Schedule[]>(null);
     private _userSchedules = new BehaviorSubject<Schedule[]>(null);
     private _allRegions = new BehaviorSubject<Region[]>(null);
@@ -52,6 +54,7 @@ export class ReportingProvider {
     private _reportPdfUrl = new BehaviorSubject<SafeResourceUrl>(null);
     
     public reports$ = this._reports.asObservable();
+    public reportError$ = this._reportError.asObservable();
     public allSchedules$ = this._allSchedules.asObservable();
     public allRegions$ = this._allRegions.asObservable();
     public allServices$ = this._allServices.asObservable();
@@ -73,8 +76,8 @@ export class ReportingProvider {
     public reportScope$ = Observable.combineLatest(this.selectedTeam$, this.selectedService$, this.selectedRegion$,
         this.selectedLocalAuthority$, (t, s, r, l) => {
             return { "team": t, "service": s, "region": r, "locAuth": l }
-        })
-        .filter(x => x.team !== null || x.service !== null || x.region !== null || x.locAuth !== null);
+        });
+        //.filter(x => x.team !== null || x.service !== null || x.region !== null || x.locAuth !== null);
 
     public reportPeriod$ = Observable.combineLatest(this.periodStart$, this.periodEnd$, (s, e) =>{
             return { "start": s, "end": e }
@@ -85,8 +88,7 @@ export class ReportingProvider {
             return { "report": r, "scope": s, "period": p }
         })
         .filter(x => x.report !== null && x.scope !== null && x.period !== null)
-        .distinctUntilChanged((x, y) => { return this.getReportUrl(x) == this.getReportUrl(y) })
-        .subscribe(x => this.getReport(x));
+        .distinctUntilChanged((x, y) => { return this.getReportUrl(x) == this.getReportUrl(y) });
 
     public getAllReports() {
         this.http.get('/api/reporting/allReports').subscribe(res => this._reports.next(res.json() as Report[]));
@@ -175,6 +177,7 @@ export class ReportingProvider {
 
         this.http.get(this.getReportUrl(x), { responseType: ResponseContentType.ArrayBuffer })
             .catch(err => {
+                this._reportError.next(err);
                 this._reportPdfUrl.error(err);
                 return Observable.throw(err);
             })
