@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-    <p-dialog [(visible)]="editVisible" modal="modal" [responsive]="false" [width]="1200" [height]="240" [closable]="false" [closeOnEscape]="false">
+    <p-dialog [(visible)]="editVisible" modal="modal" [responsive]="false" [width]="640" [height]="480" [closable]="false" [closeOnEscape]="false">
 
         <p-header>
             <div class="row">
@@ -21,100 +21,81 @@
             </div>
         </p-header>
 
-        <table class="table table-responsive" *ngIf="sched">
-            <thead>
-                <tr class="row">
-                    <th class="col-md-2">
-                        <span>Report</span>
-                    </th>
-                    <th class="col-md-1">
-                        <span>Scope</span>
-                    </th>
-                    <th class="col-md-3">
-                        <span>{{scopes[sched.scope].value}}</span>
-                    </th>
-                    <th class="col-md-1">
-                        <span>Frequency</span>
-                    </th>
-                    <th class="col-md-1">
-                        <span>Period</span>
-                    </th>
-                    <th class="col-md-2">
-                        <span>Direction</span>
-                    </th>
-                    <th class="col-md-2">
-                        <span>Next Run</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="row form-inline">
-                    <td>
-                        <select class="form-control" [(ngModel)]="sched.report" formControlName="selectedReport" (change)="reportSelected($event)">
-                            <option *ngFor="let rep of reports" [ngValue]="rep">
-                                <span>{{rep.name}}</span>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-control" [(ngModel)]="sched.scope" formControlName="selectedScope" (change)="scopeSelected($event)">
-                            <option *ngFor="let scope of scopes" [ngValue]="scope.key">
-                                <span>{{scope.value}}</span>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select *ngIf="sched.scope && sched.scope == 1" class="form-control" [(ngModel)]="sched.team" formControlName="selectedTeam" (change)="teamSelected($event)">
-                            <option *ngFor="let team of teams" [ngValue]="team">
-                                <span>{{team.teamDesc}}</span>
-                            </option>
-                        </select>
-                        <select *ngIf="sched.scope && sched.scope == 2" class="form-control" [(ngModel)]="sched.service" formControlName="selectedService" (change)="serviceSelected($event)">
-                            <option *ngFor="let service of services" [ngValue]="service">
-                                <span>{{service.name}}</span>
-                            </option>
-                        </select>
-                        <select *ngIf="sched.scope && sched.scope == 3" class="form-control" [(ngModel)]="sched.region" formControlName="selectedRegion" (change)="regionSelected($event)">
-                            <option *ngFor="let region of regions" [ngValue]="region">
-                                <span>{{region.name}}</span>
-                            </option>
-                        </select>
-                        <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority" formControlName="selectedLocalAuthority" (change)="localAuthoritySelected($event)">
-                            <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">
-                                <span>{{locAuth.name}}</span>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-control" [(ngModel)]="sched.frequency" formControlName="selectedFreq" (change)="freqSelected($event)">
-                            <option *ngFor="let freq of frequencies" [ngValue]="freq.key">
-                                <span>{{freq.value}}</span>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-control" [(ngModel)]="sched.period" formControlName="selectedPeriod" (change)="periodSelected($event)">
-                            <option *ngFor="let freq of frequencies" [ngValue]="freq.key">
-                                <span>{{freq.value}}</span>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-control" [(ngModel)]="sched.direction" formControlName="selectedDirection" (change)="directionSelected($event)">
-                            <option *ngFor="let dir of directions" [ngValue]="dir.key">
-                                <span>{{dir.value}}</span>
-                            </option>
-                        </select>
-                    </td>
-                    <td>
-                        <p-calendar [appendTo]="popover" [(ngModel)]="sched.runTime" formControlName="selectedRunTime" [showTime]="true"
-                            [locale]="loc" dateFormat="dd/mm/yy" inputStyleClass="form-control" [showIcon]="true"
-                            [inputStyle]="{'width': '128px', 'font-family': 'Century Gothic'}">
-                        </p-calendar>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="form" *ngIf="sched">
+            <div class="form-group form-inline">
+                <label class="form-label">Report</label>
+                <select class="form-control" [(ngModel)]="sched.report" formControlName="selectedReport" (change)="reportSelected($event)">
+                    <option *ngFor="let rep of reports" [ngValue]="rep">
+                        <span>{{rep.name}}</span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label class="form-label">Scope</label>
+                <select class="form-control" [(ngModel)]="sched.scope" formControlName="selectedScope" (change)="scopeSelected($event)">
+                    <option *ngFor="let scope of scopes" [ngValue]="scope.key">
+                        <span>{{scope.value}}</span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label class="form-label">{{scopes[sched.scope].value}}</label>
+                <select *ngIf="sched.scope && sched.scope == 1" class="form-control" [(ngModel)]="sched.team" formControlName="selectedTeam"
+                    (change)="teamSelected($event)">
+                    <option *ngFor="let team of teams" [ngValue]="team">
+                        <span>{{team.teamDesc}}</span>
+                    </option>
+                </select>
+                <select *ngIf="sched.scope && sched.scope == 2" class="form-control" [(ngModel)]="sched.service" formControlName="selectedService"
+                    (change)="serviceSelected($event)">
+                    <option *ngFor="let service of services" [ngValue]="service">
+                        <span>{{service.name}}</span>
+                    </option>
+                </select>
+                <select *ngIf="sched.scope && sched.scope == 3" class="form-control" [(ngModel)]="sched.region" formControlName="selectedRegion"
+                    (change)="regionSelected($event)">
+                    <option *ngFor="let region of regions" [ngValue]="region">
+                        <span>{{region.name}}</span>
+                    </option>
+                </select>
+                <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority" formControlName="selectedLocalAuthority"
+                    (change)="localAuthoritySelected($event)">
+                    <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">
+                        <span>{{locAuth.name}}</span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label class="form-label">Frequency</label>
+                <select class="form-control" [(ngModel)]="sched.frequency" formControlName="selectedFreq" (change)="freqSelected($event)">
+                    <option *ngFor="let freq of frequencies" [ngValue]="freq.key">
+                        <span>{{freq.value}}</span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label class="form-label">Period</label>
+                <select class="form-control" [(ngModel)]="sched.period" formControlName="selectedPeriod" (change)="periodSelected($event)">
+                    <option *ngFor="let freq of frequencies" [ngValue]="freq.key">
+                        <span>{{freq.value}}</span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label class="form-label">Direction</label>
+                <select class="form-control" [(ngModel)]="sched.direction" formControlName="selectedDirection" (change)="directionSelected($event)">
+                    <option *ngFor="let dir of directions" [ngValue]="dir.key">
+                        <span>{{dir.value}}</span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label class="form-label">Next Run</label>
+                <p-calendar [appendTo]="popover" [(ngModel)]="sched.runTime" formControlName="selectedRunTime" [showTime]="true" [locale]="loc"
+                    dateFormat="dd/mm/yy" inputStyleClass="form-control" [showIcon]="true" [inputStyle]="{'width': '128px', 'font-family': 'Century Gothic'}">
+                </p-calendar>
+            </div>
+        </div>
 
     </p-dialog>
 </form>
