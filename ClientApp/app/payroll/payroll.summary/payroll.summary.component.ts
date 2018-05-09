@@ -26,7 +26,8 @@ export class PayrollSummaryComponent implements OnInit {
 				this.pp.teams$.subscribe((teams) => {
 					if (teams != null) {
 						var team = teams.find(t => t.teamCode == p['teamCode']);
-						this.team = team;
+                        this.team = team;
+                        this.summaries = undefined;
 						this.pp.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
 					}
 				});

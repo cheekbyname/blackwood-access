@@ -10,8 +10,9 @@ export enum Frequency {
 
 export enum Direction {
     Unknown,
-    Forwards,
-    Backwards
+    Current,
+    Previous,
+    Next
 }
 
 export enum Scope {
@@ -42,8 +43,9 @@ export const FrequencyNames: { key: Frequency, value: string }[] = [
 
 export const DirectionNames: { key: Direction, value: string }[] = [
     { key: Direction.Unknown,  value: "" },
-    { key: Direction.Backwards, value: "Backwards" },
-    { key: Direction.Forwards, value: "Forwards" }
+    { key: Direction.Current, value: "Current" },
+    { key: Direction.Previous, value: "Previous" },
+    { key: Direction.Next, value: "Next" }
 ];
 
 export const ScopeNames: { key: Scope, value: string }[] = [

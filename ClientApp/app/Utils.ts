@@ -10,6 +10,10 @@ export module Utils {
         return new Date(dt).toLocaleDateString("en-GB");
     }
 
+    export function FormatTime(dt) {
+        return new Date(dt).toLocaleTimeString("en-GB");
+    }
+
     export function DisplayTime(mins: number): string {
         if (mins < 0) {
             return Math.ceil(mins / 60) + "h " + (mins % 60) + "m";

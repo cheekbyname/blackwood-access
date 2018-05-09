@@ -42,7 +42,7 @@
                                 <td>{{sched.report ? sched.report.name : ""}}</td>
                                 <td>{{frequencies[sched.frequency].value}}</td>
                                 <td>{{sched.scopeDescription}}</td>
-                                <td>{{Utils.FormatDate(sched.runTime)}}</td>
+                                <td>{{Utils.FormatDate(sched.runTime)}} {{Utils.FormatTime(sched.runTime)}}</td>
                                 <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
                                 <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
                                 <td>

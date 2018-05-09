@@ -17,6 +17,8 @@ export class Summary {
     public availMins: number;
     public unpaidMins: number;
 
+	public positionType: string;
+
     // Analysis Values
     public annualLeave: number;
     public maternityOtherLeave: number;

@@ -16,8 +16,12 @@ import { Utils } from '../../Utils'
 })
 export class ReportingScheduleComponent {
     constructor(private rp: ReportingProvider, private router: Router) {
-        rp.userSchedules$.subscribe(scheds => this.mySchedules = scheds);
-        rp.allSchedules$.subscribe(scheds => this.allSchedules = scheds);
+        rp.userSchedules$.subscribe(scheds => {
+            this.mySchedules = scheds;
+        });
+        rp.allSchedules$.subscribe(scheds => {
+            this.allSchedules = scheds;
+        });
         rp.reports$.subscribe(r => this.reports = r);
 
         Observable
