@@ -112,15 +112,42 @@ export class ScheduleEditorComponent implements OnInit {
 
     public directionSelected(ev) { }
 
-    public teamSelected(ev) { }
+    public teamSelected(ev: Team) {
+        this.clearSelectedScopes();
+        this.sched.team = ev;
+        this.sched.teamId = ev.id;
+    }
 
-    public serviceSelected(ev) { }
+    public serviceSelected(ev: Service) {
+        this.clearSelectedScopes();
+        this.sched.service = ev;
+        this.sched.serviceId = ev.id;
+    }
 
-    public localAuthoritySelected(ev) { }
+    public localAuthoritySelected(ev) {
+        this.clearSelectedScopes();
+        this.sched.localAuthority = ev;
+        this.sched.locAuthRef = ev.ref;
+    }
 
-    public regionSelected(ev) { }
+    public regionSelected(ev: Region) {
+        this.clearSelectedScopes();
+        this.sched.region = ev;
+        this.sched.regionId = ev.id;
+    }
 
     public freqSelected(ev) {  }
 
     public periodSelected(ev) { console.log(this.sched.period) }
+
+    private clearSelectedScopes() {
+        this.sched.team = null;
+        this.sched.teamId = null;
+        this.sched.localAuthority = null;
+        this.sched.locAuthRef = null;
+        this.sched.service = null;
+        this.sched.serviceId = null;
+        this.sched.region = null;
+        this.sched.regionId = null;
+    }
 }

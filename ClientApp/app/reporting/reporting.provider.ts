@@ -205,6 +205,7 @@ export class ReportingProvider {
     }
 
     putSchedule(sched: Schedule) {
+        sched.runTime = new Date(sched.runTime.toISOString());
         return this.http.put('/api/reporting/schedule', sched).map(res => {
             this.getUserSchedules();
             return res.json() as Schedule;

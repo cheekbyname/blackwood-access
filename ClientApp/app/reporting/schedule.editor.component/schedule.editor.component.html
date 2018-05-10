@@ -41,25 +41,25 @@
             <div class="form-group form-inline">
                 <label class="form-label">{{scopes[sched.scope].value}}</label>
                 <select *ngIf="sched.scope && sched.scope == 1" class="form-control" [(ngModel)]="sched.team" formControlName="selectedTeam"
-                    (change)="teamSelected($event)">
+                    (ngModelChange)="teamSelected($event)">
                     <option *ngFor="let team of teams" [ngValue]="team">
                         <span>{{team.teamDesc}}</span>
                     </option>
                 </select>
                 <select *ngIf="sched.scope && sched.scope == 2" class="form-control" [(ngModel)]="sched.service" formControlName="selectedService"
-                    (change)="serviceSelected($event)">
+                    (ngModelChange)="serviceSelected($event)">
                     <option *ngFor="let service of services" [ngValue]="service">
                         <span>{{service.name}}</span>
                     </option>
                 </select>
                 <select *ngIf="sched.scope && sched.scope == 3" class="form-control" [(ngModel)]="sched.region" formControlName="selectedRegion"
-                    (change)="regionSelected($event)">
+                    (ngModelChange)="regionSelected($event)">
                     <option *ngFor="let region of regions" [ngValue]="region">
                         <span>{{region.name}}</span>
                     </option>
                 </select>
                 <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority" formControlName="selectedLocalAuthority"
-                    (change)="localAuthoritySelected($event)">
+                    (ngModelChange)="localAuthoritySelected($event)">
                     <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">
                         <span>{{locAuth.name}}</span>
                     </option>
@@ -92,7 +92,8 @@
             <div class="form-group form-inline">
                 <label class="form-label">Next Run</label>
                 <p-calendar [appendTo]="popover" [(ngModel)]="sched.runTime" formControlName="selectedRunTime" [showTime]="true" [locale]="loc"
-                    dateFormat="dd/mm/yy" inputStyleClass="form-control" [showIcon]="true" [inputStyle]="{'width': '128px', 'font-family': 'Century Gothic'}">
+                    dateFormat="dd/mm/yy" inputStyleClass="form-control" [showIcon]="true" [utc]="true"
+                    [inputStyle]="{'width': '128px', 'font-family': 'Century Gothic'}">
                 </p-calendar>
             </div>
         </div>
