@@ -25,68 +25,50 @@
             <div class="form-group form-inline">
                 <label class="form-label">Report</label>
                 <select class="form-control" [(ngModel)]="sched.report" formControlName="selectedReport" (change)="reportSelected($event)">
-                    <option *ngFor="let rep of reports" [ngValue]="rep">
-                        <span>{{rep.name}}</span>
-                    </option>
+                    <option *ngFor="let rep of reports" [ngValue]="rep">{{rep.name}}</option>
                 </select>
             </div>
             <div class="form-group form-inline">
                 <label class="form-label">Scope</label>
                 <select class="form-control" [(ngModel)]="sched.scope" formControlName="selectedScope" (change)="scopeSelected($event)">
-                    <option *ngFor="let scope of scopes" [ngValue]="scope.key">
-                        <span>{{scope.value}}</span>
-                    </option>
+                    <option *ngFor="let scope of scopes" [ngValue]="scope.key">{{scope.value}}</option>
                 </select>
             </div>
             <div class="form-group form-inline">
                 <label class="form-label">{{scopes[sched.scope].value}}</label>
                 <select *ngIf="sched.scope && sched.scope == 1" class="form-control" [(ngModel)]="sched.team" formControlName="selectedTeam"
                     (ngModelChange)="teamSelected($event)">
-                    <option *ngFor="let team of teams" [ngValue]="team">
-                        <span>{{team.teamDesc}}</span>
-                    </option>
+                    <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
                 </select>
                 <select *ngIf="sched.scope && sched.scope == 2" class="form-control" [(ngModel)]="sched.service" formControlName="selectedService"
                     (ngModelChange)="serviceSelected($event)">
-                    <option *ngFor="let service of services" [ngValue]="service">
-                        <span>{{service.name}}</span>
-                    </option>
+                    <option *ngFor="let service of services" [ngValue]="service">{{service.name}}</option>
                 </select>
                 <select *ngIf="sched.scope && sched.scope == 3" class="form-control" [(ngModel)]="sched.region" formControlName="selectedRegion"
                     (ngModelChange)="regionSelected($event)">
-                    <option *ngFor="let region of regions" [ngValue]="region">
-                        <span>{{region.name}}</span>
-                    </option>
+                    <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
                 </select>
                 <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority" formControlName="selectedLocalAuthority"
                     (ngModelChange)="localAuthoritySelected($event)">
-                    <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">
-                        <span>{{locAuth.name}}</span>
-                    </option>
+                    <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">{{locAuth.name}}</option>
                 </select>
             </div>
             <div class="form-group form-inline">
                 <label class="form-label">Frequency</label>
                 <select class="form-control" [(ngModel)]="sched.frequency" formControlName="selectedFreq" (change)="freqSelected($event)">
-                    <option *ngFor="let freq of frequencies" [ngValue]="freq.key">
-                        <span>{{freq.value}}</span>
-                    </option>
+                    <option *ngFor="let freq of frequencies" [ngValue]="freq.key">{{freq.value}}</option>
                 </select>
             </div>
             <div class="form-group form-inline">
                 <label class="form-label">Period</label>
                 <select class="form-control" [(ngModel)]="sched.period" formControlName="selectedPeriod" (change)="periodSelected($event)">
-                    <option *ngFor="let freq of frequencies" [ngValue]="freq.key">
-                        <span>{{freq.value}}</span>
-                    </option>
+                    <option *ngFor="let freq of frequencies" [ngValue]="freq.key">{{freq.value}}</option>
                 </select>
             </div>
             <div class="form-group form-inline">
                 <label class="form-label">Direction</label>
                 <select class="form-control" [(ngModel)]="sched.direction" formControlName="selectedDirection" (change)="directionSelected($event)">
-                    <option *ngFor="let dir of directions" [ngValue]="dir.key">
-                        <span>{{dir.value}}</span>
-                    </option>
+                    <option *ngFor="let dir of directions" [ngValue]="dir.key">{{dir.value}}</option>
                 </select>
             </div>
             <div class="form-group form-inline">
