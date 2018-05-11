@@ -205,7 +205,8 @@ export class ReportingProvider {
     }
 
     putSchedule(sched: Schedule) {
-        sched.runTime = new Date(sched.runTime.toISOString());
+        // Adjust for Daylight savings
+        sched.runTime.setHours(sched.runTime.getHours() + (-1 * (sched.runTime.getTimezoneOffset() / 60)));
         return this.http.put('/api/reporting/schedule', sched).map(res => {
             this.getUserSchedules();
             return res.json() as Schedule;
