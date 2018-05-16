@@ -8,6 +8,7 @@ import { PayrollAdminComponent } from "./payroll.admin.component/payroll.admin.c
 import { PushMessagingComponent } from "./push.messaging.component/push.messaging.component";
 import { UserAdminComponent } from "./user.admin.component/user.admin.component";
 import { UserPermissionsComponent } from "./user.permissions.component/user.permissions.component";
+import { ReportingAdminComponent } from "./reporting.admin.component/reporting.admin.component";
 
 const adminRoutes: Routes = [
     {
@@ -16,7 +17,8 @@ const adminRoutes: Routes = [
             { path: 'users', component: UserAdminComponent },
             { path: 'users/:user', component: UserPermissionsComponent },
             { path: 'payroll', component: PayrollAdminComponent },
-            { path: 'messaging', component: PushMessagingComponent }
+            { path: 'messaging', component: PushMessagingComponent },
+            { path: 'reporting', component: ReportingAdminComponent }
         ]
     }
 ];

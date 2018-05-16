@@ -17,13 +17,26 @@
             </div>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" style="height:87vh;overflow-y:scroll;">
         <div *ngIf="!mySchedules" class="alert alert-info">
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
         <div *ngIf="mySchedules sched-container">
-            <h4>Your Subscriptions</h4>
+            <div class="row">
+                <h4 class="col-md-6">Your Subscriptions</h4>
+                <!--<div class="col-md-6">
+                    <div class="form-group form-inline pull-right">
+                        <label class="form-label">Show only</label>
+                        <select class="form-control">
+                            <option>Region</option>
+                            <option>Service</option>
+                            <option>Local Authority</option>
+                            <option>Team</option>
+                        </select>
+                    </div>
+                </div>-->
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -38,28 +51,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                            <tr class="row" *ngFor="let sched of mySchedules; index as i">
-                                <td>{{sched.report ? sched.report.name : ""}}</td>
-                                <td>{{frequencies[sched.frequency].value}}</td>
-                                <td>{{sched.scopeDescription}}</td>
-                                <td>{{Utils.FormatDate(sched.runTime)}} {{Utils.FormatTime(sched.runTime)}}</td>
-                                <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
-                                <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
-                                <td>
-                                    <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                        <span>View</span>
-                                    </button>
-                                    <button class="btn btn-primary" (click)="editSched(sched)" [disabled]="!dataLoaded">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                        <span>Edit</span>
-                                    </button>
-                                    <button class="btn btn-primary" disabled="true" (click)="unsubscribe(sched)">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                        <span>UnSub</span>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr class="row" *ngFor="let sched of mySchedules; index as i">
+                            <td>{{sched.report ? sched.report.name : ""}}</td>
+                            <td>{{frequencies[sched.frequency].value}}</td>
+                            <td>{{sched.scopeDescription}}</td>
+                            <td>{{Utils.FormatDate(sched.runTime)}} {{Utils.FormatTime(sched.runTime)}}</td>
+                            <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
+                            <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
+                            <td>
+                                <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                    <span>View</span>
+                                </button>
+                                <!--<button class="btn btn-primary" (click)="editSched(sched)" [disabled]="!dataLoaded">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                    <span>Edit</span>
+                                </button>-->
+                                <button class="btn btn-primary" (click)="unsubscribe(sched)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                    <span>Unsubscribe</span>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -81,24 +94,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                            <tr class="row" *ngFor="let sched of otherSchedules; index as i">
-                                <td>{{sched.report ? sched.report.name : ""}}</td>
-                                <td>{{frequencies[sched.frequency].value}}</td>
-                                <td>{{sched.scopeDescription}}</td>
-                                <td>{{Utils.FormatDate(sched.runTime)}}</td>
-                                <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
-                                <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
-                                <td>
-                                    <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                        <span>View</span>
-                                    </button>
-                                    <button class="btn btn-primary" (click)="subscribe(sched)" [disabled]="proc">
-                                        <span class="glyphicon glyphicon-save-file"></span>
-                                        <span>Subscribe</span>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr class="row" *ngFor="let sched of otherSchedules; index as i">
+                            <td>{{sched.report ? sched.report.name : ""}}</td>
+                            <td>{{frequencies[sched.frequency].value}}</td>
+                            <td>{{sched.scopeDescription}}</td>
+                            <td>{{Utils.FormatDate(sched.runTime)}}</td>
+                            <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
+                            <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
+                            <td>
+                                <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                    <span>View</span>
+                                </button>
+                                <button class="btn btn-primary" (click)="subscribe(sched)" [disabled]="proc">
+                                    <span class="glyphicon glyphicon-save-file"></span>
+                                    <span>Subscribe</span>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

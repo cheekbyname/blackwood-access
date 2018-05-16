@@ -47,9 +47,15 @@
                     </a>
                 </li>
                 <li *ngIf="user && user.isAdmin && showAdmin" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/reporting'}}]" class="sub-menu">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span>Reporting Admin</span>
+                    </a>
+                </li>
+                <li *ngIf="user && user.isAdmin && showAdmin" [routerLinkActive]="['link-active']" class="submenu">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/messaging'}}]" class="sub-menu">
                         <span class="glyphicon glyphicon-phone"></span>
-                        <span>Push Messaging</span>
+                        <span>Messaging Admin</span>
                     </a>
                 </li>
                 <li *ngIf="user && user.isAccidentUser" [routerLinkActive]="['link-active']">

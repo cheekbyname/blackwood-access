@@ -28,9 +28,15 @@
                 </a>
             </div>
             <div *ngIf="user && user.isAdmin" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/reporting'}}]">
+                    <span class="big-icon glyphicon glyphicon-calendar"></span>
+                    <h4 class="icon-text">Reporting Admin</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.isAdmin" class="col-md-2">
                 <a [routerLink]="['', {outlets: {summary:null, detail:null, primary: 'admin/messaging'}}]">
                     <span class="big-icon glyphicon glyphicon-phone"></span>
-                    <h4 class="icon-text">Push Messaging</h4>
+                    <h4 class="icon-text">Messaging Admin</h4>
                 </a>
             </div>
         </div>

@@ -20,6 +20,25 @@
         </div>
         <div class="panel-body">
 
+            <h4>Account Details</h4>
+            <div class="well">
+                <div class="form-group form-inline">
+                    <div class="col-md-2">
+                        <label class="form-label">Id</label>
+                        <input class="form-control" type="text" [(ngModel)]="selectedUser.id" name="id" disabled="disabled" />
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Domain User Name</label>
+                        <input class="form-control" type="text" [(ngModel)]="selectedUser.domainUsername" name="domainUsername" />
+
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Account Name</label>
+                        <input class="form-control" type="text" [(ngModel)]="selectedUser.accountName" name="accountName" />
+                    </div>
+                </div>
+            </div>
+
             <h4>Module Permissions</h4>
             <div class="well">
                 <table class="table table-responsive table-striped">

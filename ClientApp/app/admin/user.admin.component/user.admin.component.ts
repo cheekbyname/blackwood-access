@@ -52,4 +52,8 @@ export class UserAdminComponent implements OnInit {
     selectUser(user: AccessUser) {
         this.router.navigate(['admin/users', user.id]);
     }
+
+    addUser() {
+
+    }
 }

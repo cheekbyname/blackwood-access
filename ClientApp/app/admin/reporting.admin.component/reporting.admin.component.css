@@ -1,4 +1,4 @@
-h4, label, select, td, th {
+﻿h4, label, select, td, th {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -28,31 +28,17 @@ table tbody tr:hover {
     font-family: 'Century Gothic';
 }
 
-.btn-primary:enabled:hover {
-    cursor: pointer;
-    color: black;
-    background-color: hotpink;
-}
+    .btn-primary:enabled:hover {
+        cursor: pointer;
+        color: black;
+        background-color: hotpink;
+    }
 
-.btn-primary[disabled="true"]:hover {
-    cursor: not-allowed;
-    color: black;
-    background-color: #bfd730;
-}
-
-.btn-primary i {
-    margin-right: 8px;
-}
-
-.section-heading {
-    margin-top: 4px;
-}
-
-.section-heading .glyphicon {
-    top: 4px;
-    margin-right: 4px;
-    font-size: 16pt;
-}
+    .btn-primary[disabled="true"]:hover {
+        cursor: not-allowed;
+        color: black;
+        background-color: #bfd730;
+    }
 
 span.loading {
     font-family: 'Century Gothic';

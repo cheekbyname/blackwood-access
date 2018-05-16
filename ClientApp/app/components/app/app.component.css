@@ -21,3 +21,7 @@
 .col-fluid {
     padding: 0px 16px;
 }
+
+app {
+    overflow-y: hidden;
+}
