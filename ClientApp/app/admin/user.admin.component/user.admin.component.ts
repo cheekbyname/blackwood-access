@@ -19,15 +19,15 @@ export class UserAdminComponent implements OnInit {
     prevUsers: AccessUser[];
     allTeams: Team[];
 
-    constructor(private userPro: UserProvider, private payPro: PayrollProvider, private router: Router) { }
+    constructor(private up: UserProvider, private pp: PayrollProvider, private router: Router) { }
 
     ngOnInit() {
-        this.payPro.teams$.subscribe(teams => this.allTeams = teams);
-        this.userPro.allUsers$.subscribe(users => {
+        this.pp.teams$.subscribe(teams => this.allTeams = teams);
+        this.up.allUsers$.subscribe(users => {
             this.allUsers = users;
             this.prevUsers = this.allUsers.map(x => Object.assign({}, x));
         });
-        this.userPro.GetAllUsers();
+        this.up.GetAllUsers();
     }
 
     isDirty(form: NgForm): boolean {
@@ -36,7 +36,7 @@ export class UserAdminComponent implements OnInit {
 
     undoChanges(form: NgForm) {
         // Reload Users from API
-        this.userPro.GetAllUsers();
+        this.up.GetAllUsers();
         form.reset();
     }
 
@@ -44,7 +44,7 @@ export class UserAdminComponent implements OnInit {
         this.allUsers.forEach(u => {
             var p = this.prevUsers.find(p => p.id === u.id);
             if (JSON.stringify(p) !== JSON.stringify(u)) {
-                this.userPro.PutUser(u);
+                this.up.PutUser(u);
             }
         });
     }
@@ -54,6 +54,6 @@ export class UserAdminComponent implements OnInit {
     }
 
     addUser() {
-
+        this.router.navigate(['admin/users', 0]);
     }
 }

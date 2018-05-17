@@ -1,3 +1,8 @@
+<div *ngIf="!selectedUser" class="alert alert-info" style="margin-top: 16px;">
+    <i class="fa fa-cog fa-spin fa-2x"></i>
+    <span class="loading">Please wait, retrieving your data...</span>
+</div>
+
 <form *ngIf="selectedUser" #thisForm='ngForm'>
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -6,7 +11,7 @@
                     <h4>
                         <strong>
                             <span class="glyphicon glyphicon-user"></span>
-                            <span>User Configuration for {{selectedUser.accountName}}</span>
+                            <span>User Configuration for {{selectedUser.accountName || "New User"}}</span>
                         </strong>
                     </h4>
                 </div>
@@ -21,20 +26,27 @@
         <div class="panel-body">
 
             <h4>Account Details</h4>
-            <div class="well">
-                <div class="form-group form-inline">
-                    <div class="col-md-2">
-                        <label class="form-label">Id</label>
-                        <input class="form-control" type="text" [(ngModel)]="selectedUser.id" name="id" disabled="disabled" />
+            <div class="well account-details">
+                <div class="row">
+                    <div class="form-group form-inline">
+                        <div class="col-md-6">
+                            <label class="form-label">Id</label>
+                            <input class="form-control" type="text" [(ngModel)]="selectedUser.id" name="id" disabled="disabled" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Account Name</label>
+                            <input class="form-control" type="text" [(ngModel)]="selectedUser.accountName" name="accountName" (input)="accountNameChanged()" />
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <label class="form-label">Domain User Name</label>
-                        <input class="form-control" type="text" [(ngModel)]="selectedUser.domainUsername" name="domainUsername" />
-
-                    </div>
-                    <div class="col-md-5">
-                        <label class="form-label">Account Name</label>
-                        <input class="form-control" type="text" [(ngModel)]="selectedUser.accountName" name="accountName" />
+                    <div class="form-group form-inline">
+                        <div class="col-md-6">
+                            <label class="form-label">Domain User Name</label>
+                            <input class="form-control" type="text" [(ngModel)]="selectedUser.domainUsername" name="domainUsername" disabled="disabled" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email Address</label>
+                            <input class="form-control" type="text" [(ngModel)]="selectedUser.emailAddress" name="emailAddress" disabled="disabled" />
+                        </div>
                     </div>
                 </div>
             </div>

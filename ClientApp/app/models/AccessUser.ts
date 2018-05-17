@@ -1,10 +1,9 @@
 import { AccessUserTeam } from "./AccessUserTeam";
 
 export class AccessUser {
-    public id: number;
-    public domainUsername: string;
+    public id: number = 0;
     public accountName: string;
-    public isActive: boolean;
+    public isActive: boolean = true;
     public isAdmin: boolean;
     public isPayrollUser: boolean;
     public defaultTeamCode: number;
@@ -15,6 +14,7 @@ export class AccessUser {
     public isAccidentUser: boolean;
 
     public emailAddress: string;
+    public domainUsername: string;
 
-    public authorizedTeams: AccessUserTeam[];
+    public authorizedTeams: AccessUserTeam[] = [];
 }

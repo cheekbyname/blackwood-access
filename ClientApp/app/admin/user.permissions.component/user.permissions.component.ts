@@ -33,7 +33,11 @@ export class UserPermissionsComponent implements OnInit {
             if (p["user"] !== undefined) {
                 this.userPro.allUsers$.subscribe(us => {
                     this.allUsers = us;
-                    this.selectedUser = us.find(u => u.id == p["user"]);
+                    if (p["user"] == 0) {
+                        this.selectedUser = new AccessUser();
+                    } else {
+                        this.selectedUser = us.find(u => u.id == p["user"]);
+                    }
                     this.prevUser = JSON.stringify(this.selectedUser);
                     this.updateAuthTeams();
                 });
@@ -47,6 +51,11 @@ export class UserPermissionsComponent implements OnInit {
 
     isDirty(form: NgForm): boolean {
         return form.dirty;
+    }
+
+    accountNameChanged() {
+        this.selectedUser.domainUsername = `M_BLACKWOOD\\${this.selectedUser.accountName}`;
+        this.selectedUser.emailAddress = `${this.selectedUser.accountName}@blackwoodgroup.org.uk`;
     }
 
     updateAuthTeams() {
