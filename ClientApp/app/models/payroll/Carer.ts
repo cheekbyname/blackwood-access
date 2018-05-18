@@ -1,4 +1,5 @@
 import { Guid } from "../Utilities";
+import { Team } from "./Team";
 
 export class Carer {
 	public personnelNumber: string;
@@ -8,4 +9,6 @@ export class Carer {
 	public email: string;
 	public careSysGuid: Guid;
 	public defaultTeamCode: number;
+
+	public defaultTeam: Team;
 }

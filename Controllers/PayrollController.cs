@@ -109,5 +109,8 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> BookingTypeAnalyses() => Ok(await _dataService.GetBookingTypeAnalyses());
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ServiceLocations() => Ok(await _dataService.GetServiceLocations());
     }
 }
