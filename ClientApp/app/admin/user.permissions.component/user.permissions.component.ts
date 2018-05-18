@@ -1,6 +1,6 @@
 import { Component, OnInit, Output } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { NgForm } from "@angular/forms";
+import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
 import { AccessUser } from "../../models/AccessUser";
 import { AccessUserTeam } from "../../models/AccessUserTeam";
@@ -22,16 +22,19 @@ export class UserPermissionsComponent implements OnInit {
     allTeams: Team[];
     authTeams: Team[];
 
-    constructor(private userPro: UserProvider, private router: Router, private route: ActivatedRoute, payPro: PayrollProvider) {
-        userPro.GetAllUsers();
+    form: FormGroup;
 
-        payPro.teams$.subscribe(tm => this.allTeams = tm);
+    constructor(private up: UserProvider, pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
+        public fb: FormBuilder) {
+        up.GetAllUsers();
+
+        pp.teams$.subscribe(tm => this.allTeams = tm);
     }
 
     ngOnInit() {
         this.route.params.subscribe(p => {
             if (p["user"] !== undefined) {
-                this.userPro.allUsers$.subscribe(us => {
+                this.up.allUsers$.subscribe(us => {
                     this.allUsers = us;
                     if (p["user"] == 0) {
                         this.selectedUser = new AccessUser();
@@ -40,9 +43,36 @@ export class UserPermissionsComponent implements OnInit {
                     }
                     this.prevUser = JSON.stringify(this.selectedUser);
                     this.updateAuthTeams();
+
+                    // Setup Form
+                    this.form = this.fb.group(this.getFormControls());
+                    this.form.addControl("authTeams", this.fb.array([]));
+                    var teamsArray = this.form.get('authTeams') as FormArray;
+                    this.selectedUser.authorizedTeams.forEach(at => {
+                        teamsArray.push(this.fb.group(AccessUserTeam.Controls(at)));
+                    });
+
                 });
             }
         });
+    }
+
+    getFormControls() {
+        return {
+            id: [this.selectedUser.id],
+            accountName: [this.selectedUser.accountName, Validators.required],
+            domainUsername: [this.selectedUser.domainUsername],
+            emailAddress: [this.selectedUser.emailAddress],
+            isActive: [this.selectedUser.isActive],
+            isPayrollUser: [this.selectedUser.isPayrollUser],
+            isAssessmentUser: [this.selectedUser.isAssessmentUser],
+            isAdmin: [this.selectedUser.isAdmin],
+            isAccidentUser: [this.selectedUser.isAccidentUser],
+            isReportingUser: [this.selectedUser.isReportingUser],
+            defaultTeamCode: [this.selectedUser.defaultTeamCode],
+            canAuthoriseAdjustments: [this.selectedUser.canAuthoriseAdjustments],
+            canRejectAdjustments: [this.selectedUser.canRejectAdjustments]
+        }
     }
 
     codeOfTeam(index, item) {
@@ -77,12 +107,14 @@ export class UserPermissionsComponent implements OnInit {
     }
 
     addTeam() {
+        // TODO Tweak for FormArray
         var newTeam = new AccessUserTeam(this.selectedUser.id);
         this.selectedUser.authorizedTeams.push(newTeam);
         this.updateAuthTeams();
     }
 
     removeTeam(auth: AccessUserTeam) {
+        // TODO Tweak for FormArray
         var teamAt = this.selectedUser.authorizedTeams.indexOf(auth);
         this.selectedUser.authorizedTeams.splice(teamAt, 1);
         this.updateAuthTeams();
@@ -90,13 +122,13 @@ export class UserPermissionsComponent implements OnInit {
 
     undoChanges(form: NgForm) {
         // Reload Users from API
-        this.userPro.GetAllUsers();
+        this.up.GetAllUsers();
     }
 
     saveChanges(form: NgForm) {
         // TODO Remove any Authorised Teams added but not selected
         if (JSON.stringify(this.selectedUser) !== this.prevUser) {
-            this.userPro.PutUser(this.selectedUser)
+            this.up.PutUser(this.selectedUser)
                 .catch(err => {
                     return Observable.throw(err);
                 }).subscribe(r => {

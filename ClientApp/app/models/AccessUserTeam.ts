@@ -16,4 +16,16 @@ export class AccessUserTeam {
         this.teamCode = 0;
         this.canView = true;
     }
+
+    public static Controls(at: AccessUserTeam) {
+        return {
+            id: [at.id],
+            accessUserId: [at.accessUserId],
+            teamCode: [at.teamCode],
+            canView: [at.canView],
+            canAuthorizeExports: [at.canAuthorizeExports],
+            canAuthorizeAdjustments: [at.canAuthorizeAdjustments],
+            canRejectAdjustments: [at.canRejectAdjustments]
+        }
+    }
 }

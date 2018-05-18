@@ -137,7 +137,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let auth of selectedUser.authorizedTeams; trackBy: codeOfTeam" class="row">
+                                    <tr *ngFor="let auth of selectedUser.authorizedTeams; let i = index; trackBy: codeOfTeam" class="row">
                                         <td>
                                             <button class="btn select-group" (click)="removeTeam(auth)" title="Click here to remove this Team Authorisation">
                                                 <span class="glyphicon glyphicon-remove"></span>
