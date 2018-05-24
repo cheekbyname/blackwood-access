@@ -101,6 +101,7 @@ namespace Blackwood.Access
             services.AddLogging();
 
             // Add Application services
+            services.AddTransient<ICareDataService, CareDataService>();
             services.AddScoped<ICareInitialAssessmentService, CareInitialAssessmentService>();
             services.AddScoped<IPayrollDataService, PayrollDataService>();
             services.AddScoped<IPayrollService, PayrollService>();

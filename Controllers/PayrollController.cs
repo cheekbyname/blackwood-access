@@ -112,5 +112,8 @@ namespace Blackwood.Access.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> ServiceLocations() => Ok(await _dataService.GetServiceLocations());
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> CarerDetail() => Ok(await _dataService.GetCarersDetailed());
     }
 }

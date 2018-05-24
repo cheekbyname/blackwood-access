@@ -19,6 +19,7 @@ export class Schedule {
     public serviceId: number;
     public locAuthRef: string;
     public teamId: number;
+    public isActive: boolean;
 
     public report: Report;
     public region: Region;
