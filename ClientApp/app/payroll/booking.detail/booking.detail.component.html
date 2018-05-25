@@ -27,6 +27,10 @@
             <label class="col-md-4">Duration</label>
             <span class="col-md-8">{{payPro.displayTime(booking.thisMins)}}</span>
         </div>
+        <div class="row" *ngIf="booking.run">
+            <label class="col-md-4">From Run</label>
+            <span class="col-md-8">{{booking.run.name}}</span>
+        </div>
     </div>
     <footer>
         <div class="ui-dialog-buttonpane">
