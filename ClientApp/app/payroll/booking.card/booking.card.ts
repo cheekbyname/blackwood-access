@@ -4,7 +4,8 @@ import { CarerBooking } from '../../models/payroll/Booking';
 
 @Component({
     selector: 'booking-card',
-    templateUrl: './booking.card.html'
+    templateUrl: './booking.card.html',
+    styleUrls: ['booking.card.css']
 })
 export class BookingCardComponent {
     @Input()
