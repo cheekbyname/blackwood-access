@@ -2,3 +2,9 @@
     color: gray;
     float: right;
 }
+
+.card-header {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
