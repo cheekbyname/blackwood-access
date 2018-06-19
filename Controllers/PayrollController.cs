@@ -42,11 +42,12 @@ namespace Blackwood.Access.Controllers
             => Ok(await _service.GetTimesheet(carerCode, weekCommencing));
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
+        public async Task<IActionResult> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd,
+            CancellationToken token, bool includeNonPayroll = false)
         {
             // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
             token.ThrowIfCancellationRequested();
-            return Ok(await _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd));
+            return Ok(await _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd, includeNonPayroll));
         }
 
         [HttpGet("[action]")]
