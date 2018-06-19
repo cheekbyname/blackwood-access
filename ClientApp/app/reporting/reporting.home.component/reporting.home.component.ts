@@ -45,8 +45,10 @@ export class ReportingHomeComponent {
         rp.selectedTeam$.subscribe(t => this.selectedTeam = t);
         rp.reportError$.subscribe(re => {
             this.showExceptionDetail = false;
-            //this.reportException = JSON.parse(new TextDecoder('utf8').decode(new DataView(err._body)));
-            this.reportErr = re;
+            if (re !== null) {
+                this.reportException = JSON.parse(new TextDecoder('utf8').decode(new DataView(re._body)));
+                this.reportErr = re;
+            }
         });
 
         Observable
