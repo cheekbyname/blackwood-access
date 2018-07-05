@@ -214,10 +214,18 @@ export class ReportingProvider {
     }
 
     subscribeToSchedule(sched: Schedule) {
-        return this.http.put('api/reporting/subscribe', sched).map(res => {
+        return this.http.put(`api/reporting/subscribe?scheduleId=${sched.id}`, null).map(res => {
             this.getUserSchedules();
             this.getAllSchedules();
             return res.json() as Subscription;
+        });
+    }
+
+    unsubscribeFromSchedule(sched: Schedule) {
+        return this.http.put(`/api/reporting/unsubscribe?scheduleId=${sched.id}`, null).map(res => {
+            this.getUserSchedules();
+            this.getAllSchedules();
+            return res.json() as boolean;
         });
     }
 }

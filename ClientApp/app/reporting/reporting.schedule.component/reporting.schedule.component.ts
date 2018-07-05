@@ -78,6 +78,6 @@ export class ReportingScheduleComponent {
 
     public unsubscribe(sched: Schedule) {
         this.proc = true;
-        // TODO this.rp.unsubscribeFromSchedule(sched).subscribe(res => this.proc = false);
+        this.rp.unsubscribeFromSchedule(sched).subscribe(res => this.proc = false);
     }
 }

@@ -56,8 +56,8 @@
                             <td>{{frequencies[sched.frequency].value}}</td>
                             <td>{{sched.scopeDescription}}</td>
                             <td>{{Utils.FormatDate(sched.runTime)}} {{Utils.FormatTime(sched.runTime)}}</td>
-                            <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
-                            <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
+                            <td>{{sched.runPeriod.item1 != null ? Utils.FormatDate(sched.runPeriod.item1) : "N/A"}}</td>
+                            <td>{{sched.runPeriod.item2 != null ? Utils.FormatDate(sched.runPeriod.item2) : "N/A"}}</td>
                             <td>
                                 <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -98,9 +98,9 @@
                             <td>{{sched.report ? sched.report.name : ""}}</td>
                             <td>{{frequencies[sched.frequency].value}}</td>
                             <td>{{sched.scopeDescription}}</td>
-                            <td>{{Utils.FormatDate(sched.runTime)}}</td>
-                            <td>{{Utils.FormatDate(sched.runPeriod.item1)}}</td>
-                            <td>{{Utils.FormatDate(sched.runPeriod.item2)}}</td>
+                            <td>{{Utils.FormatDate(sched.runTime)}} {{Utils.FormatTime(sched.runTime)}}</td>
+                            <td>{{sched.runPeriod.item1 != null ? Utils.FormatDate(sched.runPeriod.item1) : "N/A"}}</td>
+                            <td>{{sched.runPeriod.item2 != null ? Utils.FormatDate(sched.runPeriod.item2) : "N/A"}}</td>
                             <td>
                                 <button class="btn btn-primary" (click)="viewScheduledReport(sched)">
                                     <span class="glyphicon glyphicon-eye-open"></span>
