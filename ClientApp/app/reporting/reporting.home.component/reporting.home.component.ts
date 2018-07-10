@@ -3,7 +3,7 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { Observable } from "rxjs";
 import { TextDecoder } from "text-encoding";
 
-import { Direction, DirectionNames, Frequency, FrequencyNames, Scope, ScopeNames } from "../../models/reporting/Enums";
+import { Direction, DIRECTIONS, Frequency, FREQUENCIES, Scope, SCOPES } from "../../models/reporting/Enums";
 import { LocalAuthority } from "../../models/reporting/LocalAuthority";
 import { Locale, LOC_EN } from "../../models/Locale";
 import { Region } from "../../models/reporting/Region";
@@ -71,9 +71,9 @@ export class ReportingHomeComponent {
     services: Service[];
     regions: Region[];
     localAuthorities: LocalAuthority[];
-    directions = DirectionNames;
-    frequencies = FrequencyNames;
-    scopes = ScopeNames.filter(sn => sn.key !== Scope.Unknown);
+    directions = DIRECTIONS;
+    frequencies = FREQUENCIES;
+    scopes = SCOPES.filter(sn => sn.key !== Scope.Unknown);
 
     selectedSchedule: Schedule;
     selectedReport: Report;

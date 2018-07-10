@@ -8,7 +8,7 @@ import { LocalAuthority } from "../models/reporting/LocalAuthority";
 import { Region } from "../models/reporting/Region";
 import { Report } from "../models/reporting/Report";
 import { Schedule } from "../models/reporting/Schedule";
-import { Scope, ScopeNames } from "../models/reporting/Enums";
+import { Scope, SCOPES, ReportParams } from "../models/reporting/Enums";
 import { Service } from "../models/reporting/Service";
 import { Subscription } from "../models/reporting/Subscription";
 import { Team } from "../models/payroll/Team";
@@ -191,9 +191,13 @@ export class ReportingProvider {
 
     getReportUrl(x: {"report": Report, "scope": {"team": Team, "locAuth": LocalAuthority, "service": Service, "region": Region},
         "period": { "start": Date, "end": Date}}): string {
-
+        
         var baseUrl = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?";
-        var repUrl = `${baseUrl}reportId=${x.report.id}&periodStart=${Utils.SqlDate(x.period.start)}&periodEnd=${Utils.SqlDate(x.period.end)}`;
+
+        var repUrl = `${baseUrl}reportId=${x.report.id}`;
+
+        if (x.report.filterOptions.some(f => f.option == ReportParams.Period))
+            repUrl += `&periodStart=${Utils.SqlDate(x.period.start)}&periodEnd=${Utils.SqlDate(x.period.end)}`;
 
         // TODO These should be mutually exclusive
         if (x.scope.team !== null) repUrl += `&teamCode=${x.scope.team.teamCode}`;

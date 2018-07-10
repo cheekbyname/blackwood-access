@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 
 import { Observable } from "rxjs/Observable";
 
@@ -8,7 +9,7 @@ import { Locale, LOC_EN } from "../../models/Locale";
 import { Region } from "../../models/reporting/Region";
 import { Report } from "../../models/reporting/Report";
 import { Schedule } from "../../models/reporting/Schedule";
-import { ScopeNames, Frequency, FrequencyNames, DirectionNames } from "../../models/reporting/Enums";
+import { SCOPES, Frequency, FREQUENCIES, DIRECTIONS } from "../../models/reporting/Enums";
 import { Service } from "../../models/reporting/Service";
 import { Team } from "../../models/payroll/Team";
 
@@ -21,15 +22,37 @@ import { ReportingProvider } from "../reporting.provider";
 })
 export class ScheduleEditorComponent implements OnInit {
 
-    constructor(private rp: ReportingProvider, private fb: FormBuilder) {
-        this.rp.allServices$.subscribe(s => this.services = s);
-        this.rp.allTeams$.subscribe(t => this.teams = t);
-        this.rp.allRegions$.subscribe(r => this.regions = r);
-        this.rp.reports$.subscribe(r => this.reports = r);
-        this.rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
+    constructor(private rp: ReportingProvider, private fb: FormBuilder, private route: ActivatedRoute) {
+        // this.rp.selectedSchedule$.subscribe(ss => this.sched = ss);
+        // this.rp.allServices$.subscribe(s => this.services = s);
+        // this.rp.allTeams$.subscribe(t => this.teams = t);
+        // this.rp.allRegions$.subscribe(r => this.regions = r);
+        // this.rp.reports$.subscribe(r => this.reports = r);
+        // this.rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
+
+        Observable.combineLatest(rp.selectedSchedule$, rp.allRegions$, rp.allServices$, rp.allLocalAuthorities$, rp.allTeams$,
+            rp.reports$, (sched, regions, services, locAuths, teams, reports) => {
+                return { "sched": sched, "regions": regions, "services": services, "locAuths": locAuths, "teams": teams,
+                    "reports": reports}
+            })
+            .filter(x => x.sched !== null && x.regions !== null && x.services !== null && x.locAuths !== null && x.teams !== null
+                && x.reports !== null)
+            .subscribe(x => {
+                this.regions = x.regions;
+                this.services = x.services;
+                this.localAuthorities = x.locAuths;
+                this.teams = x.teams;
+                this.reports = x.reports;
+                this.sched = x.sched;
+            });
     }
 
     ngOnInit() {
+        this.route.params.subscribe(p => {
+            if (p["schedule"] !== undefined) {
+
+            }
+        });
         this.form = this.fb.group({
             selectedReport: [this.sched.report, Validators.required],
             selectedScope: [this.sched.scope, Validators.required],
@@ -71,10 +94,10 @@ export class ScheduleEditorComponent implements OnInit {
     proc: boolean = false;
 
     loc: Locale = LOC_EN;
-    frequencies = FrequencyNames;
-    periods = FrequencyNames;
-    scopes = ScopeNames;
-    directions = DirectionNames;
+    frequencies = FREQUENCIES;
+    periods = FREQUENCIES;
+    scopes = SCOPES;
+    directions = DIRECTIONS;
 
     regions: Region[];
     reports: Report[];

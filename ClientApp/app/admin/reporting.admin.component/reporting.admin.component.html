@@ -12,9 +12,35 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="alert alert-success">
+        <!-- <div class="alert alert-success">
             <i class="fa fa-wrench fa-2x"></i>
             <span class="loading">This component is still under construction. Apologies for any inconvenience.</span>
+        </div> -->
+        <div class="alert alert-info" *ngIf="!schedules">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retrieving your data...</span>
+        </div>
+        <div *ngIf="schedules" class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th>Id</th>
+                        <th>Report</th>
+                        <th>Frequency</th>
+                        <th>Scope</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sched of schedules" class="row" (click)="openSchedule(sched)">
+                        <td>{{sched.id}}</td>
+                        <td>{{sched.report.name}}</td>
+                        <td>{{frequencies[sched.frequency].value}}</td>
+                        <td>{{sched.scopeDescription}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<!-- <schedule-editor *ngIf="selectedSched" [selectedSched]="selectedSched" [editVisible]="editVisible" (onClose)="onClose()"></schedule-editor> -->

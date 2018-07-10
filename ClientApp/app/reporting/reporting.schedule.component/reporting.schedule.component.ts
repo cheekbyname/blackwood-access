@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 
 import { Observable } from "rxjs/Observable";
 
-import { Frequency, FrequencyNames } from "../../models/reporting/Enums";
+import { Frequency, FREQUENCIES } from "../../models/reporting/Enums";
 import { Report } from "../../models/reporting/Report";
 import { ReportingProvider } from "../reporting.provider";
 import { Schedule } from "../../models/reporting/Schedule";
@@ -42,7 +42,7 @@ export class ReportingScheduleComponent {
     dataLoaded: boolean = false;
     editVisible: boolean = false;
     proc: boolean = false;
-    frequencies = FrequencyNames;
+    frequencies = FREQUENCIES;
     mySchedules: Schedule[] = undefined;
     allSchedules: Schedule[] = undefined;
     otherSchedules: Schedule[] = undefined;

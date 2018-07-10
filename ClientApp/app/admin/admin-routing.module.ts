@@ -6,9 +6,10 @@ import { AdminGuard } from "./admin-guard.service";
 import { AdminLandingComponent } from "./admin.landing.component/admin.landing.component";
 import { PayrollAdminComponent } from "./payroll.admin.component/payroll.admin.component";
 import { PushMessagingComponent } from "./push.messaging.component/push.messaging.component";
+import { ReportingAdminComponent } from "./reporting.admin.component/reporting.admin.component";
+import { ScheduleEditorComponent } from "../reporting/schedule.editor.component/schedule.editor.component";
 import { UserAdminComponent } from "./user.admin.component/user.admin.component";
 import { UserPermissionsComponent } from "./user.permissions.component/user.permissions.component";
-import { ReportingAdminComponent } from "./reporting.admin.component/reporting.admin.component";
 
 const adminRoutes: Routes = [
     {
@@ -18,7 +19,8 @@ const adminRoutes: Routes = [
             { path: 'users/:user', component: UserPermissionsComponent },
             { path: 'payroll', component: PayrollAdminComponent },
             { path: 'messaging', component: PushMessagingComponent },
-            { path: 'reporting', component: ReportingAdminComponent }
+            { path: 'reporting', component: ReportingAdminComponent },
+            { path: 'reporting/:schedule', component: ScheduleEditorComponent}
         ]
     }
 ];
