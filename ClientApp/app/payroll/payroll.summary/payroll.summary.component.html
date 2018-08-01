@@ -57,13 +57,13 @@
                         <!-- <th class="col-md-1">Hours Accruing</th> -->
                         <th class="col-md-1">Contracted Hours</th>
                         <th class="col-md-1">Actual Hours</th>
-                        <th class="col-md-1">Supervision / Training</th>
-                        <th class="col-md-1">Sickness / Annual Leave</th>
                         <th class="col-md-1">Contact Hours</th>
-                        <th class="col-md-1">Unpaid Hours</th>
+                        <th class="col-md-1">Supervision / Training</th>
+                        <th class="col-md-1">Sickness Absence</th>
+                        <th class="col-md-1">Annual &amp; Other Leave</th>
                         <th class="col-md-1">Additional Hours</th>
                         <!-- <th class="col-md-1">Utilization</th> -->
-                        <th class="col-md-2"></th> <!-- Empty for spacing -->
+                        <th class="col-md-3"></th> <!-- Empty for spacing -->
                     </tr>
 				</thead>
 				<tbody>
@@ -77,10 +77,10 @@
                         <!-- <td>{{displayTime((sum.monthlyContractMins-sum.actualMins < 0) ? 0 : sum.monthlyContractMins-sum.actualMins)}}</td> -->
                         <td>{{displayTime(sum.monthlyContractMins)}}</td>
                         <td>{{displayTime(sum.actualMins)}}</td>
-                        <td>{{displayTime(sum.supervision + sum.training)}}</td>
-                        <td>{{displayTime(sum.annualLeave + sum.maternityOtherLeave + sum.sicknessAbsence)}}</td>
                         <td>{{displayTime(sum.contact)}}</td>
-                        <td>{{displayTime(sum.unpaidMins)}}</td>
+                        <td>{{displayTime(sum.supervision + sum.training)}}</td>
+                        <td>{{displayTime(sum.sicknessAbsence)}}</td>
+                        <td>{{displayTime(sum.annualLeave + sum.maternityOtherLeave)}}</td>
                         <td>{{displayTime(additionalHours(sum))}}</td>
                         <!-- <td>{{displayPercent(sum.contactTimeMins, sum.actualMins)}}</td> -->
                     </tr>

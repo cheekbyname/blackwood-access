@@ -108,6 +108,29 @@
                     </tbody>
                 </table>
             </div>
+            <div class="well" *ngIf="noRevisions() && periodFinished()">
+                <h4>Summary of Current Additional Hours</h4>
+                <table class="table table-responsive table-striped">
+                    <thead>
+                        <tr class="row">
+                            <th><span><strong>Support Worker</strong></span></th>
+                            <th><span><strong>Payroll Number</strong></span></th>
+                            <th><span><strong>Position Type</strong></span></th>
+                            <th><span><strong>Additional Hours</strong></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let sum of sumAdd" class="row">
+                            <td><span>{{sum.forename}} {{sum.surname}}</span></td>
+                            <td><span>{{sum.personnelNumber}}</span></td>
+                            <td><span>{{sum.positionType}}</span></td>
+                            <td><span>{{pp.displayTime(sum.additionalMins)}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+<p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>

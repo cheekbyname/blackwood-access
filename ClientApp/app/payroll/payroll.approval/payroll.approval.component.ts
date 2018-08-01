@@ -1,10 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
+import { Router } from "@angular/router";
+
+import { ConfirmationService } from "../../../../node_modules/primeng/primeng";
 
 import { AccessUser } from "../../models/AccessUser";
-import { Authorization } from "../../models/payroll/Authorization";
 import { CarerValidationItem } from "../../models/payroll/Validation";
-import { Router } from "@angular/router";
-import { Team } from "../../models/payroll/Team";
+import { Summary } from "../../models/payroll/Summary";
 import { TeamPeriod } from "../../models/payroll/TeamPeriod";
 
 import { PayrollProvider } from "../payroll.provider";
@@ -14,7 +15,8 @@ import { Utils } from "../../Utils";
 @Component({
     selector: 'payroll-approval',
     templateUrl: 'payroll.approval.component.html',
-    styleUrls: ['payroll.approval.component.css']
+    styleUrls: ['payroll.approval.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PayrollApprovalComponent {
 
@@ -22,16 +24,18 @@ export class PayrollApprovalComponent {
     summary: TeamPeriod;
     viewAuth: boolean[] = [];
     Utils = Utils;
+    sumAdd: Summary[];
 
-    constructor (private payPro: PayrollProvider, private userPro: UserProvider, private router: Router) {
-		this.userPro.GetUserInfo();
-        this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
-        this.payPro.teamPeriod$.subscribe(tp => {
+    constructor (private pp: PayrollProvider, private up: UserProvider, private router: Router, private cs: ConfirmationService) {
+		this.up.GetUserInfo();
+        this.up.userInfo$.subscribe(ui => this.currentUser = ui);
+        this.pp.teamPeriod$.subscribe(tp => {
             this.summary = tp;
             if (this.summary !== null)  {
                 this.summary.authorizations.sort((a, b) => new Date(a.whenAuthorized) < new Date(b.whenAuthorized) ? 1: 0);
                 this.viewAuth.length = this.summary.authorizations.length;
                 this.viewAuth.fill(false);
+                this.sumAdd = tp.summaries.filter(s => s.actualMins > s.monthlyContractMins);
             }
         });
     }
@@ -74,7 +78,13 @@ export class PayrollApprovalComponent {
     }
 
     approveSummary(): void {
-        this.payPro.putApproval(this.summary);
+        // Confirmation of approvals
+        this.cs.confirm({
+            message: `Are you sure you want to ${this.summary.authorizations.length > 0 ? 're-': ''}approve this payroll period?`,
+            accept: () => {
+                this.pp.putApproval(this.summary);
+            }
+        });
     }
 
     public clearDetail() {
