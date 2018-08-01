@@ -14,11 +14,7 @@ namespace Blackwood.Access.Controllers
         private readonly ILogger<AccidentController> _logger;
 
         public AccidentController(IAccidentService accidentService, IUserService userService, ILogger<AccidentController> logger)
-        {
-            _accidentService = accidentService;
-            _userService = userService;
-            _logger = logger;
-        }
+            => (_accidentService, _userService, _logger) = (accidentService, userService, logger);
 
         [HttpGet("[action]/{term?}")]
         public async Task<IActionResult> Summaries(string term)

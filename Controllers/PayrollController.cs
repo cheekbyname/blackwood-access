@@ -20,12 +20,7 @@ namespace Blackwood.Access.Controllers
 
         public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
             ILogger<PayrollController> logger)
-        {
-            _service = service;
-            _dataService = dataService;
-            _validation = validation;
-            _logger = logger;
-        }
+            => (_service, _dataService, _validation, _logger) = (service, dataService, validation, logger);
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());

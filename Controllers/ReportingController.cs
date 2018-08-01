@@ -15,11 +15,7 @@ namespace Blackwood.Access.Controllers
         private readonly IReportingService _reportService;
 
         public ReportingController(ILogger<ReportingController> logger, IReportingDataService dataService, IReportingService reportService)
-        {
-            _logger = logger;
-            _dataService = dataService;
-            _reportService = reportService;
-        }
+            => (_logger, _dataService, _reportService) = (logger, dataService, reportService);
 
         [HttpGet("[action]")]
         public async Task<IActionResult> AllReports() => Ok(await _dataService.GetAllReports());

@@ -12,10 +12,7 @@
         private readonly ILogger<CareInitialAssessmentController> _logger;
 
         public CareInitialAssessmentController(ICareInitialAssessmentService service, ILogger<CareInitialAssessmentController> logger)
-        {
-            _service = service;
-            _logger = logger;
-        }
+            => (_service, _logger) = (service, logger);
 
         [HttpGet("[action]")]
         public async Task<IActionResult> CareInitialAssessments() => Ok(await _service.GetAllAssessments());

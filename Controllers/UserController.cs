@@ -14,10 +14,7 @@ namespace Blackwood.Access.Controllers
         private readonly ILogger<UserController> _logger;
 
         public UserController(IUserService service, ILogger<UserController> logger)
-        {
-            _service = service;
-            _logger = logger;
-        }
+            => (_service, _logger) = (service, logger);
         
         [HttpGet("[action]")]
         public async Task<IActionResult> GetUserInfo()
