@@ -19,7 +19,7 @@ namespace Blackwood.Access.Controllers
         private readonly ILogger<PayrollController> _logger;
 
         public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
-            ILogger<PayrollController> logger)
+                ILogger<PayrollController> logger)
             => (_service, _dataService, _validation, _logger) = (service, dataService, validation, logger);
 
         [HttpGet("[action]")]
