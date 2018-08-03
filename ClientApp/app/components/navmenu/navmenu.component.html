@@ -48,7 +48,7 @@
                 </li>
                 <li *ngIf="user && user.isAdmin && showAdmin" [routerLinkActive]="['link-active']" class="submenu">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/reporting'}}]" class="sub-menu">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span class="glyphicon glyphicon-book"></span>
                         <span>Reporting Admin</span>
                     </a>
                 </li>

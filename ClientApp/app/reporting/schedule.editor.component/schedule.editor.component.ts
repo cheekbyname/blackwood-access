@@ -1,6 +1,7 @@
 import { Component, Input, EventEmitter, Output, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
 import { Observable } from "rxjs/Observable";
 
@@ -9,7 +10,7 @@ import { Locale, LOC_EN } from "../../models/Locale";
 import { Region } from "../../models/reporting/Region";
 import { Report } from "../../models/reporting/Report";
 import { Schedule } from "../../models/reporting/Schedule";
-import { SCOPES, Frequency, FREQUENCIES, DIRECTIONS } from "../../models/reporting/Enums";
+import { SCOPES, FREQUENCIES, DIRECTIONS } from "../../models/reporting/Enums";
 import { Service } from "../../models/reporting/Service";
 import { Team } from "../../models/payroll/Team";
 
@@ -23,12 +24,13 @@ import { ReportingProvider } from "../reporting.provider";
 export class ScheduleEditorComponent implements OnInit {
 
     constructor(private rp: ReportingProvider, private fb: FormBuilder, private route: ActivatedRoute) {
-        // this.rp.selectedSchedule$.subscribe(ss => this.sched = ss);
-        // this.rp.allServices$.subscribe(s => this.services = s);
-        // this.rp.allTeams$.subscribe(t => this.teams = t);
-        // this.rp.allRegions$.subscribe(r => this.regions = r);
-        // this.rp.reports$.subscribe(r => this.reports = r);
-        // this.rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
+        rp.selectedSchedule$.subscribe(ss => this.sched = ss);
+        rp.allServices$.subscribe(s => this.services = s);
+        rp.allTeams$.subscribe(t => this.teams = t);
+        rp.allRegions$.subscribe(r => this.regions = r);
+        rp.reports$.subscribe(r => this.reports = r);
+        rp.allLocalAuthorities$.subscribe(l => this.localAuthorities = l);
+        rp.reportPdfUrl$.subscribe(pdf => this.pdf = pdf);
 
         Observable.combineLatest(rp.selectedSchedule$, rp.allRegions$, rp.allServices$, rp.allLocalAuthorities$, rp.allTeams$,
             rp.reports$, (sched, regions, services, locAuths, teams, reports) => {
@@ -43,55 +45,46 @@ export class ScheduleEditorComponent implements OnInit {
                 this.localAuthorities = x.locAuths;
                 this.teams = x.teams;
                 this.reports = x.reports;
+
+                x.sched.runTime = new Date(x.sched.runTime);
+                if (x.sched.reportId !== null) x.sched.report = this.reports.find(r => r.id === x.sched.reportId);
+                if (x.sched.teamId !== null) x.sched.team = this.teams.find(t => t.teamCode === x.sched.teamId);
+                if (x.sched.serviceId !== null) x.sched.service = this.services.find(s => s.id === x.sched.serviceId);
+                if (x.sched.regionId !== null) x.sched.region = this.regions.find(r => r.id === x.sched.regionId);
+                if (x.sched.localAuthority !== null) x.sched.localAuthority = this.localAuthorities
+                    .find(l => l.ref == x.sched.locAuthRef);
                 this.sched = x.sched;
+
+                this.form = this.fb.group({
+                    selectedReport: [this.sched.report, Validators.required],
+                    selectedScope: [this.sched.scope, Validators.required],
+                    selectedTeam: [this.sched.team],
+                    selectedLocalAuthority: [this.sched.localAuthority],
+                    selectedService: [this.sched.service],
+                    selectedRegion: [this.sched.region],
+                    selectedFreq: [this.sched.frequency, Validators.required],
+                    selectedPeriod: [this.sched.period, Validators.required],
+                    selectedDirection: [this.sched.direction, Validators.required],
+                    selectedRunTime: [this.sched.runTime, Validators.required]
+                });
+                this.saved = this.form.value;
             });
     }
 
     ngOnInit() {
         this.route.params.subscribe(p => {
             if (p["schedule"] !== undefined) {
-
+                this.rp.selectScheduleById(p["schedule"]);
             }
         });
-        this.form = this.fb.group({
-            selectedReport: [this.sched.report, Validators.required],
-            selectedScope: [this.sched.scope, Validators.required],
-            selectedTeam: [this.sched.team],
-            selectedLocalAuthority: [this.sched.localAuthority],
-            selectedService: [this.sched.service],
-            selectedRegion: [this.sched.region],
-            selectedFreq: [this.sched.frequency, Validators.required],
-            selectedPeriod: [this.sched.period, Validators.required],
-            selectedDirection: [this.sched.direction, Validators.required],
-            selectedRunTime: [this.sched.runTime, Validators.required]
-        });
-        this.saved = this.form.value;
     }
 
-    @Input('selectedSched')
-    set sched(sched: Schedule) {
-        if (sched !== undefined && this.dataLoaded()) {
-            sched.runTime = new Date(sched.runTime);
-            if (sched.reportId !== null) sched.report = this.reports.find(r => r.id === sched.reportId);
-            if (sched.teamId !== null) sched.team = this.teams.find(t => t.teamCode === sched.teamId);
-            if (sched.serviceId !== null) sched.service = this.services.find(s => s.id === sched.serviceId);
-            if (sched.regionId !== null) sched.region = this.regions.find(r => r.id === sched.regionId);
-            if (sched.localAuthority !== null) sched.localAuthority = this.localAuthorities.find(l => l.ref == sched.locAuthRef);
-        }
-        this._sched = sched;
-    };
-    get sched(): Schedule { return this._sched};
+    public sched: Schedule;
 
-    @Input()
-    public editVisible: boolean;
-    @Output()
-    public onClose: EventEmitter<void> = new EventEmitter<void>();
-
-    private _sched: Schedule;
-
-    form: FormGroup;
+    form: FormGroup = this.fb.group({});
     saved: any;
     proc: boolean = false;
+    pdf: SafeResourceUrl = null;
 
     loc: Locale = LOC_EN;
     frequencies = FREQUENCIES;
@@ -110,12 +103,6 @@ export class ScheduleEditorComponent implements OnInit {
             && this.regions !== null;
     }
 
-    public dismiss() {
-        this.form.reset(this.saved);
-        this.editVisible = false;
-        this.onClose.emit();
-    }
-
     public saveSchedule() {
         this.proc = true;
         this.rp.putSchedule(this.sched)
@@ -125,8 +112,11 @@ export class ScheduleEditorComponent implements OnInit {
             })
             .subscribe(r => {
                 this.proc = false;
-                this.dismiss();
             });
+    }
+
+    public resetForm() {
+        this.form.reset();
     }
 
     public reportSelected(ev) { }

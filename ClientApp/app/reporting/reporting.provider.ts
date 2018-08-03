@@ -55,7 +55,7 @@ export class ReportingProvider {
     
     public reports$ = this._reports.asObservable();
     public reportError$ = this._reportError.asObservable();
-    public allSchedules$ = this._allSchedules.asObservable();
+    public allSchedules$ = this._allSchedules.asObservable().filter(s => s !== null);
     public allRegions$ = this._allRegions.asObservable();
     public allServices$ = this._allServices.asObservable();
     public allTeams$ = this._allTeams.asObservable();
@@ -139,6 +139,12 @@ export class ReportingProvider {
 
     public selectLocAuth(l: LocalAuthority) { this._selectedLocalAuthority.next(l) }
 
+    public selectScheduleById(id: number) {
+        this.allSchedules$.subscribe(scheds => {
+            this._selectedSchedule.next(scheds.find(sched => sched.id == id));
+        });
+    }
+
     public selectSchedule(sched: Schedule) {
         this._selectedSchedule.next(sched);
         this._selectedReport.next(sched.report);
@@ -199,11 +205,22 @@ export class ReportingProvider {
         if (x.report.filterOptions.some(f => f.option == ReportParams.Period))
             repUrl += `&periodStart=${Utils.SqlDate(x.period.start)}&periodEnd=${Utils.SqlDate(x.period.end)}`;
 
-        // TODO These should be mutually exclusive
-        if (x.scope.team !== null) repUrl += `&teamCode=${x.scope.team.teamCode}`;
-        if (x.scope.service !== null) repUrl += `&serviceId=${x.scope.service.id}`;
-        if (x.scope.region !== null) repUrl += `&regionId=${x.scope.region.id}`;
-        if (x.scope.locAuth !== null) repUrl += `&locAuthRef=${x.scope.locAuth.ref}`;
+        if (x.scope.team !== null) {
+            repUrl += `&teamCode=${x.scope.team.teamCode}`;
+            return repUrl;
+        } 
+        if (x.scope.service !== null) {
+            repUrl += `&serviceId=${x.scope.service.id}`;
+            return repUrl;
+        }
+        if (x.scope.region !== null) {
+            repUrl += `&regionId=${x.scope.region.id}`;
+            return repUrl;
+        }
+        if (x.scope.locAuth !== null) {
+            repUrl += `&locAuthRef=${x.scope.locAuth.ref}`;
+            return repUrl;
+        }
 
         return repUrl;
     }
