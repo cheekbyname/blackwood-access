@@ -101,7 +101,7 @@
     <div class="panel-body">
         <h4>Subscriptions</h4>
         <ul>
-            <li *ngFor="let sub of sched.subscriptions">{{sub.emailAddress}}</li>
+            <li *ngFor="let sub of sched.subscriptions">{{sub.accessUserId}} {{sub.accessUser.emailAddress}}</li>
         </ul>
     </div>
 </div>
