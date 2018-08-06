@@ -1,10 +1,11 @@
 namespace Blackwood.Access
 {
     using Active.Messaging.Service;
-    using Core.Care.Services;
     using Core.Accident.Service;
+    using Core.Care.Services;
     using Core.Data.Models;
     using Core.Data.Models.Reporting;
+    using Core.Operations.Integration;
     using Core.Payroll.Service.Services;
     using Core.User.Service;
     using Microsoft.AspNetCore.Builder;
@@ -69,6 +70,15 @@ namespace Blackwood.Access
                 });
             });
 
+            services.AddDbContext<IntegrationContext>(options =>
+            {
+                options.UseSqlServer(dbConIntegration);
+                options.ConfigureWarnings(warnings =>
+                {
+                    warnings.Ignore(RelationalEventId.QueryClientEvaluationWarning);
+                });
+            });
+
             string dbConAccident = Configuration.GetConnectionString("Accident");
 
             services.AddDbContext<AccidentContext>(options =>
@@ -101,6 +111,7 @@ namespace Blackwood.Access
             services.AddLogging();
 
             // Add Application services
+            services.AddScoped<IIntegrationData, IntegrationData>();
             services.AddTransient<ICareDataService, CareDataService>();
             services.AddScoped<ICareInitialAssessmentService, CareInitialAssessmentService>();
             services.AddScoped<IPayrollDataService, PayrollDataService>();

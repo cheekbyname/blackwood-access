@@ -31,6 +31,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Databases.uht2011", "..\..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Care.Services", "..\..\Workspaces\Active\Blackwood.Core\Care.Services\Care.Services.csproj", "{6CEA82A2-F949-41A2-8E7C-F2F73E1C4DD3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Operations.Integration", "..\..\Workspaces\Active\Blackwood.Core\Operations.Integration\Operations.Integration.csproj", "{4E96646F-D096-43B8-AA0D-053ED69BB5B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,76 +103,15 @@ Global
 		{6CEA82A2-F949-41A2-8E7C-F2F73E1C4DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CEA82A2-F949-41A2-8E7C-F2F73E1C4DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CEA82A2-F949-41A2-8E7C-F2F73E1C4DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E96646F-D096-43B8-AA0D-053ED69BB5B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E96646F-D096-43B8-AA0D-053ED69BB5B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E96646F-D096-43B8-AA0D-053ED69BB5B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E96646F-D096-43B8-AA0D-053ED69BB5B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC09F9AC-DE55-4FF3-B814-A99E13EB6493}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://blackwoodgrp.visualstudio.com/
-		SccProjectUniqueName0 = ..\\..\\Workspaces\\Reporting\\Report.Utils\\Report.Utils.csproj
-		SccProjectName0 = $/Reporting/Report.Utils
-		SccAuxPath0 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath0 = ..\\..\\Workspaces\\Reporting\\Report.Utils
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName1 = ..\\..\\Workspaces\\Reporting\\Reporting.Service\\Reporting.Service.csproj
-		SccProjectName1 = $/Reporting/Reporting.Service
-		SccAuxPath1 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath1 = ..\\..\\Workspaces\\Reporting\\Reporting.Service
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName2 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Data.Models\\Data.Models.csproj
-		SccProjectName2 = $/Active/Blackwood.Core/Data.Models
-		SccAuxPath2 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath2 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Data.Models
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Email.Services\\Email.Services.csproj
-		SccProjectName3 = $/Active/Blackwood.Core/Email.Services
-		SccAuxPath3 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath3 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Email.Services
-		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = ..\\..\\Workspaces\\Active\\Blackwood.Active\\Messaging.Service\\Messaging.Service.csproj
-		SccProjectName4 = $/Active/Blackwood.Active/Messaging.Service
-		SccAuxPath4 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath4 = ..\\..\\Workspaces\\Active\\Blackwood.Active\\Messaging.Service
-		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Payroll.Service\\Payroll.Service.csproj
-		SccProjectName5 = $/Active/Blackwood.Core/Payroll.Service
-		SccAuxPath5 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath5 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Payroll.Service
-		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName6 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\User.Service\\User.Service.csproj
-		SccProjectName6 = $/Active/Blackwood.Core/User.Service
-		SccAuxPath6 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath6 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\User.Service
-		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName7 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Integration\\Integration.sqlproj
-		SccProjectName7 = $/SystemsIntegration/IntegrationProjects/Integration
-		SccAuxPath7 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath7 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Integration
-		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName8 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Databases.CARESYS\\Databases.CARESYS.sqlproj
-		SccProjectName8 = $/SystemsIntegration/IntegrationProjects/Databases.CARESYS
-		SccAuxPath8 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath8 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Databases.CARESYS
-		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName9 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Databases.RosterLive\\Databases.RosterLive.sqlproj
-		SccProjectName9 = $/SystemsIntegration/IntegrationProjects/Databases.RosterLive
-		SccAuxPath9 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath9 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Databases.RosterLive
-		SccProvider9 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName10 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Databases.uht2011\\Databases.uht2011.sqlproj
-		SccProjectName10 = $/SystemsIntegration/IntegrationProjects/Databases.uht2011
-		SccAuxPath10 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath10 = ..\\..\\Workspaces\\SystemsIntegration\\IntegrationProjects\\Databases.uht2011
-		SccProvider10 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName11 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Care.Services\\Care.Services.csproj
-		SccProjectName11 = $/Active/Blackwood.Core/Care.Services
-		SccAuxPath11 = https://blackwoodgrp.visualstudio.com
-		SccLocalPath11 = ..\\..\\Workspaces\\Active\\Blackwood.Core\\Care.Services
-		SccProvider11 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 EndGlobal

@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.WebForms" Version="140.1000.523" />
     <PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="140.1000.523" />
     <PackageReference Include="Microsoft.SqlServer.Types" Version="14.0.314.76" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +44,7 @@
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Care.Services\Care.Services.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Data.Models\Data.Models.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Email.Services\Email.Services.csproj" />
+    <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Operations.Integration\Operations.Integration.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\Payroll.Service\Payroll.Service.csproj" />
     <ProjectReference Include="..\..\Workspaces\Active\Blackwood.Core\User.Service\User.Service.csproj" />
     <ProjectReference Include="..\..\Workspaces\Reporting\Report.Utils\Report.Utils.csproj" />
