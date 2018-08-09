@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, ViewEncapsulation, OnInit } from '@ang
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs";
 
 import { AccessUser } from '../../models/AccessUser';
 import { Locale, LOC_EN } from '../../models/Locale';

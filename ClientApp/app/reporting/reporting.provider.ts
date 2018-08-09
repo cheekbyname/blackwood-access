@@ -2,13 +2,13 @@ import { Injectable, isDevMode } from "@angular/core";
 import { Http, ResponseContentType } from "@angular/http";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
-import { BehaviorSubject, Observable } from "rxjs/Rx";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { LocalAuthority } from "../models/reporting/LocalAuthority";
 import { Region } from "../models/reporting/Region";
 import { Report } from "../models/reporting/Report";
 import { Schedule } from "../models/reporting/Schedule";
-import { Scope, SCOPES, ReportParams } from "../models/reporting/Enums";
+import { Scope, ReportParams } from "../models/reporting/Enums";
 import { Service } from "../models/reporting/Service";
 import { Subscription } from "../models/reporting/Subscription";
 import { Team } from "../models/payroll/Team";

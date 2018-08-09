@@ -1,5 +1,5 @@
-import { Adjustment } from "./adjustment";
-import { Carer } from "./carer";
+import { Adjustment } from "./Adjustment";
+import { Carer } from "./Carer";
 import { Shift } from "./shift";
 
 export class ValidationResult {

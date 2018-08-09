@@ -28,13 +28,13 @@ import { InitialAssessComponent } from './careassessments/initialassess/initiala
 
 import { InitialAssessProvider } from './careassessments/initialassess.provider';
 import { UserProvider } from "./user.provider";
-import { ShiftOffsetFilter } from './models/payroll/shift';
+//import { ShiftOffsetFilter } from './models/payroll/shift';
 
 @NgModule({
     bootstrap: [AppComponent],
     declarations: [AppComponent, NavMenuComponent, NotAuthorisedComponent, HomeComponent, NotFoundComponent,
         /* Initial Assessments to be modularised */
-        InitialAssessManagerComponent, InitialAssessComponent, ShiftOffsetFilter],
+        InitialAssessManagerComponent, InitialAssessComponent],
     imports: [
         /* Platform Modules */
         FormsModule, CommonModule, HttpModule, BrowserAnimationsModule,

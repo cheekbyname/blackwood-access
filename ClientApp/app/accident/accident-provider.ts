@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Http, Response } from "@angular/http";
+import { Http } from "@angular/http";
 
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs';
 
 import { Category } from "./models/Category";
 import { Incident } from "./models/Incident";
@@ -52,9 +52,9 @@ export class AccidentProvider {
     public getSummaries(term: string): Promise<IncidentSummary[]> {
         var url = 'api/accident/summaries' + ((term && term.length > 0) ? '/' + term : '');
         return this.http.get(url).toPromise()
-            .catch(err => {
-                return Promise.reject("Error retrieving summaries");
-            })
+            .catch(() => {
+                    return Promise.reject("Error retrieving summaries");
+                })
             .then(res => {
                 this._summaries.next(res.json());
                 return res.json() as IncidentSummary[];
@@ -64,9 +64,9 @@ export class AccidentProvider {
     public getIncident(id: number): Promise<Incident> {
         var url = 'api/accident/incident/' + id;
         return this.http.get(url).toPromise()
-            .catch(err => {
-                return Promise.reject('Error retrieving Incident');
-            })
+            .catch(() => {
+                    return Promise.reject('Error retrieving Incident');
+                })
             .then(res => {
                 this._incident.next(res.json());
                 return res.json() as Incident;
@@ -76,9 +76,9 @@ export class AccidentProvider {
     public getLocations(): Promise<Location[]> {
         var url = 'api/accident/locations';
         return this.http.get(url).toPromise()
-            .catch(err => {
-                return Promise.reject('Error retrieving Locations');
-            })
+            .catch(() => {
+                    return Promise.reject('Error retrieving Locations');
+                })
             .then(res => {
                 this._locations.next(res.json());
                 return res.json() as Location[];
@@ -88,9 +88,9 @@ export class AccidentProvider {
     public getCategories(): Promise<Category[]> {
         var url = 'api/accident/categories';
         return this.http.get(url).toPromise()
-            .catch(err => {
-                return Promise.reject('Error retrieving Categories');
-            })
+            .catch(() => {
+                    return Promise.reject('Error retrieving Categories');
+                })
             .then(res => {
                 this._categories.next(res.json());
                 return res.json() as Category[];
@@ -100,9 +100,9 @@ export class AccidentProvider {
     public getTypes(): Promise<Type[]> {
         var url = 'api/accident/types';
         return this.http.get(url).toPromise()
-            .catch(err => {
-                return Promise.reject('Error retrieving Types');
-            })
+            .catch(() => {
+                    return Promise.reject('Error retrieving Types');
+                })
             .then(res => {
                 this._types.next(res.json());
                 return res.json() as Type[];
@@ -112,9 +112,9 @@ export class AccidentProvider {
     public getPeople(): Promise<Person[]> {
         var url = 'api/accident/people';
         return this.http.get(url).toPromise()
-            .catch(err => {
-                return Promise.reject('Error retrieving People');
-            })
+            .catch(() => {
+                    return Promise.reject('Error retrieving People');
+                })
             .then(res => {
                 this._people.next(res.json());
                 return res.json() as Person[];

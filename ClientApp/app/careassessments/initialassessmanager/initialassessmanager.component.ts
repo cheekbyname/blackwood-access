@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http } from '@angular/http';
-import { Subscription } from 'rxjs/subscription';
+import { Subscription } from 'rxjs/Subscription';
 
 import { CareInitialAssessment } from '../../models/CareInitialAssessment';
 
@@ -17,17 +17,17 @@ export class InitialAssessManagerComponent implements OnInit {
     public assessments: CareInitialAssessment[];
     assessSub: Subscription;
 
-    constructor(private http: Http, private assPro: InitialAssessProvider, private router: Router) {
+    constructor(private ap: InitialAssessProvider, private router: Router) {
 
     }
 
     ngOnInit() {
         // Subscribe to provider observables
-        this.assessSub = this.assPro.assessments$.subscribe(ass => {
+        this.assessSub = this.ap.assessments$.subscribe(ass => {
             this.assessments = ass;
         });
         // Init data
-        this.assPro.getAssessments();
+        this.ap.getAssessments();
     }
 
     dateFormat(parm) {

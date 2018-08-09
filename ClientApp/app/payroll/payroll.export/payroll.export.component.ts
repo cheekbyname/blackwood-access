@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, ViewChild } from "@angular/core";
 import { Router, Route } from "@angular/router";
 
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs";
 
 import { DataTableModule, SharedModule } from "primeng/primeng";
 

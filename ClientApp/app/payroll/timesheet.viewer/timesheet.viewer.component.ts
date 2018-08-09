@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs";
 
 import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
 
@@ -16,7 +16,7 @@ import { BookingTypeAnalysis, AnalysisCategory } from '../../models/payroll/Book
 import { Carer } from '../../models/payroll/Carer';
 import { CarerBooking } from '../../models/payroll/Booking';
 import { Locale, LOC_EN } from '../../models/Locale';
-import { Shift } from '../../models/payroll/Shift';
+import { Shift } from '../../models/payroll/shift';
 import { Team } from '../../models/payroll/Team';
 import { Timesheet } from '../../models/payroll/Timesheet';
 

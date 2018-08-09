@@ -10,7 +10,7 @@ import { Locale, LOC_EN } from '../../models/Locale';
 import { BreakDefinition } from "../../models/payroll/BreakDefinition";
 import { BreakPolicy } from "../../models/payroll/BreakPolicy";
 import { Timesheet } from '../../models/payroll/Timesheet';
-import { Shift } from "../../models/payroll/Shift";
+import { Shift } from "../../models/payroll/shift";
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';

@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs";
 
 import { Adjustment } from "../../models/payroll/Adjustment";
 import { Carer } from "../../models/payroll/Carer";
-import { Shift } from "../../models/payroll/Shift";
+import { Shift } from "../../models/payroll/shift";
 import { Team } from "../../models/payroll/Team";
 import { Timesheet } from "../../models/payroll/Timesheet";
 import { ValidationResult } from "../../models/payroll/Validation";

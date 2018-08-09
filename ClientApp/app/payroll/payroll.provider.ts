@@ -1,6 +1,6 @@
 import { Injectable, isDevMode, OnDestroy } from "@angular/core";
 import { Http } from "@angular/http";
-import { BehaviorSubject, Observable, Subscription } from "rxjs/Rx";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import "rxjs/add/operator/toPromise";
 
 import { AccessUser } from "../models/AccessUser";

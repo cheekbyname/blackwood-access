@@ -10,7 +10,7 @@ import { AdminRoutingModule } from "./admin-routing.module";
 import { PayrollAdminComponent } from "./payroll.admin.component/payroll.admin.component";
 import { PushMessagingComponent } from "./push.messaging.component/push.messaging.component";
 import { ReportingAdminComponent } from "./reporting.admin.component/reporting.admin.component";
-import { ScheduleEditorComponent } from "../reporting/schedule.editor.component/schedule.editor.component";
+import { ScheduleAdminComponent } from "./schedule.admin.component/schedule.admin.component";
 import { UserAdminComponent } from "./user.admin.component/user.admin.component";
 import { UserPermissionsComponent } from "./user.permissions.component/user.permissions.component";
 
@@ -22,7 +22,7 @@ import { UserProvider } from "../user.provider";
     imports: [CommonModule, FormsModule, AdminRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule,
         DialogModule, CalendarModule],
     declarations: [AdminComponent, AdminLandingComponent, PayrollAdminComponent, UserAdminComponent, ReportingAdminComponent,
-        UserPermissionsComponent, PushMessagingComponent, ScheduleEditorComponent],
+        UserPermissionsComponent, PushMessagingComponent, ScheduleAdminComponent],
     providers: [ConfirmationService, AdminGuard, UserProvider, ReportingProvider]
 })
 export class AdminModule { }

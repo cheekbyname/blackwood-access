@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs";
 
 import { Team } from '../../models/payroll/Team';
 import { AccessUser } from "../../models/AccessUser";

@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ConfirmationService } from "../../../../node_modules/primeng/primeng";
+import { ConfirmationService } from "primeng/primeng";
 
 import { AccessUser } from "../../models/AccessUser";
 import { CarerValidationItem } from "../../models/payroll/Validation";

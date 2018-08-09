@@ -24,7 +24,7 @@ import { PayrollProvider } from './payroll.provider';
 import { UserProvider } from "../user.provider";
 
 import { AdjustmentOffsetFilter } from '../models/payroll/Adjustment';
-import { ShiftOffsetFilter } from '../models/payroll/Shift';
+import { ShiftOffsetFilter } from "../models/payroll/Shift";
 
 @NgModule({
     imports: [CommonModule, FormsModule, BrowserAnimationsModule, CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule,

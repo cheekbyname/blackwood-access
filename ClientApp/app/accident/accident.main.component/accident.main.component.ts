@@ -2,8 +2,6 @@ import { Component } from "@angular/core";
 import { Location } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 
-import { Observable } from "rxjs/Rx";
-
 import { AccidentProvider } from "../accident-provider";
 import { UserProvider } from "../../user.provider";
 

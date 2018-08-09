@@ -1,7 +1,7 @@
-import { Component, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Subject, Observable } from 'rxjs';
-import 'rxjs/Rx';
+import { Subject } from 'rxjs';
+import 'rxjs';
 
 import { CareInitialAssessment } from '../models/CareInitialAssessment';
 
