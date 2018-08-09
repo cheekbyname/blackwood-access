@@ -53,3 +53,21 @@ span.loading {
 .preview object {
     width: 100%;
 }
+
+.badge {
+	background-color: rgba(191, 215, 48, 0.5);
+	color: black;
+	font-size: 11pt;
+	margin: 0px 6px 6px 0px;
+	padding: 8px;
+	border: 1px solid black;
+}
+
+.badge span.glyphicon {
+    color: red;
+}
+
+.badge:hover {
+	background-color: rgba(255, 105, 180, 0.5);
+	cursor: pointer;
+}

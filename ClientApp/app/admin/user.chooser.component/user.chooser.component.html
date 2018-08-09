@@ -1,0 +1,32 @@
+<p-dialog [(visible)]="chooserVisible" modal="modal" [responsive]="false" [width]="480" [height]="480" [closable]="false">
+    <p-header>
+        <div class="row">
+            <h4 class="col-md-6">
+                <strong>Select a User</strong>
+            </h4>
+            <div class="col-md-6">
+                <div class="header-buttons pull-right">
+                    <button class="btn btn-primary" (click)="selectUser()" [disabled]="!selectedUser">
+                        <div class="glyphicon glyphicon-ok"></div>
+                        <span>Select</span>
+                    </button>
+                    <button class="btn btn-primary" (click)="dismiss()">
+                        <div class="glyphicon glyphicon-remove"></div>
+                        <span>Cancel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </p-header>
+
+    <div *ngIf="users">
+        <p-listbox [options]="users" [(ngModel)]="selectedUser" optionLabel="accountName" filter="true"
+            [listStyle]="{'height':'340px'}" [style]="{'width':'440px'}"></p-listbox>
+    </div>
+
+    <div *ngIf="!users" class="alert alert-info">
+        <i class="fa fa-cog fa-spin fa-2x"></i>
+        <span class="loading">Please wait...</span>
+    </div>
+
+</p-dialog>

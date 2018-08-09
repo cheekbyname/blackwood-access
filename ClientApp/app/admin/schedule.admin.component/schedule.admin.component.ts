@@ -15,6 +15,8 @@ import { Service } from "../../models/reporting/Service";
 import { Team } from "../../models/payroll/Team";
 
 import { ReportingProvider } from "../../reporting/reporting.provider";
+import { AccessUser } from "../../models/AccessUser";
+import { Subscription } from "../../models/reporting/Subscription";
 
 @Component({
     selector: 'schedule-admin',
@@ -85,6 +87,7 @@ export class ScheduleAdminComponent implements OnInit {
     saved: any;
     proc: boolean = false;
     pdf: SafeResourceUrl = null;
+    chooserVisible: boolean = false;
 
     loc: Locale = LOC_EN;
     frequencies = FREQUENCIES;
@@ -162,5 +165,17 @@ export class ScheduleAdminComponent implements OnInit {
         this.sched.serviceId = null;
         this.sched.region = null;
         this.sched.regionId = null;
+    }
+
+    public addSubscriber() {
+        this.chooserVisible = true;
+    }
+
+    public chooserOnClose(event: AccessUser) {
+        this.chooserVisible = false;
+        if (event != undefined) {
+            var newSub = new Subscription(this.sched, event);
+            this.sched.subscriptions.push(newSub);
+        }
     }
 }

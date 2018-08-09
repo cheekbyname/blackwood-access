@@ -67,6 +67,7 @@ export class ReportingScheduleComponent {
 
     public addSchedule() {
         var sched = new Schedule();
+        sched.isActive = true;
         this.mySchedules.push(sched);
         this.editSched(sched);
     }

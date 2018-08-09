@@ -13,6 +13,7 @@ import { Service } from "../models/reporting/Service";
 import { Subscription } from "../models/reporting/Subscription";
 import { Team } from "../models/payroll/Team";
 import { Utils } from "../Utils";
+import { AccessUser } from "../models/AccessUser";
 
 @Injectable()
 export class ReportingProvider {
@@ -247,6 +248,13 @@ export class ReportingProvider {
             this.getUserSchedules();
             this.getAllSchedules();
             return res.json() as boolean;
+        });
+    }
+
+    subscribeUserToSchedule(sched: Schedule, user: AccessUser) {
+        return this.http.put(`api/reporting/subscribe?scheduleId=${sched.id}&userId=${user.id}`, null).map(res => {
+            this.getAllSchedules();
+            return res.json() as Subscription;
         });
     }
 }
