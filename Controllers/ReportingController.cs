@@ -75,7 +75,7 @@ namespace Blackwood.Access.Controllers
             => Ok(await _dataService.Unsubscribe(scheduleId, HttpContext.User));
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> Subscribe(int scheduleId, int userId)
+        public async Task<IActionResult> SubscribeUser(int scheduleId, int userId)
             => Ok(await _dataService.Subscribe(scheduleId, userId));
     }
 }

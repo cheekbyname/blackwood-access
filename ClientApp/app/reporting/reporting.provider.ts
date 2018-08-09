@@ -252,7 +252,7 @@ export class ReportingProvider {
     }
 
     subscribeUserToSchedule(sched: Schedule, user: AccessUser) {
-        return this.http.put(`api/reporting/subscribe?scheduleId=${sched.id}&userId=${user.id}`, null).map(res => {
+        return this.http.put(`api/reporting/subscribeUser?scheduleId=${sched.id}&userId=${user.id}`, null).map(res => {
             this.getAllSchedules();
             return res.json() as Subscription;
         });

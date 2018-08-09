@@ -171,11 +171,12 @@ export class ScheduleAdminComponent implements OnInit {
         this.chooserVisible = true;
     }
 
-    public chooserOnClose(event: AccessUser) {
+    public chooserOnClose(user: AccessUser) {
         this.chooserVisible = false;
-        if (event != undefined) {
-            var newSub = new Subscription(this.sched, event);
+        if (user != undefined) {
+            var newSub = new Subscription(this.sched, user);
             this.sched.subscriptions.push(newSub);
+            this.rp.subscribeUserToSchedule(this.sched, user).subscribe(sub => {});
         }
     }
 }
