@@ -122,6 +122,10 @@ export class ScheduleAdminComponent implements OnInit {
                 return Observable.throw(e);
             })
             .subscribe((sched) => {
+                this.ms.add({
+                    severity: 'success', summary: 'Schedule Saved', detail: 'Changes to this Schedule successfully saved'
+                });
+                this.rp.getAllSchedules();
                 this.rp.selectSchedule(sched);
                 this.router.navigate(['admin/reporting'], sched.id);
                 this.proc = false;

@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
+import { MessageService } from "primeng/components/common/messageservice";
+
 import { ReportingProvider } from "../../reporting/reporting.provider";
 import { Schedule } from "../../models/reporting/Schedule";
 import { FREQUENCIES } from "../../models/reporting/Enums";
@@ -12,7 +14,7 @@ import { FREQUENCIES } from "../../models/reporting/Enums";
 })
 export class ReportingAdminComponent
 {
-    constructor(public rp: ReportingProvider, public router: Router) {
+    constructor(public rp: ReportingProvider, public router: Router, private ms: MessageService) {
         rp.allSchedules$.subscribe(sc => this.schedules = sc);
     }
 

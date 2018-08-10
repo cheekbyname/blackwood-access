@@ -112,6 +112,7 @@ export class ReportingProvider {
     }
 
     public getAllSchedules() {
+        this._allSchedules.next(null);
         this.http.get('api/reporting/allschedules').subscribe(res => this._allSchedules.next(res.json() as Schedule[]));
     }
 
