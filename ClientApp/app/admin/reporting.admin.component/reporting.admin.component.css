@@ -1,8 +1,10 @@
-﻿h4, label, select, td, th {
+﻿/* Font overrides */
+h4, label, select, td, th {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
 
+/* Panel styling */
 .panel {
     border: 1px solid;
     border-color: slategray;
@@ -16,11 +18,18 @@
     background-color: rgba(191, 215, 48, 0.5);
 }
 
+.panel-body {
+    height:86vh;
+    overflow-y:scroll;
+}
+
+/* Table styling */
 table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
     cursor: pointer;
 }
 
+/* Button styling */
 .btn-default, .btn-primary {
     background-color: #bfd730;
     color: black;
@@ -40,6 +49,7 @@ table tbody tr:hover {
     background-color: #bfd730;
 }
 
+/* Alert styling */
 span.loading {
     font-family: 'Century Gothic';
     font-size: 14pt;

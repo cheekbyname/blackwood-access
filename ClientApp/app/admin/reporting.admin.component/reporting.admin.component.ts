@@ -23,4 +23,10 @@ export class ReportingAdminComponent
         this.rp.selectSchedule(sched);
         this.router.navigate(['admin/reporting', sched.id]);
     }
+
+    addSchedule() {
+        var sched = new Schedule();
+        this.schedules.push(sched);
+        this.openSchedule(sched);
+    }
 }

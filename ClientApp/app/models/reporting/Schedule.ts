@@ -8,7 +8,7 @@ import { Subscription } from "./Subscription";
 import { LocalAuthority } from "./LocalAuthority";
 
 export class Schedule {
-    public id: number;
+    public id: number = 0;
     public reportId: number;
     public scope: Scope;
     public frequency: Frequency;
@@ -19,7 +19,7 @@ export class Schedule {
     public serviceId: number;
     public locAuthRef: string;
     public teamId: number;
-    public isActive: boolean;
+    public isActive: boolean = true;
 
     public report: Report;
     public region: Region;
@@ -27,7 +27,7 @@ export class Schedule {
     public localAuthority: LocalAuthority;
     public team: Team;
 
-    public subscriptions: Subscription[];
+    public subscriptions: Subscription[] = [];
     public filters: ScheduleFilter[];
 
     public runPeriod: { item1: Date, item2: Date }

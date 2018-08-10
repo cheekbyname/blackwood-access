@@ -23,12 +23,12 @@
 
         <div class="panel-body">
 
-            <div *ngIf="!sched" class="alert alert-info">
+            <div *ngIf="!dataLoaded || proc" class="alert alert-info">
                 <i class="fa fa-cog fa-spin fa-2x"></i>
                 <span class="loading">Please wait, retrieving your data...</span>
             </div>
 
-            <div class="form col-md-6" *ngIf="sched">
+            <div class="form col-md-6" *ngIf="dataLoaded && !proc">
                 <div class="form-group form-inline">
                     <label class="form-label">Report</label>
                     <select class="form-control" [(ngModel)]="sched.report" formControlName="selectedReport" (change)="reportSelected($event)">
@@ -87,7 +87,7 @@
             </div>
 
             <div class="preview col-md-6">
-                <object *ngIf="dataLoaded() && pdf" [data]="pdf" type="application/pdf">
+                <object *ngIf="dataLoaded && pdf" [data]="pdf" type="application/pdf">
                     <p>There is no report only Zuul</p>
                 </object>
             </div>
@@ -96,24 +96,26 @@
     </form>
 </div>
 
-<div class="panel" *ngIf="sched">
+<div class="panel" *ngIf="dataLoaded && !proc">
     <div class="panel-body">
         <div class="row">
             <h4 class="col-md-6">Subscriptions</h4>
             <div class="col-md-6">
-                <button class="pull-right btn btn-primary" (click)="addSubscriber()">
+                <button class="pull-right btn btn-primary" (click)="addSubscriber()" [disabled]="sched.id == 0">
                     <span class="glyphicon glyphicon-user"></span>
                     <span>Add Subscriber</span>
                 </button>
             </div>
         </div>
         <hr/>
-        <div class="badge badge-primary" *ngFor="let sub of sched.subscriptions">
+        <div class="badge badge-primary" *ngFor="let sub of sched.subscriptions" (click)="removeSubscriber(sub)">
             <span>{{sub.accessUser.accountName}}</span>
             <span class="glyphicon glyphicon-remove"></span>
         </div>
     </div>
 </div>
+
+<p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>
 
 <user-chooser [chooserVisible]="chooserVisible" (userChosen)="chooserOnClose($event)"></user-chooser>
 

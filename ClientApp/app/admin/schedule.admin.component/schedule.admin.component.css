@@ -71,3 +71,43 @@ span.loading {
 	background-color: rgba(255, 105, 180, 0.5);
 	cursor: pointer;
 }
+
+/* ConfirmDialog stylings */
+.ui-dialog-titlebar .ui-dialog-title {
+	font-family: 'Century Gothic';
+	font-weight: 600;
+}
+
+.ui-confirmdialog .ui-dialog-content .fa {
+    color: darkorange;
+	font-size: 24pt;
+}
+
+.ui-dialog-content.ui-widget-content {
+	display: flex;
+}
+
+.ui-widget-content {
+	border: none;
+}
+
+button.ui-button.ui-widget, button.ui-button.ui-widget:focus {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+button.ui-button span.ui-button-text {
+	font-weight: normal;
+	font-family: 'Century Gothic';
+}
+
+button.ui-button.ui-widget:hover {
+	background-color: hotpink!important;
+	cursor: pointer;
+}
+
+span.ui-confirmdialog-message {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}

@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { SafeResourceUrl } from "@angular/platform-browser";
+
+import { ConfirmationService } from "../../../../node_modules/primeng/primeng";
 
 import { Observable } from "rxjs/Observable";
 
@@ -21,11 +23,13 @@ import { Subscription } from "../../models/reporting/Subscription";
 @Component({
     selector: 'schedule-admin',
     templateUrl: 'schedule.admin.component.html',
-    styleUrls: ['schedule.admin.component.css']
+    styleUrls: ['schedule.admin.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class ScheduleAdminComponent implements OnInit {
 
-    constructor(private rp: ReportingProvider, private fb: FormBuilder, private route: ActivatedRoute) {
+    constructor(private rp: ReportingProvider, private fb: FormBuilder, private route: ActivatedRoute,
+        public router: Router, private cs: ConfirmationService) {
         rp.selectedSchedule$.subscribe(ss => this.sched = ss);
         rp.allServices$.subscribe(s => this.services = s);
         rp.allTeams$.subscribe(t => this.teams = t);
@@ -36,8 +40,10 @@ export class ScheduleAdminComponent implements OnInit {
 
         Observable.combineLatest(rp.selectedSchedule$, rp.allRegions$, rp.allServices$, rp.allLocalAuthorities$, rp.allTeams$,
             rp.reports$, (sched, regions, services, locAuths, teams, reports) => {
-                return { "sched": sched, "regions": regions, "services": services, "locAuths": locAuths, "teams": teams,
-                    "reports": reports}
+                return {
+                    "sched": sched, "regions": regions, "services": services, "locAuths": locAuths, "teams": teams,
+                    "reports": reports
+                }
             })
             .filter(x => x.sched !== null && x.regions !== null && x.services !== null && x.locAuths !== null && x.teams !== null
                 && x.reports !== null)
@@ -70,41 +76,42 @@ export class ScheduleAdminComponent implements OnInit {
                     selectedRunTime: [this.sched.runTime, Validators.required]
                 });
                 this.saved = this.form.value;
+                this.dataLoaded = true;
             });
     }
 
     ngOnInit() {
         this.route.params.subscribe(p => {
             if (p["schedule"] !== undefined) {
-                this.rp.selectScheduleById(p["schedule"]);
+                if (p["schedule"] == 0) {
+                    this.rp.selectSchedule(new Schedule());
+                } else {
+                    this.rp.selectScheduleById(p["schedule"]);
+                }
             }
         });
     }
 
     public sched: Schedule;
 
-    form: FormGroup = this.fb.group({});
-    saved: any;
-    proc: boolean = false;
-    pdf: SafeResourceUrl = null;
-    chooserVisible: boolean = false;
+    public form: FormGroup = this.fb.group({});
+    public saved: any;
+    public proc: boolean = false;
+    public pdf: SafeResourceUrl = null;
+    public chooserVisible: boolean = false;
+    public dataLoaded: boolean = false;
 
-    loc: Locale = LOC_EN;
-    frequencies = FREQUENCIES;
-    periods = FREQUENCIES;
-    scopes = SCOPES;
-    directions = DIRECTIONS;
+    public loc: Locale = LOC_EN;
+    public frequencies = FREQUENCIES;
+    public periods = FREQUENCIES;
+    public scopes = SCOPES;
+    public directions = DIRECTIONS;
 
-    regions: Region[];
-    reports: Report[];
-    services: Service[];
-    teams: Team[];
-    localAuthorities: LocalAuthority[];
-
-    public dataLoaded(): boolean {
-        return this.reports !== null && this.teams !== null && this.localAuthorities !== null && this.services !== null
-            && this.regions !== null;
-    }
+    public regions: Region[];
+    public reports: Report[];
+    public services: Service[];
+    public teams: Team[];
+    public localAuthorities: LocalAuthority[];
 
     public saveSchedule() {
         this.proc = true;
@@ -113,9 +120,11 @@ export class ScheduleAdminComponent implements OnInit {
                 console.log(e);
                 return Observable.throw(e);
             })
-            .subscribe(() => {
-                    this.proc = false;
-                });
+            .subscribe((sched) => {
+                this.rp.selectSchedule(sched);
+                this.router.navigate(['admin/reporting'], sched.id);
+                this.proc = false;
+            });
     }
 
     public resetForm() {
@@ -128,33 +137,41 @@ export class ScheduleAdminComponent implements OnInit {
 
     public directionSelected() { }
 
-    public teamSelected(ev: Team) {
-        this.clearSelectedScopes();
-        this.sched.team = ev;
-        this.sched.teamId = ev.id;
+    public teamSelected(tm: Team) {
+        if (tm != undefined) {
+            this.clearSelectedScopes();
+            this.sched.team = tm;
+            this.sched.teamId = tm.id;
+        }
     }
 
-    public serviceSelected(ev: Service) {
-        this.clearSelectedScopes();
-        this.sched.service = ev;
-        this.sched.serviceId = ev.id;
+    public serviceSelected(sr: Service) {
+        if (sr != undefined) {
+            this.clearSelectedScopes();
+            this.sched.service = sr;
+            this.sched.serviceId = sr.id;
+        }
     }
 
-    public localAuthoritySelected(ev) {
-        this.clearSelectedScopes();
-        this.sched.localAuthority = ev;
-        this.sched.locAuthRef = ev.ref;
+    public localAuthoritySelected(la: LocalAuthority) {
+        if (la != undefined) {
+            this.clearSelectedScopes();
+            this.sched.localAuthority = la;
+            this.sched.locAuthRef = la.ref;
+        }
     }
 
-    public regionSelected(ev: Region) {
-        this.clearSelectedScopes();
-        this.sched.region = ev;
-        this.sched.regionId = ev.id;
+    public regionSelected(rg: Region) {
+        if (rg != undefined) {
+            this.clearSelectedScopes();
+            this.sched.region = rg;
+            this.sched.regionId = rg.id;
+        }
     }
 
-    public freqSelected() {  }
+    public freqSelected() { }
 
-    public periodSelected() { console.log(this.sched.period) }
+    public periodSelected() { }
 
     private clearSelectedScopes() {
         this.sched.team = null;
@@ -176,7 +193,23 @@ export class ScheduleAdminComponent implements OnInit {
         if (user != undefined) {
             var newSub = new Subscription(this.sched, user);
             this.sched.subscriptions.push(newSub);
-            this.rp.subscribeUserToSchedule(this.sched, user).subscribe(sub => {});
+            this.rp.subscribeUserToSchedule(this.sched, user).subscribe(sub => {
+                // Maybe a popup or growl or something here on success
+            });
         }
+    }
+
+    public removeSubscriber(sub: Subscription) {
+        this.cs.confirm({
+            header: "Confirm Unsubscribe",
+            message: `Are you sure you want to remove the subscription for ${sub.accessUser.accountName}?`,
+            accept: () => {
+                var idx = this.sched.subscriptions.findIndex(s => s.id == sub.id);
+                this.sched.subscriptions.splice(idx);
+                this.rp.unsubscribeUserFromSchedule(sub.scheduleId, sub.accessUserId).subscribe(sub => {
+                    // Maybe a popup or growl or something here on success
+                });
+            }
+        });
     }
 }

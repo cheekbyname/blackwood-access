@@ -31,7 +31,7 @@ import { ShiftOffsetFilter } from "../models/payroll/Shift";
         CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule],
 	declarations: [PayrollComponent, BookingCardComponent, BookingDetailComponent, PayrollExportComponent, PayrollSummaryComponent,
 		TimesheetAdjustmentComponent, PayrollManagerComponent, TimesheetViewerComponent, PayrollReviewComponent, PayrollApprovalComponent,
-		AdjustmentOffsetFilter, ShiftOffsetFilter],
+		AdjustmentOffsetFilter, ShiftOffsetFilter],	// , ShiftOffsetFilter
 	providers: [PayrollGuard, PayrollProvider, UserProvider, ConfirmationService]
 })
 export class PayrollModule {}

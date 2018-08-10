@@ -199,7 +199,9 @@ export class ReportingProvider {
     getReportUrl(x: {"report": Report, "scope": {"team": Team, "locAuth": LocalAuthority, "service": Service, "region": Region},
         "period": { "start": Date, "end": Date}}): string {
         
-        var baseUrl = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?";
+        const baseUrl = "https://hof-iis-live-01.m-blackwood.mbha.org.uk:444/api/reporting/report?";
+
+        if (x.report == undefined) return null;
 
         var repUrl = `${baseUrl}reportId=${x.report.id}`;
 
@@ -256,5 +258,12 @@ export class ReportingProvider {
             this.getAllSchedules();
             return res.json() as Subscription;
         });
+    }
+
+    unsubscribeUserFromSchedule(schedId: number, userId: number) {
+        return this.http.put(`api/reporting/unsubscribeUser?scheduleId=${schedId}&userId=${userId}`, null).map(res => {
+            this.getAllSchedules();
+            return res.json() as boolean;
+        })
     }
 }
