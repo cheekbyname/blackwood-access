@@ -2,8 +2,9 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule, CalendarModule, ListboxModule }
+import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule, CalendarModule, ListboxModule, GrowlModule }
     from "primeng/primeng";
+import { MessageService } from "primeng/components/common/messageservice";
 
 import { AdminComponent } from "./admin.component";
 import { AdminLandingComponent } from "./admin.landing.component/admin.landing.component";
@@ -22,9 +23,9 @@ import { UserProvider } from "../user.provider";
 
 @NgModule({
     imports: [CommonModule, FormsModule, AdminRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule,
-        DialogModule, CalendarModule, ListboxModule],
+        DialogModule, CalendarModule, ListboxModule, GrowlModule],
     declarations: [AdminComponent, AdminLandingComponent, PayrollAdminComponent, UserAdminComponent, ReportingAdminComponent,
         UserPermissionsComponent, PushMessagingComponent, ScheduleAdminComponent, UserChooserComponent],
-    providers: [ConfirmationService, AdminGuard, UserProvider, ReportingProvider]
+    providers: [ConfirmationService, AdminGuard, UserProvider, ReportingProvider, MessageService]
 })
 export class AdminModule { }

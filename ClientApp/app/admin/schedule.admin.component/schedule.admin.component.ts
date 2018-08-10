@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SafeResourceUrl } from "@angular/platform-browser";
 
-import { ConfirmationService } from "../../../../node_modules/primeng/primeng";
+import { ConfirmationService } from "primeng/primeng";
+import { MessageService } from "primeng/components/common/messageservice";
 
 import { Observable } from "rxjs/Observable";
 
@@ -29,7 +30,7 @@ import { Subscription } from "../../models/reporting/Subscription";
 export class ScheduleAdminComponent implements OnInit {
 
     constructor(private rp: ReportingProvider, private fb: FormBuilder, private route: ActivatedRoute,
-        public router: Router, private cs: ConfirmationService) {
+        public router: Router, private cs: ConfirmationService, private ms: MessageService) {
         rp.selectedSchedule$.subscribe(ss => this.sched = ss);
         rp.allServices$.subscribe(s => this.services = s);
         rp.allTeams$.subscribe(t => this.teams = t);
@@ -194,7 +195,10 @@ export class ScheduleAdminComponent implements OnInit {
             var newSub = new Subscription(this.sched, user);
             this.sched.subscriptions.push(newSub);
             this.rp.subscribeUserToSchedule(this.sched, user).subscribe(sub => {
-                // Maybe a popup or growl or something here on success
+                this.ms.add({
+                    severity: 'success', summary: 'Subscription Success',
+                    detail: `Subscription to this Schedule for ${user.accountName} was successful`
+                });
             });
         }
     }
@@ -206,8 +210,11 @@ export class ScheduleAdminComponent implements OnInit {
             accept: () => {
                 var idx = this.sched.subscriptions.findIndex(s => s.id == sub.id);
                 this.sched.subscriptions.splice(idx);
-                this.rp.unsubscribeUserFromSchedule(sub.scheduleId, sub.accessUserId).subscribe(sub => {
-                    // Maybe a popup or growl or something here on success
+                this.rp.unsubscribeUserFromSchedule(sub.scheduleId, sub.accessUserId).subscribe(s => {
+                    this.ms.add({
+                        severity: 'success', summary: 'Unsubscribe Success',
+                        detail: `Unsubscribe from this Schedule for ${sub.accessUser.accountName} was successful`
+                    });
                 });
             }
         });
