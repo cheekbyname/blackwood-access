@@ -12,6 +12,7 @@ export class AccessUser {
     public isAssessmentUser: boolean;
     public isReportingUser: boolean;
     public isAccidentUser: boolean;
+    public isIntegrationUser: boolean;
 
     public emailAddress: string;
     public domainUsername: string;

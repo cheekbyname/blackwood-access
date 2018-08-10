@@ -1,0 +1,58 @@
+h4, label, select, input {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+    margin-left: 8px;
+}
+
+.big-icon {
+    font-size: 48pt;
+    clear: right;
+    display: block;
+    text-align: center;
+}
+
+.icon-text {
+    text-align: center;
+    font-weight: bold;
+    text-overflow: ellipsis;
+}
+
+.menu-icon-row a {
+    border-radius: 4px;
+    padding-top: 8px!important;
+    padding-bottom: 8px!important;
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+.menu-icon-row a:hover {
+    color: black;
+    background-color: hotpink!important;
+    cursor: pointer;
+}
+
+.section-heading .glyphicon {
+    top: 4px;
+    margin-right: 4px;
+    font-size: 16pt;
+}

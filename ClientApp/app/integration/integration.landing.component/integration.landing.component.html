@@ -1,0 +1,44 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="section-heading">
+            <span class="glyphicon glyphicon-transfer"></span>
+            <strong>Integration</strong>
+        </h4>
+    </div>
+    <div class="panel-body">
+        <div *ngIf="!user" class="alert alert-info">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retreiving your user information...</span>
+        </div>
+        <div *ngIf="user" class="alert alert-success">
+            <i class="fa fa-user fa-2x"></i>
+            <span class="loading">Hello, {{user.accountName}}!</span>
+        </div>
+        <div class="row menu-icon-row">
+            <div *ngIf="user && user.isAdmin" class="col-md-2">
+                <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'integration/users'}}]">
+                    <span class="big-icon glyphicon glyphicon-user"></span>
+                    <h4 class="icon-text">User Integration</h4>
+                </a>
+            </div>
+            <!-- <div *ngIf="user && user.isAdmin" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/payroll'}}]">
+                    <span class="big-icon glyphicon glyphicon-gbp"></span>
+                    <h4 class="icon-text">Payroll Admin</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.isAdmin" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'admin/reporting'}}]">
+                    <span class="big-icon glyphicon glyphicon-book"></span>
+                    <h4 class="icon-text">Reporting Admin</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.isAdmin" class="col-md-2">
+                <a [routerLink]="['', {outlets: {summary:null, detail:null, primary: 'admin/messaging'}}]">
+                    <span class="big-icon glyphicon glyphicon-phone"></span>
+                    <h4 class="icon-text">Messaging Admin</h4>
+                </a>
+            </div> -->
+        </div>
+    </div>
+</div>
