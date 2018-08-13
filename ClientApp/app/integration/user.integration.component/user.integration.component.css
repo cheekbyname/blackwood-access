@@ -1,0 +1,43 @@
+/* Panel Styling */
+h4, label, select, input, td, th {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+.section-heading .glyphicon {
+    top: 4px;
+    margin-right: 4px;
+    font-size: 16pt;
+}
+
+/* Scrolling Panel Body */
+.panel-body {
+    height:86vh;
+    overflow-y:scroll;
+}
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+    margin-left: 8px;
+}
+
+/* Table styling */
+table tbody tr:hover {
+    background-color: rgba(255, 105, 180, 0.5);
+    cursor: pointer;
+}

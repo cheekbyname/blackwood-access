@@ -1,7 +1,9 @@
-import { Service } from "../reporting/Service";
-import { LocalAuthority } from "../reporting/LocalAuthority";
 import { Guid } from "../Utilities";
+
+import { LocalAuthority } from "../reporting/LocalAuthority";
+import { Service } from "../reporting/Service";
 import { ServiceLocation } from "./ServiceLocation";
+import { TeamUser } from "../integration/TeamUser";
 
 export class Team {
 	public id: number;
@@ -17,6 +19,8 @@ export class Team {
 	public localAuthority: LocalAuthority;
 	public serviceLocation: ServiceLocation;
 
+	public teamUsers: TeamUser[];
+	
 	// Deprecated, to be removed in due course
 	public serviceId: number;
 	public service: Service;
