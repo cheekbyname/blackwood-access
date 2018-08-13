@@ -1,3 +1,4 @@
+// Angular
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
@@ -5,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
+// PrimeNg
 import {
     CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, ConfirmationService,
     CheckboxModule, InputSwitchModule
@@ -18,8 +20,10 @@ import { NotAuthorisedComponent } from "./components/notauthorised/notauthorised
 import { NotFoundComponent } from './components/notfound/notfound.component';
 import { HomeComponent } from './components/home/home.component';
 
+// Application Modules
 import { AccidentModule } from "./accident/accident.module";
 import { AdminModule } from "./admin/admin.module";
+import { IntegrationModule } from "./integration/integration.module";
 import { PayrollModule } from "./payroll/payroll.module";
 import { ReportingModule } from "./reporting/reporting.module";
 
@@ -41,7 +45,7 @@ import { ShiftOffsetFilter } from './models/payroll/shift';
         /* PrimeNg Component Modules */
         CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule, InputSwitchModule,
         /* Application Feature Modules */
-        AccidentModule, AdminModule, PayrollModule, ReportingModule,
+        AccidentModule, AdminModule, PayrollModule, ReportingModule, IntegrationModule,
         /* Application Router */
         AppRouterModule
     ],
