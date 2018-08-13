@@ -1,20 +1,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <h4 class="col-md-4 section-heading">
+            <h4 class="col-md-6 section-heading">
                 <span class="glyphicon glyphicon-transfer"></span>
                 <span class="glyphicon glyphicon-user"></span>
                 <strong>User Integration</strong>
             </h4>
-            <div class="col-md-4">
-                <div class="input-group">
+            <div class="col-md-6">
+                <div class="input-group" *ngIf="users">
                     <span class="input-group-addon glyphicon glyphicon-search"></span>
                     <input class="form-control" type="text" [(ngModel)]="searchTerm" placeholder="Filter User list by typing name here" />
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-label" *ngIf="users">
-                    Showing {{(users | userNameFilter : searchTerm)?.length}} of {{users.length}} Users
                 </div>
             </div>
         </div>
@@ -24,10 +19,14 @@
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retreiving your user information...</span>
         </div>
+        <label class="form-label pull-right" *ngIf="users">
+            <em>Showing {{(users | userNameFilter : searchTerm)?.length}} of {{users.length}} Users</em>
+        </label>
         <table *ngIf="users" class="table table-striped table-responsive">
             <thead>
                 <tr>
                     <th><strong>Name</strong></th>
+                    <th><strong>Date of Birth</strong></th>
                     <th><strong>Role</strong></th>
                     <th><strong>Integration</strong></th>
                     <th><strong>StaffPlan</strong></th>
@@ -37,6 +36,7 @@
             </thead>
             <tr *ngFor="let user of (users | userNameFilter : searchTerm)">
                 <td>{{user.firstName}} {{user.lastName}}</td>
+                <td>{{user.birthDate}}</td>
                 <td>{{roleDesc(user.role)}}</td>
                 <td>{{user.id}}</td>
                 <td>{{user.personCode}}</td>
