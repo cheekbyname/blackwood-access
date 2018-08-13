@@ -33,6 +33,12 @@
                     <h4 class="icon-text">Administration</h4>
                 </a>
             </div>
+            <div *ngIf="user && user.isIntegrationUser" class="col-md-2">
+                <a [routerLink]="['', { outlets: {summary: null, detail: null, primary: 'integration'}}]">
+                    <span class="big-icon glyphicon glyphicon-transfer"></span>
+                    <h4 class="icon-text">Integration</h4>
+                </a>
+            </div>
             <div *ngIf="user && user.accountName == 'AlexC'" class="col-md-2">
                 <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
                     <span class="big-icon glyphicon glyphicon-plus-sign"></span>

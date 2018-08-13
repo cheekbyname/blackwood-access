@@ -58,8 +58,7 @@
                         <span>Messaging Admin</span>
                     </a>
                 </li>
-                  <!-- && user.isIntegrationUser -->
-                <li *ngIf="user" [routerLinkActive]="['link-active']">
+                <li *ngIf="user && user.isIntegrationUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: { summary: null, detail: null, primary: 'integration'}}]">
                         <span class="glyphicon glyphicon-transfer"></span>
                         <span>Integration</span>

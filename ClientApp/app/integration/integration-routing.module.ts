@@ -8,7 +8,7 @@ import { UserIntegrationComponent } from "./user.integration.component/user.inte
 
 const integrationRoutes: Routes = [
     {
-        path: 'admin', component: IntegrationComponent, canActivate: [IntegrationGuard], children: [
+        path: 'integration', component: IntegrationComponent, canActivate: [IntegrationGuard], children: [
             { path: '', component: IntegrationLandingComponent },
             { path: 'users', component: UserIntegrationComponent }
         ]

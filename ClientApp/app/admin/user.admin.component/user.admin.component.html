@@ -27,13 +27,14 @@
             <table *ngIf="allUsers" class="table table-responsive table-striped">
                 <thead>
                     <tr class="row">
-                        <th class="col-md-6">Username</th>
+                        <th class="col-md-5">Username</th>
                         <th class="col-md-1">Active</th>
                         <th class="col-md-1">Payroll</th>
                         <th class="col-md-1">Assessments</th>
                         <th class="col-md-1">Admin</th>
                         <th class="col-md-1">Accident</th>
                         <th class="col-md-1">Reporting</th>
+                        <th class="col-md-1">Integration</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,6 +46,7 @@
                         <td><p-checkbox [(ngModel)]="user.isAdmin" binary="true" [name]="'isAdmin_' + user.id"></p-checkbox></td>
                         <td><p-checkbox [(ngModel)]="user.isAccidentUser" binary="true" [name]="'isAccidentUser_' + user.id"></p-checkbox></td>
                         <td><p-checkbox [(ngModel)]="user.isReportingUser" binary="true" [name]="'isReportingUser_' + user.id"></p-checkbox></td>
+                        <td><p-checkbox [(ngModel)]="user.isIntegrationUser" binary="true" [name]="'isIntegrationUser_' + user.id"></p-checkbox></td>
                     </tr>
                 </tbody>
             </table>

@@ -62,6 +62,7 @@
                             <th class="col-md-2">Admin</th>
                             <th class="col-md-2">Accident</th>
                             <th class="col-md-2">Reporting</th>
+                            <th class="col-md-2">Integration</th>
                             <!-- <th class="col-md-3">Default Team</th>
                             <th class="col-md-1">Can Authorise Payroll Adjustments</th>
                             <th class="col-md-1">Can Reject Payroll Adjustments</th> -->
@@ -86,6 +87,9 @@
                             </td>
                             <td>
                                 <p-checkbox [(ngModel)]="selectedUser.isReportingUser" binary="true" name="isReportingUser"></p-checkbox>
+                            </td>
+                            <td>
+                                <p-checkbox [(ngModel)]="selectedUser.isIntegrationUser" binary="true" name="isIntegrationUser"></p-checkbox>
                             </td>
                         </tr>
                     </tbody>
@@ -162,6 +166,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Reporting configuration -->
 
         </div>
     </div>
