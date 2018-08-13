@@ -14,5 +14,13 @@ export class UserIntegrationComponent {
         ip.integrationUsers$.subscribe(au => this.users = au);
     }
 
-    users: User[];
+    public users: User[];
+    public searchTerm: string;
+
+    public roleDesc(role: string): string {
+        switch(role) {
+            case 'spt': return 'Staff';
+            case 'usr': return 'Client';
+        }
+    }
 }

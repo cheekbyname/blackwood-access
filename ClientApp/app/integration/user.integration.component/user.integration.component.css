@@ -41,3 +41,8 @@ table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
     cursor: pointer;
 }
+
+/* Input group addon fix */
+.input-group .input-group-addon, .input-group input {
+    top: 4px;
+}

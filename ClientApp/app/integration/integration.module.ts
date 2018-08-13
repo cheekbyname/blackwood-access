@@ -1,6 +1,7 @@
 // Angular/PrimeNg
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 // Components
 import { IntegrationComponent } from "./integration.component";
@@ -13,10 +14,12 @@ import { UserIntegrationComponent } from "./user.integration.component/user.inte
 import { IntegrationGuard } from "./integration-guard.service";
 import { IntegrationProvider } from "./integration.provider";
 import { UserProvider } from "../user.provider";
+import { UserNameFilter } from "../models/integration/User";
 
 @NgModule({
-	imports: [ CommonModule, IntegrationRoutingModule ],
-	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent ],
+	imports: [ CommonModule, FormsModule, IntegrationRoutingModule ],
+	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent,
+		UserNameFilter ],
 	providers: [ UserProvider, IntegrationGuard, IntegrationProvider ]
 })
 export class IntegrationModule { }

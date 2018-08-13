@@ -1,10 +1,23 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4 class="section-heading">
-            <span class="glyphicon glyphicon-transfer"></span>
-            <span class="glyphicon glyphicon-user"></span>
-            <strong>User Integration</strong>
-        </h4>
+        <div class="row">
+            <h4 class="col-md-4 section-heading">
+                <span class="glyphicon glyphicon-transfer"></span>
+                <span class="glyphicon glyphicon-user"></span>
+                <strong>User Integration</strong>
+            </h4>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input class="form-control" type="text" [(ngModel)]="searchTerm" placeholder="Filter User list by typing name here" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-label" *ngIf="users">
+                    Showing {{(users | userNameFilter : searchTerm)?.length}} of {{users.length}} Users
+                </div>
+            </div>
+        </div>
     </div>
     <div class="panel-body">
         <div *ngIf="!users" class="alert alert-info">
@@ -12,8 +25,23 @@
             <span class="loading">Please wait, retreiving your user information...</span>
         </div>
         <table *ngIf="users" class="table table-striped table-responsive">
-            <tr *ngFor="let user of users">
+            <thead>
+                <tr>
+                    <th><strong>Name</strong></th>
+                    <th><strong>Role</strong></th>
+                    <th><strong>Integration</strong></th>
+                    <th><strong>StaffPlan</strong></th>
+                    <th><strong>CareSys</strong></th>
+                    <th><strong>CleverCogs</strong></th>
+                </tr>
+            </thead>
+            <tr *ngFor="let user of (users | userNameFilter : searchTerm)">
                 <td>{{user.firstName}} {{user.lastName}}</td>
+                <td>{{roleDesc(user.role)}}</td>
+                <td>{{user.id}}</td>
+                <td>{{user.personCode}}</td>
+                <td>{{user.careSysGuid}}</td>
+                <td>{{user.cleverCogsUserID}}</td>
             </tr>
         </table>
     </div>
