@@ -64,6 +64,18 @@
                         <span>Integration</span>
                     </a>
                 </li>
+                <li *ngIf="user && user.isIntegrationUser && showIntegration" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: { summary: null, detail: null, primary: 'integration/users'}}]">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span>User Integration</span>
+                    </a>
+                </li>
+                <li *ngIf="user && user.isIntegrationUser && showIntegration" [routerLinkActive]="['link-active']" class="submenu">
+                    <a [routerLink]="['', { outlets: { summary: null, detail: null, primary: 'integration/teams'}}]">
+                        <i class="fa fa-users"></i>
+                        <span>Team Integration</span>
+                    </a>
+                </li>
                 <li *ngIf="user && user.isAccidentUser" [routerLinkActive]="['link-active']">
                     <a [routerLink]="['', { outlets: {summary:null, detail:null, primary: 'accident'}}]">
                         <span class="glyphicon glyphicon-plus-sign"></span>

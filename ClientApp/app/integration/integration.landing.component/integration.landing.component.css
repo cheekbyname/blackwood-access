@@ -17,6 +17,12 @@ h4, label, select, input {
     background-color: rgba(191, 215, 48, 0.5);
 }
 
+.section-heading .glyphicon {
+    top: 4px;
+    margin-right: 4px;
+    font-size: 16pt;
+}
+
 span.loading {
     font-family: 'Century Gothic';
     font-size: 14pt;
@@ -49,10 +55,4 @@ span.loading {
     color: black;
     background-color: hotpink!important;
     cursor: pointer;
-}
-
-.section-heading .glyphicon {
-    top: 4px;
-    margin-right: 4px;
-    font-size: 16pt;
 }

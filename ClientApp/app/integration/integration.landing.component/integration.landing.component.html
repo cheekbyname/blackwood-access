@@ -15,10 +15,16 @@
             <span class="loading">Hello, {{user.accountName}}!</span>
         </div>
         <div class="row menu-icon-row">
-            <div *ngIf="user && user.isAdmin" class="col-md-2">
+            <div *ngIf="user && user.isIntegrationUser" class="col-md-2">
                 <a [routerLink]="['', {outlets: {summary:null, detail:null, primary:'integration/users'}}]">
                     <span class="big-icon glyphicon glyphicon-user"></span>
                     <h4 class="icon-text">User Integration</h4>
+                </a>
+            </div>
+            <div *ngIf="user && user.isIntegrationUser" class="col-md-2">
+                <a [routerLink]="['', { outlets: { summary: null, detail: null, primary: 'integration/teams'}}]">
+                    <i class="fa fa-users big-icon"></i>
+                    <h4 class="icon-text">Team Integration</h4>
                 </a>
             </div>
         </div>

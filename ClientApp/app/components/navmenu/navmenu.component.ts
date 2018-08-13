@@ -19,32 +19,34 @@ export class NavMenuComponent implements OnInit {
     showCalendar: boolean = false;
     showAdmin: boolean = false;
     showReports: boolean = false;
+    showIntegration: boolean = false;
     user: AccessUser;
 
-    constructor(public payPro: PayrollProvider, private router: Router, private userPro: UserProvider) {
+    constructor(public pp: PayrollProvider, private router: Router, private up: UserProvider) {
         router.events.subscribe((ev) => {
             this.showCalendar = this.router.url.includes("payroll") && !this.router.url.includes("admin");
             this.showAdmin = this.router.url.includes("admin");
             this.showReports = this.router.url.includes("reports");
+            this.showIntegration = this.router.url.includes("integration");
 
             if (ev.toString().includes("notfound")) {
                 this.router.navigate([{ outlets: [{'summary': [null]}, {'detail': [null]}]}]);
             }
         });
-        userPro.userInfo$.subscribe(usr => {
+        up.userInfo$.subscribe(usr => {
             this.user = usr;
         });
     }
 
     ngOnInit() {
-        this.payPro.selectWeekCommencing(new Date());
-        this.payPro.weekCommencing$.subscribe((wc) => {
+        this.pp.selectWeekCommencing(new Date());
+        this.pp.weekCommencing$.subscribe((wc) => {
             this.selectedDate = wc;
         });
     }
 
     dateSelected(ev: Event) {
-        this.payPro.setPeriod(this.selectedDate);
-        this.payPro.selectWeekCommencing(this.selectedDate);
+        this.pp.setPeriod(this.selectedDate);
+        this.pp.selectWeekCommencing(this.selectedDate);
     }
 }

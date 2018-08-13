@@ -6,6 +6,7 @@ import { CommonModule } from "@angular/common";
 import { IntegrationComponent } from "./integration.component";
 import { IntegrationLandingComponent } from "./integration.landing.component/integration.landing.component";
 import { IntegrationRoutingModule } from "./integration-routing.module";
+import { TeamIntegrationComponent } from "./team.integration.component/team.integration.component";
 import { UserIntegrationComponent } from "./user.integration.component/user.integration.component";
 
 // Providers
@@ -15,7 +16,7 @@ import { UserProvider } from "../user.provider";
 
 @NgModule({
 	imports: [ CommonModule, IntegrationRoutingModule ],
-	declarations: [ IntegrationComponent, IntegrationLandingComponent, UserIntegrationComponent ],
+	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent ],
 	providers: [ UserProvider, IntegrationGuard, IntegrationProvider ]
 })
 export class IntegrationModule { }
