@@ -14,12 +14,12 @@ import { UserIntegrationComponent } from "./user.integration.component/user.inte
 import { IntegrationGuard } from "./integration-guard.service";
 import { IntegrationProvider } from "./integration.provider";
 import { UserProvider } from "../user.provider";
-import { UserNameFilter } from "../models/integration/User";
+//import { UserNameFilter } from "../models/integration/User";
 
 @NgModule({
 	imports: [ CommonModule, FormsModule, IntegrationRoutingModule ],
-	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent,
-		UserNameFilter ],
+	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent
+		/* UserNameFilter */ ],
 	providers: [ UserProvider, IntegrationGuard, IntegrationProvider ]
 })
 export class IntegrationModule { }

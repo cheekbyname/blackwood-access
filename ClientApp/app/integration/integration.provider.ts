@@ -12,9 +12,11 @@ export class IntegrationProvider {
 
     private _integrationUsers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null);
 
-    public integrationUsers$: Observable<User[]> = this._integrationUsers.asObservable();
+    public integrationUsers$: Observable<User[]> = this._integrationUsers.asObservable()
+        .filter(x => x != null).distinctUntilChanged();
 
     getAllUsers() {
+        this._integrationUsers.next(null);
         return this.http.get('/api/integration/allusers', null).map(res => {
             var au = res.json() as User[];
             this._integrationUsers.next(au);

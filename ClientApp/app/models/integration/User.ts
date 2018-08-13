@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from "@angular/core";
+//import { Pipe, PipeTransform } from "@angular/core";
 
 import { TeamUser } from "./TeamUser";
 import { UserMap } from "./UserMap";
@@ -46,18 +46,18 @@ export class User {
     public teamUser: TeamUser;
 }
 
-@Pipe({
-    name: 'userNameFilter'
-})
-export class UserNameFilter implements PipeTransform {
-    transform(users: User[], searchTerm: string) {
-        if (!users) return [];
-        if (!searchTerm) return users;
+// @Pipe({
+//     name: 'userNameFilter'
+// })
+// export class UserNameFilter implements PipeTransform {
+//     transform(users: User[], searchTerm: string) {
+//         if (!users) return [];
+//         if (!searchTerm) return users;
 
-        searchTerm = searchTerm.toLowerCase();
+//         searchTerm = searchTerm.toLowerCase();
 
-        return users.filter(user => {
-            return (user.firstName + ' ' + user.lastName).toLowerCase().includes(searchTerm);
-        });
-    }
-}
+//         return users.filter(user => {
+//             return (user.firstName + ' ' + user.lastName).toLowerCase().includes(searchTerm);
+//         });
+//     }
+// }
