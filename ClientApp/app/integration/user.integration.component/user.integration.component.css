@@ -10,6 +10,7 @@ h4, label, select, input, td, th {
     background-color: rgba(255,255,255,0.5);
     margin-top: 20px;
     margin-left: 0px;
+    height: 86vh;
 }
 
 .panel-heading {
@@ -25,12 +26,13 @@ h4, label, select, input, td, th {
 }
 
 /* Scrolling Panel Body */
-.panel-body {
-    height:86vh;
-    overflow-y:scroll;
+.table-fixed {
+    height: 200px;
+    overflow-y: auto;
+    width: 100%;
 }
 
-span.loading {
+ span.loading {
     font-family: 'Century Gothic';
     font-size: 14pt;
     margin-left: 8px;
@@ -40,6 +42,24 @@ span.loading {
 table tbody tr:hover {
     background-color: rgba(255, 105, 180, 0.5);
     cursor: pointer;
+}
+
+table .glyphicon-ok {
+    color: green;
+}
+
+table td.syscheck {
+    text-align: center;
+}
+
+/* Table scroll stuff */
+thead {
+    height: 56px;
+}
+
+tbody {
+    height: 100%;
+    overflow-y: scroll;
 }
 
 /* Input group addon fix */
