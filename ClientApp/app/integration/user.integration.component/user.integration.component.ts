@@ -54,10 +54,6 @@ export class UserIntegrationComponent implements AfterViewInit {
 		}
 	}
 
-	public trackByFn(index, item: User) {
-		return item.personCode;
-	}
-
 	public onSearchChanged(term: string) {
 		// Clear out list and notify user
 		this.filtering = true;
