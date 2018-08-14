@@ -17,5 +17,8 @@
 
         [Route("[action]")]
         public async Task<IActionResult> AllUsers() => Ok(await _integrationData.GetAllUsers());
+
+        [Route("[action]")]
+        public async Task<IActionResult> AUser(int personCode) => Ok(await _integrationData.GetUser(personCode));
     }
 }

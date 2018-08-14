@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of filteredUsers$ | async"> <!--  | slice:0:99 -->
+                    <tr *ngFor="let user of filteredUsers$ | async" [routerLink]="['/integration/users', user.personCode]"> <!--  | slice:0:99 -->
                         <td>{{user.firstName}} {{user.lastName}}</td>
                         <td>{{Utils.FormatDate(user.birthDate)}}</td>
                         <td>{{roleDesc(user.role)}}</td>

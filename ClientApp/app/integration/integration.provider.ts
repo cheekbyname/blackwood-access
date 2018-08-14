@@ -15,12 +15,16 @@ export class IntegrationProvider {
     public integrationUsers$: Observable<User[]> = this._integrationUsers.asObservable()
         .filter(x => x != null).distinctUntilChanged();
 
-    getAllUsers() {
+    getAllUsers(): Observable<User[]> {
         this._integrationUsers.next(null);
         return this.http.get('/api/integration/allusers', null).map(res => {
             var au = res.json() as User[];
             this._integrationUsers.next(au);
             return au;
         });
+    }
+
+    getUserByPersonCode(person: number): Observable<User> {
+        return this.http.get(`api/integration/auser?personCode=${person}`, null).map(res => res.json() as User);
     }
 }

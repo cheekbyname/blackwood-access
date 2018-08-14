@@ -9,17 +9,17 @@ import { IntegrationLandingComponent } from "./integration.landing.component/int
 import { IntegrationRoutingModule } from "./integration-routing.module";
 import { TeamIntegrationComponent } from "./team.integration.component/team.integration.component";
 import { UserIntegrationComponent } from "./user.integration.component/user.integration.component";
+import { UserMappingComponent } from "./user.mapping.component/user.mapping.component";
 
 // Providers
 import { IntegrationGuard } from "./integration-guard.service";
 import { IntegrationProvider } from "./integration.provider";
 import { UserProvider } from "../user.provider";
-//import { UserNameFilter } from "../models/integration/User";
 
 @NgModule({
 	imports: [ CommonModule, FormsModule, IntegrationRoutingModule ],
-	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent
-		/* UserNameFilter */ ],
+	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent,
+		UserMappingComponent ],
 	providers: [ UserProvider, IntegrationGuard, IntegrationProvider ]
 })
 export class IntegrationModule { }
