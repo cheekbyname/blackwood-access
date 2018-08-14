@@ -1,2 +1,42 @@
-<h2 *ngIf="!user">Loading...</h2>
-<h2 *ngIf="user">{{user.firstName}} {{user.lastName}}</h2>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="section-heading">
+            <strong>User Mapping Details</strong>
+        </h4>
+    </div>
+
+    <div class="panel-body">
+        <div *ngIf="!user" class="alert alert-info" style="margin-top: 16px;">
+            <i class="fa fa-cog fa-spin fa-2x"></i>
+            <span class="loading">Please wait, retrieving your data...</span>
+        </div>
+
+        <form *ngIf="user" [formGroup]="form">
+            <div class="row">
+                <div class="form-group form-inline">
+                    <label class="col-md-2 form-label">Name</label>
+                    <input class="col-md-4 form-control" formControlName="name" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group form-inline">
+                    <label class="col-md-2 form-label">Date of Birth</label>
+                    <input class="col-md-4 form-control" formControlName="dateOfBirth" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group form-inline">
+                    <label class="col-md-2 form-label">Role</label>
+                    <input class="col-md-4 form-control" formControlName="role" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group form-inline">
+                    <label class="col-md-2 form-label">Integration Id</label>
+                    <input class="col-md-4 form-control" formControlName="integrationId" />
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

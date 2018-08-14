@@ -1,0 +1,36 @@
+h4, label, select, td, th, input {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.panel {
+    border: 1px solid;
+    border-color: slategray;
+    background-color: rgba(255,255,255,0.5);
+    margin-top: 24px;
+}
+
+.panel div.panel-heading {
+    border-bottom: 1px solid silver;
+    border-color: slategray;
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+.section-heading .glyphicon {
+    top: 4px;
+    font-size: 16pt;
+}
+
+span.loading {
+    font-family: 'Century Gothic';
+    font-size: 14pt;
+    margin-left: 8px;
+}
+
+.form-label {
+    top: 8px;
+}
+
+.row {
+    margin-bottom: 8px;
+}

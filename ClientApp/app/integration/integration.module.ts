@@ -1,7 +1,7 @@
 // Angular/PrimeNg
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 // Components
 import { IntegrationComponent } from "./integration.component";
@@ -17,7 +17,7 @@ import { IntegrationProvider } from "./integration.provider";
 import { UserProvider } from "../user.provider";
 
 @NgModule({
-	imports: [ CommonModule, FormsModule, IntegrationRoutingModule ],
+	imports: [ CommonModule, FormsModule, IntegrationRoutingModule, ReactiveFormsModule ],
 	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent,
 		UserMappingComponent ],
 	providers: [ UserProvider, IntegrationGuard, IntegrationProvider ]
