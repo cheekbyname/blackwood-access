@@ -9,7 +9,8 @@
             <div class="col-md-6">
                 <div class="input-group" *ngIf="users">
                     <span class="input-group-addon glyphicon glyphicon-search"></span>
-                    <input class="form-control" type="text" (input)="onSearchChanged($event.target.value)" placeholder="Filter list by typing name here" />
+                    <input class="form-control" type="text" (input)="onSearchChanged($event.target.value)"
+                        placeholder="Filter list by typing name here" />
                 </div>
             </div>
         </div>
@@ -19,39 +20,41 @@
             <i class="fa fa-cog fa-spin fa-2x"></i>
             <span class="loading">Please wait, retreiving data...</span>
         </div>
-        <label class="form-label pull-right" *ngIf="filteredUsers && !filtering">
-            <em>Showing {{filteredUsers.length}} of {{users.length}} Users</em>
+        <label class="form-label pull-right" *ngIf="users && !filtering">
+            <em>Filtered {{(filteredUsers$ | async)?.length}} of {{users.length}} Users</em>
         </label>
         <label class="form-label pull-right" *ngIf="users && filtering">
             <em>Filtering, please wait...</em>
         </label>
-        <table *ngIf="users" class="table table-striped table-responsive table-fixed">
-            <thead>
-                <tr>
-                    <th class="col-md-3"><strong>Name</strong></th>
-                    <th class="col-md-2"><strong>Date of Birth</strong></th>
-                    <th class="col-md-1"><strong>Role</strong></th>
-                    <th class="col-md-1"><strong>Integration</strong></th>
-                    <th class="col-md-1"><strong>StaffPlan</strong></th>
-                    <th class="col-md-1"><strong>CareSys</strong></th>
-                    <th class="col-md-1"><strong>CleverCogs</strong></th>
-                    <th class="col-md-1"><strong>Dynamics</strong></th>
-                    <th class="col-md-1"><strong>Universal Housing</strong></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of filteredUsers; trackBy: trackByFn">
-                    <td>{{user.firstName}} {{user.lastName}}</td>
-                    <td>{{Utils.FormatDate(user.birthDate)}}</td>
-                    <td>{{roleDesc(user.role)}}</td>
-                    <td class="syscheck"><span *ngIf="user.id" class="glyphicon glyphicon-ok"></span></td>
-                    <td class="syscheck"><span *ngIf="user.personCode" class="glyphicon glyphicon-ok"></span></td>
-                    <td class="syscheck"><span *ngIf="user.careSysGuid" class="glyphicon glyphicon-ok"></span></td>
-                    <td class="syscheck"><span *ngIf="user.cleverCogsUserID" class="glyphicon glyphicon-ok"></span></td>
-                    <td class="syscheck"></td>
-                    <td class="syscheck"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table *ngIf="users" class="table table-striped table-fixed table-list">
+                <thead>
+                    <tr>
+                        <th class="col-md-3"><strong>Name</strong></th>
+                        <th class="col-md-2"><strong>Date of Birth</strong></th>
+                        <th class="col-md-1"><strong>Role</strong></th>
+                        <th class="col-md-1"><strong>Integration</strong></th>
+                        <th class="col-md-1"><strong>StaffPlan</strong></th>
+                        <th class="col-md-1"><strong>CareSys</strong></th>
+                        <th class="col-md-1"><strong>CleverCogs</strong></th>
+                        <th class="col-md-1"><strong>Dynamics</strong></th>
+                        <th class="col-md-1"><strong>Universal Housing</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of filteredUsers$ | async | slice:0:99">
+                        <td>{{user.firstName}} {{user.lastName}}</td>
+                        <td>{{Utils.FormatDate(user.birthDate)}}</td>
+                        <td>{{roleDesc(user.role)}}</td>
+                        <td class="syscheck"><span *ngIf="user.id" class="glyphicon glyphicon-ok"></span></td>
+                        <td class="syscheck"><span *ngIf="user.personCode" class="glyphicon glyphicon-ok"></span></td>
+                        <td class="syscheck"><span *ngIf="user.careSysGuid" class="glyphicon glyphicon-ok"></span></td>
+                        <td class="syscheck"><span *ngIf="user.cleverCogsUserID" class="glyphicon glyphicon-ok"></span></td>
+                        <td class="syscheck"></td>
+                        <td class="syscheck"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

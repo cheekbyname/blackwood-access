@@ -5,7 +5,7 @@ import { User } from "../../models/integration/User";
 import { Utils } from "../../Utils";
 
 import { IntegrationProvider } from "../integration.provider";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable, ObjectUnsubscribedError } from "rxjs";
 
 @Component({
 	selector: "user-integration",
@@ -17,21 +17,15 @@ export class UserIntegrationComponent implements AfterViewInit {
 	constructor(private ip: IntegrationProvider, private cd: ChangeDetectorRef) {
 		ip.integrationUsers$.subscribe(au => {
 			this.users = au;
-			this.filteredUsers = this.users;
+			this._filteredUsers.next(au);
 			this.cd.detectChanges();
 		});
 
-		/* Filter users on searchbox contents */
-		this.searchTerm$ //.switchMap(term => term)
-			.subscribe(term => {
-				if (this.users == null) {
-					this.filteredUsers = this.users;
-				} else {
-					term = term.toLowerCase();
-					this.filteredUsers = this.users.filter(user =>
-						(user.firstName + " " + user.lastName).toLowerCase().includes(term)
-					);
-				}
+		this.searchTerm$
+			.switchMap(term => this.filterUsers(term))
+			.subscribe(users => {
+				this._filteredUsers.next(users);
+
 				this.filtering = false;
 				this.cd.detectChanges();
 			});
@@ -41,15 +35,13 @@ export class UserIntegrationComponent implements AfterViewInit {
 		this.cd.detach();
 	}
 
-	private _searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>(
-		null
-	);
+	private _searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+	private _filteredUsers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null);
 
-	private searchTerm$ = this._searchTerm.asObservable()
-		.delay(200).debounceTime(200);
+	private searchTerm$ = this._searchTerm.debounceTime(250);
+	public filteredUsers$ = this._filteredUsers.asObservable();
 
 	public users: User[];
-	public filteredUsers: User[];
 	public Utils = Utils;
 	public filtering: boolean = false;
 
@@ -62,14 +54,25 @@ export class UserIntegrationComponent implements AfterViewInit {
 		}
 	}
 
+	public trackByFn(index, item: User) {
+		return item.personCode;
+	}
+
 	public onSearchChanged(term: string) {
+		// Clear out list and notify user
 		this.filtering = true;
-		this.filteredUsers = null;
+		this._filteredUsers.next(null);
 		this.cd.detectChanges();
+
 		this._searchTerm.next(term);
 	}
 
-	public trackByFn(index, item: User) {
-		return item.personCode;
+	private filterUsers(term: string): Observable<User[]> {
+		if (this.users == null) return Observable.of(null);
+		term = term.toLowerCase();
+		var filteredUsers = this.users.filter(user =>
+			(user.firstName + ' ' + user.lastName).toLowerCase().includes(term)
+		);
+		return Observable.of(filteredUsers);
 	}
 }
