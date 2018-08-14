@@ -9,7 +9,7 @@
             <div class="col-md-6">
                 <div class="input-group" *ngIf="users">
                     <span class="input-group-addon glyphicon glyphicon-search"></span>
-                    <input class="form-control" type="text" (input)="onSearchChanged($event.target.value)"
+                    <input class="form-control" type="text" [(ngModel)]="searchTerm" (input)="onSearchChanged($event.target.value)"
                         placeholder="Filter list by typing name here" />
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of filteredUsers$ | async | slice:0:99">
+                    <tr *ngFor="let user of filteredUsers$ | async"> <!--  | slice:0:99 -->
                         <td>{{user.firstName}} {{user.lastName}}</td>
                         <td>{{Utils.FormatDate(user.birthDate)}}</td>
                         <td>{{roleDesc(user.role)}}</td>
