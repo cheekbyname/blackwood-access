@@ -46,18 +46,13 @@ export class User {
     public teamUser: TeamUser;
 }
 
-// @Pipe({
-//     name: 'userNameFilter'
-// })
-// export class UserNameFilter implements PipeTransform {
-//     transform(users: User[], searchTerm: string) {
-//         if (!users) return [];
-//         if (!searchTerm) return users;
+export enum GENDERS {
+    U = 'Unknown',
+    F = 'Female',
+    M = 'Male'
+};
 
-//         searchTerm = searchTerm.toLowerCase();
-
-//         return users.filter(user => {
-//             return (user.firstName + ' ' + user.lastName).toLowerCase().includes(searchTerm);
-//         });
-//     }
-// }
+export enum ROLES {
+    spt = 'Staff',
+    usr = 'Client'
+};

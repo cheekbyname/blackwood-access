@@ -45,7 +45,7 @@
                     <tr *ngFor="let user of filteredUsers$ | async" [routerLink]="['/integration/users', user.personCode]"> <!--  | slice:0:99 -->
                         <td>{{user.firstName}} {{user.lastName}}</td>
                         <td>{{Utils.FormatDate(user.birthDate)}}</td>
-                        <td>{{roleDesc(user.role)}}</td>
+                        <td>{{ROLES[user.role]}}</td>
                         <td class="syscheck"><span *ngIf="user.id" class="glyphicon glyphicon-ok"></span></td>
                         <td class="syscheck"><span *ngIf="user.personCode" class="glyphicon glyphicon-ok"></span></td>
                         <td class="syscheck"><span *ngIf="user.careSysGuid" class="glyphicon glyphicon-ok"></span></td>

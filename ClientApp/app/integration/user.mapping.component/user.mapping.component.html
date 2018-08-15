@@ -1,8 +1,13 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h4 class="section-heading">
-            <strong>User Mapping Details</strong>
-        </h4>
+        <div class="row">
+            <h4 class="col-md-6 section-heading">
+                <span class="glyphicon glyphicon-transfer"></span>
+                <span class="glyphicon glyphicon-user"></span>
+                <span class="glyphicon glyphicon-globe"></span>
+                <strong>User Integration Mapping</strong>
+            </h4>
+        </div>
     </div>
 
     <div class="panel-body">
@@ -11,63 +16,80 @@
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
 
-        <form *ngIf="user" [formGroup]="form">
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">Name</label>
-                    <input class="col-md-4 form-control" formControlName="name" />
-                </div>
+        <div class="col-md-6 col-left">
+            <div class="well">
+                <form *ngIf="user" [formGroup]="form" class="form-inline">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input class="form-control pull-right" formControlName="name" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth</label>
+                        <input class="form-control pull-right" formControlName="dateOfBirth" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <input class="form-control pull-right" formControlName="role" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Integration</label>
+                        <input class="form-control pull-right" formControlName="integrationId" />
+                    </div>
+                    <button class="btn btn-primary pull-right" [disabled]="user.id">Map User</button>
+                    <hr />
+                    <div class="form-group">
+                        <label class="form-label">StaffPlan</label>
+                        <input class="form-control pull-right" formControlName="staffPlanId" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CareSys</label>
+                        <input class="form-control pull-right" formControlName="careSysId" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">UH</label>
+                        <input class="form-control pull-right" formControlName="uhId" />
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="form-label">CleverCogs</label>
+                        <input class="form-control pull-right" formControlName="cleverCogsId" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Enabled</label>
+                        <input class="form-control pull-right" formControlName="cleverCogsEnabled" />
+                    </div>
+                    <button class="btn btn-primary pull-right" [disabled]="!user.id">{{enableMsg()}} User</button>
+                    <hr />
+                    <div class="form-group">
+                        <label class="form-label">Dynamics</label>
+                        <input class="form-control pull-right" formControlName="dynamicsId" />
+                    </div>
+                </form>
             </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">Date of Birth</label>
-                    <input class="col-md-4 form-control" formControlName="dateOfBirth" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">Role</label>
-                    <input class="col-md-4 form-control" formControlName="role" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">Integration</label>
-                    <input class="col-md-4 form-control" formControlName="integrationId" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">StaffPlan</label>
-                    <input class="col-md-4 form-control" formControlName="staffPlanId" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">CareSys</label>
-                    <input class="col-md-4 form-control" formControlName="careSysId" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">CleverCogs</label>
-                    <input class="col-md-4 form-control" formControlName="cleverCogsId" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">Dynamics</label>
-                    <input class="col-md-4 form-control" formControlName="dynamicsId" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group form-inline">
-                    <label class="col-md-2 form-label">UH</label>
-                    <input class="col-md-4 form-control" formControlName="uhId" />
-                </div>
-            </div>
+        </div>
 
-        </form>
+        <div class="col-md-6 col-right">
+            <div class="well">
+                <form *ngIf="user" [formGroup]="form" class="form-inline">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input class="form-control pull-right" formControlName="firstName" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Middle Name</label>
+                        <input class="form-control pull-right" formControlName="middleName" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input class="form-control pull-right" formControlName="lastName" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <input class="form-control pull-right" formControlName="gender" />
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </div>
 </div>

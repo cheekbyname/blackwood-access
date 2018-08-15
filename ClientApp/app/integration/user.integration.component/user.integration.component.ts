@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } 
 import { Location } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 
-import { User } from "../../models/integration/User";
+import { User, ROLES } from "../../models/integration/User";
 
 import { Utils } from "../../Utils";
 
@@ -52,18 +52,11 @@ export class UserIntegrationComponent implements AfterViewInit {
 	public filteredUsers$ = this._filteredUsers.asObservable();
 
 	public users: User[];
-	public Utils = Utils;
 	public searchTerm: string = '';
 	public filtering: boolean = false;
 
-	public roleDesc(role: string): string {
-		switch (role) {
-			case "spt":
-				return "Staff";
-			case "usr":
-				return "Client";
-		}
-	}
+	public Utils = Utils;
+	public ROLES = ROLES;
 
 	public onSearchChanged(term: string) {
 		// Clear out list and notify user

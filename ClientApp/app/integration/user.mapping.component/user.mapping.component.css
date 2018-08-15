@@ -1,4 +1,4 @@
-h4, label, select, td, th, input {
+h4, label, select, td, th, input, p {
     font-family: 'Century Gothic';
     font-weight: normal;
 }
@@ -10,7 +10,7 @@ h4, label, select, td, th, input {
     margin-top: 24px;
 }
 
-.panel div.panel-heading {
+.panel .panel-heading {
     border-bottom: 1px solid silver;
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);
@@ -27,10 +27,63 @@ span.loading {
     margin-left: 8px;
 }
 
+
+/* Form Styles */
+.panel-body .col-left {
+    padding-left: 0px;
+    padding-right: 4px;
+}
+
+.panel-body .col-right {
+    padding-right: 0px;
+    padding-left: 4px;
+}
+
+.well {
+    padding: 12px;
+}
+
 .form-label {
     top: 8px;
 }
 
-.row {
-    margin-bottom: 8px;
+.form-group {
+    width: 100%;
+    padding-bottom: 8px;
+}
+
+.form-group label.form-label {
+    width: 25%;
+}
+
+.form-group input.form-control {
+    width: 70%;
+}
+
+/* Button styles */
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-primary:enabled:hover, .btn-primary:enabled:focus {
+    cursor: pointer;
+    color: black;
+    background-color: hotpink;
+}
+
+.btn-primary:enabled:focus {
+    box-shadow: 1px solid red;
+}
+
+.btn-primary[disabled="true"]:hover, .btn-primary[disabled="true"]:focus {
+    cursor: not-allowed;
+    color: black;
+    background-color: #bfd730;
+}
+
+.btn-primary i {
+    margin-right: 8px;
 }
