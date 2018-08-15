@@ -37,8 +37,8 @@ export class UserMappingComponent {
             staffPlanId: [{ value: this.user.personCode, disabled: true }],
             careSysId: [{ value: this.user.careSysGuid, disabled: true }],
             cleverCogsId: [{ value: this.user.cleverCogsUserID, disabled: true }],
-            dynamicsId: ['N/A'],
-            uhId: ['N/A']
+            dynamicsId: [{ value: 'N/A', disabled: true }],
+            uhId: [{ value: 'N/A', disabled: true }]
         };
     }
 
