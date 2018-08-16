@@ -55,6 +55,12 @@
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="users && filtering" class="progress">
+                <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    <h4><em>Filtering, please wait...</em></h4>
+                </div>
+            </div>
         </div>
     </div>
 </div>

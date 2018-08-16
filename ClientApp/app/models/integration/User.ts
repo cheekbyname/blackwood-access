@@ -41,6 +41,8 @@ export class User {
     public enableSync: boolean;
     public cs_guid: Guid;
     public notified: boolean;
+    public startDate: Date;
+    public finishDate: Date;
 
     public userMap: UserMap;
     public teamUser: TeamUser;

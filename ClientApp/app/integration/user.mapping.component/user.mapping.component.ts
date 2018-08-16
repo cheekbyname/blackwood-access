@@ -18,7 +18,6 @@ export class UserMappingComponent {
         this.route.params.subscribe(p => {
             var personCode = p['person'];
             this.ip.getUserByPersonCode(personCode).subscribe(u => {
-                console.log(u);
                 this.user = u;
                 this.form = this.fb.group(this.getFormControls());
             });
@@ -47,7 +46,10 @@ export class UserMappingComponent {
             firstName: [{ value: this.user.firstName, disabled: true }],
             middleName: [{ value: this.user.middleName, disabled: true }],
             lastName: [{ value: this.user.lastName, disabled: true }],
-            gender: [{ value: GENDERS[this.user.gender], disabled: true }]
+            gender: [{ value: GENDERS[this.user.gender], disabled: true }],
+            address: [{ value: this.user.address, disabled: true }],
+            postcode: [{ value: this.user.zippCode, disabled: true }],
+            city: [{ value: this.user.city, disabled: true }]
         };
     }
     

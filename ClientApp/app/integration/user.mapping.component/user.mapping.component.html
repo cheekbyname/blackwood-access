@@ -16,9 +16,9 @@
             <span class="loading">Please wait, retrieving your data...</span>
         </div>
 
-        <div class="col-md-6 col-left">
+        <div *ngIf="user" class="col-md-6 col-left">
             <div class="well">
-                <form *ngIf="user" [formGroup]="form" class="form-inline">
+                <form [formGroup]="form" class="form-inline">
                     <div class="form-group">
                         <label class="form-label">Name</label>
                         <input class="form-control pull-right" formControlName="name" />
@@ -68,9 +68,9 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-right">
+        <!-- <div  *ngIf="user"class="col-md-6 col-right">
             <div class="well">
-                <form *ngIf="user" [formGroup]="form" class="form-inline">
+                <form [formGroup]="form" class="form-inline">
                     <div class="form-group">
                         <label class="form-label">First Name</label>
                         <input class="form-control pull-right" formControlName="firstName" />
@@ -87,9 +87,21 @@
                         <label class="form-label">Gender</label>
                         <input class="form-control pull-right" formControlName="gender" />
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input class="form-control pull-right" formControlName="address" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Postcode</label>
+                        <input class="form-control pull-right" formControlName="postcode" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input class="form-control pull-right" formControlName="city" />
+                    </div>
                 </form>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </div>

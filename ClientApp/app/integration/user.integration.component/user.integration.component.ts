@@ -60,7 +60,11 @@ export class UserIntegrationComponent implements AfterViewInit {
 
 	public onSearchChanged(term: string) {
 		// Clear out list and notify user
-		if (term != '') this.loc.go('integration/users', `search=${term}`);
+		if (term != '') {
+			this.loc.go('integration/users', `search=${term}`);
+		} else {
+			this.loc.go('integration/users');
+		}
 
 		this.filtering = true;
 		this._filteredUsers.next(null);

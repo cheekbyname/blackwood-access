@@ -60,3 +60,16 @@ tbody {
 .input-group .input-group-addon, .input-group input {
     top: 4px;
 }
+
+/* Progress Bar */
+.progress {
+    height: 40px;
+}
+
+.progress-bar {
+    width: 100%;
+}
+
+.progress-bar h4 {
+    color: black;
+}
