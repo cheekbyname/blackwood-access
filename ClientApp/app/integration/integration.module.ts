@@ -1,7 +1,11 @@
-// Angular/PrimeNg
+// Angular
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+
+// PrimeNg
+import { GrowlModule, ConfirmationService, ConfirmDialogModule } from "primeng/primeng";
+import { MessageService } from "primeng/components/common/messageservice";
 
 // Components
 import { IntegrationComponent } from "./integration.component";
@@ -17,9 +21,9 @@ import { IntegrationProvider } from "./integration.provider";
 import { UserProvider } from "../user.provider";
 
 @NgModule({
-	imports: [ CommonModule, FormsModule, IntegrationRoutingModule, ReactiveFormsModule ],
+	imports: [ CommonModule, FormsModule, IntegrationRoutingModule, ReactiveFormsModule, GrowlModule, ConfirmDialogModule ],
 	declarations: [ IntegrationComponent, IntegrationLandingComponent, TeamIntegrationComponent, UserIntegrationComponent,
 		UserMappingComponent ],
-	providers: [ UserProvider, IntegrationGuard, IntegrationProvider ]
+	providers: [ UserProvider, IntegrationGuard, IntegrationProvider, MessageService, ConfirmationService ]
 })
 export class IntegrationModule { }

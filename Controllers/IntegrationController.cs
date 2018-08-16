@@ -1,5 +1,6 @@
 ﻿namespace Blackwood.Access.Controllers
 {
+    using Core.Data.Models;
     using Core.Operations.Integration;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -15,10 +16,13 @@
         public IntegrationController(ILogger<IntegrationController> logger, IIntegrationData integrationData)
             => (_logger, _integrationData) = (logger, integrationData);
 
-        [Route("[action]")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> AllUsers() => Ok(await _integrationData.GetAllUsers());
 
-        [Route("[action]")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> AUser(int personCode) => Ok(await _integrationData.GetUser(personCode));
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> MapUser(User user) => Ok(await _integrationData.MapUser(user));
     }
 }

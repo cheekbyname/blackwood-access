@@ -2,10 +2,14 @@ import { Component, ViewEncapsulation } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
+import { ConfirmationService } from "primeng/primeng";
+import { MessageService } from "primeng/components/common/messageservice";
+
 import { Utils } from "../../Utils";
 
 import { User, GENDERS, ROLES } from '../../models/integration/User';
 import { IntegrationProvider } from "../integration.provider";
+import { Observable } from "../../../../node_modules/rxjs";
 
 @Component({
     selector: 'user-mapping',
@@ -14,7 +18,8 @@ import { IntegrationProvider } from "../integration.provider";
     encapsulation: ViewEncapsulation.None
 })
 export class UserMappingComponent {
-    constructor(private route: ActivatedRoute, private ip: IntegrationProvider, public fb: FormBuilder) {
+    constructor(private route: ActivatedRoute, private ip: IntegrationProvider, public fb: FormBuilder,
+        private ms: MessageService, private cs: ConfirmationService) {
         this.route.params.subscribe(p => {
             var personCode = p['person'];
             this.ip.getUserByPersonCode(personCode).subscribe(u => {
@@ -43,6 +48,7 @@ export class UserMappingComponent {
             cleverCogsEnabled: [{ value: (this.user.enableSync ? 'Yes' : 'No'), disabled: true }],
             dynamicsId: [{ value: 'N/A', disabled: true }],
             uhId: [{ value: 'N/A', disabled: true }],
+            // Replace all this stuff with values that wouldn't be visible to applications normally
             firstName: [{ value: this.user.firstName, disabled: true }],
             middleName: [{ value: this.user.middleName, disabled: true }],
             lastName: [{ value: this.user.lastName, disabled: true }],
@@ -52,6 +58,31 @@ export class UserMappingComponent {
             city: [{ value: this.user.city, disabled: true }]
         };
     }
-    
+
     public enableMsg = () => this.user && this.user.enableSync ? 'Disable' : 'Enable';
+
+    public mapUser(user: User) {
+        this.cs.confirm({
+            header: 'Confirm User Mapping',
+            message: 'Are you sure you want to assign an Integration identity for this User?',
+            accept: () => {
+                this.ip.mapUser(user)
+                    .catch(err => {
+                        this.ms.add({
+                            severity: 'error', summary: 'Error Mapping User',
+                            detail: `Attempt to map ${user.firstName} ${user.lastName} failed. Please advise Business Solutions.`
+                        });
+                        return Observable.throw(err);
+                    })
+                    .subscribe(u => {
+                        this.ms.add({
+                            severity: 'success', summary: 'User Successfully Mapped',
+                            detail: `User ${user.firstName} ${user.lastName} mapped with Integration Id ${u.id}`
+                        });
+                        this.user = u;
+                        this.form = this.fb.group(this.getFormControls());
+                    });
+            }
+        })
+    }
 }

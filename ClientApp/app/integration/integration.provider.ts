@@ -27,4 +27,11 @@ export class IntegrationProvider {
     getUserByPersonCode(person: number): Observable<User> {
         return this.http.get(`api/integration/auser?personCode=${person}`, null).map(res => res.json() as User);
     }
+
+    mapUser(user: User): Observable<User> {
+        return this.http.put(`api/integration/mapuser`, user).map(res => {
+            this.getAllUsers().subscribe(au => this._integrationUsers.next(au));
+            return res.json() as User;
+        });
+    }
 }

@@ -35,7 +35,7 @@
                         <label class="form-label">Integration</label>
                         <input class="form-control pull-right" formControlName="integrationId" />
                     </div>
-                    <button class="btn btn-primary pull-right" [disabled]="user.id">Map User</button>
+                    <button class="btn btn-primary pull-right" [disabled]="user.id" (click)="mapUser(user)">Map User</button>
                     <hr />
                     <div class="form-group">
                         <label class="form-label">StaffPlan</label>
@@ -105,3 +105,7 @@
 
     </div>
 </div>
+
+<p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>
+
+<p-growl [life]="5000"></p-growl>
