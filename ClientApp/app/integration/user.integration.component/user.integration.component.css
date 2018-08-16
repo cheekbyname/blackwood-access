@@ -56,7 +56,6 @@ tbody {
 /* Table scroll stuff */
 
 /* Input group addon fix */
-
 .input-group .input-group-addon, .input-group input {
     top: 4px;
 }
@@ -72,4 +71,41 @@ tbody {
 
 .progress-bar h4 {
     color: black;
+}
+
+/* Button styles */
+.btn-default, .btn-primary {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+    font-family: 'Century Gothic';
+}
+
+.btn-primary:enabled:hover, .btn-primary:enabled:focus {
+    cursor: pointer;
+    color: black;
+    background-color: hotpink;
+}
+
+.btn-primary:enabled:focus {
+    box-shadow: 1px solid red;
+}
+
+.btn-primary[disabled="true"]:hover, .btn-primary[disabled="true"]:focus {
+    cursor: not-allowed;
+    color: black;
+    background-color: #bfd730;
+}
+
+.btn-primary i {
+    margin-right: 8px;
+}
+
+/* InputGroup Refresh Button tweaks*/
+.input-wrapper {
+    width: 90%;
+}
+
+.btn-refresh {
+    margin-top: 4px;
 }

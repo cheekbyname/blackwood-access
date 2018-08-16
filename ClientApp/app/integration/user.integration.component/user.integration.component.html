@@ -6,11 +6,17 @@
                 <span class="glyphicon glyphicon-user"></span>
                 <strong>User Integration</strong>
             </h4>
-            <div class="col-md-6">
-                <div class="input-group" *ngIf="users">
-                    <span class="input-group-addon glyphicon glyphicon-search"></span>
-                    <input class="form-control" type="text" [(ngModel)]="searchTerm" (input)="onSearchChanged($event.target.value)"
-                        placeholder="Filter list by typing name here" />
+            <div class="col-md-6" *ngIf="users">
+                <div class="pull-left input-wrapper">
+                    <div class="input-group">
+                        <span class="input-group-addon glyphicon glyphicon-search"></span>
+                        <input class="form-control" type="text" [(ngModel)]="searchTerm" (input)="onSearchChanged($event.target.value)" placeholder="Filter list by typing name here" />
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-primary pull-right btn-refresh" (click)="refreshUsers()">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>
                 </div>
             </div>
         </div>

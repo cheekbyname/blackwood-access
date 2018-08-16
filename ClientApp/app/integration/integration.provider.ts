@@ -34,4 +34,8 @@ export class IntegrationProvider {
             return res.json() as User;
         });
     }
+
+    public refreshUsers() {
+        this.getAllUsers();
+    }
 }

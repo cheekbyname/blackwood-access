@@ -83,4 +83,10 @@ export class UserIntegrationComponent implements AfterViewInit {
 		);
 		return Observable.of(filteredUsers);
 	}
+
+	public refreshUsers() {
+		this.users = null;
+		this.cd.detectChanges();
+		this.ip.getAllUsers().subscribe(x => this.cd.detectChanges());
+	}
 }
