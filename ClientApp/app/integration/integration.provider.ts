@@ -38,4 +38,11 @@ export class IntegrationProvider {
     public refreshUsers() {
         this.getAllUsers();
     }
+
+    public toggleEnable(user: User): Observable<User> {
+        return this.http.put('api/integration/toggleEnable', user).map(res => {
+            this.getAllUsers().subscribe(au => this._integrationUsers.next(au));
+            return res.json() as User;
+        });
+    }
 }

@@ -61,7 +61,7 @@
                         <label class="form-label">Enabled</label>
                         <input class="form-control pull-right" formControlName="cleverCogsEnabled" />
                     </div>
-                    <button class="btn btn-primary pull-right" [disabled]="!user.id">{{enableMsg()}} User</button>
+                    <button class="btn btn-primary pull-right" [disabled]="!user.id" (click)="toggleEnable(user)">{{enableMsg()}} User</button>
                     <hr />
                     <div class="form-group">
                         <label class="form-label">Dynamics</label>

@@ -24,5 +24,8 @@
 
         [HttpPut("[action]")]
         public async Task<IActionResult> MapUser(User user) => Ok(await _integrationData.MapUser(user));
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> ToggleEnable(User user) => Ok(await _integrationData.ToggleEnableSync(user));
     }
 }

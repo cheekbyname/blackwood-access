@@ -86,4 +86,30 @@ export class UserMappingComponent {
             }
         })
     }
+
+    public toggleEnable(user: User) {
+        this.cs.confirm({
+            header: `${this.enableMsg()} User Integration`,
+            message: `Are you sure you want to ${this.enableMsg()} ${this.user.firstName} ${this.user.lastName} for Integration`,
+            accept: () => {
+                this.ip.toggleEnable(user)
+                    .catch(err => {
+                        var verb = this.enableMsg().substring(0, this.enableMsg().length - 1);
+                        this.ms.add({
+                            severity: 'error', summary: `Error ${verb}ing User`,
+                            detail: `An error ocurred while attempting to ${this.enableMsg()} Integration for ${user.firstName} ${user.lastName}. Please contact Business Solutions.`
+                        });
+                        return Observable.throw(err);
+                    })
+                    .subscribe(u => {
+                        this.ms.add({
+                            severity: 'success', summary: `User Successfully ${this.enableMsg()}d`,
+                            detail: `User ${user.firstName} ${user.lastName} is now ${this.enableMsg()}d`
+                        });
+                        this.user = u;
+                        this.form = this.fb.group(this.getFormControls());
+                    });
+            }
+        });
+    }
 }
