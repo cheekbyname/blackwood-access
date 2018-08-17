@@ -45,7 +45,7 @@ export class User {
     public finishDate: Date;
 
     public userMap: UserMap;
-    public teamUser: TeamUser;
+    public teamUsers: TeamUser[];
 }
 
 export enum GENDERS {
