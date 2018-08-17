@@ -45,6 +45,10 @@ table .glyphicon-ok {
     color: green;
 }
 
+table .glyphicon-warning-sign {
+    color: orangered;
+}
+
 table td.syscheck {
     text-align: center;
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, OnDestroy } from "@angular/core";
 import { Location } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 
@@ -7,7 +7,7 @@ import { User, ROLES } from "../../models/integration/User";
 import { Utils } from "../../Utils";
 
 import { IntegrationProvider } from "../integration.provider";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 @Component({
 	selector: "user-integration",
@@ -15,25 +15,26 @@ import { BehaviorSubject, Observable } from "rxjs";
 	styleUrls: ["./user.integration.component.css"],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserIntegrationComponent implements AfterViewInit {
+export class UserIntegrationComponent implements AfterViewInit, OnDestroy {
 	constructor(private ip: IntegrationProvider, private cd: ChangeDetectorRef, private route: ActivatedRoute,
 		private loc: Location) { }
 
 	ngAfterViewInit() {
 		this.cd.detach();
 
-		this.ip.integrationUsers$.subscribe(au => {this.users = au });
+		this.ip.integrationUsers$.subscribe(au => { this.users = au });
 
-		Observable.combineLatest(this.ip.integrationUsers$, this.route.queryParams, (u, p) => { return { "users": u, "params": p } })
+		this.subs.push(Observable
+			.combineLatest(this.ip.integrationUsers$, this.route.queryParams, (u, p) => { return { "users": u, "params": p } })
 			.filter(x => x.users != null)
 			.subscribe(x => {
 				if (x.params['search'] != undefined) {
 					this.searchTerm = x.params['search'];
 				}
 				this.onSearchChanged(this.searchTerm);
-			});
+			}));
 
-		this.searchTerm$
+		this.subs.push(this.searchTerm$
 			.switchMap(term => {
 				return this.filterUsers(term);
 			})
@@ -42,7 +43,11 @@ export class UserIntegrationComponent implements AfterViewInit {
 
 				this.filtering = false;
 				this.cd.detectChanges();
-			});
+			}));
+	}
+
+	ngOnDestroy() {
+		this.subs.forEach(sub => sub.unsubscribe());
 	}
 
 	private _searchTerm: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -50,6 +55,8 @@ export class UserIntegrationComponent implements AfterViewInit {
 
 	private searchTerm$ = this._searchTerm.debounceTime(250);
 	public filteredUsers$ = this._filteredUsers.asObservable();
+
+	private subs: Subscription[] = [];
 
 	public users: User[];
 	public searchTerm: string = '';

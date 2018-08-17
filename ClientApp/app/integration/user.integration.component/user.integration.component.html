@@ -54,7 +54,10 @@
                         <td>{{ROLES[user.role]}}</td>
                         <td class="syscheck"><span *ngIf="user.id" class="glyphicon glyphicon-ok"></span></td>
                         <td class="syscheck"><span *ngIf="user.personCode" class="glyphicon glyphicon-ok"></span></td>
-                        <td class="syscheck"><span *ngIf="user.careSysGuid" class="glyphicon glyphicon-ok"></span></td>
+                        <td class="syscheck">
+                            <span *ngIf="user.careSysGuid && (user.role=='usr' || user.careSysUsername)" class="glyphicon glyphicon-ok"></span>
+                            <span *ngIf="user.careSysGuid && (user.role=='spt' && !user.careSysUsername)" class="glyphicon glyphicon-warning-sign"></span>
+                        </td>
                         <td class="syscheck"><span *ngIf="user.cleverCogsUserID" class="glyphicon glyphicon-ok"></span></td>
                         <td class="syscheck"></td>
                         <td class="syscheck"></td>

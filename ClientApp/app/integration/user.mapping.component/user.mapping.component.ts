@@ -37,7 +37,6 @@ export class UserMappingComponent {
     public ROLES = ROLES;
 
     private getFormControls() {
-        console.log(this.user);
         return {
             name: [{ value: `${this.user.firstName} ${this.user.lastName}`, disabled: true }],
             dateOfBirth: [{ value: this.Utils.FormatDate(this.user.birthDate), disabled: true }],
