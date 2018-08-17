@@ -37,6 +37,7 @@ export class UserMappingComponent {
     public ROLES = ROLES;
 
     private getFormControls() {
+        console.log(this.user);
         return {
             name: [{ value: `${this.user.firstName} ${this.user.lastName}`, disabled: true }],
             dateOfBirth: [{ value: this.Utils.FormatDate(this.user.birthDate), disabled: true }],
@@ -44,7 +45,7 @@ export class UserMappingComponent {
             integrationId: [{ value: this.user.id, disabled: true }],
             staffPlanId: [{ value: this.user.personCode, disabled: true }],
             careSysId: [{ value: this.user.careSysGuid, disabled: true }],
-            careSysUser: [{ value: this.user.careSysUserName, disabled: true }],
+            careSysUser: [{ value: this.user.careSysUsername, disabled: true }],
             cleverCogsId: [{ value: this.user.cleverCogsUserID, disabled: true }],
             cleverCogsEnabled: [{ value: (this.user.enableSync ? 'Yes' : 'No'), disabled: true }],
             dynamicsId: [{ value: 'N/A', disabled: true }],

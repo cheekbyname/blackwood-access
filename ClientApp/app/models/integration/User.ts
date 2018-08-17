@@ -37,7 +37,7 @@ export class User {
     public cleverCogsUserID: number;
     public careSysGuid: Guid;
     public addressCode: number;
-    public careSysUserName: string;
+    public careSysUsername: string;
     public enableSync: boolean;
     public cs_guid: Guid;
     public notified: boolean;
