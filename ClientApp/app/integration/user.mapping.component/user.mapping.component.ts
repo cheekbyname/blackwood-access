@@ -49,14 +49,10 @@ export class UserMappingComponent {
             cleverCogsEnabled: [{ value: (this.user.enableSync ? 'Yes' : 'No'), disabled: true }],
             dynamicsId: [{ value: 'N/A', disabled: true }],
             uhId: [{ value: 'N/A', disabled: true }],
-            // Replace all this stuff with values that wouldn't be visible to applications normally
-            firstName: [{ value: this.user.firstName, disabled: true }],
-            middleName: [{ value: this.user.middleName, disabled: true }],
-            lastName: [{ value: this.user.lastName, disabled: true }],
-            gender: [{ value: GENDERS[this.user.gender], disabled: true }],
-            address: [{ value: this.user.address, disabled: true }],
-            postcode: [{ value: this.user.zippCode, disabled: true }],
-            city: [{ value: this.user.city, disabled: true }]
+            // Right hand side form
+            addressCode: [{ value: this.user.addressCode, disabled: true }],
+            latitude: [{ value: this.user.latitude, disabled: true }],
+            longitude: [{ value: this.user.longitude, disabled: true }]
         };
     }
 
