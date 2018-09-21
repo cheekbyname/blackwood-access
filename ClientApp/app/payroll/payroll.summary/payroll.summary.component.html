@@ -2,57 +2,69 @@
 	<div class="panel-heading">
 		<div class="row">
 			<!--<h4>{{team.teamDesc}} : {{displayMonth()}}</h4>-->
-			<h4 class="col-md-4 section-heading">
+			<!-- <h4 class="col-md-4 section-heading">
                 <strong>
                     <span class="glyphicon glyphicon-align-justify"></span>
                     <span>Payroll Summary</span>
                 </strong>
-            </h4>
-			<div class="col-md-4 form-inline date-controls">
-				<button class="btn btn-primary week-nav" (click)="periodBack()">
-					<i class="fa fa-angle-left"></i>
-				</button>
-				<label class="control-label" for="periodStart">From</label>
-				<p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy"
-					(onSelect)="periodStartSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
-				<!-- Add [showIcon]="true" -->
-				<label class="control-label" for="periodFinish">To</label>
-				<p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy"
-				(onSelect)="periodFinishSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
-				<!-- Add [showIcon]="true" -->
-				<button class="btn btn-primary week-nav" (click)="periodForward()">
-					<i class="fa fa-angle-right"></i>
-				</button>
-			</div>
-            <div class="col-md-4">
-                <div class="btn-group">
-                    <button class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
-                        <span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
-                        <span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
-                        <span>{{showSummary ? "Hide" : "Show"}}</span>
-					</button>
-                    <button class="btn btn-primary" (click)="showExport()">
-                        <span class="glyphicon glyphicon-export"></span>
-                        <span>Export</span>
-					</button>
-                    <button class="btn btn-primary" (click)="showReview()">
-                        <span class="glyphicon glyphicon-eye-open"></span>
-                        <span>Review</span>
-					</button>
-                    <button class="btn btn-primary" (click)="showApproval()">
-                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                        <span>Approve</span>
-					</button>
+            </h4> -->
+            <div class="col-md-8">
+                    <div class="btn-group">
+                        <button class="btn btn-default btn-primary" (click)="toggleSummary()">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                            <span>Summary</span>
+                        </button>
+                        <!-- <button class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
+                            <span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
+                            <span *ngIf="!showSummary" class="glyphicon glyphicon-chevron-down"></span>
+                            <span>{{showSummary ? "Hide" : "Show"}}</span>
+                        </button> -->
+                        <!-- <button class="btn btn-primary" (click)="showExport()">
+                            <span class="glyphicon glyphicon-export"></span>
+                            <span>Export</span>
+                        </button> -->
+                        <button class="btn btn-primary">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span>Contracts</span>
+                        </button>
+                        <button class="btn btn-primary">
+                            <span class="glyphicon glyphicon-time"></span>
+                            <span>Timesheets</span>
+                        </button>
+                        <button class="btn btn-primary" (click)="showReview()">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                            <span>Review</span>
+                        </button>
+                        <button class="btn btn-primary" (click)="showApproval()">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                            <span>Approve</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4 form-inline date-controls">
+                    <button class="btn btn-primary week-nav" (click)="periodBack()">
+                        <i class="fa fa-angle-left"></i>
+                    </button>
+                    <label class="control-label" for="periodStart">From</label>
+                    <p-calendar [(ngModel)]="periodStart" id="periodStart" [locale]="loc" dateFormat="dd/mm/yy"
+                        (onSelect)="periodStartSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
+                    <!-- Add [showIcon]="true" -->
+                    <label class="control-label" for="periodFinish">To</label>
+                    <p-calendar [(ngModel)]="periodFinish" id="periodFinish" [locale]="loc" dateFormat="dd/mm/yy"
+                    (onSelect)="periodFinishSelected($event)" [inputStyle]="{'width': '96px'}"></p-calendar>
+                    <!-- Add [showIcon]="true" -->
+                    <button class="btn btn-primary week-nav" (click)="periodForward()">
+                        <i class="fa fa-angle-right"></i>
+                    </button>
                 </div>
             </div>
-		</div>
-	</div>
+        </div>
 	<div class="panel-body" *ngIf="showSummary && !error && summaries">
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
 				<thead>
                     <tr class="row">
-                        <th class="col-md-2">Staff Name</th>
+                        <th class="col-md-3">Staff Name</th>
                         <th class="col-md-1">Payroll Number</th>
                         <!-- <th class="col-md-1">Hours Accruing</th> -->
                         <th class="col-md-1">Contracted Hours</th>
@@ -63,7 +75,7 @@
                         <th class="col-md-1">Annual &amp; Other Leave</th>
                         <th class="col-md-1">Additional Hours</th>
                         <!-- <th class="col-md-1">Utilization</th> -->
-                        <th class="col-md-3"></th> <!-- Empty for spacing -->
+                        <th class="col-md-2"></th> <!-- Empty for spacing -->
                     </tr>
 				</thead>
 				<tbody>

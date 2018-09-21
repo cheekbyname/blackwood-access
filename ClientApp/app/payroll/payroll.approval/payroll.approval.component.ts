@@ -26,7 +26,7 @@ export class PayrollApprovalComponent {
     Utils = Utils;
     sumAdd: Summary[];
 
-    constructor (private pp: PayrollProvider, private up: UserProvider, private router: Router, private cs: ConfirmationService) {
+    constructor (public pp: PayrollProvider, private up: UserProvider, private router: Router, private cs: ConfirmationService) {
 		this.up.GetUserInfo();
         this.up.userInfo$.subscribe(ui => this.currentUser = ui);
         this.pp.teamPeriod$.subscribe(tp => {

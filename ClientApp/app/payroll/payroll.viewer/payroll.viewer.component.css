@@ -1,0 +1,21 @@
+.nav.nav-tabs {
+    font-family: 'Century Gothic';
+    font-size: 12pt;
+}
+
+li a.nav-link {
+    color: black;
+    border: 1px solid black;
+    background-color: rgba(191, 215, 48, 0.5);
+}
+
+li a.nav-link:hover {
+    background-color: hotpink;
+    border: 1px solid black;
+}
+
+li a.nav-link.active, li.nav-item.active {
+    background-color: hotpink;
+    border: 1px solid black;
+    color: black;
+}

@@ -87,8 +87,13 @@ span.loading {
     margin-left: 8px;
 }
 
-.btn-group {
+/* .btn-group {
     float:right!important;
+} */
+
+.btn-group .btn {
+    font-size: 12pt;
+    font-weight: 700;
 }
 
 .section-heading {

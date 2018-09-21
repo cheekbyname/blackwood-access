@@ -14,7 +14,8 @@
                 </div>
                 <div *ngIf="teams">
                     <label for="teamSelect">Select Team</label>
-                    <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
+                    <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam"
+                            required>
                         <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
                     </select>
                 </div>

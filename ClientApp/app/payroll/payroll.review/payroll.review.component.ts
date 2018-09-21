@@ -33,14 +33,14 @@ export class PayrollReviewComponent implements OnInit {
     public dayOffset: number;
     public weekCommencing: Date;
 
-    constructor(private payPro: PayrollProvider, private router: Router, private route: ActivatedRoute) { }
+    constructor(public pp: PayrollProvider, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         // Sub to provider data
-        this.payPro.validation$.subscribe(valid => this.valid = valid);
+        this.pp.validation$.subscribe(valid => this.valid = valid);
 
-        this.payPro.timesheet$.subscribe(ts => this.timesheet = ts);
-        this.payPro.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
+        this.pp.timesheet$.subscribe(ts => this.timesheet = ts);
+        this.pp.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
     }
 
     carerForAdjust(adjust: Adjustment): Carer {
@@ -63,14 +63,14 @@ export class PayrollReviewComponent implements OnInit {
     }
 
     showAdjust(adjust: Adjustment) {
-        this.payPro.selectCarer(this.carerForAdjust(adjust));
-        this.payPro.selectWeekCommencing(new Date(adjust.weekCommencing));     // TODO Not a date? Why not?
+        this.pp.selectCarer(this.carerForAdjust(adjust));
+        this.pp.selectWeekCommencing(new Date(adjust.weekCommencing));     // TODO Not a date? Why not?
         this.dayOffset = adjust.dayOffset;
         this.adjustVisible = true;
     }
 
     timesheetFor(shift: Shift) {
-        this.payPro.selectWeekCommencing(new Date(shift.start));
+        this.pp.selectWeekCommencing(new Date(shift.start));
         this.router.navigate(['/payroll', this.valid.teamCode,
             { outlets: {
                 detail: ['timesheet', shift.carerCode],
@@ -131,7 +131,7 @@ export class PayrollReviewComponent implements OnInit {
 
     public authInfo(adjust: Adjustment): string {
         return (adjust.authorisedBy || adjust.rejectedBy)
-            ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.payPro.displayDate(adjust.authorised || adjust.rejected)}`
+            ? `${adjust.authorisedBy || adjust.rejectedBy} ${this.pp.displayDate(adjust.authorised || adjust.rejected)}`
             : 'Pending';
     }
 }
