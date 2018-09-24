@@ -6,9 +6,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
-// ngx-bootstrap
-import { TabsModule } from "ngx-bootstrap/tabs";
-
 // PrimeNg
 import {
     CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, ConfirmationService,
@@ -45,8 +42,6 @@ import { ShiftOffsetFilter } from './models/payroll/shift';
     imports: [
         /* Platform Modules */
         FormsModule, CommonModule, HttpModule, BrowserAnimationsModule,
-        /* ngx-bootstrap Modules */
-        TabsModule.forRoot(),
         /* PrimeNg Component Modules */
         CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule, InputSwitchModule,
         /* Application Feature Modules */

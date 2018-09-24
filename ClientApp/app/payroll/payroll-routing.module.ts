@@ -10,7 +10,6 @@ import { PayrollManagerComponent } from './payroll.manager/payroll.manager.compo
 import { PayrollReviewComponent } from "./payroll.review/payroll.review.component";
 import { PayrollSummaryComponent } from './payroll.summary/payroll.summary.component';
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
-import { PayrollViewerComponent } from './payroll.viewer/payroll.viewer.component';
 
 const timesheetRoutes: Routes = [
 	{ path: 'payroll/:teamCode', component: PayrollComponent, canActivate: [PayrollGuard], children: [

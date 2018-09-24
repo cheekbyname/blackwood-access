@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { TabsModule } from "ngx-bootstrap/tabs";
-
 import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
 	ConfirmationService, InputSwitchModule, DataTableModule, SharedModule } from "primeng/primeng";
 
@@ -19,7 +17,6 @@ import { PayrollExportComponent } from "./payroll.export/payroll.export.componen
 import { PayrollManagerComponent } from './payroll.manager/payroll.manager.component';
 import { PayrollReviewComponent } from "./payroll.review/payroll.review.component";
 import { PayrollSummaryComponent } from './payroll.summary/payroll.summary.component';
-import { PayrollViewerComponent } from "./payroll.viewer/payroll.viewer.component";
 import { TimesheetAdjustmentComponent } from './timesheet.adjustment/timesheet.adjustment.component';
 import { TimesheetViewerComponent } from './timesheet.viewer/timesheet.viewer.component';
 
@@ -31,10 +28,10 @@ import { ShiftOffsetFilter } from "../models/payroll/Shift";
 
 @NgModule({
     imports: [CommonModule, FormsModule, BrowserAnimationsModule, CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule,
-        CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule, TabsModule.forRoot()],
+        CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule],
 	declarations: [PayrollComponent, BookingCardComponent, BookingDetailComponent, PayrollExportComponent, PayrollSummaryComponent,
 		TimesheetAdjustmentComponent, PayrollManagerComponent, TimesheetViewerComponent, PayrollReviewComponent, PayrollApprovalComponent,
-		AdjustmentOffsetFilter, ShiftOffsetFilter, PayrollViewerComponent],
+		AdjustmentOffsetFilter, ShiftOffsetFilter],	// , ShiftOffsetFilter
 	providers: [PayrollGuard, PayrollProvider, UserProvider, ConfirmationService]
 })
 export class PayrollModule {}

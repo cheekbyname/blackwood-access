@@ -39,7 +39,7 @@ export class PayrollManagerComponent implements OnInit {
                         if (p['teamCode'] !== undefined) {
                             this.setTeam(p['teamCode']);
                         } else
-                        if (this.user.defaultTeamCode !== 0 && this.user.defaultTeamCode !== null) {
+                        if (this.user.defaultTeamCode !== null) {
                             this.setTeam(x.user.defaultTeamCode);
                         }
                     })

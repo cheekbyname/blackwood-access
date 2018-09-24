@@ -42,8 +42,8 @@
                     <tbody>
                         <tr *ngFor="let adjust of valid.pendingAdjustments" class="row" (click)="showAdjust(adjust)">
                             <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
-                            <td>{{pp.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
-                            <td>{{pp.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
+                            <td>{{payPro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
+                            <td>{{payPro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
                             <td>{{adjust.reason}}</td>
                             <td>
                                 <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.authorised != null}">
@@ -84,8 +84,8 @@
                     <tbody>
                         <tr *ngFor="let adjust of valid.otherAdjustments" class="row" (click)="showAdjust(adjust)">
                             <td>{{carerForAdjust(adjust).forename}} {{carerForAdjust(adjust).surname}}</td>
-                            <td>{{pp.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
-                            <td>{{pp.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
+                            <td>{{payPro.displayDate(addDays(adjust.weekCommencing, adjust.dayOffset))}}</td>
+                            <td>{{payPro.displayTime((adjust.hours * 60) + adjust.mins)}}</td>
                             <td>{{adjust.reason}}</td>
                             <td>
                                 <button type="button" class="btn action-button" [ngClass]="{'adjust-selected': adjust.authorised != null}">
@@ -125,10 +125,10 @@
                     <tbody>
                         <tr *ngFor="let shift of valid.invalidShifts" class="row" (click)="timesheetFor(shift)">
                             <td>{{carerForShift(shift).forename}} {{carerForShift(shift).surname}}</td>
-                            <td>{{pp.displayDate(shift.start)}}</td>
-                            <td>{{pp.timeFromDate(shift.start)}}</td>
-                            <td>{{pp.timeFromDate(shift.finish)}}</td>
-                            <td>{{pp.displayTime(shift.shiftMins)}}</td>
+                            <td>{{payPro.displayDate(shift.start)}}</td>
+                            <td>{{payPro.timeFromDate(shift.start)}}</td>
+                            <td>{{payPro.timeFromDate(shift.finish)}}</td>
+                            <td>{{payPro.displayTime(shift.shiftMins)}}</td>
                         </tr>
                     </tbody>
                 </table>
