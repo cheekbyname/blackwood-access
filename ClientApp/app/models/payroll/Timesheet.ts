@@ -2,7 +2,7 @@ import { Carer } from './Carer';
 import { CarerContract } from './Contract';
 import { Availability } from './Availability';
 import { CarerBooking } from './Booking';
-import { Shift } from './shift';
+import { Shift } from './Shift';
 import { Adjustment } from './Adjustment';
 import { BreakPolicy } from "./BreakPolicy";
 import { BreakDefinition } from "./BreakDefinition";

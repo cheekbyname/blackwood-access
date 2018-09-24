@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { CarerBooking } from '../../models/payroll/Booking';
+import { ToilSetting, TOIL } from '../../models/payroll/PayrollCodeMap';
 
 @Component({
     selector: 'booking-card',
@@ -10,6 +11,8 @@ import { CarerBooking } from '../../models/payroll/Booking';
 export class BookingCardComponent {
     @Input()
     booking: CarerBooking;
+
+    toilSetting = ToilSetting;
 
     displayTime(dt: Date): string {
         var ndt = new Date(dt);

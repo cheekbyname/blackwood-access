@@ -49,7 +49,7 @@ export class TimesheetViewerComponent implements OnInit {
 	selectedBooking: CarerBooking = new CarerBooking();
 	showCodes: boolean = false;
 
-	constructor(private http: Http, private pp: PayrollProvider, private router: Router,
+	constructor(private http: Http, public pp: PayrollProvider, private router: Router,
 		private route: ActivatedRoute) {
 		this.hideableCodes = pp.hideableCodes;
 	}

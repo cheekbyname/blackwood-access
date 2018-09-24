@@ -1,6 +1,6 @@
 import { Adjustment } from "./Adjustment";
 import { Carer } from "./Carer";
-import { Shift } from "./shift";
+import { Shift } from "./Shift";
 
 export class ValidationResult {
     public teamCode: number;

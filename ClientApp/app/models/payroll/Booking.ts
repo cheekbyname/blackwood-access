@@ -1,4 +1,5 @@
 import { Run } from "./Run";
+import { ToilSetting } from "./PayrollCodeMap";
 
 export class CarerBooking {
 	public bookingCode: number;
@@ -17,4 +18,5 @@ export class CarerBooking {
 	public runCode: number;
 
 	public run: Run;
+	public toil: ToilSetting;
 }
