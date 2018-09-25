@@ -133,3 +133,9 @@ span.ui-dialog-title, span.header-text {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.tooltip-inner {
+    font-family: 'Century Gothic';
+    font-size: 10pt;
+    color: hotpink;
+}

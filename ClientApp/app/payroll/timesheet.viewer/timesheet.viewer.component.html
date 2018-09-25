@@ -5,13 +5,14 @@
 				<span>
 					<strong>Timesheet</strong>
 				</span>
-                <button class="btn btn-primary week-nav" (click)="weekBack()">
-                    <i class="fa fa-angle-left"></i>
-                </button>
-				<p-calendar [locale]="LOC" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing" (onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
-                <button class="btn btn-primary week-nav" (click)="weekForward()">
-                    <i class="fa fa-angle-right"></i>
-                </button>
+				<button class="btn btn-primary week-nav" (click)="weekBack()">
+					<i class="fa fa-angle-left"></i>
+				</button>
+				<p-calendar [locale]="LOC" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing" (onSelect)="selectWeekCommencing($event)"
+				            inputStyleClass="form-control"></p-calendar>
+				<button class="btn btn-primary week-nav" (click)="weekForward()">
+					<i class="fa fa-angle-right"></i>
+				</button>
 				<select class="form-control" [(ngModel)]="carer" (ngModelChange)="pp.selectCarer($event)">
 					<option *ngFor="let car of carers" [ngValue]="car">{{car.forename}} {{car.surname}}</option>
 				</select>
@@ -69,15 +70,17 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th *ngFor="let day of LOC.dayOrder; let i = index" (click)="openAdjustments(i)"
-								[tooltip]="'Click here to adjust hours for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)"
-								placement="top" container="body">
+						<th *ngFor="let day of LOC.dayOrder; let i = index" (click)="openAdjustments(i)" [tooltip]="'Click here to adjust hours for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)"
+						    placement="top" container="body">
 							<span>{{day}} {{pp.dateOrd(weekCommencing, i)}}</span>
-							<br/>
+							<br />
 							<span>{{pp.displayTime(totalActualHoursForDay(i))}}</span>
-							<span *ngIf="hasAdjustOffsetAction(i)" title="There are adjustments for this day that require attention" class="glyphicon glyphicon-exclamation-sign adjust-crit pull-right"></span>
-							<span *ngIf="hasAdjustOffset(i)" title="There are adjustments for this day" class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right"></span>
-							<span *ngIf="hasInvalidShift(i)" title="There is one or more invalid shifts on this day. Click for more information." class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
+							<span *ngIf="hasAdjustOffsetAction(i)" class="glyphicon glyphicon-exclamation-sign adjust-crit pull-right"
+							      tooltip="There are adjustments for this day that require attention" placement="bottom"></span>
+							<span *ngIf="hasAdjustOffset(i)" class="glyphicon glyphicon-exclamation-sign adjust-flag pull-right" tooltip="There are adjustments for this day"
+							      placement="bottom"></span>
+							<span *ngIf="hasInvalidShift(i)" class="glyphicon glyphicon-warning-sign adjust-crit pull-right" tooltip="There is one or more invalid shifts on this day. Click for more information."
+							      placement="bottom"></span>
 						</th>
 					</tr>
 				</thead>
@@ -91,7 +94,8 @@
 			</table>
 		</div>
 
-		<timesheet-adjustment [(timesheet)]="timesheet" [(adjustVisible)]="adjustVisible" [dayOffset]="dayOffset" [weekCommencing]="weekCommencing"></timesheet-adjustment>
+		<timesheet-adjustment [(timesheet)]="timesheet" [(adjustVisible)]="adjustVisible" [dayOffset]="dayOffset"
+		                      [weekCommencing]="weekCommencing"></timesheet-adjustment>
 
 		<booking-detail [booking]="selectedBooking" [(bookingVisible)]="bookingVisible" [contracts]="timesheet.contracts"></booking-detail>
 
