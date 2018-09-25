@@ -28,11 +28,13 @@ table.table-rota th {
 
 table.table-rota th:hover {
     background-color: rgb(191, 215, 48);
+    border: 1px double green;
     cursor: pointer;
 }
 
 table.table-rota td:hover {
     background-color: rgba(255, 105, 180, 0.5)!important;
+    border: 1px double deeppink;
     cursor: pointer;
 }
 

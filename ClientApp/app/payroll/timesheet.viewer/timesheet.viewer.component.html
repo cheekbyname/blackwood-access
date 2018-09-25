@@ -8,7 +8,7 @@
                 <button class="btn btn-primary week-nav" (click)="weekBack()">
                     <i class="fa fa-angle-left"></i>
                 </button>
-				<p-calendar [locale]="loc" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing" (onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
+				<p-calendar [locale]="LOC" dateFormat="dd/mm/yy" [(ngModel)]="weekCommencing" (onSelect)="selectWeekCommencing($event)" inputStyleClass="form-control"></p-calendar>
                 <button class="btn btn-primary week-nav" (click)="weekForward()">
                     <i class="fa fa-angle-right"></i>
                 </button>
@@ -69,7 +69,7 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th *ngFor="let day of loc.dayOrder; let i = index" (click)="openAdjustments(i)" [title]="'Click here to adjust hours for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)">
+						<th *ngFor="let day of LOC.dayOrder; let i = index" (click)="openAdjustments(i)" [title]="'Click here to adjust hours for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)">
 							<span>{{day}} {{pp.dateOrd(weekCommencing, i)}}</span>
 							<br/>
 							<span>{{pp.displayTime(totalActualHoursForDay(i))}}</span>
@@ -79,9 +79,9 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody *ngIf="!proc">
 					<tr class="row" *ngFor="let bk of bookings">
-						<td *ngFor="let day of loc.dayOrder; let i = index" [style.background-color]="bookColor(bk[i])">
+						<td *ngFor="let day of LOC.dayOrder; let i = index" [style.background-color]="bookColor(bk[i])">
 							<booking-card *ngIf="bk[i]" [booking]="bk[i]" (click)="openBookingDetail(bk[i])"></booking-card>
 						</td>
 					</tr>

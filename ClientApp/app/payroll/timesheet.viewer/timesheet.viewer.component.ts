@@ -1,22 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from "rxjs";
 
-import { DialogModule, Header, Footer, SpinnerModule } from 'primeng/primeng';
-
-import { BookingCardComponent } from '../booking.card/booking.card';
-import { BookingDetailComponent } from '../booking.detail/booking.detail.component';
-import { TimesheetAdjustmentComponent } from '../timesheet.adjustment/timesheet.adjustment.component';
-
-import { Adjustment, AdjustmentOffsetFilter } from '../../models/payroll/Adjustment';
-import { Availability } from '../../models/payroll/Availability';
 import { BookingTypeAnalysis, AnalysisCategory } from '../../models/payroll/BookingTypeAnalysis';
 import { Carer } from '../../models/payroll/Carer';
 import { CarerBooking } from '../../models/payroll/Booking';
 import { Locale, LOC_EN } from '../../models/Locale';
-import { Shift } from '../../models/payroll/shift';
 import { Team } from '../../models/payroll/Team';
 import { Timesheet } from '../../models/payroll/Timesheet';
 
@@ -31,17 +21,18 @@ type BookingGrid = Array<Array<CarerBooking>>;
 })
 export class TimesheetViewerComponent implements OnInit {
 
-	public readonly loc: Locale = LOC_EN;
+	public readonly LOC: Locale = LOC_EN;
 
 	analysis: BookingTypeAnalysis[];
 	carer: Carer;
 	weekCommencing: Date;
 	timesheet: Timesheet;
-	bookings: BookingGrid;
+	bookings: BookingGrid = this.emptyBook();
 	isContracted: boolean;
 	carers: Carer[];
 	hideableCodes: number[];
 	team: Team;		// This required purely for navigation -_-
+	proc: boolean = true;
 
 	adjustVisible: boolean = false;
 	dayOffset: number;
@@ -49,8 +40,7 @@ export class TimesheetViewerComponent implements OnInit {
 	selectedBooking: CarerBooking = new CarerBooking();
 	showCodes: boolean = false;
 
-	constructor(private http: Http, public pp: PayrollProvider, private router: Router,
-		private route: ActivatedRoute) {
+	constructor(public pp: PayrollProvider, private router: Router, private route: ActivatedRoute) {
 		this.hideableCodes = pp.hideableCodes;
 	}
 
@@ -114,6 +104,7 @@ export class TimesheetViewerComponent implements OnInit {
 	// }
 
 	selectWeekCommencing(ev: Event) {
+		this.bookings = this.emptyBook();
 		this.pp.selectWeekCommencing(this.weekCommencing);
 	}
 
@@ -126,9 +117,11 @@ export class TimesheetViewerComponent implements OnInit {
 		});
 		this.transBook();
 		this.isContracted = ts.contracts.some(cn => { return cn.contractMins > 0 });
+		this.proc = false;
 	}
 
-	emptyBook() {
+	private emptyBook(): BookingGrid {
+		this.proc = true;
 		return [[], [], [], [], [], [], []];
 	};
 
@@ -209,11 +202,13 @@ export class TimesheetViewerComponent implements OnInit {
 	public bookColor(bk: CarerBooking): string {
 		if (bk === undefined) return '';
 
+		if (this.pp.absenceCodes.some(t => t == bk.bookingType)) return 'paleturquoise';
+
 		var cats = this.analysis.filter(a => a.bookingTypeCode == bk.bookingType).map(a => a.analysisCategory);
 		if (cats.some(c => c == AnalysisCategory.TravelTime)) return 'bisque';
 		if (cats.some(c => c == AnalysisCategory.NonContactTime)) return 'lightgoldenrodyellow';
 
-		var shiftColors = ['lavender', 'lightblue', 'salmon'];
+		var shiftColors = ['lavender', 'lightblue', 'burlywood'];
 		return shiftColors[bk.shift - 1];
 	}
 
@@ -255,10 +250,12 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public weekBack() {
+		this.bookings = this.emptyBook();
 		this.pp.selectWeekCommencing(this.adjustDate(this.weekCommencing, -7));
 	}
 
 	public weekForward() {
+		this.bookings = this.emptyBook();
 		this.pp.selectWeekCommencing(this.adjustDate(this.weekCommencing, 7));
 	}
 
