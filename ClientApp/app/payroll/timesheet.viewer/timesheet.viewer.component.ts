@@ -264,4 +264,8 @@ export class TimesheetViewerComponent implements OnInit {
 		dt.setDate(dt.getDate() + offset);
 		return dt;
 	}
+
+	public dayTooltip(day, i) {
+		return `Click here to adjust hours for ${day} ${this.pp.dateOrd(this.weekCommencing, i)} ${this.pp.monthOf(this.weekCommencing, i)}`;
+	}
 }

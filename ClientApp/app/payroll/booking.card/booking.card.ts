@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 import { CarerBooking } from '../../models/payroll/Booking';
 import { ToilSetting, TOIL } from '../../models/payroll/PayrollCodeMap';
@@ -6,13 +6,17 @@ import { ToilSetting, TOIL } from '../../models/payroll/PayrollCodeMap';
 @Component({
     selector: 'booking-card',
     templateUrl: './booking.card.html',
-    styleUrls: ['booking.card.css']
+    styleUrls: ['booking.card.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class BookingCardComponent {
     @Input()
     booking: CarerBooking;
 
     toilSetting = ToilSetting;
+    tooltipHtml(): string {
+        return this.booking ? `<span>From Run: ${this.booking.run.name}</span>` : "";
+    }
 
     displayTime(dt: Date): string {
         var ndt = new Date(dt);

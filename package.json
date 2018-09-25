@@ -66,6 +66,7 @@
   "dependencies": {
     "@types/text-encoding": "0.0.32",
     "font-awesome": "^4.7.0",
+    "ngx-bootstrap": "^3.0.1",
     "text-encoding": "^0.6.4"
   }
 }

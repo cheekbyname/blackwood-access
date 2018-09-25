@@ -6,6 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule, CheckboxModule,
 	ConfirmationService, InputSwitchModule, DataTableModule, SharedModule } from "primeng/primeng";
 
+import { TooltipModule } from "ngx-bootstrap/tooltip";
+
 import { PayrollGuard } from "./payroll-guard.service";
 import { PayrollRoutingModule } from './payroll-routing.module';
 
@@ -28,7 +30,7 @@ import { ShiftOffsetFilter } from "../models/payroll/Shift";
 
 @NgModule({
     imports: [CommonModule, FormsModule, BrowserAnimationsModule, CalendarModule, SliderModule, DialogModule, SpinnerModule, ConfirmDialogModule,
-        CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule],
+        CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule, TooltipModule.forRoot()],
 	declarations: [PayrollComponent, BookingCardComponent, BookingDetailComponent, PayrollExportComponent, PayrollSummaryComponent,
 		TimesheetAdjustmentComponent, PayrollManagerComponent, TimesheetViewerComponent, PayrollReviewComponent, PayrollApprovalComponent,
 		AdjustmentOffsetFilter, ShiftOffsetFilter],	// , ShiftOffsetFilter
