@@ -15,6 +15,7 @@ export class Team {
 	public costCentre: string;
 	public breakPolicy: number;
 	public locAuthRef: string;
+	public hourlyCalc: HourlyCalc;
 
 	public localAuthority: LocalAuthority;
 	public serviceLocation: ServiceLocation;
@@ -24,4 +25,9 @@ export class Team {
 	// Deprecated, to be removed in due course
 	public serviceId: number;
 	public service: Service;
+}
+
+export enum HourlyCalc {
+	ContractedAverage = 0,
+	ScheduledAvail = 1
 }

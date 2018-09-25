@@ -33,7 +33,7 @@
                 <select *ngIf="selectedScope && selectedScope == 3" class="form-control" [(ngModel)]="selectedRegion" (ngModelChange)="regionSelected($event)">
                     <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope == 4" class="form-control" [(ngModel)]="selectedLocAuth" (ngModelChange)="locAuthSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 4" class="form-control" [(ngModel)]="selectedLocalAuthority" (ngModelChange)="locAuthSelected($event)">
                     <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">{{locAuth.name}}</option>
                 </select>
                 <label class="control-label" for="selectedStart">from</label>
@@ -42,7 +42,7 @@
                 <label class="control-label" for="selectedEnd">to</label>
                 <p-calendar [(ngModel)]="selectedEnd" id="selectedEnd" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodEndSelected($event)"
                     inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
-                <button class="btn btn-primary pull-right" title="Clear current filter options" (click)="clearFilters()">
+                <button class="btn btn-primary pull-right" tooltip="Clear current filter options" (click)="clearFilters()">
                     <i class="fa fa-close"></i>
                     <span>Clear</span>
                 </button>

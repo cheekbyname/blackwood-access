@@ -14,11 +14,11 @@
 					<i class="fa fa-angle-right"></i>
 				</button>
 				<select class="form-control" [(ngModel)]="carer" (ngModelChange)="pp.selectCarer($event)">
-					<option *ngFor="let car of carers" [ngValue]="car">{{car.forename}} {{car.surname}}</option>
+					<option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
 				</select>
 				<span>{{isContracted ? "[Contracted]" : "[Relief]"}}</span>
 			</div>
-			<div class="hide-codes col-md-2 form-group form-inline" title="Show hidden booking types such as Travel Time">
+			<div class="hide-codes col-md-2 form-group form-inline" tooltip="Show hidden booking types such as Travel Time">
 				<label>
 					<p-checkbox [(ngModel)]="showCodes" binary="true" id="showCheck" (onChange)="showCodesChanged()"></p-checkbox>
 					<span>Show hidden bookings</span>
@@ -70,7 +70,7 @@
 			<table class="table table-striped table-bordered table-rota">
 				<thead>
 					<tr class="row">
-						<th *ngFor="let day of LOC.dayOrder; let i = index" (click)="openAdjustments(i)" [tooltip]="'Click here to adjust hours for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)"
+						<th *ngFor="let day of LOC.dayOrder; let i = index" (click)="openAdjustments(i)" [tooltip]="'Click here to view Shifts for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)"
 						    placement="top" container="body">
 							<span>{{day}} {{pp.dateOrd(weekCommencing, i)}}</span>
 							<br />

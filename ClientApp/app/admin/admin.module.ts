@@ -4,7 +4,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule, CalendarModule, ListboxModule, GrowlModule }
     from "primeng/primeng";
-import { MessageService } from "primeng/components/common/messageservice";
+    import { MessageService } from "primeng/components/common/messageservice";
+
+import { TooltipModule } from "ngx-bootstrap/tooltip";
 
 import { AdminComponent } from "./admin.component";
 import { AdminLandingComponent } from "./admin.landing.component/admin.landing.component";
@@ -23,7 +25,7 @@ import { UserProvider } from "../user.provider";
 
 @NgModule({
     imports: [CommonModule, FormsModule, AdminRoutingModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule,
-        DialogModule, CalendarModule, ListboxModule, GrowlModule],
+        DialogModule, CalendarModule, ListboxModule, GrowlModule, TooltipModule.forRoot()],
     declarations: [AdminComponent, AdminLandingComponent, PayrollAdminComponent, UserAdminComponent, ReportingAdminComponent,
         UserPermissionsComponent, PushMessagingComponent, ScheduleAdminComponent, UserChooserComponent],
     providers: [ConfirmationService, AdminGuard, UserProvider, ReportingProvider, MessageService]

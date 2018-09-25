@@ -5,7 +5,7 @@
             <div class="header-row">
                 <button class="btn btn-primary pull-left" (click)="prevDay(thisForm)" [disabled]="dayOffset==0">Previous</button>
                 <span class="text-center header-text">Hours for {{loc.dayOrder[dayOffset]}}
-                    {{payPro.dateOrd(weekCommencing, dayOffset)}} {{payPro.monthOf(weekCommencing, dayOffset)}}</span>
+                    {{pp.dateOrd(weekCommencing, dayOffset)}} {{pp.monthOf(weekCommencing, dayOffset)}}</span>
                 <button class="btn btn-primary pull-right" (click)="nextDay(thisForm)" [disabled]="dayOffset==6">Next</button>
             </div>
         </p-header>
@@ -13,12 +13,13 @@
             <table class="table table-striped">
                 <thead>
                     <tr class="row">
-                        <th class="col-md-7">Team</th>
+                        <th class="col-md-6">Team</th>
                         <th class="col-md-1">Start</th>
                         <th class="col-md-1">Finish</th>
                         <th class="col-md-1">Total</th>
                         <th class="col-md-1">Unpaid</th>
                         <th class="col-md-1">Actual</th>
+                        <th class="col-md-1">TOIL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,20 +27,22 @@
                         <td>
                             <span (click)="showBreakPolicyInfo(shift)" *ngIf="!shift.validBreak" tooltip="There are insufficient breaks in this shift. Click for more information."
                                   placement="bottom" class="glyphicon glyphicon-warning-sign adjust-crit pull-right action-icon"></span>
-                            <span>{{payPro.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
+                            <span>{{pp.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
                         </td>
-                        <td>{{payPro.timeFromDate(shift.start)}}</td>
-                        <td>{{payPro.timeFromDate(shift.finish)}}</td>
-                        <td>{{payPro.displayTime(shift.shiftMins)}}</td>
-                        <td>{{payPro.displayTime(shift.unpaidMins)}}</td>
-                        <td>{{payPro.displayTime(shift.shiftMins - shift.unpaidMins)}}</td>
+                        <td>{{pp.timeFromDate(shift.start)}}</td>
+                        <td>{{pp.timeFromDate(shift.finish)}}</td>
+                        <td>{{pp.displayTime(shift.shiftMins)}}</td>
+                        <td>{{pp.displayTime(shift.unpaidMins)}}</td>
+                        <td>{{pp.displayTime(shift.shiftMins - shift.unpaidMins)}}</td>
+                        <td>{{pp.displayTime(shift.availabilityType.toil == ToilSetting.Increment ? shift.shiftMins - shift.unpaidMins : 0)}}</td>
                     </tr>
                     <tr class="row">
                         <td colspan="3"><strong>Shift Totals</strong></td>
-                        <td>{{payPro.displayTime(totalActualHoursForDay(dayOffset))}}</td>
-                        <td>{{payPro.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
-                        <td>{{payPro.displayTime(totalActualHoursForDay(dayOffset) -
+                        <td>{{pp.displayTime(totalActualHoursForDay(dayOffset))}}</td>
+                        <td>{{pp.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
+                        <td>{{pp.displayTime(totalActualHoursForDay(dayOffset) -
                             totalUnpaidHoursForDay(dayOffset))}}</td>
+                        <td>{{pp.displayTime(totalToilMinsForDay(dayOffset) < 0 ? 0 : totalToilMinsForDay(dayOffset))}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -88,11 +91,11 @@
                     </tr>
                     <tr *ngIf="minsForAdjustments()" class="row">
                         <td colspan="4"><strong>Adjustment Totals</strong></td>
-                        <td><strong>{{payPro.displayTime(minsForAdjustments())}}</strong></td>
+                        <td><strong>{{pp.displayTime(minsForAdjustments())}}</strong></td>
                     </tr>
                     <tr *ngIf="minsForAdjustments()" class="row">
                         <td colspan="4"><strong>Daily Totals</strong></td>
-                        <td><strong>{{payPro.displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
+                        <td><strong>{{pp.displayTime(totalActualHoursForDay(dayOffset) + minsForAdjustments())}}</strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -122,8 +125,8 @@
         </thead>
         <tbody>
             <tr *ngFor="let def of shiftBreakPolicy.definitions" class="row">
-                <td>{{payPro.displayTime(def.minThreshold)}} or more</td>
-                <td>{{payPro.displayTime(def.breakLength)}}</td>
+                <td>{{pp.displayTime(def.minThreshold)}} or more</td>
+                <td>{{pp.displayTime(def.breakLength)}}</td>
                 <td>{{def.paid ? "Paid" : "Unpaid"}}</td>
             </tr>
         </tbody>

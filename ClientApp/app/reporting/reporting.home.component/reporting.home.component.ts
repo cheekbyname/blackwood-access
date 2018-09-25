@@ -1,4 +1,4 @@
-import { Component, Pipe, PipeTransform } from "@angular/core";
+import { Component } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Observable } from "rxjs";
 import { TextDecoder } from "text-encoding";

@@ -40,7 +40,7 @@
                 </thead>
                 <tbody formArrayName="maps">
                     <tr class="row" *ngFor="let code of maps.controls; let i = index" [formGroupName]="i">
-                        <td><i class="fa fa-times-circle fa-2x delete" title="Click to remove this mapping" (click)="removeMap(i, code.getRawValue())"></i></td>
+                        <td><i class="fa fa-times-circle fa-2x delete" tooltip="Click to remove this mapping" (click)="removeMap(i, code.getRawValue())"></i></td>
                         <td>{{typeDesc(code.getRawValue())}}</td>
                         <td>
                             <select class="form-control" formControlName="type">

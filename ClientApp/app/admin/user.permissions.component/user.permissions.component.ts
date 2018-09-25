@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
@@ -13,7 +13,8 @@ import { Observable } from "rxjs/Observable";
 @Component({
     selector: 'user-permissions',
     templateUrl: 'user.permissions.component.html',
-    styleUrls: ['user.permissions.component.css']
+    styleUrls: ['user.permissions.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class UserPermissionsComponent implements OnInit {
     selectedUser: AccessUser;

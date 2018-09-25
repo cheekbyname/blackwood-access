@@ -1,6 +1,7 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
 import { PayrollCodeMap } from "./PayrollCodeMap";
+import { CarerBooking } from './Booking';
 
 export class Shift {
     public id: number;
@@ -15,6 +16,7 @@ export class Shift {
     public validBreak: boolean;
     public breakPolicyId: number;
 
+    public bookings: CarerBooking[];
     public availabilityType: PayrollCodeMap;
 }
 

@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from "@angular/core";
-import { NgForm, FormBuilder, FormGroup, FormControl, FormArray, AbstractControl } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray } from "@angular/forms";
 
-import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
+import { ConfirmationService } from "primeng/primeng";
 
 import { PayrollCodeMap } from "../../models/payroll/PayrollCodeMap";
 import { PayrollCodeType } from "../../models/payroll/PayrollCodeType";
@@ -71,11 +71,10 @@ export class PayrollAdminComponent {
         let changes = (<FormArray>this.form.get('maps'))
             .controls.filter(con => !con.pristine)
             .map(con => (<FormGroup>con).getRawValue());
-        let removed = this.codeMap.filter(map => !this.maps.controls.map(con => con.value.id as number).some(id => id == map.id));
         changes.forEach(ch => {
             this.pp.putCodeMap(<PayrollCodeMap>ch)
                 .subscribe(
-                    res => this.form.markAsPristine(),
+                    () => this.form.markAsPristine(),
                     err => {
                         this.errorMessage = err.statusText == "" ? "Network connection or server error." : err.statusText;
                         this.errorMessage += " If this problem persists, please contact Business Solutions or raise a Support Desk ticket.";

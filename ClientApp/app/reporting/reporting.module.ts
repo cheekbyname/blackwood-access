@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { CheckboxModule, ConfirmDialogModule, ConfirmationService, DialogModule, CalendarModule } from "primeng/primeng";
 
+import { TooltipModule } from "ngx-bootstrap/tooltip";
+
 import { ReportingComponent } from "./reporting.component";
 import { ReportingHomeComponent } from "./reporting.home.component/reporting.home.component";
 import { ReportingLandingComponent } from "./reporting.landing.component/reporting.landing.component";
@@ -17,7 +19,7 @@ import { UserProvider } from "../user.provider";
 
 @NgModule({
     imports: [CommonModule, FormsModule, CheckboxModule, ConfirmDialogModule, ReactiveFormsModule, DialogModule, CalendarModule,
-        ReportingRoutingModule],
+        ReportingRoutingModule, TooltipModule.forRoot()],
     declarations: [ReportingComponent, ReportingHomeComponent, ReportingLandingComponent, ReportingScheduleComponent,
         ScheduleEditorComponent],
     providers: [ConfirmationService, UserProvider, ReportingProvider]

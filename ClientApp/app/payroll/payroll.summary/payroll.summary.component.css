@@ -100,3 +100,10 @@ span.loading {
     margin-right: 4px;
     font-size: 16pt;
 }
+
+.tooltip-inner {
+    padding: 8px;
+    font-family: 'Century Gothic';
+    font-size: 10pt;
+    color: hotpink;
+}

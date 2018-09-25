@@ -15,7 +15,9 @@ export class Summary {
 	public actualMins: number;
 	public totalMins: number;
     public availMins: number;
-    public unpaidMins: number;
+	public unpaidMins: number;
+	public additionalMins: number;
+	// TODO There are others...
 
 	public positionType: string;
 

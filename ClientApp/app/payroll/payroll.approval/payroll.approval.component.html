@@ -9,13 +9,11 @@
             </h4>
             <div class="col-md-6">
                 <div class="btn-group pull-right">
-                    <!-- <button class="btn btn-primary" (click)="approveSummary()">
-                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                        <span>OVERRIDE</span>
-                    </button> -->
-                    <button class="btn btn-primary" (click)="approveSummary()" [disabled]="!isAuthable()" [title]="authText()">
-                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                        <span>Approve</span>
+                    <button class="btn btn-primary" (click)="approveSummary()" [disabled]="!isAuthable()">
+                        <div [tooltip]="authText()" placement="left" container="body">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                            <span>Approve</span>
+                        </div>
                     </button>
                     <button class="btn btn-primary" (click)="clearDetail()">
                         <span class="glyphicon glyphicon-remove"></span>
@@ -33,12 +31,14 @@
         <div *ngIf="summaryLoaded()">
             <div *ngIf="!periodFinished()" class="alert alert-danger">
                 <i class="fa fa-exclamation-triangle fa-2x"></i>
-                <span class="loading">Payroll period for this Team cannot be approved until it finishes on {{displayDate(summary.periodEnd)}}</span>
+                <span class="loading">Payroll period for this Team cannot be approved until it finishes on
+                    {{displayDate(summary.periodEnd)}}</span>
             </div>
             <div *ngIf="!noRevisions()" class="alert alert-danger">
                 <i class="fa fa-exclamation-triangle fa-2x"></i>
-                <span class="loading">Payroll period for this Team cannot be approved until the following issues are resolved</span>
-                <hr/>
+                <span class="loading">Payroll period for this Team cannot be approved until the following issues are
+                    resolved</span>
+                <hr />
                 <table class="table">
                     <tbody>
                         <tr *ngFor="let item of invalidOnExport()" class="no-action">
@@ -49,7 +49,8 @@
             </div>
             <div *ngIf="noRevisions() && periodFinished() && summary.authorizations.length == 0" class="alert alert-success">
                 <i class="fa fa-thumbs-up fa-2x"></i>
-                <span class="loading">Click "Approve" if you are happy with the number of additional hours [{{Utils.DisplayTime(currentHours())}}] shown on the payroll summary</span>
+                <span class="loading">Click "Approve" if you are happy with the number of additional hours
+                    [{{Utils.DisplayTime(currentHours())}}] shown on the payroll summary</span>
             </div>
             <div *ngIf="summary.authorizations.length > 0">
                 <div class="alert alert-success">

@@ -2,18 +2,18 @@ import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angu
 import { Http } from '@angular/http';
 import { NgForm } from '@angular/forms';
 
-import { ConfirmDialogModule, ConfirmationService, DialogModule } from "primeng/primeng";
+import { ConfirmationService } from "primeng/primeng";
 
 import { AccessUser } from "../../models/AccessUser";
 import { Adjustment } from '../../models/payroll/Adjustment';
 import { Locale, LOC_EN } from '../../models/Locale';
-import { BreakDefinition } from "../../models/payroll/BreakDefinition";
 import { BreakPolicy } from "../../models/payroll/BreakPolicy";
 import { Timesheet } from '../../models/payroll/Timesheet';
 import { Shift } from "../../models/payroll/shift";
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
+import { ToilSetting } from '../../models/payroll/PayrollCodeMap';
 
 @Component({
     selector: 'timesheet-adjustment',
@@ -23,13 +23,13 @@ import { UserProvider } from '../../user.provider';
 })
 export class TimesheetAdjustmentComponent {
 
-    constructor(public payPro: PayrollProvider, private http: Http, private conServ: ConfirmationService,
+    constructor(public pp: PayrollProvider, private http: Http, private conServ: ConfirmationService,
         private userPro: UserProvider) {
-			//this.userPro.userInfo$.subscribe(ui => { this.user = ui; console.log(ui); });
 			this.userPro.GetUserInfo().then(ui => this.user = ui);
     }
 
-    public loc: Locale = LOC_EN;
+	public loc: Locale = LOC_EN;
+	public ToilSetting = ToilSetting;
 
     private _weekCommencing: Date;
     private _timesheet: Timesheet;
@@ -74,6 +74,21 @@ export class TimesheetAdjustmentComponent {
 			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc +cur }, 0);
 	}
 
+	public totalToilMinsForDay(offset: number): number {
+		return this.timesheet.shifts
+			.filter(sh => sh.day == offset)
+			.map(sh => { return this.toilDelta(sh)})
+			.reduce((acc, cur) => { return acc + cur }, 0);
+	}
+
+	private toilDelta(shift: Shift): number {
+		if(shift.availabilityType.toil == ToilSetting.Increment) return shift.shiftMins - shift.unpaidMins;
+		return shift.bookings
+			.filter(bk => bk.toil == ToilSetting.Decrement)
+			.map(bk => { return bk.thisMins })
+			.reduce((acc, cur) => { return acc - cur }, 0);
+	}
+
     public minsForAdjustments(): number {
         return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset && adj.rejected == null)
             .map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
@@ -106,7 +121,7 @@ export class TimesheetAdjustmentComponent {
 
 	putAdjustment(oldAdj: Adjustment) {
         // TODO Guard on what condition?
-		this.payPro.putAdjustment(oldAdj).then((newAdj) => {
+		this.pp.putAdjustment(oldAdj).then((newAdj) => {
 			var idx = this.timesheet.adjustments.indexOf(oldAdj);
 			this.timesheet.adjustments.splice(idx, 1, newAdj);
 		});
@@ -135,7 +150,7 @@ export class TimesheetAdjustmentComponent {
 
     public approve(adjust: Adjustment, sendNow: boolean): Promise<Adjustment> {
         if (this.user.canAuthoriseAdjustments) {
-            return this.payPro.approveAdjustment(adjust, sendNow);
+            return this.pp.approveAdjustment(adjust, sendNow);
         } else {
             alert("You are not authorised to approve timesheet adjustments");
         }
@@ -143,7 +158,7 @@ export class TimesheetAdjustmentComponent {
 
     public reject(adjust: Adjustment) {
         if (this.user.canRejectAdjustments) {
-            this.payPro.rejectAdjustment(adjust);
+            this.pp.rejectAdjustment(adjust);
         } else {
             alert("You are not authorised to reject timesheet adjustments");
         }
