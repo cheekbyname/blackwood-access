@@ -24,6 +24,7 @@ table.table-rota th {
     min-width: 9em;
     background-color: rgba(191, 215, 48, 0.5);
     /*width: 14.285714%;*/
+    border: none;
 }
 
 table.table-rota th:hover {
