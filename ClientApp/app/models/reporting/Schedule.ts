@@ -20,6 +20,7 @@ export class Schedule {
     public locAuthRef: string;
     public teamId: number;
     public isActive: boolean = true;
+    public scopeDescription: string;
 
     public report: Report;
     public region: Region;
