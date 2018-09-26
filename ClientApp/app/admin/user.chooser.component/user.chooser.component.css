@@ -6,15 +6,16 @@ h4, select, span, .btn.btn-primary, label {
     background-color: rgba(191, 215, 48, 0.5);
 }
 
-.btn.btn-primary, p-calendar button {
+.btn.btn-primary {
     background-color: rgba(191, 215, 48, 1.0)!important;
     color: black;
-    font-size: 11pt;
+    font-size: 10pt;
     border-color: black;
 }
 
 .btn.btn-primary:hover {
-    background-color: hotpink;
+    background-color: hotpink!important;
+    border-color: black;
 }
 
 .header-buttons:first-child() {

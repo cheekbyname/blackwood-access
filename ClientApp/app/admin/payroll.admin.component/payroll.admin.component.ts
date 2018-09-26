@@ -56,8 +56,9 @@ export class PayrollAdminComponent {
         });
     }
 
-    typeDesc(code: PayrollCodeMap): string {
-        var type = this.types.find(ty => ty.type == code.type && ty.code == code.typeCode);
+    typeDesc(code: FormGroup): string {
+        var codeVal = code.getRawValue();
+        var type = this.types.find(ty => ty.type == codeVal.type && ty.code == codeVal.typeCode);
         return type == undefined ? "Unknown" : type.description;
     }
 
@@ -111,7 +112,7 @@ export class PayrollAdminComponent {
         });
     }
 
-    removeMap(idx: number, code: PayrollCodeMap) {
+    removeMap(idx: number, code: FormGroup) {
         this.cs.confirm({
             header: 'Confirm Mapping Removal',
             message: 'Are you sure you want to remove the mapping for "' + this.typeDesc(code) + '"?',

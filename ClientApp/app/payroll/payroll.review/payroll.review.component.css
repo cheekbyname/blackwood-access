@@ -68,26 +68,7 @@ span.glyphicon-remove {
     font-size: 12pt;
     margin-left: 12px;
 }
-  
-p-inputswitch .ui-widget {
-    height: 26px;
-    border: 1px solid black;
-}
-
-p-inputswitch .ui-widget span {
-    font-family: 'Century Gothic';
-    font-size: 12pt;
-}
-
-p-inputswitch .ui-inputswitch-onlabel {
-    background-color: #bfd730;
-    color: black;
-}
-
-p-inputswitch .ui-inputswitch-offlabel {
-    background-color: hotpink;
-}
-
+ 
 span.loading {
     font-family: 'Century Gothic';
     font-size: 14pt;

@@ -40,8 +40,8 @@
                 </thead>
                 <tbody formArrayName="maps">
                     <tr class="row" *ngFor="let code of maps.controls; let i = index" [formGroupName]="i">
-                        <td><i class="fa fa-times-circle fa-2x delete" tooltip="Click to remove this mapping" (click)="removeMap(i, code.getRawValue())"></i></td>
-                        <td>{{typeDesc(code.getRawValue())}}</td>
+                        <td><i class="fa fa-times-circle fa-2x delete" tooltip="Click to remove this mapping" (click)="removeMap(i, code)"></i></td>
+                        <td>{{typeDesc(code)}}</td>
                         <td>
                             <select class="form-control" formControlName="type">
                                 <option value="0">Booking</option>
@@ -60,7 +60,7 @@
                 </tbody>
             </table>
             <h4>Unmapped Booking Types</h4><hr/>
-            <span class="badge badge-primary" *ngFor="let type of unmappedTypes()" (click)="addMap(type)">{{type.description}}</span>
+            <span class="badge badge-primary" *ngFor="let type of unmappedTypes()" (click)="addMap(type)" tooltip="Click to map this Booking Type">{{type.description}}</span>
         </div>
     </div>
 </form>

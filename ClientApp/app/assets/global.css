@@ -1,6 +1,121 @@
+/* Shadow-piercing global styles for external components i.e. PrimeNg, ngx-bootstrap */
 
+/* ngx-bootstrap Tooltip styles */
 ::ng-deep .tooltip .tooltip-inner {
     font-family: 'Century Gothic';
     font-size: 10pt;
     color: hotpink;
+}
+
+::ng-deep .ui-dialog-footer.ui-widget-content {
+    border: none;
+}
+
+::ng-deep .ui-dialog-titlebar {
+    cursor: move;
+}
+
+/* PrimeNg ConfirmDialog styles */
+::ng-deep .ui-dialog-titlebar .ui-dialog-title {
+	font-family: 'Century Gothic';
+	font-weight: 600;
+}
+
+::ng-deep .ui-confirmdialog .ui-dialog-content .fa {
+    color: darkorange;
+	font-size: 24pt;
+}
+
+::ng-deep .ui-confirmdialog .ui-dialog-content.ui-widget-content {
+	display: flex;
+}
+
+::ng-deep .ui-widget-content {
+	border: none;
+}
+
+::ng-deep .ui-button.ui-widget, ::ng-deep .ui-button.ui-widget:focus {
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+::ng-deep .ui-button .ui-button-text {
+	font-weight: normal;
+	font-family: 'Century Gothic';
+}
+
+::ng-deep .ui-button.ui-widget:enabled:hover {
+    background-color: hotpink;
+    color: black;
+    border-color: black;
+	cursor: pointer;
+}
+
+::ng-deep .ui-confirmdialog-message {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}
+
+::ng-deep .ui-listbox-item, ::ng-deep input.ui-widget {
+    font-family: 'Century Gothic';
+}
+
+::ng-deep .ui-state-highlight {
+    background-color: hotpink;
+    color: black;
+}
+
+::ng-deep .ui-chkbox-box.ui-state-active {
+    background-color: #bfd730;
+    border-color: black;
+    color: black;
+}
+
+/* PrimeNg Dialog styles */
+::ng-deep p-dialog p-header span {
+    font-family: 'Century Gothic';
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+::ng-deep p-dialog span, ::ng-deep p-dialog label {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+::ng-deep p-dialog .btn.btn-primary span {
+    font-size: 10pt;
+}
+
+/* PrimeNg DataTable styles */
+::ng-deep p-dataTable span {
+    font-family: 'Century Gothic';
+}
+
+/* PrimeNg InputSwitch styles */ 
+::ng-deep p-inputswitch .ui-widget {
+    height: 26px;
+    border: 1px solid black;
+}
+
+::ng-deep p-inputswitch .ui-widget span {
+    font-family: 'Century Gothic';
+    font-size: 11pt;
+}
+
+::ng-deep p-inputswitch .ui-inputswitch-onlabel {
+    background-color: #bfd730;
+    color: black;
+}
+
+::ng-deep p-inputswitch .ui-inputswitch-offlabel {
+    background-color: hotpink;
+}
+
+/* PrimeNg Growl styles */
+::ng-deep .ui-growl-item-container.ui-state-highlight.ui-growl-message-success {
+    background-color: #bfd730;
+    border: 1px solid black;
+    font-family: 'Century Gothic';
 }

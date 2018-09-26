@@ -79,6 +79,7 @@ export class PayrollApprovalComponent {
     approveSummary(): void {
         // Confirmation of approvals
         this.cs.confirm({
+            header: 'Confirm Approval',
             message: `Are you sure you want to ${this.summary.authorizations.length > 0 ? 're-': ''}approve this payroll period?`,
             accept: () => {
                 this.pp.putApproval(this.summary);

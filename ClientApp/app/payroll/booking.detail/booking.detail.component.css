@@ -1,20 +1,3 @@
-p-dialog p-header span {
-    font-family: 'Century Gothic';
-    font-size: 12pt;
-    font-weight: bold;
-}
-
-span, label {
-    font-family: 'Century Gothic';
-    font-weight: normal;
-}
-
-.custom-title {
-    cursor: move;
-    width: 100%;
-    height: 100%;
-}
-
 .btn-default, .btn-primary {
     font-family: 'Century Gothic';
     background-color: #bfd730;

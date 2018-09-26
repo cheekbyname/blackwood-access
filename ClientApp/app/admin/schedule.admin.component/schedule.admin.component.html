@@ -43,20 +43,20 @@
                 </div>
                 <div class="form-group form-inline">
                     <label class="form-label">{{scopes[sched.scope].value}}</label>
-                    <select *ngIf="sched.scope && sched.scope == 1" class="form-control" [(ngModel)]="sched.team" formControlName="selectedTeam"
-                        (ngModelChange)="teamSelected($event)">
+                    <select *ngIf="sched.scope && sched.scope == 1" class="form-control" [(ngModel)]="sched.team"
+                            formControlName="selectedTeam" (ngModelChange)="teamSelected($event)">
                         <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
                     </select>
-                    <select *ngIf="sched.scope && sched.scope == 2" class="form-control" [(ngModel)]="sched.service" formControlName="selectedService"
-                        (ngModelChange)="serviceSelected($event)">
+                    <select *ngIf="sched.scope && sched.scope == 2" class="form-control" [(ngModel)]="sched.service"
+                            formControlName="selectedService" (ngModelChange)="serviceSelected($event)">
                         <option *ngFor="let service of services" [ngValue]="service">{{service.name}}</option>
                     </select>
-                    <select *ngIf="sched.scope && sched.scope == 3" class="form-control" [(ngModel)]="sched.region" formControlName="selectedRegion"
-                        (ngModelChange)="regionSelected($event)">
+                    <select *ngIf="sched.scope && sched.scope == 3" class="form-control" [(ngModel)]="sched.region"
+                            formControlName="selectedRegion" (ngModelChange)="regionSelected($event)">
                         <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
                     </select>
-                    <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority" formControlName="selectedLocalAuthority"
-                        (ngModelChange)="localAuthoritySelected($event)">
+                    <select *ngIf="sched.scope && sched.scope == 4" class="form-control" [(ngModel)]="sched.localAuthority"
+                            formControlName="selectedLocalAuthority" (ngModelChange)="localAuthoritySelected($event)">
                         <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">{{locAuth.name}}</option>
                     </select>
                 </div>
@@ -74,14 +74,16 @@
                 </div>
                 <div class="form-group form-inline">
                     <label class="form-label">Direction</label>
-                    <select class="form-control" [(ngModel)]="sched.direction" formControlName="selectedDirection" (change)="directionSelected($event)">
+                    <select class="form-control" [(ngModel)]="sched.direction" formControlName="selectedDirection"
+                            (change)="directionSelected($event)">
                         <option *ngFor="let dir of directions" [ngValue]="dir.key">{{dir.value}}</option>
                     </select>
                 </div>
                 <div class="form-group form-inline">
                     <label class="form-label">Next Run</label>
-                    <p-calendar [appendTo]="popover" [(ngModel)]="sched.runTime" formControlName="selectedRunTime" [showTime]="true" [locale]="loc"
-                        dateFormat="dd/mm/yy" inputStyleClass="form-control" [showIcon]="true" [utc]="true" [inputStyle]="{'width': '142px', 'font-family': 'Century Gothic', 'padding-left': '14px'}">
+                    <p-calendar [appendTo]="popover" [(ngModel)]="sched.runTime" formControlName="selectedRunTime"
+                                [showTime]="true" [locale]="loc" dateFormat="dd/mm/yy" inputStyleClass="form-control"
+                                [showIcon]="true" [utc]="true" [inputStyle]="{'width': '142px', 'font-family': 'Century Gothic', 'padding-left': '14px'}">
                     </p-calendar>
                 </div>
             </div>
@@ -107,8 +109,9 @@
                 </button>
             </div>
         </div>
-        <hr/>
-        <div class="badge badge-primary" *ngFor="let sub of sched.subscriptions" (click)="removeSubscriber(sub)">
+        <hr />
+        <div class="badge badge-primary" *ngFor="let sub of sched.subscriptions" (click)="removeSubscriber(sub)"
+             tooltip="Click to remove this subscription">
             <span>{{sub.accessUser.accountName}}</span>
             <span class="glyphicon glyphicon-remove"></span>
         </div>
@@ -119,6 +122,6 @@
 
 <user-chooser [chooserVisible]="chooserVisible" (userChosen)="chooserOnClose($event)"></user-chooser>
 
-<p-growl></p-growl>
+<p-growl [life]="5000"></p-growl>
 
 <div #popover></div>

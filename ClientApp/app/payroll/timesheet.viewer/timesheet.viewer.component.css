@@ -51,7 +51,7 @@ table.table-rota td:hover {
     border-color: black;
 }
 
-p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select, .form-inline span, span.ui-calendar input.form-control {
+.form-inline span, span.ui-calendar input.form-control {
     font-family: 'Century Gothic'!important;
 }
 
@@ -59,10 +59,10 @@ p-dialog input, p-dialog button, p-dialog .row > span, p-dialog select, .form-in
     font-size: 12pt;
 }
 
-p-spinner, p-calendar {
+/* p-spinner, p-calendar {
     height: 34px!important;
 }
-
+ */
 .panel-heading:nth-child(2) {
     margin-left: 8px;
 }
@@ -92,10 +92,10 @@ span.glyphicon-ok {
     color: black;
 }
 
-span.ui-dialog-title, span.header-text {
+/* span.ui-dialog-title, span.header-text {
     width: 100%;
 }
-
+ */
 .panel-heading a.btn, .ui-dialog-buttonpane button {
     font-size: 10pt;
     font-family: 'Century Gothic';
