@@ -1,0 +1,6 @@
+
+::ng-deep .tooltip .tooltip-inner {
+    font-family: 'Century Gothic';
+    font-size: 10pt;
+    color: hotpink;
+}

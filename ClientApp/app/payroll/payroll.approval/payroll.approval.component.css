@@ -100,9 +100,3 @@ span.ui-confirmdialog-message {
 .ui-dialog-titlebar.ui-widget-header {
     cursor: move;
 }
-
-.tooltip-inner {
-    font-family: 'Century Gothic';
-    font-size: 10pt;
-    color: hotpink;
-}

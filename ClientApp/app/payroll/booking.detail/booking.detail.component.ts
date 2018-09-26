@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { CarerBooking } from '../../models/payroll/Booking';
 import { CarerContract } from '../../models/payroll/Contract';
@@ -8,8 +8,7 @@ import { PayrollProvider } from '../payroll.provider';
 @Component({
     selector: 'booking-detail',
     templateUrl: './booking.detail.component.html',
-    styleUrls: ['./booking.detail.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./booking.detail.component.css']
 })
 export class BookingDetailComponent {
 

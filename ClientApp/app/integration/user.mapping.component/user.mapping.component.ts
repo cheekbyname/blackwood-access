@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
@@ -14,8 +14,7 @@ import { Observable } from "../../../../node_modules/rxjs";
 @Component({
     selector: 'user-mapping',
     templateUrl: 'user.mapping.component.html',
-    styleUrls: ['user.mapping.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['user.mapping.component.css']
 })
 export class UserMappingComponent {
     constructor(private route: ActivatedRoute, private ip: IntegrationProvider, public fb: FormBuilder,

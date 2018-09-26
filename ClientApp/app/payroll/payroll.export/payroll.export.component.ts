@@ -1,9 +1,7 @@
-import { Component, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router, Route } from "@angular/router";
 
 import { Observable } from "rxjs";
-
-import { DataTableModule, SharedModule } from "primeng/primeng";
 
 import { Export } from "../../models/payroll/Export";
 import { Team } from "../../models/payroll/Team";
@@ -12,8 +10,7 @@ import { PayrollProvider } from "../payroll.provider";
 
 @Component({
     templateUrl: './payroll.export.component.html',
-    styleUrls: ['./payroll.export.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./payroll.export.component.css']
 })
 export class PayrollExportComponent {
     @ViewChild('dt') dt;

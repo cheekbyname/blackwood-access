@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,8 +16,7 @@ import { Utils } from '../../Utils';
 @Component({
 	selector: 'team-summary',
 	templateUrl: './payroll.summary.component.html',
-	styleUrls: ['./payroll.summary.component.css'],
-	encapsulation: ViewEncapsulation.None
+	styleUrls: ['./payroll.summary.component.css']
 })
 export class PayrollSummaryComponent implements OnInit {
 

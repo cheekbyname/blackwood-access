@@ -1,5 +1,10 @@
 <p-dialog [(visible)]="bookingVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
-    [closable]="false" [closeOnEscape]="false" header="Booking Detail">
+    [closable]="false" [closeOnEscape]="false">
+    <p-header>
+        <div class="custom-title">
+            <span>Booking Detail</span>
+        </div>
+    </p-header>
     <!-- <header><span>Booking Detail</span></header> -->
     <div id="booking-modal-content" class="container" style="width:100%;">
         <div class="row">

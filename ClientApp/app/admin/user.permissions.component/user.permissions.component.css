@@ -87,9 +87,3 @@ span.loading {
 .account-details .form-group:first-of-type .form-label {
     margin-bottom: 16px;
 }
-
-.tooltip-inner {
-    font-family: 'Century Gothic';
-    font-size: 10pt;
-    color: hotpink;
-}

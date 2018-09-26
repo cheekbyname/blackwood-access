@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { ConfirmationService } from "primeng/primeng";
@@ -15,8 +15,7 @@ import { Utils } from "../../Utils";
 @Component({
     selector: 'payroll-approval',
     templateUrl: 'payroll.approval.component.html',
-    styleUrls: ['payroll.approval.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['payroll.approval.component.css']
 })
 export class PayrollApprovalComponent {
 

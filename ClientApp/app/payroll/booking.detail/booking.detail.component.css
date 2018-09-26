@@ -1,5 +1,29 @@
-span.ui-dialog-title {
+p-dialog p-header span {
     font-family: 'Century Gothic';
     font-size: 12pt;
     font-weight: bold;
+}
+
+span, label {
+    font-family: 'Century Gothic';
+    font-weight: normal;
+}
+
+.custom-title {
+    cursor: move;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-default, .btn-primary {
+    font-family: 'Century Gothic';
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+.action-button:hover, .delete-button:hover, .btn-primary:hover {
+    cursor: pointer;
+    color: black;
+    background-color: hotpink;
 }

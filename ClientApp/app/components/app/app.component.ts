@@ -7,7 +7,7 @@ import { UserProvider } from "../../user.provider";
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css', '../../assets/century-gothic.css'],
+    styleUrls: ['./app.component.css', '../../assets/century-gothic.css', '../../assets/global.css'],
     providers: [ InitialAssessProvider, PayrollProvider, UserProvider]
 })
 export class AppComponent {

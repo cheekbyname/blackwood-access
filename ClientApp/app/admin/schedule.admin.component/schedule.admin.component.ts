@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SafeResourceUrl } from "@angular/platform-browser";
@@ -24,8 +24,7 @@ import { Subscription } from "../../models/reporting/Subscription";
 @Component({
     selector: 'schedule-admin',
     templateUrl: 'schedule.admin.component.html',
-    styleUrls: ['schedule.admin.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['schedule.admin.component.css']
 })
 export class ScheduleAdminComponent implements OnInit {
 

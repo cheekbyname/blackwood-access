@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 import { AccessUser } from "../../models/AccessUser";
 
@@ -7,8 +7,7 @@ import { UserProvider } from "../../user.provider";
 @Component({
     selector: 'user-chooser',
     templateUrl: 'user.chooser.component.html',
-    styleUrls: ['user.chooser.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['user.chooser.component.css']
 })
 export class UserChooserComponent {
     constructor (private up: UserProvider) {

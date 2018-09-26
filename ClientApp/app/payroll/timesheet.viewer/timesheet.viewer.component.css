@@ -96,10 +96,6 @@ span.ui-dialog-title, span.header-text {
     width: 100%;
 }
 
-.header-row {
-    display: flex;
-}
-
 .panel-heading a.btn, .ui-dialog-buttonpane button {
     font-size: 10pt;
     font-family: 'Century Gothic';
@@ -133,10 +129,4 @@ span.ui-dialog-title, span.header-text {
 .hide-codes > label {
     white-space: nowrap;
     text-overflow: ellipsis;
-}
-
-.tooltip-inner {
-    font-family: 'Century Gothic';
-    font-size: 10pt;
-    color: hotpink;
 }

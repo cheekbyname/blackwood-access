@@ -5,8 +5,7 @@
     </div>
     <div class="card-block">
         <span>{{displayTime(booking.thisStart)}} - {{displayTime(booking.thisFinish)}}</span>
-        <i *ngIf="booking.run" class="fa fa-registered run-symbol" [tooltip]="runTooltip"
-           placement="right" container="body"></i>
+        <i *ngIf="booking.run" class="fa fa-registered run-symbol" [tooltip]="runTooltip" placement="bottom" container="body"></i>
     </div>
 </div>
 <ng-template #runTooltip>

@@ -92,9 +92,3 @@ span.loading {
 .alert-danger i {
     cursor: help;
 }
-
-.tooltip-inner {
-    font-family: 'Century Gothic';
-    font-size: 10pt;
-    color: hotpink;
-}

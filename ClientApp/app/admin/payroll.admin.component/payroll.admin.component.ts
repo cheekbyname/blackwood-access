@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, FormArray } from "@angular/forms";
 
 import { ConfirmationService } from "primeng/primeng";
@@ -11,8 +11,7 @@ import { PayrollProvider } from "../../payroll/payroll.provider";
 @Component({
     selector: 'payroll-admin',
     templateUrl: 'payroll.admin.component.html',
-    styleUrls: ['payroll.admin.component.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['payroll.admin.component.css']
 })
 export class PayrollAdminComponent {
     constructor(private pp: PayrollProvider, private cs: ConfirmationService, private fb: FormBuilder) {

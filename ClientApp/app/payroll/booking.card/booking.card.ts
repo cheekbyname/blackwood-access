@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { CarerBooking } from '../../models/payroll/Booking';
 import { ToilSetting, TOIL } from '../../models/payroll/PayrollCodeMap';
@@ -6,8 +6,7 @@ import { ToilSetting, TOIL } from '../../models/payroll/PayrollCodeMap';
 @Component({
     selector: 'booking-card',
     templateUrl: './booking.card.html',
-    styleUrls: ['booking.card.css'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['booking.card.css']
 })
 export class BookingCardComponent {
     @Input()

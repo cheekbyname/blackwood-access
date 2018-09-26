@@ -1,4 +1,4 @@
-import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Http } from '@angular/http';
 import { NgForm } from '@angular/forms';
 
@@ -18,8 +18,7 @@ import { ToilSetting } from '../../models/payroll/PayrollCodeMap';
 @Component({
     selector: 'timesheet-adjustment',
     templateUrl: './timesheet.adjustment.component.html',
-	styleUrls: ['./timesheet.adjustment.component.css'],
-	encapsulation: ViewEncapsulation.None
+	styleUrls: ['./timesheet.adjustment.component.css']
 })
 export class TimesheetAdjustmentComponent {
 

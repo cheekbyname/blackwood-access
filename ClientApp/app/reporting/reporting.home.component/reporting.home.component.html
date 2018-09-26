@@ -16,33 +16,37 @@
         <div *ngIf="dataLoaded" class="list-group report-filters">
             <div class="list-group-item form-inline">
                 <label for="reportSelect">Show report</label>
-                <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport" (ngModelChange)="reportSelected($event)"
-                    required>
+                <select class="form-control" id="reportSelect" [(ngModel)]="selectedReport" name="selectedReport"
+                        (ngModelChange)="reportSelected($event)" required>
                     <option *ngFor="let rep of reports" [ngValue]="rep">{{rep.name}}</option>
                 </select>
                 <label for="scopeSelect">for</label>
                 <select class="form-control" id="scopeSelect" [(ngModel)]="selectedScope" (ngModelChange)="scopeSelected($event)">
                     <option *ngFor="let scope of scopes" [ngValue]="scope.key">{{scope.value}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope == 1" class="form-control" [(ngModel)]="selectedTeam" (ngModelChange)="teamSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 1" class="form-control" [(ngModel)]="selectedTeam"
+                        (ngModelChange)="teamSelected($event)">
                     <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope == 2" class="form-control" [(ngModel)]="selectedService" (ngModelChange)="serviceSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 2" class="form-control" [(ngModel)]="selectedService"
+                        (ngModelChange)="serviceSelected($event)">
                     <option *ngFor="let service of services" [ngValue]="service">{{service.name}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope == 3" class="form-control" [(ngModel)]="selectedRegion" (ngModelChange)="regionSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 3" class="form-control" [(ngModel)]="selectedRegion"
+                        (ngModelChange)="regionSelected($event)">
                     <option *ngFor="let region of regions" [ngValue]="region">{{region.name}}</option>
                 </select>
-                <select *ngIf="selectedScope && selectedScope == 4" class="form-control" [(ngModel)]="selectedLocalAuthority" (ngModelChange)="locAuthSelected($event)">
+                <select *ngIf="selectedScope && selectedScope == 4" class="form-control" [(ngModel)]="selectedLocalAuthority"
+                        (ngModelChange)="locAuthSelected($event)">
                     <option *ngFor="let locAuth of localAuthorities" [ngValue]="locAuth">{{locAuth.name}}</option>
                 </select>
                 <label class="control-label" for="selectedStart">from</label>
-                <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodStartSelected($event)"
-                    inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
+                <p-calendar [(ngModel)]="selectedStart" id="selectedStart" [locale]="loc" dateFormat="dd/mm/yy"
+                            (onSelect)="periodStartSelected($event)" inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
                 <label class="control-label" for="selectedEnd">to</label>
                 <p-calendar [(ngModel)]="selectedEnd" id="selectedEnd" [locale]="loc" dateFormat="dd/mm/yy" (onSelect)="periodEndSelected($event)"
-                    inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
-                <button class="btn btn-primary pull-right" tooltip="Clear current filter options" (click)="clearFilters()">
+                            inputStyleClass="form-control" [inputStyle]="{'width': '96px', 'font-family': 'Century Gothic'}"></p-calendar>
+                <button class="btn btn-primary pull-right" [tooltip]="clearTooltip" container="body" (click)="clearFilters()">
                     <i class="fa fa-close"></i>
                     <span>Clear</span>
                 </button>
@@ -76,3 +80,6 @@
         </object>
     </div>
 </div>
+<ng-template #clearTooltip>
+    <span>Clear current filter options</span>
+</ng-template>
