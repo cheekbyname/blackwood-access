@@ -119,3 +119,18 @@
     border: 1px solid black;
     font-family: 'Century Gothic';
 }
+
+/* PrimeNg CheckBox styles */
+::ng-deep .ui-chkbox-box.ui-state-active {
+    border: 1px solid black;
+    background: #bfd730;
+    color: black;
+}
+
+::ng-deep .ui-chkbox-box.ui-state-focus {
+    box-shadow: 0 0 5px #bfd730;
+}
+
+::ng-deep .ui-chkbox-box.ui-state-focus.ui-state-active {
+    background: #bfd730;
+}

@@ -5,8 +5,6 @@
 				<h4>
 					<strong>Timesheet</strong>
 				</h4>
-			<!-- </div>
-			<div class="col-md-2 form-group form-inline"> -->
 				<button class="btn btn-primary week-nav" (click)="weekBack()">
 					<i class="fa fa-angle-left"></i>
 				</button>
@@ -15,20 +13,16 @@
 				<button class="btn btn-primary week-nav" (click)="weekForward()">
 					<i class="fa fa-angle-right"></i>
 				</button>
-			<!-- </div>
-			<div class="col-md-4 form-group form-inline"> -->
 				<select class="form-control" [(ngModel)]="carer" (ngModelChange)="pp.selectCarer($event)">
 					<option *ngFor="let carer of carers" [ngValue]="carer">{{carer.forename}} {{carer.surname}}</option>
 				</select>
 				<span>{{isContracted ? "[Contracted]" : "[Relief]"}}</span>
-			<!-- </div>
-			<div class="hide-codes col-md-3 form-group form-inline" tooltip="Show hidden booking types such as Travel Time"> -->
-				<label>
-					<p-checkbox [(ngModel)]="showCodes" binary="true" id="showCheck" (onChange)="showCodesChanged()"></p-checkbox>
-					<span>Show hidden bookings</span>
-				</label>
-			<!-- </div>
-			<div class="col-md-1"> -->
+				<div class="hide-codes" tooltip="Show hidden booking types such as Travel Time">
+					<label>
+						<p-checkbox [(ngModel)]="showCodes" binary="true" id="showCheck" (onChange)="showCodesChanged()"></p-checkbox>
+						<span>Show hidden bookings</span>
+					</label>
+				</div>
 				<button class="btn btn-primary btn-default pull-right" (click)="clearDetail()">
 					<span class="glyphicon glyphicon-remove"></span>
 					<span>Close</span>

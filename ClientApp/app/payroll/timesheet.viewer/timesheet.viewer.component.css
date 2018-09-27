@@ -128,11 +128,10 @@ span.glyphicon-ok {
     background-color: hotpink;
 }
 
-.hide-codes:hover, .hide-codes span:hover {
-    cursor: pointer;
+.hide-codes {
+    display: inline;
 }
 
-.hide-codes > label {
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.hide-codes:hover, .hide-codes span:hover {
+    cursor: pointer;
 }
