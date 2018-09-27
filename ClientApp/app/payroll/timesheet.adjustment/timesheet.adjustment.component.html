@@ -23,39 +23,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let shift of timesheet.shifts | shiftOffsetFilter:dayOffset" class="row">
-                        <td>
-                            <span (click)="showBreakPolicyInfo(shift)" *ngIf="!shift.validBreak" tooltip="There are insufficient breaks in this shift. Click for more information."
-                                  placement="bottom" class="glyphicon glyphicon-warning-sign adjust-crit pull-right action-icon"></span>
-                            <span>{{pp.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
-                        </td>
-                        <td>{{pp.timeFromDate(shift.start)}}</td>
-                        <td>{{pp.timeFromDate(shift.finish)}}</td>
-                        <td>{{pp.displayTime(shift.shiftMins)}}</td>
-                        <td>{{pp.displayTime(shift.unpaidMins)}}</td>
-                        <td>{{pp.displayTime(shift.shiftMins - shift.unpaidMins)}}</td>
-                        <td>{{pp.displayTime(shift.availabilityType.toil == ToilSetting.Increment ? shift.shiftMins - shift.unpaidMins : 0)}}</td>
-                    </tr>
+                    <ng-template ngFor let-shift [ngForOf]="timesheet.shifts | shiftOffsetFilter:dayOffset">
+                        <tr class="row" [ngClass]="{'invalid-shift' : !shift.validBreak}" [tooltip]="validTip(shift)"
+                            placement="bottom" (click)="showBreakPolicyInfo(shift)">
+                            <td>
+                                <span *ngIf="!shift.validBreak" class="glyphicon glyphicon-warning-sign adjust-crit pull-right action-icon"></span>
+                                <span>{{pp.teamForContract(shift.contractCode, timesheet.contracts)}}</span>
+                            </td>
+                            <td>{{pp.timeFromDate(shift.start)}}</td>
+                            <td>{{pp.timeFromDate(shift.finish)}}</td>
+                            <td>{{pp.displayTime(shift.shiftMins)}}</td>
+                            <td>{{pp.displayTime(shift.unpaidMins)}}</td>
+                            <td>{{pp.displayTime(shift.shiftMins - shift.unpaidMins)}}</td>
+                            <td>{{pp.displayTime(shift.availabilityType.toil == ToilSetting.Increment ? shift.shiftMins - shift.unpaidMins : 0)}}</td>
+                        </tr>
+                    </ng-template>
                     <tr class="row">
                         <td colspan="3"><strong>Shift Totals</strong></td>
                         <td>{{pp.displayTime(totalActualHoursForDay(dayOffset))}}</td>
                         <td>{{pp.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
                         <td>{{pp.displayTime(totalActualHoursForDay(dayOffset) -
                             totalUnpaidHoursForDay(dayOffset))}}</td>
-                        <td>{{pp.displayTime(totalToilMinsForDay(dayOffset) < 0 ? 0 : totalToilMinsForDay(dayOffset))}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0" class="table table-striped">
-                <thead>
-                    <tr class="row">
-                        <th class="col-md-4">Reason for Adjustment</th>
-                        <th class="col-md-4">Team</th>
-                        <th class="col-md-2">Approval</th>
-                        <th class="col-md-1">Hours</th>
-                        <th class="col-md-1">Mins</th>
-                    </tr>
-                </thead>
+                        <td>{{pp.displayTime(totalToilMinsForDay(dayOffset) < 0 ? 0 :
+                              totalToilMinsForDay(dayOffset))}}</td> </tr> </tbody> </table> <table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0"
+                              class="table table-striped">
+                                <thead>
+                                    <tr class="row">
+                                        <th class="col-md-4">Reason for Adjustment</th>
+                                        <th class="col-md-4">Team</th>
+                                        <th class="col-md-2">Approval</th>
+                                        <th class="col-md-1">Hours</th>
+                                        <th class="col-md-1">Mins</th>
+                                    </tr>
+                                </thead>
                 <tbody>
                     <tr *ngFor="let adjust of timesheet.adjustments | adjustmentOffsetFilter:dayOffset" class="row">
                         <td>

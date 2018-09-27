@@ -16,86 +16,86 @@ import { UserProvider } from '../../user.provider';
 import { ToilSetting } from '../../models/payroll/PayrollCodeMap';
 
 @Component({
-    selector: 'timesheet-adjustment',
-    templateUrl: './timesheet.adjustment.component.html',
+	selector: 'timesheet-adjustment',
+	templateUrl: './timesheet.adjustment.component.html',
 	styleUrls: ['./timesheet.adjustment.component.css']
 })
 export class TimesheetAdjustmentComponent {
 
-    constructor(public pp: PayrollProvider, private http: Http, private conServ: ConfirmationService,
-        private userPro: UserProvider) {
-			this.userPro.GetUserInfo().then(ui => this.user = ui);
-    }
+	constructor(public pp: PayrollProvider, private http: Http, private conServ: ConfirmationService,
+		private userPro: UserProvider) {
+		this.userPro.GetUserInfo().then(ui => this.user = ui);
+	}
 
 	public loc: Locale = LOC_EN;
 	public ToilSetting = ToilSetting;
 
-    private _weekCommencing: Date;
-    private _timesheet: Timesheet;
-    private _adjustVisible: boolean;
+	private _weekCommencing: Date;
+	private _timesheet: Timesheet;
+	private _adjustVisible: boolean;
 	private _dayOffset: number;
 	private user: AccessUser;
 
 	public breakInfoVisible: boolean = false;
 	public shiftBreakPolicy: BreakPolicy;
 
-    @Input()
-    set weekCommencing(dt: Date) { this._weekCommencing = dt; }
-    get weekCommencing(): Date { return this._weekCommencing; }
+	@Input()
+	set weekCommencing(dt: Date) { this._weekCommencing = dt; }
+	get weekCommencing(): Date { return this._weekCommencing; }
 
-    @Input()
-    set timesheet(ts: Timesheet) { this._timesheet = ts; }
-    get timesheet(): Timesheet { return this._timesheet; }
+	@Input()
+	set timesheet(ts: Timesheet) { this._timesheet = ts; }
+	get timesheet(): Timesheet { return this._timesheet; }
 
-    @Output()
-    timesheetChange: EventEmitter<Timesheet> = new EventEmitter<Timesheet>();
+	@Output()
+	timesheetChange: EventEmitter<Timesheet> = new EventEmitter<Timesheet>();
 
-    @Input()
-    set adjustVisible(vis: boolean) { this._adjustVisible = vis; }
-    get adjustVisible(): boolean { return this._adjustVisible;}
+	@Input()
+	set adjustVisible(vis: boolean) { this._adjustVisible = vis; }
+	get adjustVisible(): boolean { return this._adjustVisible; }
 
-    @Output()
-    adjustVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+	@Output()
+	adjustVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    @Input()
-    set dayOffset(off: number) { this._dayOffset = off; }
-    get dayOffset(): number { return this._dayOffset; }
+	@Input()
+	set dayOffset(off: number) { this._dayOffset = off; }
+	get dayOffset(): number { return this._dayOffset; }
 
-    public totalUnpaidHoursForDay(offset: number): number {
-    return this.timesheet.shifts
-        .filter(sh => sh.day === offset)
-        .map(sh => { return sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
+	public totalUnpaidHoursForDay(offset: number): number {
+		return this.timesheet.shifts
+			.filter(sh => sh.day === offset)
+			.map(sh => { return sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public totalActualHoursForDay(offset: number): number {
 		return this.timesheet.shifts
 			.filter(sh => sh.day == offset)
-			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc +cur }, 0);
+			.map(sh => { return sh.shiftMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public totalToilMinsForDay(offset: number): number {
 		return this.timesheet.shifts
 			.filter(sh => sh.day == offset)
-			.map(sh => { return this.toilDelta(sh)})
+			.map(sh => { return this.toilDelta(sh) })
 			.reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	private toilDelta(shift: Shift): number {
-		if(shift.availabilityType.toil == ToilSetting.Increment) return shift.shiftMins - shift.unpaidMins;
+		if (shift.availabilityType.toil == ToilSetting.Increment) return shift.shiftMins - shift.unpaidMins;
 		return shift.bookings
 			.filter(bk => bk.toil == ToilSetting.Decrement)
 			.map(bk => { return bk.thisMins })
 			.reduce((acc, cur) => { return acc - cur }, 0);
 	}
 
-    public minsForAdjustments(): number {
-        return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset && adj.rejected == null)
-            .map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
+	public minsForAdjustments(): number {
+		return this.timesheet.adjustments.filter(adj => adj.dayOffset == this.dayOffset && adj.rejected == null)
+			.map(adj => { return (adj.mins || 0) + ((adj.hours || 0) * 60) }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
 	public removeAdjust(adjust: Adjustment) {
 		// TODO Move API call onto Provider
-        // TODO Guard on what condition?
+		// TODO Guard on what condition?
 		this.conServ.confirm({
 			message: 'Are you sure you want to remove this adjustment?',
 			accept: () => {
@@ -119,14 +119,14 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	putAdjustment(oldAdj: Adjustment) {
-        // TODO Guard on what condition?
+		// TODO Guard on what condition?
 		this.pp.putAdjustment(oldAdj).then((newAdj) => {
 			var idx = this.timesheet.adjustments.indexOf(oldAdj);
 			this.timesheet.adjustments.splice(idx, 1, newAdj);
 		});
 	}
 
-    public addAdjust() {
+	public addAdjust() {
 		// TODO Guard on what condition?
 		var newAdjust = new Adjustment(this.timesheet.carerCode, this.timesheet.weekCommencing, this.dayOffset);
 
@@ -147,20 +147,20 @@ export class TimesheetAdjustmentComponent {
 		if (this.isValid(form)) this.dayOffset++;
 	}
 
-    public approve(adjust: Adjustment, sendNow: boolean): Promise<Adjustment> {
-        if (this.user.canAuthoriseAdjustments) {
-            return this.pp.approveAdjustment(adjust, sendNow);
-        } else {
-            alert("You are not authorised to approve timesheet adjustments");
-        }
+	public approve(adjust: Adjustment, sendNow: boolean): Promise<Adjustment> {
+		if (this.user.canAuthoriseAdjustments) {
+			return this.pp.approveAdjustment(adjust, sendNow);
+		} else {
+			alert("You are not authorised to approve timesheet adjustments");
+		}
 	}
 
-    public reject(adjust: Adjustment) {
-        if (this.user.canRejectAdjustments) {
-            this.pp.rejectAdjustment(adjust);
-        } else {
-            alert("You are not authorised to reject timesheet adjustments");
-        }
+	public reject(adjust: Adjustment) {
+		if (this.user.canRejectAdjustments) {
+			this.pp.rejectAdjustment(adjust);
+		} else {
+			alert("You are not authorised to reject timesheet adjustments");
+		}
 	}
 
 	public isValid(form: NgForm): boolean {
@@ -169,15 +169,21 @@ export class TimesheetAdjustmentComponent {
 	}
 
 	public showBreakPolicyInfo(shift: Shift) {
-		this.shiftBreakPolicy = this.timesheet.breakPolicies.find(bp => bp.id == shift.breakPolicyId);
-		this.shiftBreakPolicy.definitions = this.timesheet.breakDefinitions
-			.filter(bd => bd.breakPolicyId == this.shiftBreakPolicy.id
-				&& shift.shiftMins >= bd.minThreshold && (shift.shiftMins <= bd.maxThreshold || bd.maxThreshold == null));
-				// TODO Add filter clause for valid dates
-		this.breakInfoVisible = true;
+		if (!shift.validBreak) {
+			this.shiftBreakPolicy = this.timesheet.breakPolicies.find(bp => bp.id == shift.breakPolicyId);
+			this.shiftBreakPolicy.definitions = this.timesheet.breakDefinitions
+				.filter(bd => bd.breakPolicyId == this.shiftBreakPolicy.id
+					&& shift.shiftMins >= bd.minThreshold && (shift.shiftMins <= bd.maxThreshold || bd.maxThreshold == null));
+			// TODO Add filter clause for valid dates
+			this.breakInfoVisible = true;
+		}
 	}
 
 	public dismissBreakPolicyInfo() {
 		this.breakInfoVisible = false;
+	}
+
+	public validTip(shift: Shift): string {
+		return !shift.validBreak ? 'There are insufficient breaks in this shift. Click for more information.' : '';
 	}
 }

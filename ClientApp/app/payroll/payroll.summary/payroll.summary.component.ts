@@ -12,6 +12,7 @@ import { Team } from '../../models/payroll/Team';
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
 import { Utils } from '../../Utils';
+import { CarerContract } from '../../models/payroll/Contract';
 
 @Component({
 	selector: 'team-summary',
@@ -153,5 +154,9 @@ export class PayrollSummaryComponent implements OnInit {
 	public periodForward() {
 		this.summaries = undefined;
 		this.pp.setPeriod(Utils.AdjustDateByMonths(this.periodStart, 1));
+	}
+
+	public gradeOf(sum: Summary): string {
+		return sum.carer.contracts.find(c => c.teamCode == this.team.teamCode).carerGradeDesc;
 	}
 }

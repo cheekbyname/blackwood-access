@@ -27,6 +27,11 @@ table.table-rota th {
     border: none;
 }
 
+.table-rota th.invalid-shift {
+    background-color: yellow;
+    border: 1px double red;
+}
+
 table.table-rota th:hover {
     background-color: rgb(191, 215, 48);
     border: 1px double green;
@@ -98,10 +103,6 @@ span.glyphicon-ok {
     color: black;
 }
 
-/* span.ui-dialog-title, span.header-text {
-    width: 100%;
-}
- */
 .panel-heading a.btn, .ui-dialog-buttonpane button {
     font-size: 10pt;
     font-family: 'Century Gothic';
@@ -116,6 +117,10 @@ span.glyphicon-ok {
 
 .panel-heading .form-group {
     margin-bottom: 0px;
+}
+
+.panel-body {
+    padding: 0px;
 }
 
 .action-button {

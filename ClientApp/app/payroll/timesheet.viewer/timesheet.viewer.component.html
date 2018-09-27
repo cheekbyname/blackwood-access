@@ -71,7 +71,7 @@
 				<thead>
 					<tr class="row">
 						<th *ngFor="let day of LOC.dayOrder; let i = index" (click)="openAdjustments(i)" [tooltip]="'Click here to view Shifts for ' + day + ' ' + pp.dateOrd(weekCommencing, i) + ' ' + pp.monthOf(weekCommencing, i)"
-						    placement="top" container="body">
+						    placement="top" container="body" [ngClass]="{'invalid-shift' : hasInvalidShift(i)}">
 							<span>{{day}} {{pp.dateOrd(weekCommencing, i)}}</span>
 							<br />
 							<span>{{pp.displayTime(totalActualHoursForDay(i))}}</span>

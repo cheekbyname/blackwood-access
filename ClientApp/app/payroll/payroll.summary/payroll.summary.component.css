@@ -3,6 +3,10 @@ h4, label, select, td, th{
     font-weight: normal;
 }
 
+tr td, tr th {
+    font-size: 10pt;
+}
+
 .panel {
     border: 1px solid;
     border-color: slategray;
@@ -13,6 +17,10 @@ h4, label, select, td, th{
     border-bottom: 1px solid silver;
     border-color: slategray;
     background-color: rgba(191, 215, 48, 0.5);
+}
+
+.panel-body {
+    padding-bottom: 0px;
 }
 
 .btn-default, .btn-primary {
@@ -26,6 +34,11 @@ h4, label, select, td, th{
     background-color: hotpink;
     color: black;
     border-color: black;
+}
+
+.week-nav {
+    background-color: transparent;
+    border-color: darkgray;
 }
 
 table tbody tr {
@@ -52,14 +65,6 @@ p-calendar > span.ui-calendar > input {
     width: 120px;
     font-family: 'Century Gothic';
 }
-
-/*.summ-toggle {
-    width: 48px;
-    font-size: 14pt;
-    height: 36px;
-    border-color: darkslategray;
-    color: darkslategray;
-}*/
 
 .date-controls {
     display: inline-block;
@@ -93,7 +98,7 @@ span.loading {
 }
 
 .section-heading {
-    margin-top: 4px;
+    display: inline;
 }
 
 .section-heading .glyphicon {

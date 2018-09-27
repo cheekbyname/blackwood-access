@@ -1,5 +1,6 @@
 import { Guid } from "../Utilities";
 import { Team } from "./Team";
+import { CarerContract } from "./Contract";
 
 export class Carer {
 	public personnelNumber: string;
@@ -11,4 +12,6 @@ export class Carer {
 	public defaultTeamCode: number;
 
 	public defaultTeam: Team;
+
+	public contracts: CarerContract[];
 }

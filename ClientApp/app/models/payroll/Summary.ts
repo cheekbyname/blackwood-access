@@ -1,3 +1,5 @@
+import { Carer } from "./Carer";
+
 export class Summary {
 	public carerCode: number;
 	public forename: string;
@@ -33,4 +35,5 @@ export class Summary {
     public contact: number;
 	public nonContact: number;
 
+	public carer: Carer;
 }

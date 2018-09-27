@@ -57,8 +57,12 @@ span.glyphicon-ok {
     color: green;
 }
 
-span.glyphicon-remove {
+.glyphicon-remove, .adjust-crit, .invalid-shift {
     color: red;
+}
+
+.invalid-shift:hover {
+    cursor: pointer;
 }
 
 .adjust-selected {
