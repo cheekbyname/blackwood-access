@@ -144,7 +144,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public availHoursForContract(contractCode: number): number {
-		return this.timesheet.scheduledAvailability.concat(this.timesheet.actualAvailability)
+		return this.timesheet.scheduledAvailability
 			.filter(av => av.contractCode === contractCode)
 			.map(av => { return av.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}

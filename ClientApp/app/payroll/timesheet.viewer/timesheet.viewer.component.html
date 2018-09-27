@@ -40,8 +40,8 @@
 						<th class="col-md-3">Team</th>
 						<th class="col-md-1">Cycle Week</th>
 						<th class="col-md-1">Contracted Hours</th>
+						<th class="col-md-1">Scheduled Hours</th>
 						<th class="col-md-1">Avg Days per Week</th>
-						<th class="col-md-1">Available Hours</th>
 						<th class="col-md-1">Booking Hours</th>
 						<th class="col-md-1">Actual Hours</th>
 						<th class="col-md-1">Additional Hours</th>
@@ -55,8 +55,8 @@
 						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
 						<!-- "Future" cycles still an issue here -->
 						<td>{{pp.displayTime(contract.contractMins)}}</td>
-						<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
 						<td>{{pp.displayTime(availHoursForContract(contract.contractCode))}}</td>
+						<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
 						<td>{{pp.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
 						<td>{{pp.displayTime(actualHoursForContract(contract.contractCode))}}</td>
 						<td>{{pp.displayTime(additionalHoursForContract(contract.contractCode))}}</td>
