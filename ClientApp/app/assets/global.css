@@ -138,3 +138,9 @@
 ::ng-deep .ui-chkbox-box.ui-state-focus.ui-state-active {
     background: #bfd730;
 }
+
+/* PrimeNg DatePicker styles */
+::ng-deep .ui-datepicker.ui-widget .ui-datepicker-calendar td a.ui-state-active {
+    background-color: #bfd730;
+    color: black;
+}
