@@ -35,27 +35,29 @@
                             <td>{{pp.displayTime(shift.shiftMins)}}</td>
                             <td>{{pp.displayTime(shift.unpaidMins)}}</td>
                             <td>{{pp.displayTime(shift.shiftMins - shift.unpaidMins)}}</td>
-                            <td>{{pp.displayTime(shift.availabilityType.toil == ToilSetting.Increment ? shift.shiftMins - shift.unpaidMins : 0)}}</td>
+                            <td>{{pp.displayTime(shift.availabilityType.toil == ToilSetting.Increment ? shift.shiftMins
+                                - shift.unpaidMins : 0)}}</td>
                         </tr>
                     </ng-template>
                     <tr class="row">
                         <td colspan="3"><strong>Shift Totals</strong></td>
                         <td>{{pp.displayTime(totalActualHoursForDay(dayOffset))}}</td>
                         <td>{{pp.displayTime(totalUnpaidHoursForDay(dayOffset))}}</td>
-                        <td>{{pp.displayTime(totalActualHoursForDay(dayOffset) -
-                            totalUnpaidHoursForDay(dayOffset))}}</td>
-                        <td>{{pp.displayTime(totalToilMinsForDay(dayOffset) < 0 ? 0 :
-                              totalToilMinsForDay(dayOffset))}}</td> </tr> </tbody> </table> <table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0"
-                              class="table table-striped">
-                                <thead>
-                                    <tr class="row">
-                                        <th class="col-md-4">Reason for Adjustment</th>
-                                        <th class="col-md-4">Team</th>
-                                        <th class="col-md-2">Approval</th>
-                                        <th class="col-md-1">Hours</th>
-                                        <th class="col-md-1">Mins</th>
-                                    </tr>
-                                </thead>
+                        <td>{{pp.displayTime(totalActualHoursForDay(dayOffset)-totalUnpaidHoursForDay(dayOffset))}}</td>
+                        <td>{{pp.displayTime(totalToilMinsForDay(dayOffset))}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table *ngIf="(timesheet.adjustments | adjustmentOffsetFilter:dayOffset).length > 0" class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th class="col-md-4">Reason for Adjustment</th>
+                        <th class="col-md-4">Team</th>
+                        <th class="col-md-2">Approval</th>
+                        <th class="col-md-1">Hours</th>
+                        <th class="col-md-1">Mins</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr *ngFor="let adjust of timesheet.adjustments | adjustmentOffsetFilter:dayOffset" class="row">
                         <td>

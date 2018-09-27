@@ -88,6 +88,10 @@
     font-size: 10pt;
 }
 
+::ng-deep p-dialog .ui-dialog.ui-widget .ui-dialog-content {
+    padding-bottom: 24px;
+}
+
 /* PrimeNg DataTable styles */
 ::ng-deep p-dataTable span {
     font-family: 'Century Gothic';
