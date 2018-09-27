@@ -2,13 +2,17 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
+import { Observable } from "rxjs/Observable";
+
+import { ConfirmationService } from "primeng/primeng";
+import { MessageService } from "primeng/components/common/messageservice";
+
 import { AccessUser } from "../../models/AccessUser";
 import { AccessUserTeam } from "../../models/AccessUserTeam";
 import { Team } from "../../models/payroll/Team";
 
 import { PayrollProvider } from "../../payroll/payroll.provider";
 import { UserProvider } from "../../user.provider";
-import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: 'user-permissions',
@@ -25,7 +29,7 @@ export class UserPermissionsComponent implements OnInit {
     form: FormGroup;
 
     constructor(private up: UserProvider, pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
-        public fb: FormBuilder) {
+        public fb: FormBuilder, public cs: ConfirmationService, private ms: MessageService) {
         up.GetAllUsers();
 
         pp.teams$.subscribe(tm => this.allTeams = tm);
@@ -128,12 +132,36 @@ export class UserPermissionsComponent implements OnInit {
     saveChanges(form: NgForm) {
         // TODO Remove any Authorised Teams added but not selected
         if (JSON.stringify(this.selectedUser) !== this.prevUser) {
-            this.up.PutUser(this.selectedUser)
-                .catch(err => {
-                    return Observable.throw(err);
-                }).subscribe(r => {
-                    this.selectedUser = r;
+            // Require confirmation if AccountName has been changed
+            if (this.selectedUser.accountName !== JSON.parse(this.prevUser).accountName) {
+                this.cs.confirm({
+                    header: "Confirm Account Name Change",
+                    message: "Are you sure that you want to change the user's Account Name? This may cause them to be unable to access functions.",
+                    accept: () => {
+                        this.putUser(this.selectedUser);
+                    }
                 });
+            } else {
+                this.putUser(this.selectedUser);
+            }
         }
+    }
+
+    private putUser(user: AccessUser) {
+        this.up.PutUser(this.selectedUser)
+        .catch(err => {
+            this.ms.add({
+                severity: 'error', summary: 'Error Saving User Data',
+                detail: 'An error occurred saving the data for this User. No changes have been saved.'
+            });
+            return Observable.throw(err);
+        }).subscribe(r => {
+            this.ms.add({
+                severity: 'success', summary: 'User Data Saved',
+                detail: "Changes to this User's configuration have been successfully saved."
+            });
+            this.selectedUser = r;
+            this.prevUser = JSON.stringify(this.selectedUser);
+        });
     }
 }

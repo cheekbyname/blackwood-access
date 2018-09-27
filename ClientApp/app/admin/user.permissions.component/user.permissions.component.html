@@ -103,11 +103,11 @@
                     <div class="col-md-12">
                         <div class="well">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <span class="proper-font">Default Team</span>
                                 </div>
-                                <div class="col-md-3">
-                                    <select class="form-control" id="teamSelect" [(ngModel)]="selectedUser.defaultTeamCode" name="defaultTeamCode">
+                                <div class="col-md-4">
+                                    <select class="form-control" id="teamSelect" [(ngModel)]="selectedUser.defaultTeamCode" name="defaultTeamCode" [disabled]="selectedUser.authorizedTeams.length == 0">
                                         <option *ngFor="let team of authTeams" [ngValue]="team.teamCode">{{team.teamDesc}}</option>
                                     </select>
                                 </div>
@@ -173,3 +173,7 @@
         </div>
     </div>
 </form>
+
+<p-confirmDialog icon="fa fa-question-circle" width="480"></p-confirmDialog>
+
+<p-growl [life]="5000"></p-growl>
