@@ -44,7 +44,7 @@ span.loading {
 }
 
 .section-heading {
-    margin-top: 4px;
+    display: inline;
 }
 
 .section-heading .glyphicon {

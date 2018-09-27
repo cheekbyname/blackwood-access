@@ -1,51 +1,47 @@
 <div class="panel">
     <div class="panel-heading">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h4 class="section-heading">
                     <strong>
                         <span class="glyphicon glyphicon-export"></span>
                         <span>Payroll Export for {{team.teamDesc}}</span>
                     </strong>
                 </h4>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group form-inline">
+                <div class="form-group form-inline pull-right">
                     <label class="control-label">File Name</label>
                     <input class="form-control" type="text" [(ngModel)]="fileName" placeholder="Enter export file name" />
-                    <div class="pull-right">
-                        <a class="btn btn-primary" (click)="dt.exportCSV()">
-                            <span class="glyphicon glyphicon-floppy-save"></span>
-                            <span>Save CSV</span>
-                        </a>
-                        <a class="btn btn-primary" (click)="clearDetail()">
-                            <span class="glyphicon glyphicon-remove"></span>
-                            <span>Close</span>
-                        </a>
-                    </div>
+                    <a class="btn btn-primary pull" (click)="dt.exportCSV()">
+                        <span class="glyphicon glyphicon-floppy-save"></span>
+                        <span>Save CSV</span>
+                    </a>
+                    <a class="btn btn-primary" (click)="clearDetail()">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span>Close</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="panel-body">
-        <p-dataTable #dt [value]="export" [exportFilename]="fileName" [hidden]="!export || error">
-            <p-column field="staffMember" header="StaffMember"></p-column>
-            <p-column field="dateFormatted" header="Date"></p-column>
-            <p-column field="sequence" header="Sequence"></p-column>
-            <p-column field="nePay" header="NEPay"></p-column>
-            <p-column field="startDateFormatted" header="StartDate"></p-column>
-            <p-column field="position" header="Position"></p-column>
-            <p-column field="contractNo" header="ContractNo"></p-column>
-            <p-column field="code" header="Code"></p-column>
-            <p-column field="hours" header="Hours"></p-column>
-        </p-dataTable>
-        <div *ngIf="!export && !error" class="alert alert-info">
-            <i class="fa fa-cog fa-spin fa-2x"></i>
-            <span class="loading">Please wait, retrieving your data...</span>
-        </div>
-        <div *ngIf="error" class="alert alert-danger">
-            <i class="fa fa-exclamation-circle fa-2x"></i>
-            <span class="loading">An error occurred retrieving your data [{{error.status}} {{error.statusText}}]</span>
-        </div>
+</div>
+<div class="panel-body">
+    <p-dataTable #dt [value]="export" [exportFilename]="fileName" [hidden]="!export || error">
+        <p-column field="staffMember" header="StaffMember"></p-column>
+        <p-column field="dateFormatted" header="Date"></p-column>
+        <p-column field="sequence" header="Sequence"></p-column>
+        <p-column field="nePay" header="NEPay"></p-column>
+        <p-column field="startDateFormatted" header="StartDate"></p-column>
+        <p-column field="position" header="Position"></p-column>
+        <p-column field="contractNo" header="ContractNo"></p-column>
+        <p-column field="code" header="Code"></p-column>
+        <p-column field="hours" header="Hours"></p-column>
+    </p-dataTable>
+    <div *ngIf="!export && !error" class="alert alert-info">
+        <i class="fa fa-cog fa-spin fa-2x"></i>
+        <span class="loading">Please wait, retrieving your data...</span>
+    </div>
+    <div *ngIf="error" class="alert alert-danger">
+        <i class="fa fa-exclamation-circle fa-2x"></i>
+        <span class="loading">An error occurred retrieving your data [{{error.status}} {{error.statusText}}]</span>
     </div>
 </div>
