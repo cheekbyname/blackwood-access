@@ -89,6 +89,7 @@ span.loading {
 
 .btn-group {
     float:right!important;
+    margin-left: 16px;
 }
 
 .section-heading {

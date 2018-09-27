@@ -2,13 +2,13 @@
     <div class="panel-heading">
         <div class="row">
             <!--<h4>{{team.teamDesc}} : {{displayMonth()}}</h4>-->
-            <h4 class="col-md-4 section-heading">
+            <h4 class="col-md-3 section-heading">
                 <strong>
                     <span class="glyphicon glyphicon-align-justify"></span>
                     <span>Payroll Summary</span>
                 </strong>
             </h4>
-            <div class="col-md-4 form-inline date-controls">
+            <div class="col-md-9 form-inline date-controls">
                 <button class="btn btn-primary week-nav" (click)="periodBack()">
                     <i class="fa fa-angle-left"></i>
                 </button>
@@ -23,8 +23,8 @@
                 <button class="btn btn-primary week-nav" (click)="periodForward()">
                     <i class="fa fa-angle-right"></i>
                 </button>
-            </div>
-            <div class="col-md-4">
+            <!-- </div>
+            <div class="col-md"> -->
                 <div class="btn-group">
                     <button class="btn btn-default btn-primary summ-toggle" (click)="toggleSummary()">
                         <span *ngIf="showSummary" class="glyphicon glyphicon-chevron-up"></span>
