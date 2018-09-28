@@ -4,6 +4,7 @@ import { LocalAuthority } from "../reporting/LocalAuthority";
 import { Service } from "../reporting/Service";
 import { ServiceLocation } from "./ServiceLocation";
 import { TeamUser } from "../integration/TeamUser";
+import { BreakPolicy } from "./BreakPolicy";
 
 export class Team {
 	public id: number;
@@ -19,6 +20,7 @@ export class Team {
 
 	public localAuthority: LocalAuthority;
 	public serviceLocation: ServiceLocation;
+	public teamBreakPolicy: BreakPolicy;
 
 	public teamUsers: TeamUser[];
 	

@@ -1,11 +1,13 @@
 import { Injectable, isDevMode, OnDestroy } from "@angular/core";
 import { Http } from "@angular/http";
+
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
 import "rxjs/add/operator/toPromise";
 
 import { AccessUser } from "../models/AccessUser";
 import { Adjustment } from "../models/payroll/Adjustment";
 import { BookingTypeAnalysis } from "../models/payroll/BookingTypeAnalysis";
+import { BreakPolicy } from "../models/payroll/BreakPolicy";
 import { Carer } from "../models/payroll/Carer";
 import { CarerContract } from "../models/payroll/Contract";
 import { Export } from "../models/payroll/Export";
@@ -379,5 +381,9 @@ export class PayrollProvider implements OnDestroy {
             var tp = res.json() as TeamPeriod;
             this._teamPeriod.next(tp);
         });
+    }
+
+    public getBreakPolicyForTeamCode(teamCode: number): BreakPolicy {
+        return this._teams.value.find(t => t.teamCode == teamCode).teamBreakPolicy;
     }
 }

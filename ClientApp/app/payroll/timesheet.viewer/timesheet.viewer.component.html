@@ -33,7 +33,7 @@
 	<div class="panel-body">
 		<!-- Team/Contract Summary -->
 		<div class="table-responsive">
-			<table class="table table-striped" *ngIf="timesheet.contracts !== null">
+			<table class="table table-striped table-contracts" *ngIf="timesheet.contracts !== null">
 				<thead class="thead-default">
 					<tr class="row">
 						<th class="col-md-1">Payroll No</th>
@@ -49,19 +49,25 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="row" *ngFor="let contract of timesheet.contracts">
-						<td>{{contract.payrollNumber}}</td>
-						<td>{{contract.teamDesc}}</td>
-						<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
-						<!-- "Future" cycles still an issue here -->
-						<td>{{pp.displayTime(contract.contractMins)}}</td>
-						<td>{{pp.displayTime(availHoursForContract(contract.contractCode))}}</td>
-						<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
-						<td>{{pp.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
-						<td>{{pp.displayTime(actualHoursForContract(contract.contractCode))}}</td>
-						<td>{{pp.displayTime(additionalHoursForContract(contract.contractCode))}}</td>
-						<td>{{pp.displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
-					</tr>
+					<ng-template ngFor let-contract [ngForOf]="timesheet.contracts">
+						<tr class="row" [tooltip]="!contractHoursMatch(contract) ? 'Scheduled Availability for this Contract does not match the Contracted Hours. Click for more details.' : ''"
+						    placement="left" [ngClass]="{ 'contract-hours-nomatch' : !contractHoursMatch(contract) }">
+							<td>{{contract.payrollNumber}}</td>
+							<td>
+								<span>{{contract.teamDesc}}</span>
+								<span *ngIf="!contractHoursMatch(contract)" class="glyphicon glyphicon-warning-sign adjust-crit pull-right"></span>
+							</td>
+							<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
+							<!-- "Future" cycles still an issue here -->
+							<td>{{pp.displayTime(contract.contractMins)}}</td>
+							<td>{{pp.displayTime(availHoursForContract(contract.contractCode))}}</td>
+							<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
+							<td>{{pp.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
+							<td>{{pp.displayTime(actualHoursForContract(contract.contractCode))}}</td>
+							<td>{{pp.displayTime(additionalHoursForContract(contract.contractCode))}}</td>
+							<td>{{pp.displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
+						</tr>
+					</ng-template>
 				</tbody>
 			</table>
 		</div>

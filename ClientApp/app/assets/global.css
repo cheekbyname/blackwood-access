@@ -5,6 +5,7 @@
     font-family: 'Century Gothic';
     font-size: 10pt;
     color: hotpink;
+    opacity: 1.0;
 }
 
 ::ng-deep .ui-dialog-footer.ui-widget-content {

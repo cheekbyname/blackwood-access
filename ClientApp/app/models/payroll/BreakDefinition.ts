@@ -1,3 +1,5 @@
+import { BreakPolicy } from "./BreakPolicy";
+
 export class BreakDefinition {
     public id: number;
     public breakPolicyId: number;
@@ -7,4 +9,6 @@ export class BreakDefinition {
     public paid: boolean;
     public validFrom: Date;
     public ValidTo: Date;
+
+    public breakPolicy: BreakPolicy;
 }

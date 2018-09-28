@@ -29,7 +29,13 @@ table.table-rota th {
 
 .table-rota th.invalid-shift {
     background-color: yellow;
+    color: red;
+}
+
+.table-rota th.invalid-shift:hover {
     border: 1px double red;
+    background-color: orange;
+    color: black;
 }
 
 table.table-rota th:hover {
@@ -139,4 +145,22 @@ span.glyphicon-ok {
 
 .hide-codes:hover, .hide-codes span:hover {
     cursor: pointer;
+}
+
+.contract-hours-nomatch td {
+    background-color: yellow;
+    color: red;
+}
+
+.table-contracts tr:hover {
+    cursor: pointer;
+}
+
+.table-contracts tr.contract-hours-nomatch:hover td {
+    background-color: orange;
+    color: black;
+}
+
+.table-contracts tr:hover td {
+    background-color: rgba(255, 105, 180, 0.5);
 }

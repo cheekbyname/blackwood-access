@@ -6,11 +6,13 @@ import { Observable } from "rxjs";
 import { BookingTypeAnalysis, AnalysisCategory } from '../../models/payroll/BookingTypeAnalysis';
 import { Carer } from '../../models/payroll/Carer';
 import { CarerBooking } from '../../models/payroll/Booking';
+import { CarerContract } from '../../models/payroll/Contract';
 import { Locale, LOC_EN } from '../../models/Locale';
-import { Team } from '../../models/payroll/Team';
+import { Team, HourlyCalc } from '../../models/payroll/Team';
 import { Timesheet } from '../../models/payroll/Timesheet';
 
 import { PayrollProvider } from '../payroll.provider';
+import { Availability } from '../../models/payroll/Availability';
 
 type BookingGrid = Array<Array<CarerBooking>>;
 
@@ -31,7 +33,7 @@ export class TimesheetViewerComponent implements OnInit {
 	isContracted: boolean;
 	carers: Carer[];
 	hideableCodes: number[];
-	team: Team;		// This required purely for navigation -_-
+	team: Team;
 	proc: boolean = true;
 
 	adjustVisible: boolean = false;
@@ -136,11 +138,10 @@ export class TimesheetViewerComponent implements OnInit {
 	// Transpose Bookings array
 	transBook(): void {
 		var bks = this.bookings;
-		var len = Math.max(...bks.map(ar => { return ar.length }));					// Get max width of matrix
+		var len = Math.max(...bks.map(ar => { return ar.length }));						// Get max width of matrix
 		if (len - bks.length > 0) bks = bks.concat(Array(len - bks.length).fill([]));	// Pad to square
-		bks = bks.map((x, y) => bks.map(x => x[y]));								// Transpose array
-		//bks = this.chronOrder(bks);												// Shift down to make some chronological sense
-		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 	// Strip blank rows
+		bks = bks.map((x, y) => bks.map(x => x[y]));									// Transpose array
+		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 		// Strip blank rows
 	}
 
 	public availHoursForContract(contractCode: number): number {
@@ -267,5 +268,23 @@ export class TimesheetViewerComponent implements OnInit {
 
 	public dayTooltip(day, i) {
 		return `Click here to adjust hours for ${day} ${this.pp.dateOrd(this.weekCommencing, i)} ${this.pp.monthOf(this.weekCommencing, i)}`;
+	}
+
+	public contractHoursMatch(contract: CarerContract): boolean {
+		if (this.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0) return true;
+		var contractedHours = contract.contractMins * (contract.cycleLength + 1);
+		var scheduledHours = contract.scheduledAvailability
+			.map(avail => this.adjustAvailForBreaks(avail, contract))
+			.reduce((acc, cur) => { return acc + cur }, 0);
+		return contractedHours == scheduledHours;
+	}
+
+	private adjustAvailForBreaks(avail: Availability, contract: CarerContract): number {
+		var policy = this.pp.getBreakPolicyForTeamCode(contract.teamCode);
+		var breakTime = policy.definitions
+			.filter(def => avail.thisMins >= def.minThreshold && !def.paid)
+			.map(def => def.breakLength)
+			.reduce((acc, cur) => { return acc + cur }, 0);
+		return avail.thisMins - breakTime;
 	}
 }
