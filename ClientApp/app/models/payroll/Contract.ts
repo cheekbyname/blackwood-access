@@ -1,3 +1,5 @@
+import { Availability } from "./Availability";
+
 export class CarerContract {
 	public payrollNumber: string;
 	public carerCode: number;
@@ -14,4 +16,6 @@ export class CarerContract {
 	public carerGradeDesc: string;
 	public cycleDaysWorked: number;
 	public breakPolicyId: number;
+
+	public scheduledAvailability: Availability[];
 }
