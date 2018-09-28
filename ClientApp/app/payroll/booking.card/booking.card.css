@@ -8,3 +8,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+::ng-deep .tooltip.run-tooltip .tooltip-inner * {
+    text-align: left;
+}

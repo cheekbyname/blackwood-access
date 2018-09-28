@@ -5,9 +5,11 @@
     </div>
     <div class="card-block">
         <span>{{displayTime(booking.thisStart)}} - {{displayTime(booking.thisFinish)}}</span>
-        <i *ngIf="booking.run" class="fa fa-registered run-symbol" [tooltip]="runTooltip" placement="bottom" container="body"></i>
+        <i *ngIf="booking.run" class="fa fa-registered run-symbol" [tooltip]="runTooltip" placement="bottom" container="body"
+           containerClass="run-tooltip"></i>
     </div>
 </div>
 <ng-template #runTooltip>
-    <div [innerHtml]="tooltipHtml()"></div>
+    <div><span>From Run</span></div>
+    <div><span>{{this.booking.run.name}}</span></div>
 </ng-template>

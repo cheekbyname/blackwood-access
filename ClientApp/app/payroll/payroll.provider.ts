@@ -51,6 +51,7 @@ export class PayrollProvider implements OnDestroy {
     periodFinish$ = this._periodFinish.asObservable().distinctUntilChanged();
     periodStart$ = this._periodStart.asObservable().distinctUntilChanged();
     selectedCarer$ = this._selectedCarer.asObservable()
+        .filter(a => a !== null && a !== undefined)
         .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
     selectedTeam$ = this._selectedTeam.asObservable()
         .distinctUntilChanged((a: Team, b: Team) => a !== null && b !== null && a.teamCode === b.teamCode);

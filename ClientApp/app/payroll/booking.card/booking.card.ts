@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { CarerBooking } from '../../models/payroll/Booking';
-import { ToilSetting, TOIL } from '../../models/payroll/PayrollCodeMap';
+import { ToilSetting } from '../../models/payroll/PayrollCodeMap';
 
 @Component({
     selector: 'booking-card',
@@ -13,9 +13,6 @@ export class BookingCardComponent {
     booking: CarerBooking;
 
     toilSetting = ToilSetting;
-    tooltipHtml(): string {
-        return this.booking ? `<span>From Run: ${this.booking.run.name}</span>` : "";
-    }
 
     displayTime(dt: Date): string {
         var ndt = new Date(dt);
