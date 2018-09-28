@@ -1,0 +1,10 @@
+<p-dialog [(visible)]="contractVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
+          [closable]="false" [closeOnEscape]="false">
+    <div><span>{{contract.teamDesc}}</span></div>
+    <div><span>{{contract.carerGradeDesc}}</span></div>
+    <footer>
+        <div class="ui-dialog-buttonpane">
+            <button class="btn btn-primary pull-right" (click)="close()">Close</button>
+        </div>
+    </footer>
+</p-dialog>

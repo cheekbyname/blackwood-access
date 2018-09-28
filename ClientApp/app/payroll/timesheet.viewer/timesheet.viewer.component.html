@@ -51,7 +51,7 @@
 				<tbody>
 					<ng-template ngFor let-contract [ngForOf]="timesheet.contracts">
 						<tr class="row" [tooltip]="!contractHoursMatch(contract) ? 'Scheduled Availability for this Contract does not match the Contracted Hours. Click for more details.' : ''"
-						    placement="left" [ngClass]="{ 'contract-hours-nomatch' : !contractHoursMatch(contract) }">
+						    placement="left" [ngClass]="{ 'contract-hours-nomatch' : !contractHoursMatch(contract) }" (click)="openContractInfo(contract)">
 							<td>{{contract.payrollNumber}}</td>
 							<td>
 								<span>{{contract.teamDesc}}</span>
@@ -104,6 +104,8 @@
 		                      [weekCommencing]="weekCommencing"></timesheet-adjustment>
 
 		<booking-detail [booking]="selectedBooking" [(bookingVisible)]="bookingVisible" [contracts]="timesheet.contracts"></booking-detail>
+
+		<contract-info [contract]="selectedContract" [(contractVisible)]="contractVisible"></contract-info>
 
 		<div>
 			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>

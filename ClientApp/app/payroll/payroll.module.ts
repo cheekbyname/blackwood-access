@@ -13,6 +13,7 @@ import { PayrollRoutingModule } from './payroll-routing.module';
 
 import { BookingCardComponent } from './booking.card/booking.card';
 import { BookingDetailComponent } from './booking.detail/booking.detail.component';
+import { ContractInfoComponent } from './contract.info/contract.info.component';
 import { PayrollApprovalComponent } from './payroll.approval/payroll.approval.component';
 import { PayrollComponent } from "./payroll.component";
 import { PayrollExportComponent } from "./payroll.export/payroll.export.component";
@@ -33,7 +34,7 @@ import { ShiftOffsetFilter } from "../models/payroll/Shift";
         CheckboxModule, InputSwitchModule, DataTableModule, SharedModule, PayrollRoutingModule, TooltipModule.forRoot()],
 	declarations: [PayrollComponent, BookingCardComponent, BookingDetailComponent, PayrollExportComponent, PayrollSummaryComponent,
 		TimesheetAdjustmentComponent, PayrollManagerComponent, TimesheetViewerComponent, PayrollReviewComponent, PayrollApprovalComponent,
-		AdjustmentOffsetFilter, ShiftOffsetFilter],	// , ShiftOffsetFilter
+		AdjustmentOffsetFilter, ShiftOffsetFilter, ContractInfoComponent],	// , ShiftOffsetFilter
 	providers: [PayrollGuard, PayrollProvider, UserProvider, ConfirmationService]
 })
 export class PayrollModule {}

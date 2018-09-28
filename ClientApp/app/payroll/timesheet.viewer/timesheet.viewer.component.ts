@@ -40,6 +40,8 @@ export class TimesheetViewerComponent implements OnInit {
 	dayOffset: number;
 	bookingVisible: boolean = false;
 	selectedBooking: CarerBooking = new CarerBooking();
+	contractVisible: boolean = false;
+	selectedContract: CarerContract = new CarerContract();
 	showCodes: boolean = false;
 
 	constructor(public pp: PayrollProvider, private router: Router, private route: ActivatedRoute) {
@@ -286,5 +288,10 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(def => def.breakLength)
 			.reduce((acc, cur) => { return acc + cur }, 0);
 		return avail.thisMins - breakTime;
+	}
+
+	public openContractInfo(contract: CarerContract) {
+		this.selectedContract = contract;
+		this.contractVisible = true;
 	}
 }

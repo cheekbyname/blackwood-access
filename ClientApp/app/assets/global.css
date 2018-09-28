@@ -85,8 +85,21 @@
     font-weight: normal;
 }
 
+::ng-deep p-dialog .btn.btn-primary {
+    font-size: 10pt;
+    font-family: 'Century Gothic';
+    background-color: #bfd730;
+    color: black;
+    border-color: black;
+}
+
+::ng-deep p-dialog .btn.btn-primary:hover {
+    background-color: hotpink;
+}
+
 ::ng-deep p-dialog .btn.btn-primary span {
     font-size: 10pt;
+    font-family: 'Century Gothic';
 }
 
 ::ng-deep p-dialog .ui-dialog.ui-widget .ui-dialog-content {
