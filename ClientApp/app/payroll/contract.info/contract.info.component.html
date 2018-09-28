@@ -1,7 +1,58 @@
 <p-dialog [(visible)]="contractVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
           [closable]="false" [closeOnEscape]="false">
-    <div><span>{{contract.teamDesc}}</span></div>
-    <div><span>{{contract.carerGradeDesc}}</span></div>
+    <p-header>
+        <div>
+            <span>Contract Details</span>
+            <span class="pull-right">{{contract.teamDesc}}</span>
+        </div>
+        <div>
+            <span>{{carer.forename}} {{carer.surname}}</span>
+            <span class="pull-right">{{contract.carerGradeDesc}}</span>
+        </div>
+    </p-header>
+
+    <table class="table table-striped">
+        <tr>
+            <td>Cycle Length</td>
+            <td>{{contract.cycleLength + 1}} Weeks</td>
+        </tr>
+        <tr>
+            <td>Contracted Hours</td>
+            <td>{{Utils.DisplayTime(contract.contractMins)}}</td>
+        </tr>
+        <tr>
+            <td>Contracted Hours over Cycle</td>
+            <td>{{Utils.DisplayTime(contract.contractMins * (contract.cycleLength + 1))}}</td>
+        </tr>
+    </table>
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="row">
+                <th>Day</th>
+                <th>Start</th>
+                <th>Finish</th>
+                <th>Time</th>
+                <th tooltip="Scheduled time, adjusted for unpaid breaks according to the active Break Policy for this Team"
+                    placement="left" container="body">Adjusted</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="row" *ngFor="let avail of contract.scheduledAvailability">
+                <td>{{Loc.dayNames[dayOfWeek(avail.thisStart)]}}</td>
+                <td>{{Utils.FormatTime(avail.thisStart)}}</td>
+                <td>{{Utils.FormatTime(avail.thisFinish)}}</td>
+                <td>{{Utils.DisplayTime(avail.thisMins)}}</td>
+                <td>{{Utils.DisplayTime(pp.adjustAvailForBreaks(avail, contract))}}</td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Totals</strong></td>
+                <td><strong>{{Utils.DisplayTime(totalMins())}}</strong></td>
+                <td><strong>{{Utils.DisplayTime(adjustMins())}}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
     <footer>
         <div class="ui-dialog-buttonpane">
             <button class="btn btn-primary pull-right" (click)="close()">Close</button>

@@ -105,7 +105,7 @@
 
 		<booking-detail [booking]="selectedBooking" [(bookingVisible)]="bookingVisible" [contracts]="timesheet.contracts"></booking-detail>
 
-		<contract-info [contract]="selectedContract" [(contractVisible)]="contractVisible"></contract-info>
+		<contract-info [contract]="selectedContract" [carer]="carer" [(contractVisible)]="contractVisible"></contract-info>
 
 		<div>
 			<span *ngIf="timesheet.contracts === null" class="danger">No Contracts found for this Carer</span>

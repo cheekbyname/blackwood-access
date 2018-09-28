@@ -6,6 +6,7 @@ import "rxjs/add/operator/toPromise";
 
 import { AccessUser } from "../models/AccessUser";
 import { Adjustment } from "../models/payroll/Adjustment";
+import { Availability } from "../models/payroll/Availability";
 import { BookingTypeAnalysis } from "../models/payroll/BookingTypeAnalysis";
 import { BreakPolicy } from "../models/payroll/BreakPolicy";
 import { Carer } from "../models/payroll/Carer";
@@ -386,4 +387,13 @@ export class PayrollProvider implements OnDestroy {
     public getBreakPolicyForTeamCode(teamCode: number): BreakPolicy {
         return this._teams.value.find(t => t.teamCode == teamCode).teamBreakPolicy;
     }
+
+    public adjustAvailForBreaks(avail: Availability, contract: CarerContract): number {
+		var policy = this.getBreakPolicyForTeamCode(contract.teamCode);
+		var breakTime = policy.definitions
+			.filter(def => avail.thisMins >= def.minThreshold && !def.paid)
+			.map(def => def.breakLength)
+			.reduce((acc, cur) => { return acc + cur }, 0);
+		return avail.thisMins - breakTime;
+	}
 }

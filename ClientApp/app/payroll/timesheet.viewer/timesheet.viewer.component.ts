@@ -276,18 +276,9 @@ export class TimesheetViewerComponent implements OnInit {
 		if (this.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0) return true;
 		var contractedHours = contract.contractMins * (contract.cycleLength + 1);
 		var scheduledHours = contract.scheduledAvailability
-			.map(avail => this.adjustAvailForBreaks(avail, contract))
+			.map(avail => this.pp.adjustAvailForBreaks(avail, contract))
 			.reduce((acc, cur) => { return acc + cur }, 0);
 		return contractedHours == scheduledHours;
-	}
-
-	private adjustAvailForBreaks(avail: Availability, contract: CarerContract): number {
-		var policy = this.pp.getBreakPolicyForTeamCode(contract.teamCode);
-		var breakTime = policy.definitions
-			.filter(def => avail.thisMins >= def.minThreshold && !def.paid)
-			.map(def => def.breakLength)
-			.reduce((acc, cur) => { return acc + cur }, 0);
-		return avail.thisMins - breakTime;
 	}
 
 	public openContractInfo(contract: CarerContract) {

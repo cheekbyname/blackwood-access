@@ -17,5 +17,5 @@ export class CarerContract {
 	public cycleDaysWorked: number;
 	public breakPolicyId: number;
 
-	public scheduledAvailability: Availability[];
+	public scheduledAvailability: Availability[] = [];
 }
