@@ -54,8 +54,23 @@ export class ContractInfoComponent implements OnInit {
             .reduce((acc, cur) => { return acc + cur }, 0);
     }
 
+    
+    public totalWeekMins(weekOffset: number): number {
+        return this.contract.scheduledAvailability
+            .filter(avail => this.weekOffset(avail.thisStart) == weekOffset)
+            .map(avail => avail.thisMins)
+            .reduce((acc, cur) => { return acc+ cur }, 0);
+    }
+
     public adjustMins(): number {
         return this.contract.scheduledAvailability
+            .map(avail => this.pp.adjustAvailForBreaks(avail, this.contract))
+            .reduce((acc, cur) => { return acc + cur }, 0);
+    }
+
+    public adjustWeekMins(weekOffset: number): number {
+        return this.contract.scheduledAvailability
+            .filter(avail => this.weekOffset(avail.thisStart) == weekOffset)
             .map(avail => this.pp.adjustAvailForBreaks(avail, this.contract))
             .reduce((acc, cur) => { return acc + cur }, 0);
     }
@@ -64,5 +79,9 @@ export class ContractInfoComponent implements OnInit {
         var currVal = !this.weekVisibility[weekOffset];
         this.weekVisibility.fill(false, 0, this.weekVisibility.length);
         this.weekVisibility[weekOffset] = currVal;
+    }
+
+    public toggleToolip(show: boolean) {
+        return show ? "Click to hide the details for this week" : "Click to expand and show details for each day of this week";
     }
 }

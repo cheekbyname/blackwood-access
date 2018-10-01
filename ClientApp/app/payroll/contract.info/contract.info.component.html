@@ -42,11 +42,11 @@
         </thead>
         <tbody>
             <ng-template ngFor let-avail [ngForOf]="contract.scheduledAvailability">
-                <tr class="row week-header" *ngIf="!(week == weekOffset(avail.thisStart, true))" tooltip="Click to expand and show details for each day of this week"
-                    placement="bottom" container="body">
-                    <td colspan="6" (click)="toggleWeekVisibility(weekOffset(avail.thisStart))">
-                        New week header is going here
-                    </td>
+                <tr class="row week-header" *ngIf="!(week == weekOffset(avail.thisStart, true))" [tooltip]="toggleToolip(weekVisibility[weekOffset(avail.thisStart)])"
+                    placement="bottom" container="body" (click)="toggleWeekVisibility(weekOffset(avail.thisStart))">
+                    <td colspan="4">{{weekOffset(avail.thisStart)}}</td>
+                    <td>{{Utils.DisplayTime(totalWeekMins(weekOffset(avail.thisStart)))}}</td>
+                    <td>{{Utils.DisplayTime(adjustWeekMins(weekOffset(avail.thisStart)))}}</td>
                 </tr>
                 <tr class="row" *ngIf="weekVisibility[weekOffset(avail.thisStart)]">
                     <td>{{weekOffset(avail.thisStart)}}</td>

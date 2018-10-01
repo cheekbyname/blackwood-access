@@ -14,3 +14,7 @@ table tbody tr.week-header:hover {
     background-color: rgba(255, 105, 180, 0.5);
     cursor: pointer;
 }
+
+table tbody tr.week-header {
+    font-weight: bold;
+}
