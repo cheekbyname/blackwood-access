@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 
 import { CarerContract } from "../../models/payroll/Contract";
 
@@ -12,9 +12,15 @@ import { Carer } from "../../models/payroll/Carer";
     templateUrl: 'contract.info.component.html',
     styleUrls: ['contract.info.component.css']
 })
-export class ContractInfoComponent {
+export class ContractInfoComponent implements OnInit {
 
     constructor(public pp: PayrollProvider) { }
+
+    ngOnInit() {
+        for (var i = 0; i < this.contract.cycleLength; i++) {
+            this.weekVisibility.push(false);
+        }
+    }
 
     @Input() contract: CarerContract = new CarerContract();
     @Input() carer: Carer = new Carer();
@@ -24,6 +30,8 @@ export class ContractInfoComponent {
 
     public Loc: Locale = LOC_EN;
     public Utils = Utils;
+    public week: number = 0;
+    public weekVisibility: boolean[] = [];
 
     public close() {
         this.contractVisible = false;
@@ -31,11 +39,13 @@ export class ContractInfoComponent {
     }
 
     public dayOfWeek(dt): number {
-        return (Utils.DiffDays(dt) + this.Loc.firstDayOfWeek) % 7;
+        return (Utils.DaysFromZero(dt) + this.Loc.firstDayOfWeek) % 7;
     }
 
     public weekOffset(dt): number {
-        return Math.floor(Utils.DiffDays(dt) / 7) + 1;
+        var week = Math.floor(Utils.DaysFromZero(dt) / 7) + 1;
+        this.week = week;
+        return week;
     }
 
     public totalMins(): number {
@@ -48,5 +58,9 @@ export class ContractInfoComponent {
         return this.contract.scheduledAvailability
             .map(avail => this.pp.adjustAvailForBreaks(avail, this.contract))
             .reduce((acc, cur) => { return acc + cur }, 0);
+    }
+
+    public toggleWeekVisibility(weekOffset: number) {
+        this.weekVisibility[weekOffset - 1] = !this.weekVisibility[weekOffset - 1];
     }
 }

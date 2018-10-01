@@ -41,14 +41,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="row" *ngFor="let avail of contract.scheduledAvailability">
-                <td>{{weekOffset(avail.thisStart)}}</td>
-                <td>{{Loc.dayNames[dayOfWeek(avail.thisStart)]}}</td>
-                <td>{{Utils.FormatTime(avail.thisStart)}}</td>
-                <td>{{Utils.FormatTime(avail.thisFinish)}}</td>
-                <td>{{Utils.DisplayTime(avail.thisMins)}}</td>
-                <td>{{Utils.DisplayTime(pp.adjustAvailForBreaks(avail, contract))}}</td>
-            </tr>
+            <ng-template ngFor let-avail [ngForOf]="contract.scheduledAvailability">
+                <tr class="row week-header" *ngIf="!(week == weekOffset(avail.thisStart))" tooltip="Click to expand and show details for each day of this week"
+                    placement="bottom" container="body">
+                    <td colspan="6" (click)="toggleWeekVisibility(weekOffset(avail.thisStart))">
+                        New week header is going here
+                    </td>
+                </tr>
+                <tr class="row" *ngIf="weekVisibility[weekOffset(avail.thisStart)]">
+                    <td>{{weekOffset(avail.thisStart)}}</td>
+                    <td>{{Loc.dayNames[dayOfWeek(avail.thisStart)]}}</td>
+                    <td>{{Utils.FormatTime(avail.thisStart)}}</td>
+                    <td>{{Utils.FormatTime(avail.thisFinish)}}</td>
+                    <td>{{Utils.DisplayTime(avail.thisMins)}}</td>
+                    <td>{{Utils.DisplayTime(pp.adjustAvailForBreaks(avail, contract))}}</td>
+                </tr>
+            </ng-template>
             <tr>
                 <td colspan="5"><strong>Totals</strong></td>
                 <td><strong>{{Utils.DisplayTime(totalMins())}}</strong></td>

@@ -9,3 +9,8 @@ thead tr.row:last-child {
 ::ng-deep contract-info .glyphicon.glyphicon-info-sign {
     font-size: 12pt;
 }
+
+table tbody tr.week-header:hover {
+    background-color: rgba(255, 105, 180, 0.5);
+    cursor: pointer;
+}

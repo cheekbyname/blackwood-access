@@ -33,7 +33,7 @@ export module Utils {
         return dt;
     }
 
-    export function DiffDays(dt): number {
+    export function DaysFromZero(dt): number {
         const zeroDay = new Date("1899-12-30T00:00:00");
         var diffMs = new Date(dt).getTime() - zeroDay.getTime();
         return  Math.floor(diffMs / (1000 * 60 * 60 * 24));
