@@ -1,3 +1,11 @@
 table td, table th {
     font-family: 'Century Gothic';
 }
+
+thead tr.row:last-child {
+    cursor: help;
+}
+
+::ng-deep contract-info .glyphicon.glyphicon-info-sign {
+    font-size: 12pt;
+}

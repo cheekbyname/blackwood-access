@@ -31,10 +31,11 @@ export class ContractInfoComponent {
     }
 
     public dayOfWeek(dt): number {
-        const zeroDay = new Date("1899-12-30T00:00:00");
-        var diffMs = new Date(dt).getTime() - zeroDay.getTime();
-        var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        return (diffDays + this.Loc.firstDayOfWeek) % 7;
+        return (Utils.DiffDays(dt) + this.Loc.firstDayOfWeek) % 7;
+    }
+
+    public weekOffset(dt): number {
+        return Math.floor(Utils.DiffDays(dt) / 7) + 1;
     }
 
     public totalMins(): number {

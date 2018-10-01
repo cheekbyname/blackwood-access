@@ -106,6 +106,10 @@
     padding-bottom: 24px;
 }
 
+::ng-deep .glyphicon.glyphicon-info-sign {
+    color: blue;
+}
+
 /* PrimeNg DataTable styles */
 ::ng-deep p-dataTable span {
     font-family: 'Century Gothic';

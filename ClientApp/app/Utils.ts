@@ -11,7 +11,7 @@ export module Utils {
     }
 
     export function FormatTime(dt) {
-        return new Date(dt).toLocaleTimeString("en-GB");
+        return new Date(dt).toLocaleTimeString("en-GB").substr(0, 5);
     }
 
     export function DisplayTime(mins: number): string {
@@ -31,5 +31,11 @@ export module Utils {
         let dt: Date = new Date(adjDate);
         dt.setMonth(dt.getMonth() + offset);
         return dt;
+    }
+
+    export function DiffDays(dt): number {
+        const zeroDay = new Date("1899-12-30T00:00:00");
+        var diffMs = new Date(dt).getTime() - zeroDay.getTime();
+        return  Math.floor(diffMs / (1000 * 60 * 60 * 24));
     }
 }

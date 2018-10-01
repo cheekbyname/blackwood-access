@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="contractVisible" modal="modal" [width]="480" [minWidth]="480" [minHeight]="320" [responsive]="true"
+<p-dialog [(visible)]="contractVisible" modal="modal" [width]="640" [minWidth]="480" [minHeight]="320" [responsive]="true"
           [closable]="false" [closeOnEscape]="false">
     <p-header>
         <div>
@@ -29,16 +29,20 @@
     <table class="table table-striped">
         <thead>
             <tr class="row">
+                <th>Week</th>
                 <th>Day</th>
                 <th>Start</th>
                 <th>Finish</th>
                 <th>Time</th>
                 <th tooltip="Scheduled time, adjusted for unpaid breaks according to the active Break Policy for this Team"
-                    placement="left" container="body">Adjusted</th>
+                    placement="left" container="body">Adjusted
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                </th>
             </tr>
         </thead>
         <tbody>
             <tr class="row" *ngFor="let avail of contract.scheduledAvailability">
+                <td>{{weekOffset(avail.thisStart)}}</td>
                 <td>{{Loc.dayNames[dayOfWeek(avail.thisStart)]}}</td>
                 <td>{{Utils.FormatTime(avail.thisStart)}}</td>
                 <td>{{Utils.FormatTime(avail.thisFinish)}}</td>
@@ -46,7 +50,7 @@
                 <td>{{Utils.DisplayTime(pp.adjustAvailForBreaks(avail, contract))}}</td>
             </tr>
             <tr>
-                <td colspan="4"><strong>Totals</strong></td>
+                <td colspan="5"><strong>Totals</strong></td>
                 <td><strong>{{Utils.DisplayTime(totalMins())}}</strong></td>
                 <td><strong>{{Utils.DisplayTime(adjustMins())}}</strong></td>
             </tr>
