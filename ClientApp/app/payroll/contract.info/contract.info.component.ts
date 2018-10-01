@@ -42,9 +42,9 @@ export class ContractInfoComponent implements OnInit {
         return (Utils.DaysFromZero(dt) + this.Loc.firstDayOfWeek) % 7;
     }
 
-    public weekOffset(dt): number {
+    public weekOffset(dt, setWeek: boolean = false): number {
         var week = Math.floor(Utils.DaysFromZero(dt) / 7) + 1;
-        this.week = week;
+        if (setWeek) this.week = week;
         return week;
     }
 
@@ -61,6 +61,8 @@ export class ContractInfoComponent implements OnInit {
     }
 
     public toggleWeekVisibility(weekOffset: number) {
-        this.weekVisibility[weekOffset - 1] = !this.weekVisibility[weekOffset - 1];
+        var currVal = !this.weekVisibility[weekOffset];
+        this.weekVisibility.fill(false, 0, this.weekVisibility.length);
+        this.weekVisibility[weekOffset] = currVal;
     }
 }
