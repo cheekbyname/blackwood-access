@@ -114,6 +114,7 @@ namespace Blackwood.Access
             services.AddScoped<IIntegrationData, IntegrationData>();
             services.AddTransient<ICareDataService, CareDataService>();
             services.AddScoped<ICareInitialAssessmentService, CareInitialAssessmentService>();
+            services.AddScoped<IPayrollApprovalService, PayrollApprovalService>();
             services.AddScoped<IPayrollDataService, PayrollDataService>();
             services.AddScoped<IPayrollService, PayrollService>();
             services.AddScoped<IPayrollShiftService, PayrollShiftService>();

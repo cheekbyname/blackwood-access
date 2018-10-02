@@ -210,14 +210,6 @@ export class PayrollProvider implements OnDestroy {
             .catch(err => Observable.throw(err));
     }
 
-    getSummaries(x: { team: Team, start: Date, finish: Date }): Observable<Summary[]> {
-        var tsUrl = `/api/payroll/summaries?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodEnd=${this.sqlDate(x.finish)}`;
-        if (isDevMode()) console.log(tsUrl);
-        return this.http.get(tsUrl)
-            .map(res => res.json() as Summary[])
-            .catch(err => Observable.throw(err));
-    }
-
     getPayrollExport(x: { team: Team, start: Date, finish: Date }): Observable<Export[]> {
         var tsUrl = `/api/payroll/getPayrollData?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodFinish=${this.sqlDate(x.finish)}`;
         if (isDevMode()) console.log(tsUrl);

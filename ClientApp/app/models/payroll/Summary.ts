@@ -9,7 +9,8 @@ export class Summary {
 	public payrollNumber: string;
 	public teamDesc: string;
 	public costCentre: string;
-	public monthlyContractMins: number;
+	public periodContractMins: number;
+	public periodSchedMins: number;
 	public monthlyLimitMins: number;
 	public superTrainMins: number;
 	public leaveSickMins: number;

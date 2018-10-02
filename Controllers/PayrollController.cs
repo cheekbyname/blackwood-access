@@ -13,14 +13,15 @@ namespace Blackwood.Access.Controllers
     [Route("api/[Controller]")]
     public class PayrollController : ControllerBase
     {
+        private readonly IPayrollApprovalService _approvalService;
         private readonly IPayrollService _service;
         private readonly IPayrollDataService _dataService;
         private readonly IPayrollValidationService _validation;
         private readonly ILogger<PayrollController> _logger;
 
         public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
-                ILogger<PayrollController> logger)
-            => (_service, _dataService, _validation, _logger) = (service, dataService, validation, logger);
+                ILogger<PayrollController> logger, IPayrollApprovalService approvalService)
+            => (_service, _dataService, _validation, _logger, _approvalService) = (service, dataService, validation, logger, approvalService);
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());
@@ -35,15 +36,6 @@ namespace Blackwood.Access.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> Timesheet(int carerCode, DateTime weekCommencing)
             => Ok(await _service.GetTimesheet(carerCode, weekCommencing));
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Summaries(int teamCode, DateTime periodStart, DateTime periodEnd,
-            CancellationToken token, bool includeNonPayroll = false)
-        {
-            // Cancellation actually not working, as per https://github.com/aspnet/AspNetCoreModule/issues/38
-            token.ThrowIfCancellationRequested();
-            return Ok(await _service.GetAdjustedSummaries(teamCode, periodStart, periodEnd, includeNonPayroll));
-        }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Summary(short teamCode, DateTime periodStart, DateTime periodEnd, CancellationToken token)
@@ -95,7 +87,7 @@ namespace Blackwood.Access.Controllers
         [HttpPut("[action]")]
         public async Task<IActionResult> ApproveSummary([FromBody] TeamPeriod period)
         {
-            var result = await _service.ApproveTeamPeriod(period, HttpContext.User);
+            var result = await _approvalService.ApproveTeamPeriod(period, HttpContext.User);
 
             if (result.ValidationMessages.ContainsKey(401)) return Unauthorized();
             if (result.ValidationMessages.ContainsKey(400)) return BadRequest(result);

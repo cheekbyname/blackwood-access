@@ -73,12 +73,12 @@
                         <tr class="row" (click)="selectCarer(sum)" [tooltip]="carerTooltip" placement="left" container="body"
                             [ngClass]="{'add-hours-highlight' : additionalHours(sum) > 0}">
                             <td>
-                                <span *ngIf="sum.monthlyContractMins == 0" class="contract-status glyphicon glyphicon-registration-mark"></span>
-                                <span *ngIf="sum.monthlyContractMins != 0" class="contract-status glyphicon glyphicon-copyright-mark"></span>
+                                <span *ngIf="sum.periodContractMins == 0" class="contract-status glyphicon glyphicon-registration-mark"></span>
+                                <span *ngIf="sum.periodContractMins != 0" class="contract-status glyphicon glyphicon-copyright-mark"></span>
                                 <span>{{sum.forename}} {{sum.surname}}</span>
                             </td>
                             <td>{{sum.personnelNumber}}</td>
-                            <td>{{displayTime(sum.monthlyContractMins)}}</td>
+                            <td>{{displayTime(sum.periodContractMins)}}</td>
                             <td>{{displayTime(sum.actualMins)}}</td>
                             <td>{{displayTime(sum.contact)}}</td>
                             <td>{{displayTime(sum.supervision + sum.training)}}</td>
