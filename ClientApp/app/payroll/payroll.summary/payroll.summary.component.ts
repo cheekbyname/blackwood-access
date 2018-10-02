@@ -12,7 +12,6 @@ import { Team } from '../../models/payroll/Team';
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
 import { Utils } from '../../Utils';
-import { CarerContract } from '../../models/payroll/Contract';
 
 @Component({
 	selector: 'team-summary',
@@ -20,6 +19,13 @@ import { CarerContract } from '../../models/payroll/Contract';
 	styleUrls: ['./payroll.summary.component.css']
 })
 export class PayrollSummaryComponent implements OnInit {
+
+	constructor(private http: Http, private pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
+		private userPro: UserProvider) {
+		this.pp.setPeriod(new Date(Date.now()));
+		this.userPro.GetUserInfo();
+		this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
+	}
 
 	ngOnInit() {
 		this.route.params.subscribe((p) => {
@@ -43,16 +49,10 @@ export class PayrollSummaryComponent implements OnInit {
 			})
 			.subscribe(sums => this.summaries = sums);
 		this.pp.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
-		// this.payPro.errorMessage$.subscribe(err => {
-		// 	if(err != undefined) this.errored = true;
-		// });
-	}
-
-	constructor(private http: Http, private pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
-		private userPro: UserProvider) {
-		this.pp.setPeriod(new Date(Date.now()));
-		this.userPro.GetUserInfo();
-		this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
+		// TODO Take another look at this, maybe not be used atm
+		this.pp.errorMessage$.subscribe(err => {
+			if(err != undefined) this.error = err;
+		});
 	}
 
 	loc: Locale = LOC_EN;

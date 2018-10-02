@@ -48,6 +48,12 @@ export class ContractInfoComponent implements OnInit {
         return week;
     }
 
+    public daysForWeek(weekOffset: number): number {
+        return this.contract.scheduledAvailability
+            .filter(avail => this.weekOffset(avail.thisStart) == weekOffset)
+            .length;
+    }
+
     public totalMins(): number {
         return this.contract.scheduledAvailability
             .map(avail => avail.thisMins)

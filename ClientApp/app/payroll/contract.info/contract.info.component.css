@@ -2,7 +2,7 @@ table td, table th {
     font-family: 'Century Gothic';
 }
 
-thead tr.row:last-child {
+thead tr.row :last-child {
     cursor: help;
 }
 

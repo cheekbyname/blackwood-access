@@ -1,5 +1,5 @@
 <p-dialog [(visible)]="contractVisible" modal="modal" [width]="640" [minWidth]="480" [minHeight]="320" [responsive]="true"
-          [closable]="false" [closeOnEscape]="false">
+          [closable]="false" [closeOnEscape]="false" [positionTop]="64">
     <p-header>
         <div>
             <span>Contract Details</span>
@@ -30,7 +30,7 @@
         <thead>
             <tr class="row">
                 <th>Week</th>
-                <th>Day</th>
+                <th>Day(s)</th>
                 <th>Start</th>
                 <th>Finish</th>
                 <th>Time</th>
@@ -44,7 +44,9 @@
             <ng-template ngFor let-avail [ngForOf]="contract.scheduledAvailability">
                 <tr class="row week-header" *ngIf="!(week == weekOffset(avail.thisStart, true))" [tooltip]="toggleToolip(weekVisibility[weekOffset(avail.thisStart)])"
                     placement="bottom" container="body" (click)="toggleWeekVisibility(weekOffset(avail.thisStart))">
-                    <td colspan="4">{{weekOffset(avail.thisStart)}}</td>
+                    <td>{{weekOffset(avail.thisStart)}}</td>
+                    <td>{{daysForWeek(weekOffset(avail.thisStart))}}</td>
+                    <td colspan="2"></td>
                     <td>{{Utils.DisplayTime(totalWeekMins(weekOffset(avail.thisStart)))}}</td>
                     <td>{{Utils.DisplayTime(adjustWeekMins(weekOffset(avail.thisStart)))}}</td>
                 </tr>
