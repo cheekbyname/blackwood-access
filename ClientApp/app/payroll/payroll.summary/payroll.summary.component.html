@@ -53,7 +53,10 @@
                     <tr class="row">
                         <th class="col-md-3">Staff Name</th>
                         <th class="col-md-1">Payroll Number</th>
-                        <th class="col-md-1">Contracted Hours</th>
+                        <th class="col-md-1 contract-hours" [tooltip]="hoursTooltip()" placement="bottom" container="body">
+                            Contracted Hours
+                            <span class="glyphicon glyphicon-info-sign pull-right"></span>
+                        </th>
                         <th class="col-md-1">Actual Hours</th>
                         <th class="col-md-1">Contact Hours</th>
                         <th class="col-md-1">Supervision / Training</th>

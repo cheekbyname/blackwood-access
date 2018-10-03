@@ -108,3 +108,7 @@ span.loading {
     margin-right: 4px;
     font-size: 16pt;
 }
+
+.contract-hours {
+    cursor: help;
+}

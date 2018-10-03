@@ -33,8 +33,8 @@ export class PayrollSummaryComponent implements OnInit {
 				this.pp.teams$.subscribe((teams) => {
 					if (teams != null) {
 						var team = teams.find(t => t.teamCode == p['teamCode']);
-                        this.team = team;
-                        this.summaries = undefined;
+						this.team = team;
+						this.summaries = undefined;
 						this.pp.selectTeam(team);	// TODO Works, but shouldn't it be on ManagerComponent?
 					}
 				});
@@ -51,7 +51,7 @@ export class PayrollSummaryComponent implements OnInit {
 		this.pp.weekCommencing$.subscribe(wc => this.weekCommencing = wc);
 		// TODO Take another look at this, maybe not be used atm
 		this.pp.errorMessage$.subscribe(err => {
-			if(err != undefined) this.error = err;
+			if (err != undefined) this.error = err;
 		});
 	}
 
@@ -164,5 +164,11 @@ export class PayrollSummaryComponent implements OnInit {
 
 	public isHourlyCalc(sum: Summary): boolean {
 		return this.team.hourlyCalc == HourlyCalc.ScheduledAvail && sum.periodContractMins > 0;
+	}
+
+	public hoursTooltip(): string {
+		return this.team.hourlyCalc == HourlyCalc.ContractedAverage ?
+			"Monthly contracted hours calculated by mulitplying up weekly figure" :
+			"Monthly contracted hours calculated by totalling Scheduled Hours for period";
 	}
 }
