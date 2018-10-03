@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 import { AccessUser } from '../../models/AccessUser';
 import { Locale, LOC_EN } from '../../models/Locale';
 import { Summary } from '../../models/payroll/Summary';
-import { Team } from '../../models/payroll/Team';
+import { Team, HourlyCalc } from '../../models/payroll/Team';
 
 import { PayrollProvider } from '../payroll.provider';
 import { UserProvider } from '../../user.provider';
@@ -56,6 +56,7 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
 	loc: Locale = LOC_EN;
+	HourlyCalc = HourlyCalc;
 	_team: Team;
 	summaries: Summary[];
 	periodStart: Date;
@@ -142,7 +143,8 @@ export class PayrollSummaryComponent implements OnInit {
 	}
 
 	public additionalHours(sum: Summary): number {
-		let sumMins = sum.actualMins - sum.unpaidMins - sum.periodContractMins;
+		var contractTime = this.isHourlyCalc(sum) ? sum.periodSchedMins : sum.periodContractMins;
+		let sumMins = sum.actualMins - sum.unpaidMins - contractTime;
 		return sumMins < 0 ? 0 : sumMins;
 	}
 
@@ -158,5 +160,9 @@ export class PayrollSummaryComponent implements OnInit {
 
 	public gradeOf(sum: Summary): string {
 		return sum.carer.contracts.find(c => c.teamCode == this.team.teamCode).carerGradeDesc;
+	}
+
+	public isHourlyCalc(sum: Summary): boolean {
+		return this.team.hourlyCalc == HourlyCalc.ScheduledAvail && sum.periodContractMins > 0;
 	}
 }

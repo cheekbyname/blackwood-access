@@ -78,7 +78,7 @@
                                 <span>{{sum.forename}} {{sum.surname}}</span>
                             </td>
                             <td>{{sum.personnelNumber}}</td>
-                            <td>{{displayTime(sum.periodContractMins)}}</td>
+                            <td>{{displayTime(isHourlyCalc(sum) ? sum.periodSchedMins : sum.periodContractMins)}}</td>
                             <td>{{displayTime(sum.actualMins)}}</td>
                             <td>{{displayTime(sum.contact)}}</td>
                             <td>{{displayTime(sum.supervision + sum.training)}}</td>
