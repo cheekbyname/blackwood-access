@@ -22,7 +22,7 @@ export class PayrollSummaryComponent implements OnInit {
 
 	constructor(private http: Http, private pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
 		private userPro: UserProvider) {
-		this.pp.setPeriod(new Date(Date.now()));
+		this.pp.setPeriod(Utils.AdjustDateByMonths(new Date(Date.now()), -1));
 		this.userPro.GetUserInfo();
 		this.userPro.userInfo$.subscribe(ui => this.currentUser = ui);
 	}
