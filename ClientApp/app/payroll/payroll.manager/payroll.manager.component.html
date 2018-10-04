@@ -1,22 +1,25 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">
-            <h4 class="col-md-6 section-heading">
-                <strong>
-                    <span class="glyphicon glyphicon-gbp"></span>
-                    <span>Payroll Management</span>
-                </strong>
-            </h4>
-            <div class="col-md-6 form-inline text-right">
-                <div *ngIf="!teams">
-                    <i class="fa fa-cog fa-spin fa-2x"></i>
-                    <span class="loading">Loading...</span>
-                </div>
-                <div *ngIf="teams">
-                    <label for="teamSelect">Select Team</label>
-                    <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam" required>
-                        <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
-                    </select>
+            <div class="col-md-12">
+                <h4 class="section-heading">
+                    <strong>
+                        <span class="glyphicon glyphicon-gbp"></span>
+                        <span>Payroll Management</span>
+                    </strong>
+                </h4>
+                <div class="form-inline pull-right">
+                    <div *ngIf="!teams">
+                        <i class="fa fa-cog fa-spin fa-2x"></i>
+                        <span class="loading">Loading...</span>
+                    </div>
+                    <div *ngIf="teams">
+                        <label for="teamSelect">Select Team</label>
+                        <select class="form-control" id="teamSelect" [(ngModel)]="selectedTeam" name="selectedTeam"
+                                required>
+                            <option *ngFor="let team of teams" [ngValue]="team">{{team.teamDesc}}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
