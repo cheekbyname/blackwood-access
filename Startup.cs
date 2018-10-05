@@ -144,10 +144,7 @@ namespace Blackwood.Access
             }
 
             app.UseStaticFiles();
-
-            //var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 44313);    // Dev
-            var options = new RewriteOptions().AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 443);    // Live
-            app.UseRewriter(options);
+            app.UseHttpsRedirection();
 
             app.UseMvc(routes =>
             {
