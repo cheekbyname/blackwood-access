@@ -1,4 +1,5 @@
 import { Availability } from "./Availability";
+import { Team } from "./Team";
 
 export class CarerContract {
 	public payrollNumber: string;
@@ -16,6 +17,8 @@ export class CarerContract {
 	public carerGradeDesc: string;
 	public cycleDaysWorked: number;
 	public breakPolicyId: number;
+	public schedMins: number;
 
 	public scheduledAvailability: Availability[] = [];
+	public team: Team;
 }
