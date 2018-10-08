@@ -273,7 +273,7 @@ export class TimesheetViewerComponent implements OnInit {
 	}
 
 	public contractHoursMatch(contract: CarerContract): boolean {
-		if (this.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0) return true;
+		if (contract.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0) return true;
 		var contractedHours = contract.contractMins * (contract.cycleLength + 1);
 		var scheduledHours = contract.scheduledAvailability
 			.map(avail => this.pp.adjustAvailForBreaks(avail, contract))

@@ -112,3 +112,7 @@ span.loading {
 .contract-hours {
     cursor: help;
 }
+
+.glyphicon.glyphicon-warning-sign {
+    color: red;
+}

@@ -88,6 +88,11 @@
                             <td>{{displayTime(sum.sicknessAbsence)}}</td>
                             <td>{{displayTime(sum.annualLeave + sum.maternityOtherLeave)}}</td>
                             <td>{{displayTime(additionalHours(sum))}}</td>
+                            <td>
+                                <span *ngIf="anyContractDoesntMatch(sum.carer)" class="glyphicon glyphicon-warning-sign pull-right"
+                                      tooltip="One or more Contracts for this Carer has Contracted Hours which do not match Scheduled Availability. Click to see Timesheet view for details."
+                                      placement="left" container="body"></span>
+                            </td>
                         </tr>
                     </ng-template>
                 </tbody>

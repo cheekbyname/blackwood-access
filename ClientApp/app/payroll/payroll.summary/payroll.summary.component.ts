@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from "rxjs";
 
 import { AccessUser } from '../../models/AccessUser';
+import { Carer } from '../../models/payroll/Carer';
+import { CarerContract } from '../../models/payroll/Contract';
 import { Locale, LOC_EN } from '../../models/Locale';
 import { Summary } from '../../models/payroll/Summary';
 import { Team, HourlyCalc } from '../../models/payroll/Team';
@@ -170,5 +172,18 @@ export class PayrollSummaryComponent implements OnInit {
 		return this.team.hourlyCalc == HourlyCalc.ContractedAverage ?
 			"Monthly contracted hours calculated by mulitplying up weekly figure" :
 			"Monthly contracted hours calculated by totalling Scheduled Hours for period";
+	}
+
+	private contractHoursMatch(contract: CarerContract): boolean {
+		if (contract.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0) return true;
+		var contractedHours = contract.contractMins * (contract.cycleLength + 1);
+		var scheduledHours = contract.scheduledAvailability
+			.map(avail => this.pp.adjustAvailForBreaks(avail, contract))
+			.reduce((acc, cur) => { return acc + cur }, 0);
+		return contractedHours == scheduledHours;
+	}
+
+	public anyContractDoesntMatch(carer: Carer): boolean {
+		return carer.contracts.some(con => !this.contractHoursMatch(con));
 	}
 }
