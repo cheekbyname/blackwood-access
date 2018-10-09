@@ -19,15 +19,15 @@ export class PayrollManagerComponent implements OnInit {
 
     public teams: Team[];
     public user: AccessUser;
-    
+
     _selectedTeam: Team;
 
-    constructor(public payPro: PayrollProvider, private router: Router, private route: ActivatedRoute,
-        private userPro: UserProvider) { }
+    constructor(public pp: PayrollProvider, private router: Router, private route: ActivatedRoute,
+        private up: UserProvider) { }
 
     ngOnInit() {
         Observable
-            .combineLatest(this.userPro.userInfo$, this.payPro.teams$, (u, t) => {
+            .combineLatest(this.up.userInfo$, this.pp.teams$, (u, t) => {
                 return { "user": u, "teams": t };
             })
             .subscribe(x => {
@@ -39,14 +39,14 @@ export class PayrollManagerComponent implements OnInit {
                         if (p['teamCode'] !== undefined) {
                             this.setTeam(p['teamCode']);
                         } else
-                        if (this.user.defaultTeamCode !== null) {
-                            this.setTeam(x.user.defaultTeamCode);
-                        }
+                            if (this.user.defaultTeamCode !== null) {
+                                this.setTeam(x.user.defaultTeamCode);
+                            }
                     })
                 }
             });
 
-        this.userPro.GetUserInfo();
+        this.up.GetUserInfo();
     }
 
     setTeam(teamCode: number): void {
@@ -54,14 +54,16 @@ export class PayrollManagerComponent implements OnInit {
     }
 
     get selectedTeam() { return this._selectedTeam }
-    set selectedTeam(team: Team ) {
+    set selectedTeam(team: Team) {
         this._selectedTeam = team;
-        this.payPro.selectTeam(team);
+        this.pp.selectTeam(team);
 
         // Navigate to aux route for summary
-        this.router.navigate([{ outlets: { 'detail': null }}]).then((q) => {
-            this.router.navigate(['payroll', this.selectedTeam.teamCode,
-                { outlets: { 'summary': ['summary', this.selectedTeam.teamCode] }}]);
-        });
+        if (team !== undefined) {
+            this.router.navigate([{ outlets: { 'detail': null } }]).then((q) => {
+                this.router.navigate(['payroll', this.selectedTeam.teamCode,
+                    { outlets: { 'summary': ['summary', this.selectedTeam.teamCode] } }]);
+            });
+        }
     }
 }

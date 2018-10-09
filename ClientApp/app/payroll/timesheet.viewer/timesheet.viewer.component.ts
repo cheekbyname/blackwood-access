@@ -155,10 +155,11 @@ export class TimesheetViewerComponent implements OnInit {
 				.reduce((acc, cur) => { return acc + cur }, 0);
 		} else {
 			const zeroDay = Utils.AdjustDateByDays(new Date("1899-12-30 00:00:00"), con.cycleWeek * 7);
+			const oneDay = Utils.AdjustDateByDays(zeroDay, 7);
 			return con.scheduledAvailability
 				.filter(av => {
 					var avDt = new Date(av.thisStart);
-					return avDt >= zeroDay && avDt <= Utils.AdjustDateByDays(zeroDay, 7)
+					return avDt >= zeroDay && avDt <= oneDay;
 				})
 				.map(av => this.pp.adjustAvailForBreaks(av, con))
 				.reduce((acc, cur) => { return acc + cur }, 0);

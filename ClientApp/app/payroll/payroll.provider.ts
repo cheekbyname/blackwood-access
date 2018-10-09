@@ -57,7 +57,8 @@ export class PayrollProvider implements OnDestroy {
         .filter(a => a !== null && a !== undefined)
         .distinctUntilChanged((a: Carer, b: Carer) => a !== null && b !== null && a.carerCode === b.carerCode);
     selectedTeam$ = this._selectedTeam.asObservable()
-        .distinctUntilChanged((a: Team, b: Team) => a !== null && b !== null && a.teamCode === b.teamCode);
+        .distinctUntilChanged((a: Team, b: Team) => a !== null && a !== undefined && b !== null && b !== undefined
+            && a.teamCode === b.teamCode);
     summaries$ = this._summaries.asObservable();
     teamPeriod$ = this._teamPeriod.asObservable();
     teams$ = this._teams.asObservable();
@@ -84,7 +85,7 @@ export class PayrollProvider implements OnDestroy {
             .combineLatest(this.periodStart$, this.selectedTeam$, (wc: Date, tm: Team) => {
                 return { "periodStart": wc, "selectedTeam": tm };
             })
-            .filter(x => x.selectedTeam !== null && x.periodStart !== null)
+            .filter(x => x.selectedTeam !== null && x.selectedTeam !== undefined && x.periodStart !== null)
             .distinctUntilChanged((a, b) => {
                 return (a.selectedTeam.teamCode === b.selectedTeam.teamCode)
                     && (a.periodStart.toLocaleDateString("en-GB") === b.periodStart.toLocaleDateString("en-GB"));
@@ -112,7 +113,7 @@ export class PayrollProvider implements OnDestroy {
             .combineLatest(this.selectedTeam$, this.periodStart$, this.periodFinish$, (team, start, finish) => {
                 return { "team": team, "start": start, "finish": finish }
             })
-            .filter(x => x.team !== null && x.start !== null && x.finish !== null && x.finish > x.start)
+            .filter(x => x.team !== null && x.team !== undefined && x.start !== null && x.finish !== null && x.finish > x.start)
             .distinctUntilChanged((a, b) => {
                 return (a.team.teamCode === b.team.teamCode)
                     && (a.start.toLocaleDateString("en-GB") === b.start.toLocaleDateString("en-GB"))
@@ -226,7 +227,7 @@ export class PayrollProvider implements OnDestroy {
             .catch(err => Observable.throw(err));
     }
 
-    getTeamPeriod(x: {team: Team, start: Date, finish: Date}): Observable<TeamPeriod> {
+    getTeamPeriod(x: { team: Team, start: Date, finish: Date }): Observable<TeamPeriod> {
         var tsUrl = `/api/payroll/summary?teamCode=${x.team.teamCode}&periodStart=${this.sqlDate(x.start)}&periodEnd=${this.sqlDate(x.finish)}`;
         if (isDevMode()) console.log(tsUrl);
         return this.http.get(tsUrl)
@@ -381,11 +382,11 @@ export class PayrollProvider implements OnDestroy {
     }
 
     public adjustAvailForBreaks(avail: Availability, contract: CarerContract): number {
-		var policy = this.getBreakPolicyForTeamCode(contract.teamCode);
-		var breakTime = policy.definitions
-			.filter(def => avail.thisMins >= def.minThreshold && !def.paid)
-			.map(def => def.breakLength)
-			.reduce((acc, cur) => { return acc + cur }, 0);
-		return avail.thisMins - breakTime;
-	}
+        var policy = this.getBreakPolicyForTeamCode(contract.teamCode);
+        var breakTime = policy.definitions
+            .filter(def => avail.thisMins >= def.minThreshold && !def.paid)
+            .map(def => def.breakLength)
+            .reduce((acc, cur) => { return acc + cur }, 0);
+        return avail.thisMins - breakTime;
+    }
 }
