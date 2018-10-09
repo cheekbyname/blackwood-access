@@ -27,6 +27,7 @@
     "aspnet-webpack": "^2.0.1",
     "awesome-typescript-loader": "3.2.1",
     "bootstrap": "3.3.7",
+    "ngx-bootstrap": "^2.0.5",
     "chai": "4.0.2",
     "css": "^2.2.4",
     "css-loader": "0.28.4",
@@ -66,7 +67,7 @@
   "dependencies": {
     "@types/text-encoding": "0.0.32",
     "font-awesome": "^4.7.0",
-    "ngx-bootstrap": "^3.0.1",
+    "ngx-bootstrap": "^2.0.5",
     "text-encoding": "^0.6.4"
   }
 }
