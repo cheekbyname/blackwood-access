@@ -10,9 +10,9 @@ import { CarerContract } from '../../models/payroll/Contract';
 import { Locale, LOC_EN } from '../../models/Locale';
 import { Team, HourlyCalc } from '../../models/payroll/Team';
 import { Timesheet } from '../../models/payroll/Timesheet';
+import { Utils } from '../../Utils';
 
 import { PayrollProvider } from '../payroll.provider';
-import { Availability } from '../../models/payroll/Availability';
 
 type BookingGrid = Array<Array<CarerBooking>>;
 
@@ -24,17 +24,18 @@ type BookingGrid = Array<Array<CarerBooking>>;
 export class TimesheetViewerComponent implements OnInit {
 
 	public readonly LOC: Locale = LOC_EN;
+	public Utils = Utils;
 
-	analysis: BookingTypeAnalysis[];
-	carer: Carer;
-	weekCommencing: Date;
-	timesheet: Timesheet;
-	bookings: BookingGrid = this.emptyBook();
-	isContracted: boolean;
-	carers: Carer[];
-	hideableCodes: number[];
-	team: Team;
-	proc: boolean = true;
+	public analysis: BookingTypeAnalysis[];
+	public carer: Carer;
+	public weekCommencing: Date;
+	public timesheet: Timesheet;
+	public bookings: BookingGrid = this.emptyBook();
+	public isContracted: boolean;
+	public carers: Carer[];
+	public hideableCodes: number[];
+	public team: Team;
+	public proc: boolean = true;
 
 	adjustVisible: boolean = false;
 	dayOffset: number;
@@ -60,7 +61,7 @@ export class TimesheetViewerComponent implements OnInit {
 			.combineLatest(this.route.params, this.pp.carers$, this.pp.analysis$, (params, carers, anals) => {
 				return { params: params, carers: carers, anals: anals }
 			})
-			.filter(p => p.params['carer'] !== null && p.carers !== null &&  p.anals !== null)
+			.filter(p => p.params['carer'] !== null && p.carers !== null && p.anals !== null)
 			.distinctUntilChanged((a, b) => {
 				return a.params['carer'] == b.params['carer'] && a.carers == b.carers;
 			})
@@ -146,10 +147,22 @@ export class TimesheetViewerComponent implements OnInit {
 		this.bookings = bks.filter((x: [any]) => x.some(e => e !== undefined)); 		// Strip blank rows
 	}
 
-	public availHoursForContract(contractCode: number): number {
-		return this.timesheet.scheduledAvailability
-			.filter(av => av.contractCode === contractCode)
-			.map(av => { return av.thisMins }).reduce((acc, cur) => { return acc + cur }, 0);
+	public availHoursForContract(con: CarerContract): number {
+		if (this.isAverageContract(con)) {
+			return this.timesheet.scheduledAvailability
+				.filter(av => av.contractCode === con.contractCode)
+				.map(av => { return av.thisMins })
+				.reduce((acc, cur) => { return acc + cur }, 0);
+		} else {
+			const zeroDay = Utils.AdjustDateByDays(new Date("1899-12-30 00:00:00"), con.cycleWeek * 7);
+			return con.scheduledAvailability
+				.filter(av => {
+					var avDt = new Date(av.thisStart);
+					return avDt >= zeroDay && avDt <= Utils.AdjustDateByDays(zeroDay, 7)
+				})
+				.map(av => this.pp.adjustAvailForBreaks(av, con))
+				.reduce((acc, cur) => { return acc + cur }, 0);
+		}
 	}
 
 	// Replace with Contact time?
@@ -272,13 +285,17 @@ export class TimesheetViewerComponent implements OnInit {
 		return `Click here to adjust hours for ${day} ${this.pp.dateOrd(this.weekCommencing, i)} ${this.pp.monthOf(this.weekCommencing, i)}`;
 	}
 
-	public contractHoursMatch(contract: CarerContract): boolean {
-		if (contract.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0) return true;
-		var contractedHours = contract.contractMins * (contract.cycleLength + 1);
-		var scheduledHours = contract.scheduledAvailability
-			.map(avail => this.pp.adjustAvailForBreaks(avail, contract))
+	public contractHoursMatch(con: CarerContract): boolean {
+		if (this.isAverageContract(con)) return true;
+		var contractedHours = con.contractMins * (con.cycleLength + 1);
+		var scheduledHours = con.scheduledAvailability
+			.map(avail => this.pp.adjustAvailForBreaks(avail, con))
 			.reduce((acc, cur) => { return acc + cur }, 0);
 		return contractedHours == scheduledHours;
+	}
+
+	private isAverageContract(contract: CarerContract): boolean {
+		return contract.team.hourlyCalc == HourlyCalc.ContractedAverage || contract.contractMins == 0;
 	}
 
 	public openContractInfo(contract: CarerContract) {

@@ -60,7 +60,7 @@
 							<td>{{contract.cycleWeek + 1}} of {{ contract.cycleLength + 1}}</td>
 							<!-- "Future" cycles still an issue here -->
 							<td>{{pp.displayTime(contract.contractMins)}}</td>
-							<td>{{pp.displayTime(availHoursForContract(contract.contractCode))}}</td>
+							<td>{{pp.displayTime(availHoursForContract(contract))}}</td>
 							<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
 							<td>{{pp.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
 							<td>{{pp.displayTime(actualHoursForContract(contract.contractCode))}}</td>
