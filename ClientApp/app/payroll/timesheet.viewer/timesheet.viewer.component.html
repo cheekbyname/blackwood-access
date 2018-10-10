@@ -64,7 +64,7 @@
 							<td>{{(contract.cycleDaysWorked / (contract.cycleLength + 1)).toPrecision(3)}}</td>
 							<td>{{pp.displayTime(bookedHoursForContract(contract.contractCode))}}</td>
 							<td>{{pp.displayTime(actualHoursForContract(contract.contractCode))}}</td>
-							<td>{{pp.displayTime(additionalHoursForContract(contract.contractCode))}}</td>
+							<td>{{pp.displayTime(additionalHoursForContract(contract))}}</td>
 							<td>{{pp.displayTime(leaveSickHoursForContract(contract.contractCode))}}</td>
 						</tr>
 					</ng-template>

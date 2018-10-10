@@ -204,9 +204,9 @@ export class TimesheetViewerComponent implements OnInit {
 			.map(sh => { return sh.shiftMins - sh.unpaidMins }).reduce((acc, cur) => { return acc + cur }, 0);
 	}
 
-	public additionalHoursForContract(contractCode: number): number {
-		var overMins = this.actualHoursForContract(contractCode)
-			- this.timesheet.contracts.find(cn => cn.contractCode === contractCode).contractMins;
+	public additionalHoursForContract(con: CarerContract): number {
+		var overMins = this.actualHoursForContract(con.contractCode)
+			- (con.team.hourlyCalc == HourlyCalc.ContractedAverage ? con.contractMins : this.availHoursForContract(con));
 		return overMins < 0 ? 0 : overMins;
 	}
 
