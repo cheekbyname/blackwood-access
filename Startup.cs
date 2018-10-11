@@ -10,9 +10,7 @@ namespace Blackwood.Access
     using Core.User.Service;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Rewrite;
     using Microsoft.AspNetCore.SpaServices.Webpack;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -115,6 +113,7 @@ namespace Blackwood.Access
             services.AddTransient<ICareDataService, CareDataService>();
             services.AddScoped<ICareInitialAssessmentService, CareInitialAssessmentService>();
             services.AddScoped<IPayrollApprovalService, PayrollApprovalService>();
+            services.AddScoped<IPayrollAdjustmentService, PayrollAdjustmentService>();
             services.AddScoped<IPayrollDataService, PayrollDataService>();
             services.AddScoped<IPayrollService, PayrollService>();
             services.AddScoped<IPayrollShiftService, PayrollShiftService>();
@@ -141,6 +140,7 @@ namespace Blackwood.Access
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
             app.UseStaticFiles();

@@ -15,13 +15,15 @@ namespace Blackwood.Access.Controllers
     {
         private readonly IPayrollApprovalService _approvalService;
         private readonly IPayrollService _service;
+        private readonly IPayrollAdjustmentService _adjustService;
         private readonly IPayrollDataService _dataService;
         private readonly IPayrollValidationService _validation;
         private readonly ILogger<PayrollController> _logger;
 
         public PayrollController(IPayrollService service, IPayrollValidationService validation, IPayrollDataService dataService,
-                ILogger<PayrollController> logger, IPayrollApprovalService approvalService)
-            => (_service, _dataService, _validation, _logger, _approvalService) = (service, dataService, validation, logger, approvalService);
+                ILogger<PayrollController> logger, IPayrollApprovalService approvalService, IPayrollAdjustmentService adjustService)
+            => (_service, _dataService, _validation, _logger, _approvalService, _adjustService)
+                = (service, dataService, validation, logger, approvalService, adjustService);
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Teams() => Ok(await _dataService.GetTeams());
@@ -47,7 +49,7 @@ namespace Blackwood.Access.Controllers
 
         [HttpPut("[action]")]
         public IActionResult AddTimesheetAdjustment([FromBody] Adjustment adj)
-            => Ok(_service.PutTimesheetAdjustment(adj, HttpContext.User));
+            => Ok(_adjustService.PutTimesheetAdjustment(adj, HttpContext.User));
 
         [HttpDelete("[action]")]
         public void RemoveTimesheetAdjustment(int id)
@@ -55,7 +57,7 @@ namespace Blackwood.Access.Controllers
 
         [HttpPut("[action]")]
         public void UpdateTimesheetAdjustment([FromBody] Adjustment adj)
-            => _service.PutTimesheetAdjustment(adj, HttpContext.User);  // Don't need to return the ID for updates
+            => _adjustService.PutTimesheetAdjustment(adj, HttpContext.User);  // Don't need to return the ID for updates
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetTimesheetAdjustmentsByTeam(int teamCode, DateTime periodStart, DateTime periodEnd)
