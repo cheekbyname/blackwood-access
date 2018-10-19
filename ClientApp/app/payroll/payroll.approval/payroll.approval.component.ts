@@ -34,7 +34,7 @@ export class PayrollApprovalComponent {
                 this.summary.authorizations.sort((a, b) => new Date(a.whenAuthorized) < new Date(b.whenAuthorized) ? 1: 0);
                 this.viewAuth.length = this.summary.authorizations.length;
                 this.viewAuth.fill(false);
-                this.sumAdd = tp.summaries.filter(s => s.actualMins > s.periodContractMins);
+                this.sumAdd = tp.summaries.filter(s => s.additionalMins > 0);
             }
         });
     }
@@ -107,7 +107,7 @@ export class PayrollApprovalComponent {
     }
 
     private additionalHours(sum): number {
-		var calcHours = sum.actualMins - sum.unpaidMins - sum.periodContractMins;
+		var calcHours = sum.actualMins - sum.unpaidMins - sum.effectContractMins;
 		return calcHours < 0 ? 0 : calcHours;
     }
     

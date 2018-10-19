@@ -1,4 +1,8 @@
 import { Carer } from "./Carer";
+import { CarerBooking } from "./Booking";
+import { Shift } from "./Shift";
+import { Availability } from "./Availability";
+import { CarerContract } from "./Contract";
 
 export class Summary {
 	public carerCode: number;
@@ -7,10 +11,8 @@ export class Summary {
 	public personnelNumber: string;
 	public contractCode: string;
 	public payrollNumber: string;
-	public teamDesc: string;
 	public costCentre: string;
 	public periodContractMins: number;
-	public periodSchedMins: number;
 	public monthlyLimitMins: number;
 	public superTrainMins: number;
 	public leaveSickMins: number;
@@ -19,10 +21,32 @@ export class Summary {
 	public totalMins: number;
     public availMins: number;
 	public unpaidMins: number;
-	public additionalMins: number;
-	// TODO There are others...
+	public isManager: boolean;
+	public toilBalance: number;
+	public toilDelta: number;
 
+	public teamCode: number;
+	public teamDesc: string;
+	public locAuthRef: string;
+	public locAuthName: string;
+	public serviceId: number;
+	public serviceName: string;
+	public regionId: number;
+	public regionName: string;
+
+	public bookings: CarerBooking[];
+	public shifts: Shift[];
+	public unmappedForAnalysis: CarerBooking[];
+	public scheduledAvailability: Availability[];
+	public actualAvailability: Availability[];
+	public carer: Carer;
+	public contract: CarerContract;
+	
+	public downTime: number;
+	public additionalMins: number;
 	public positionType: string;
+	public periodSchedMins: number;
+	public effectContractMins: number;
 
     // Analysis Values
     public annualLeave: number;
@@ -35,6 +59,5 @@ export class Summary {
     public training: number;
     public contact: number;
 	public nonContact: number;
-
-	public carer: Carer;
+	public unpaid: number;
 }
