@@ -142,6 +142,11 @@
     font-family: 'Century Gothic';
 }
 
+::ng-deep .ui-growl-item-container.ui-state-highlight.ui-growl-message-error {
+    border: 1px solid black;
+    font-family: 'Century Gothic';
+}
+
 /* PrimeNg CheckBox styles */
 ::ng-deep .ui-chkbox-box.ui-state-active {
     border: 1px solid black;

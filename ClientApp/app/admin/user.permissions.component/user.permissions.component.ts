@@ -133,7 +133,8 @@ export class UserPermissionsComponent implements OnInit {
         // TODO Remove any Authorised Teams added but not selected
         if (JSON.stringify(this.selectedUser) !== this.prevUser) {
             // Require confirmation if AccountName has been changed
-            if (this.selectedUser.accountName !== JSON.parse(this.prevUser).accountName) {
+            var prev = JSON.parse(this.prevUser) as AccessUser;
+            if (prev.accountName && this.selectedUser.accountName !== prev.accountName) {
                 this.cs.confirm({
                     header: "Confirm Account Name Change",
                     message: "Are you sure that you want to change the user's Account Name? This may cause them to be unable to access functions.",
